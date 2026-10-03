@@ -10,7 +10,7 @@ only** (CSV + one JSON); there is no application code, build system, or dependen
 AGENTS.md
 .gitignore
 data/raw/betika/     4 CSVs   — grand, mega, midweek, must-be-won jackpots
-data/raw/mozzart/    9 CSVs   — super-jackpot (1 file + numbered variants), super-grand-jackpot (1 + variants)
+data/raw/mozzart/    6 CSVs   — super-jackpot (1 file + numbered variants), super-grand-jackpot
 data/raw/sportpesa/  2 files  — mega-jackpot-pro as CSV and as the original nested JSON
 ```
 
@@ -23,21 +23,22 @@ Filenames use lowercase bookmaker + hyphenated jackpot name (`betika-midweek-jac
 
 ## Schemas
 
-**`data/raw/betika/*` and most of `data/raw/mozzart/*`** — 9 columns, one match per row:
-`date,home_team,away_team,league,score,odds,bet_type,pick,result`
+**`data/raw/betika/*` and most of `data/raw/mozzart/*`** — 7 columns, one match per row:
+`date,home_team,away_team,league,score,odds,result`
 
 | field | notes |
 |---|---|
 | `date` | `DD-MM-YYYY` |
 | `score` | `H-A` (e.g. `0-3`); `Postp` / `Abn` when postponed or abandoned |
 | `odds` | decimal odds as text, 2dp |
-| `bet_type` | `FT` (full time 1X2) or `DC` (double chance) |
-| `pick` | `1`, `X`, `2` for FT; `12`, `1X`, `X2` for DC |
 | `result` | `home`, `draw`, `away`, `postponed`, `abandoned`, occasionally `unknown` |
 | `league` | `Country – League name` with an **en dash**, frequently blank |
 
-**`data/raw/mozzart/mozzart-super-grand-jackpot{1,2,3}.csv`** — reduced 5 columns, no odds/pick:
-`date,home_team,away_team,score,result`
+The market type (`bet_type`: FT 1X2 vs DC double chance) and the tipster selection (`pick`: `1`,
+`X`, `2`, `12`, `1X`, `X2`) are **not present**. Consequently `odds` cannot be interpreted on its
+own — a 1.35 may be a full-time away win or the equivalent double-chance price, and rows from the
+two markets are interleaved. Do not treat `odds` as a single homogeneous market or compute
+calibration/implied-probability statistics across it without splitting by price band.
 
 **`data/raw/sportpesa/*`** — 6 columns, PascalCase headers, ISO timestamps, `H:A` scores,
 `Home/Draw/Away` results, plus `JackpotId` grouping rows into individual jackpots. The JSON is the
@@ -54,7 +55,7 @@ analysis.
 - Coverage overlaps between files within a bookmaker (e.g. `mozzart-super-jackpot*.csv` are
   consecutive extracts, not distinct products). Dedupe on `(date, home_team, away_team)` before
   aggregating.
-- Normalise the three schemes into one canonical shape (lowercase snake_case columns, ISO dates,
+- Normalise the two schemes into one canonical shape (lowercase snake_case columns, ISO dates,
   consistent `score` separator, consistent result casing) before cross-bookmaker analysis.
 
 ## Conventions
@@ -71,4 +72,5 @@ analysis.
 ## Git
 
 Repository is initialised locally with `main` as the default branch. Commit or push only when
-explicitly asked.
+explicitly asked. The betika/mozzart CSVs originally carried `bet_type` and `pick`; those versions
+are in the initial commit if the columns are ever needed again.
