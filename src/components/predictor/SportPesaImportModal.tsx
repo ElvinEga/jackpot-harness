@@ -95,9 +95,6 @@ export const SportPesaImportModal: React.FC<SportPesaImportModalProps> = ({
       <DialogContent className="max-w-2xl bg-card border-border max-h-[90vh] flex flex-col p-6">
         <DialogHeader>
           <div className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-lg bg-primary/10 border border-primary/30 flex items-center justify-center text-muted-foreground">
-              <Zap className="h-4 w-4" />
-            </div>
             <div>
               <DialogTitle className="text-base font-bold text-foreground">
                 SportPesa Mega Jackpot Pro — API Prefill
@@ -147,14 +144,6 @@ export const SportPesaImportModal: React.FC<SportPesaImportModalProps> = ({
               </Button>
             </div>
 
-            {/* Cookie & Akamai Info Note */}
-            <div className="p-2.5 rounded-lg border border-primary/20 bg-primary/5 text-primary text-xs flex items-start gap-2">
-              <Info className="h-4 w-4 shrink-0 mt-0.5 text-muted-foreground" />
-              <div className="leading-relaxed">
-                <span className="font-semibold text-primary">Akamai Bot Protection Bypassed: </span>
-                Standard browsers require <code className="font-mono bg-muted px-1 py-0.5 rounded text-xs">bm_so</code> / <code className="font-mono bg-muted px-1 py-0.5 rounded text-xs">bm_sv</code> cookies. This app routes requests via an internal proxy with Android mobile client headers (<code className="font-mono text-xs">okhttp/4.9.0</code>), allowing direct access without expiring cookies!
-              </div>
-            </div>
           </TabsContent>
 
           {/* TAB 2: Paste JSON */}
@@ -198,24 +187,20 @@ export const SportPesaImportModal: React.FC<SportPesaImportModalProps> = ({
                 <span className="font-semibold text-foreground text-xs">
                   Jackpot #{previewJackpot.humanId}
                 </span>
-                <Badge variant="outline" className="text-xs px-1.5 py-0 font-mono">
-                  {previewJackpot.numberOfEvents} Fixtures
-                </Badge>
-                <Badge
-                  variant="outline"
-                  className={`text-xs px-1.5 py-0 ${
-                    previewJackpot.bettingStatus.toLowerCase() === "open"
-                      ? "text-primary border-primary/30"
-                      : "text-foreground border-border"
-                  }`}
-                >
-                  Status: {previewJackpot.bettingStatus}
-                </Badge>
+
+
               </div>
 
-              <span className="text-xs text-muted-foreground font-mono">
-                ID: {previewJackpot.id.slice(0, 8)}...
-              </span>
+              <Badge
+                variant="outline"
+                className={`text-xs px-1.5 py-0 ${
+                  previewJackpot.bettingStatus.toLowerCase() === "open"
+                    ? "text-primary border-primary/30"
+                    : "text-foreground border-border"
+                }`}
+              >
+                Status: {previewJackpot.bettingStatus}
+              </Badge>
             </div>
 
             {/* Scrollable Fixture Preview */}
