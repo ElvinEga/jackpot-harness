@@ -36,7 +36,7 @@ export const MatchTable: React.FC<MatchTableProps> = ({ matches, onSelectMatch }
         cell: (info) => {
           const val = info.getValue() as string | null;
           return (
-            <span className="font-mono text-xs text-slate-300">
+            <span className="font-mono text-xs text-muted-foreground">
               {val || "—"}
             </span>
           );
@@ -58,7 +58,7 @@ export const MatchTable: React.FC<MatchTableProps> = ({ matches, onSelectMatch }
         header: "Jackpot",
         size: 160,
         cell: (info) => (
-          <span className="text-xs text-slate-300 truncate max-w-[150px] block" title={info.getValue() as string}>
+          <span className="text-xs text-foreground truncate max-w-[150px] block" title={info.getValue() as string}>
             {info.getValue() as string}
           </span>
         ),
@@ -68,7 +68,7 @@ export const MatchTable: React.FC<MatchTableProps> = ({ matches, onSelectMatch }
         header: "Home Team",
         size: 200,
         cell: (info) => (
-          <span className="font-semibold text-xs text-slate-100 truncate max-w-[190px] block" title={info.getValue() as string}>
+          <span className="font-semibold text-xs text-foreground truncate max-w-[190px] block" title={info.getValue() as string}>
             {info.getValue() as string}
           </span>
         ),
@@ -80,7 +80,7 @@ export const MatchTable: React.FC<MatchTableProps> = ({ matches, onSelectMatch }
         cell: (info) => {
           const score = info.getValue() as string | null;
           return (
-            <span className="font-mono font-bold text-xs px-2 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-200">
+            <span className="font-mono font-bold text-xs px-2 py-0.5 rounded bg-muted border border-border text-foreground">
               {score || "—"}
             </span>
           );
@@ -91,7 +91,7 @@ export const MatchTable: React.FC<MatchTableProps> = ({ matches, onSelectMatch }
         header: "Away Team",
         size: 200,
         cell: (info) => (
-          <span className="font-semibold text-xs text-slate-100 truncate max-w-[190px] block" title={info.getValue() as string}>
+          <span className="font-semibold text-xs text-foreground truncate max-w-[190px] block" title={info.getValue() as string}>
             {info.getValue() as string}
           </span>
         ),
@@ -117,7 +117,7 @@ export const MatchTable: React.FC<MatchTableProps> = ({ matches, onSelectMatch }
         cell: (info) => {
           const val = info.getValue() as number | null;
           return (
-            <span className="font-mono text-xs font-semibold text-emerald-400">
+            <span className="font-mono text-xs font-semibold text-primary">
               {val !== null ? val.toFixed(2) : "—"}
             </span>
           );
@@ -130,7 +130,7 @@ export const MatchTable: React.FC<MatchTableProps> = ({ matches, onSelectMatch }
         cell: (info) => {
           const val = info.getValue() as string | null;
           return (
-            <span className="text-xs text-slate-400 truncate max-w-[170px] block" title={val || ""}>
+            <span className="text-xs text-muted-foreground truncate max-w-[170px] block" title={val || ""}>
               {val || "—"}
             </span>
           );
@@ -161,10 +161,10 @@ export const MatchTable: React.FC<MatchTableProps> = ({ matches, onSelectMatch }
 
   if (matches.length === 0) {
     return (
-      <div className="flex-1 flex flex-col items-center justify-center p-12 text-center bg-slate-950">
-        <Inbox className="h-12 w-12 text-slate-600 mb-3" />
-        <h3 className="text-base font-semibold text-slate-300">No matching matches found</h3>
-        <p className="text-xs text-slate-500 mt-1 max-w-sm">
+      <div className="flex-1 flex flex-col items-center justify-center p-12 text-center bg-background">
+        <Inbox className="h-12 w-12 text-muted-foreground/60 mb-3" />
+        <h3 className="text-base font-semibold text-foreground">No matching matches found</h3>
+        <p className="text-xs text-muted-foreground mt-1 max-w-sm">
           Try loosening your search keywords, clearing bookmaker selection, or resetting the odds and date filters.
         </p>
       </div>
@@ -172,11 +172,11 @@ export const MatchTable: React.FC<MatchTableProps> = ({ matches, onSelectMatch }
   }
 
   return (
-    <div className="flex-1 flex flex-col min-h-0 bg-slate-950">
+    <div className="flex-1 flex flex-col min-h-0 bg-background">
       <div ref={parentRef} className="flex-1 overflow-auto">
         <table className="w-full text-left border-collapse table-fixed">
           {/* Table Header */}
-          <thead className="sticky top-0 z-20 bg-slate-900/95 backdrop-blur border-b border-slate-800 shadow-sm">
+          <thead className="sticky top-0 z-20 bg-card/95 backdrop-blur border-b border-border shadow-sm">
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
@@ -186,16 +186,16 @@ export const MatchTable: React.FC<MatchTableProps> = ({ matches, onSelectMatch }
                       key={header.id}
                       style={{ width: header.getSize() }}
                       onClick={header.column.getToggleSortingHandler()}
-                      className="px-3 py-2.5 text-xs font-semibold text-slate-300 tracking-wider uppercase cursor-pointer select-none hover:text-white transition-colors"
+                      className="px-3 py-2.5 text-xs font-semibold text-muted-foreground tracking-wider uppercase cursor-pointer select-none hover:text-foreground transition-colors"
                     >
                       <div className="flex items-center gap-1.5">
                         {flexRender(header.column.columnDef.header, header.getContext())}
                         {isSorted === "asc" ? (
-                          <ArrowUp className="h-3 w-3 text-blue-400" />
+                          <ArrowUp className="h-3 w-3 text-primary" />
                         ) : isSorted === "desc" ? (
-                          <ArrowDown className="h-3 w-3 text-blue-400" />
+                          <ArrowDown className="h-3 w-3 text-primary" />
                         ) : (
-                          <ArrowUpDown className="h-3 w-3 text-slate-600 opacity-0 group-hover:opacity-100" />
+                          <ArrowUpDown className="h-3 w-3 text-muted-foreground/40 opacity-0 group-hover:opacity-100" />
                         )}
                       </div>
                     </th>
@@ -226,7 +226,7 @@ export const MatchTable: React.FC<MatchTableProps> = ({ matches, onSelectMatch }
                     height: `${virtualRow.size}px`,
                     transform: `translateY(${virtualRow.start}px)`,
                   }}
-                  className="flex items-center border-b border-slate-900/80 hover:bg-slate-900/70 transition-colors cursor-pointer group"
+                  className="flex items-center border-b border-border/40 hover:bg-muted/60 transition-colors cursor-pointer group"
                 >
                   {row.getVisibleCells().map((cell) => (
                     <td
@@ -245,11 +245,11 @@ export const MatchTable: React.FC<MatchTableProps> = ({ matches, onSelectMatch }
       </div>
 
       {/* Table Footer with quick stats */}
-      <div className="border-t border-slate-800 bg-slate-950 px-4 py-2 text-xs text-slate-400 flex items-center justify-between">
+      <div className="border-t border-border bg-card/60 px-4 py-2 text-xs text-muted-foreground flex items-center justify-between">
         <div>
-          Showing <span className="font-semibold text-slate-200">{rows.length.toLocaleString()}</span> virtualized records
+          Showing <span className="font-semibold text-foreground">{rows.length.toLocaleString()}</span> virtualized records
         </div>
-        <div className="text-[11px] text-slate-500">
+        <div className="text-[11px] text-muted-foreground/70">
           Click any row to open the detailed match inspector
         </div>
       </div>
