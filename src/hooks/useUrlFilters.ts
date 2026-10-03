@@ -8,16 +8,22 @@ export function useUrlFilters() {
 
     const params = new URLSearchParams(window.location.search);
     const search = params.get("search") || "";
+    const VALID_BOOKMAKERS: Bookmaker[] = ["betika", "mozzart", "sportpesa"];
+    const VALID_RESULTS = ["home", "draw", "away", "postponed", "abandoned", "unknown"];
+    const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
+
     const bookmakersParam = params.get("bookmaker") || params.get("bookmakers") || "";
     const bookmakers = bookmakersParam
-      ? (bookmakersParam.split(",").filter(Boolean) as Bookmaker[])
+      ? (bookmakersParam.split(",").filter((b) => VALID_BOOKMAKERS.includes(b as Bookmaker)) as Bookmaker[])
       : [];
     const jackpotsParam = params.get("jackpot") || params.get("jackpots") || "";
     const jackpots = jackpotsParam ? jackpotsParam.split(",").filter(Boolean) : [];
     const resultsParam = params.get("result") || params.get("results") || "";
-    const results = resultsParam ? resultsParam.split(",").filter(Boolean) : [];
-    const from = params.get("from") || null;
-    const to = params.get("to") || null;
+    const results = resultsParam ? resultsParam.split(",").filter((r) => VALID_RESULTS.includes(r)) : [];
+    const fromParam = params.get("from");
+    const toParam = params.get("to");
+    const from = fromParam && ISO_DATE.test(fromParam) ? fromParam : null;
+    const to = toParam && ISO_DATE.test(toParam) ? toParam : null;
     const minOddsStr = params.get("minOdds");
     const minOdds = minOddsStr ? parseFloat(minOddsStr) : null;
     const maxOddsStr = params.get("maxOdds");
