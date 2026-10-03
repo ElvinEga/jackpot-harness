@@ -1,10 +1,13 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Search, X, RotateCcw, Filter, ChevronDown, SlidersHorizontal, Loader2 } from "lucide-react";
+import React, { useEffect, useRef, useState, useMemo } from "react";
+import { Search, X, RotateCcw, Filter, ChevronDown, SlidersHorizontal, Loader2, Calendar as CalendarIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "../ui/input";
 import { Checkbox } from "../ui/checkbox";
 import { NativeSelect, NativeSelectOption } from "../ui/native-select";
 import { Popover, PopoverTrigger, PopoverContent } from "../ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import type { DateRange } from "react-day-picker";
+import { format } from "date-fns";
 import type { MatchFilters, Bookmaker } from "../../lib/types";
 import { DATASETS } from "../../lib/data";
 
@@ -88,6 +91,60 @@ export const FilterBar: React.FC<FilterBarProps> = ({
       search: "",
     });
     searchInputRef.current?.focus();
+  };
+
+  // Helper to parse ISO date "YYYY-MM-DD"
+  const parseIsoDate = (iso: string | null): Date | undefined => {
+    if (!iso) return undefined;
+    const [y, m, d] = iso.split("-").map(Number);
+    if (!y || !m || !d) return undefined;
+    return new Date(y, m - 1, d);
+  };
+
+  const selectedDateRange: DateRange | undefined = useMemo(() => {
+    if (!filters.from && !filters.to) return undefined;
+    return {
+      from: parseIsoDate(filters.from),
+      to: parseIsoDate(filters.to),
+    };
+  }, [filters.from, filters.to]);
+
+  const handleDateRangeSelect = (range: DateRange | undefined) => {
+    const fromStr = range?.from ? format(range.from, "yyyy-MM-dd") : null;
+    const toStr = range?.to ? format(range.to, "yyyy-MM-dd") : null;
+    onFilterChange({
+      ...filters,
+      from: fromStr,
+      to: toStr,
+    });
+  };
+
+  const dateRangeLabel = useMemo(() => {
+    if (filters.from && filters.to) {
+      const fromDate = parseIsoDate(filters.from);
+      const toDate = parseIsoDate(filters.to);
+      if (fromDate && toDate) {
+        return `${format(fromDate, "MMM d, yyyy")} – ${format(toDate, "MMM d, yyyy")}`;
+      }
+      return `${filters.from} – ${filters.to}`;
+    }
+    if (filters.from) {
+      const fromDate = parseIsoDate(filters.from);
+      return fromDate ? `From ${format(fromDate, "MMM d, yyyy")}` : `From ${filters.from}`;
+    }
+    if (filters.to) {
+      const toDate = parseIsoDate(filters.to);
+      return toDate ? `Until ${format(toDate, "MMM d, yyyy")}` : `Until ${filters.to}`;
+    }
+    return "Dates";
+  }, [filters.from, filters.to]);
+
+  const setYearPreset = (year: number) => {
+    onFilterChange({
+      ...filters,
+      from: `${year}-01-01`,
+      to: `${year}-12-31`,
+    });
   };
 
   // Keyboard shortcut listener for CMD+K or '/'
@@ -261,6 +318,67 @@ export const FilterBar: React.FC<FilterBarProps> = ({
           </PopoverContent>
         </Popover>
 
+        {/* Date Filter Popover */}
+        <Popover>
+          <PopoverTrigger
+            render={
+              <button
+                className={`flex items-center gap-1.5 text-xs px-3 py-2 rounded-md border font-medium transition-colors cursor-pointer ${
+                  filters.from || filters.to
+                    ? "bg-primary/20 border-primary text-primary"
+                    : "bg-background border-border text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <CalendarIcon className="h-3 w-3 text-muted-foreground" />
+                <span>{dateRangeLabel}</span>
+                <ChevronDown className="h-3 w-3 text-muted-foreground" />
+              </button>
+            }
+          />
+          <PopoverContent align="end" className="w-auto p-3">
+            <div className="flex items-center justify-between pb-2 mb-2 border-b border-border gap-3">
+              <span className="text-xs font-semibold text-foreground">Filter by Date Range</span>
+              {(filters.from || filters.to) && (
+                <Button
+                  variant="ghost"
+                  size="xs"
+                  onClick={() => onFilterChange({ ...filters, from: null, to: null })}
+                  className="text-xs text-destructive hover:text-destructive h-6 px-2"
+                >
+                  Clear dates
+                </Button>
+              )}
+            </div>
+
+            {/* Quick Year Presets */}
+            <div className="flex items-center gap-1 mb-2 flex-wrap">
+              <span className="text-[11px] text-muted-foreground mr-1">Presets:</span>
+              {[2026, 2025, 2024, 2023, 2022].map((yr) => {
+                const isActive = filters.from === `${yr}-01-01` && filters.to === `${yr}-12-31`;
+                return (
+                  <Button
+                    key={yr}
+                    variant={isActive ? "secondary" : "outline"}
+                    size="xs"
+                    onClick={() => setYearPreset(yr)}
+                    className="h-6 text-[11px] px-2"
+                  >
+                    {yr}
+                  </Button>
+                );
+              })}
+            </div>
+
+            <Calendar
+              mode="range"
+              selected={selectedDateRange}
+              onSelect={handleDateRangeSelect}
+              defaultMonth={selectedDateRange?.from || new Date(2023, 0, 1)}
+              numberOfMonths={1}
+            />
+          </PopoverContent>
+        </Popover>
+
         {/* Toggle Advanced Filters Button */}
         <Button
           variant={showAdvanced ? "secondary" : "outline"}
@@ -286,25 +404,25 @@ export const FilterBar: React.FC<FilterBarProps> = ({
         )}
       </div>
 
-      {/* Row 2: Advanced filters (Date range, Odds range, League) */}
+      {/* Row 2: Advanced filters (Odds range, League, Date info) */}
       {showAdvanced && (
         <div className="flex flex-wrap items-center gap-3 pt-2 border-t border-border/60 text-xs">
-          {/* Date Range */}
+          {/* Active Date Info */}
           <div className="flex items-center gap-2">
-            <span className="text-muted-foreground">Date:</span>
-            <Input
-              type="date"
-              value={filters.from || ""}
-              onChange={(e) => onFilterChange({ ...filters, from: e.target.value || null })}
-              className="h-8 w-36 text-xs"
-            />
-            <span className="text-muted-foreground">to</span>
-            <Input
-              type="date"
-              value={filters.to || ""}
-              onChange={(e) => onFilterChange({ ...filters, to: e.target.value || null })}
-              className="h-8 w-36 text-xs"
-            />
+            <span className="text-muted-foreground">Active Date:</span>
+            {filters.from || filters.to ? (
+              <div className="flex items-center gap-1.5 bg-muted border border-border px-2 py-0.5 rounded text-foreground font-mono text-xs">
+                <span>{dateRangeLabel}</span>
+                <button
+                  onClick={() => onFilterChange({ ...filters, from: null, to: null })}
+                  className="text-muted-foreground hover:text-foreground cursor-pointer"
+                >
+                  <X className="h-3 w-3" />
+                </button>
+              </div>
+            ) : (
+              <span className="text-muted-foreground italic">All historical records</span>
+            )}
           </div>
 
           {/* Odds Range */}
