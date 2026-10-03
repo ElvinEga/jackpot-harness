@@ -8,7 +8,8 @@ import {
   Layers,
   FileSpreadsheet,
   FileCode,
-  ChevronDown
+  ChevronDown,
+  Loader2,
 } from "lucide-react";
 import { Button } from "../ui/Button";
 import { Badge } from "../ui/Badge";
@@ -22,6 +23,7 @@ interface HeaderProps {
   activeTab: "explorer" | "analytics";
   onTabChange: (tab: "explorer" | "analytics") => void;
   filteredMatches: Match[];
+  isFiltering?: boolean;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -31,6 +33,7 @@ export const Header: React.FC<HeaderProps> = ({
   activeTab,
   onTabChange,
   filteredMatches,
+  isFiltering = false,
 }) => {
   const [exportOpen, setExportOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -63,7 +66,7 @@ export const Header: React.FC<HeaderProps> = ({
               </Badge>
             </div>
             <p className="text-xs text-muted-foreground">
-              Betika · Mozzart · SportPesa historical jackpot archives
+               Betika · Mozzart · SportPesa historical jackpot archives
             </p>
           </div>
         </div>
@@ -98,7 +101,8 @@ export const Header: React.FC<HeaderProps> = ({
         {/* Right: Tab switch & Actions */}
         <div className="flex items-center gap-2 self-end md:self-auto">
           {/* Filter Match Count Pill */}
-          <div className="text-xs px-2.5 py-1 rounded-md bg-muted/60 border border-border text-muted-foreground">
+          <div className="text-xs px-2.5 py-1 rounded-md bg-muted/60 border border-border text-muted-foreground flex items-center gap-1.5">
+            {isFiltering && <Loader2 className="h-3 w-3 text-primary animate-spin" />}
             {isFiltered ? (
               <span>
                 Filtered: <strong className="text-emerald-400">{filteredCount.toLocaleString()}</strong> of {totalCount.toLocaleString()}
