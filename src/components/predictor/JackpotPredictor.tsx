@@ -19,13 +19,14 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
-import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 
 import type { Match, PositionStat, MatchPrediction } from "../../lib/types";
 import { computePositionStats } from "../../lib/positions";
 import { predictMatch } from "../../lib/predictions";
+import { getAllTeams, getTeamAppearances } from "../../lib/teams";
 import { DATASETS } from "../../lib/data";
+import { TeamSearchInput } from "../common/TeamSearchInput";
 
 interface JackpotPredictorProps {
   matches: Match[];
@@ -51,6 +52,10 @@ const MONTHS = [
 const YEARS = ["all", "2026", "2025", "2024", "2023", "2022"];
 
 export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onSelectTeamForH2H }) => {
+  // Extract unique sorted teams and frequencies
+  const allTeams = useMemo(() => getAllTeams(matches), [matches]);
+  const teamAppearances = useMemo(() => getTeamAppearances(matches), [matches]);
+
   // Period & Jackpot filters
   const [selectedJackpot, setSelectedJackpot] = useState<string>("SportPesa - Mega Jackpot Pro");
   const [selectedMonth, setSelectedMonth] = useState<string>("all");
@@ -458,7 +463,7 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
             <thead>
               <tr className="border-b border-border bg-muted/50 text-muted-foreground font-semibold">
                 <th className="py-2.5 px-3 w-14 text-center">Pos</th>
-                <th className="py-2.5 px-3 min-w-[240px]">Match Fixture (Home vs Away)</th>
+                <th className="py-2.5 px-3 min-w-[340px]">Match Fixture (Home vs Away)</th>
                 <th className="py-2.5 px-3 text-center min-w-[130px]">1X2 Distribution</th>
                 <th className="py-2.5 px-3 text-center min-w-[70px]">Avg Goals</th>
                 <th className="py-2.5 px-3 text-center min-w-[90px]">Likely Score</th>
@@ -488,18 +493,24 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
                     {/* Match Fixture Input / Display */}
                     <td className="py-2 px-3" onClick={(e) => e.stopPropagation()}>
                       <div className="flex items-center gap-1.5">
-                        <Input
+                        <TeamSearchInput
+                          size="xs"
                           placeholder={`Home Team ${pred.position}`}
                           value={customFixtures[pred.position]?.home || ""}
-                          onChange={(e) => handleUpdateFixture(pred.position, "home", e.target.value)}
-                          className="h-7 text-xs font-medium w-36"
+                          onChange={(val) => handleUpdateFixture(pred.position, "home", val)}
+                          teams={allTeams}
+                          teamAppearances={teamAppearances}
+                          className="w-36"
                         />
                         <span className="text-muted-foreground text-[10px] font-semibold">vs</span>
-                        <Input
+                        <TeamSearchInput
+                          size="xs"
                           placeholder={`Away Team ${pred.position}`}
                           value={customFixtures[pred.position]?.away || ""}
-                          onChange={(e) => handleUpdateFixture(pred.position, "away", e.target.value)}
-                          className="h-7 text-xs font-medium w-36"
+                          onChange={(val) => handleUpdateFixture(pred.position, "away", val)}
+                          teams={allTeams}
+                          teamAppearances={teamAppearances}
+                          className="w-36"
                         />
                         {isCustom && (
                           <Badge variant="outline" className="text-[10px] px-1 py-0 text-emerald-400 border-emerald-500/30">
