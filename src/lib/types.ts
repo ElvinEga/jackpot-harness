@@ -106,6 +106,10 @@ export type MatchPrediction = {
     detail: string;
     impact: "home" | "draw" | "away" | "neutral";
   }[];
+  bookmakerOdds?: { home?: number; draw?: number; away?: number };
+  tournament?: string;
+  country?: string;
+  kickOffTime?: string;
 };
 
 export type TeamH2H = {
