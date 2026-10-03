@@ -32,6 +32,29 @@ function serveProcessedData() {
           }
         }
 
+        // Proxy Mozzart predefined tickets API — returns JSON with okhttp UA directly
+        if (req.url && (req.url === '/api/mozzart/super-jackpot' || req.url.startsWith('/api/mozzart/super-jackpot'))) {
+          try {
+            const upstreamRes = await fetch('https://www.mozzartbet.co.ke/predefined-tickets', {
+              headers: {
+                'User-Agent': 'okhttp/4.9.0',
+                'Accept': 'application/json, text/plain, */*',
+              },
+            })
+            const data = await upstreamRes.text()
+            res.setHeader('Content-Type', 'application/json')
+            res.setHeader('Access-Control-Allow-Origin', '*')
+            res.statusCode = upstreamRes.status
+            res.end(data)
+            return
+          } catch (err: any) {
+            res.statusCode = 502
+            res.setHeader('Content-Type', 'application/json')
+            res.end(JSON.stringify({ error: err.message }))
+            return
+          }
+        }
+
         if (req.url && req.url.startsWith('/data/')) {
           const relativePath = req.url.replace(/^\/data\//, '').split('?')[0]
           const targetFile = path.resolve(import.meta.dirname, 'data/processed', relativePath)
