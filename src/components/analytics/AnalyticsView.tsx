@@ -88,7 +88,7 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({ matches }) => {
             <strong className="text-sm font-semibold text-amber-300">
               Crucial Market Caveat: Interleaved 1X2 & Double Chance Odds
             </strong>
-            <Badge variant="outline" className="border-amber-600/50 text-amber-300 text-[10px]">
+            <Badge variant="outline" className="border-amber-600/50 text-amber-300 text-xs">
               Schema Limitation
             </Badge>
           </div>
@@ -110,7 +110,7 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({ matches }) => {
             />
             <span>Deduplicate overlapping Mozzart extract batches</span>
           </label>
-          <span className="text-[11px] text-muted-foreground hidden md:inline">
+          <span className="text-xs text-muted-foreground hidden md:inline">
             (Deduplicates on date + home team + away team across mozzart files)
           </span>
         </div>
@@ -129,7 +129,7 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({ matches }) => {
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
         <Card className="bg-card/40 border-border">
           <CardContent className="p-3">
-            <span className="text-[11px] font-medium text-muted-foreground">Analyzed Matches</span>
+            <span className="text-xs font-medium text-muted-foreground">Analyzed Matches</span>
             <div className="text-xl font-bold text-foreground mt-1">
               {analyzedMatches.length.toLocaleString()}
             </div>
@@ -138,7 +138,7 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({ matches }) => {
 
         <Card className="bg-emerald-950/20 border-emerald-900/40">
           <CardContent className="p-3">
-            <span className="text-[11px] font-medium text-emerald-400">Home Win Rate</span>
+            <span className="text-xs font-medium text-emerald-400">Home Win Rate</span>
             <div className="text-xl font-bold text-emerald-300 mt-1">
               {homeRate.toFixed(1)}%
             </div>
@@ -147,7 +147,7 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({ matches }) => {
 
         <Card className="bg-amber-950/20 border-amber-900/40">
           <CardContent className="p-3">
-            <span className="text-[11px] font-medium text-amber-400">Draw Rate</span>
+            <span className="text-xs font-medium text-amber-400">Draw Rate</span>
             <div className="text-xl font-bold text-amber-300 mt-1">
               {drawRate.toFixed(1)}%
             </div>
@@ -156,7 +156,7 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({ matches }) => {
 
         <Card className="bg-sky-950/20 border-sky-900/40">
           <CardContent className="p-3">
-            <span className="text-[11px] font-medium text-sky-400">Away Win Rate</span>
+            <span className="text-xs font-medium text-sky-400">Away Win Rate</span>
             <div className="text-xl font-bold text-sky-300 mt-1">
               {awayRate.toFixed(1)}%
             </div>
@@ -165,7 +165,7 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({ matches }) => {
 
         <Card className="bg-card/40 border-border">
           <CardContent className="p-3">
-            <span className="text-[11px] font-medium text-muted-foreground">Avg Goals / Match</span>
+            <span className="text-xs font-medium text-muted-foreground">Avg Goals / Match</span>
             <div className="text-xl font-bold text-foreground mt-1">
               {goalsStats.avgGoals.toFixed(2)}
             </div>
@@ -174,7 +174,7 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({ matches }) => {
 
         <Card className="bg-purple-950/20 border-purple-900/40">
           <CardContent className="p-3">
-            <span className="text-[11px] font-medium text-purple-400">Over 2.5 Goals</span>
+            <span className="text-xs font-medium text-purple-400">Over 2.5 Goals</span>
             <div className="text-xl font-bold text-purple-300 mt-1">
               {goalsStats.over25Rate.toFixed(1)}%
             </div>
@@ -444,7 +444,7 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({ matches }) => {
                 <span className="text-foreground">Missing Dates</span>
                 <span className="font-mono font-bold text-amber-400">
                   {coverageStats.missingDate.toLocaleString()}
-                  <span className="text-[10px] text-muted-foreground ml-1">
+                  <span className="text-xs text-muted-foreground ml-1">
                     ({((coverageStats.missingDate / total) * 100).toFixed(2)}%)
                   </span>
                 </span>
@@ -454,7 +454,7 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({ matches }) => {
                 <span className="text-foreground">Null Odds Records</span>
                 <span className="font-mono font-bold text-amber-400">
                   {coverageStats.missingOdds.toLocaleString()}
-                  <span className="text-[10px] text-muted-foreground ml-1">
+                  <span className="text-xs text-muted-foreground ml-1">
                     ({((coverageStats.missingOdds / total) * 100).toFixed(2)}%)
                   </span>
                 </span>
@@ -464,7 +464,7 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({ matches }) => {
                 <span className="text-foreground">Postponed / Abandoned Matches</span>
                 <span className="font-mono font-bold text-purple-400">
                   {coverageStats.postponedOrAbandoned.toLocaleString()}
-                  <span className="text-[10px] text-muted-foreground ml-1">
+                  <span className="text-xs text-muted-foreground ml-1">
                     ({((coverageStats.postponedOrAbandoned / total) * 100).toFixed(2)}%)
                   </span>
                 </span>
