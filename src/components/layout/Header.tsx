@@ -24,7 +24,7 @@ import {
 import type { AppStats, Match } from "../../lib/types";
 import { exportToCsv, exportToJson } from "../../lib/export";
 
-export type AppTab = "predictor" | "positions" | "teams" | "goals" | "explorer";
+export type AppTab = "explorer" | "predictor" | "positions" | "teams" | "goals";
 
 interface HeaderProps {
   stats: AppStats | null;
@@ -75,6 +75,10 @@ export const Header: React.FC<HeaderProps> = ({
             onValueChange={(val) => onTabChange(val as AppTab)}
           >
             <TabsList className="h-8">
+              <TabsTrigger value="explorer" className="flex items-center gap-1.5 text-xs h-7">
+                <TableIcon className="h-3.5 w-3.5 text-muted-foreground" />
+                <span>Explorer</span>
+              </TabsTrigger>
               <TabsTrigger value="predictor" className="flex items-center gap-1.5 text-xs h-7">
                 <Sparkles className="h-3.5 w-3.5 text-primary" />
                 <span>Predictor</span>
@@ -90,10 +94,6 @@ export const Header: React.FC<HeaderProps> = ({
               <TabsTrigger value="goals" className="flex items-center gap-1.5 text-xs h-7">
                 <Goal className="h-3.5 w-3.5 text-emerald-400" />
                 <span>Goals</span>
-              </TabsTrigger>
-              <TabsTrigger value="explorer" className="flex items-center gap-1.5 text-xs h-7">
-                <TableIcon className="h-3.5 w-3.5 text-muted-foreground" />
-                <span>Explorer</span>
               </TabsTrigger>
             </TabsList>
           </Tabs>
