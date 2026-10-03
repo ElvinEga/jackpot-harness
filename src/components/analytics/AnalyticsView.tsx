@@ -22,8 +22,9 @@ import {
   Legend,
   CartesianGrid
 } from "recharts";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "../ui/Card";
-import { Badge } from "../ui/Badge";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
 import type { Match } from "../../lib/types";
 import {
   deduplicateMatches,
@@ -102,12 +103,10 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({ matches }) => {
       {/* 2. Top Controls & KPI Summary */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-card/60 border border-border p-3 rounded-lg">
         <div className="flex items-center gap-2">
-          <label className="flex items-center gap-2 text-xs text-foreground cursor-pointer font-medium">
-            <input
-              type="checkbox"
+          <label className="flex items-center gap-2 text-xs text-foreground cursor-pointer font-medium select-none">
+            <Checkbox
               checked={dedupMozzart}
-              onChange={(e) => setDedupMozzart(e.target.checked)}
-              className="rounded border-border bg-background text-primary focus:ring-primary h-4 w-4 cursor-pointer"
+              onCheckedChange={(checked) => setDedupMozzart(checked === true)}
             />
             <span>Deduplicate overlapping Mozzart extract batches</span>
           </label>
