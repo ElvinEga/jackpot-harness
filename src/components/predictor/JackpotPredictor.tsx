@@ -24,6 +24,17 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { toast } from "@/components/ui/toast";
 
 import type { Match, PositionStat, MatchPrediction } from "../../lib/types";
 import { computePositionStats } from "../../lib/positions";
@@ -96,6 +107,61 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
   const [customFixtures, setCustomFixtures] = useState<Record<number, FixtureEntry>>({});
   const [copiedSlip, setCopiedSlip] = useState(false);
   const [detailMatch, setDetailMatch] = useState<MatchPrediction | null>(null);
+
+  // Prefill protection: track hand-typed rows and pending destructive replace
+  const [hasManualEdits, setHasManualEdits] = useState(false);
+  const [replacePrompt, setReplacePrompt] = useState<{ label: string; mutate: () => void } | null>(null);
+
+  interface FixtureSnapshot {
+    fixtures: Record<number, FixtureEntry>;
+    sportpesaMeta: { id: string; humanId: number; status: string } | null;
+    mozzartMeta: { id: number; roundId: number; jackpotAmount: number | null } | null;
+    preset: string;
+    historicalEvent: string;
+    manual: boolean;
+  }
+
+  const takeSnapshot = (): FixtureSnapshot => ({
+    fixtures: customFixtures,
+    sportpesaMeta: activeSportPesaMeta,
+    mozzartMeta: activeMozzartMeta,
+    preset: prefillPreset,
+    historicalEvent: selectedHistoricalEvent,
+    manual: hasManualEdits,
+  });
+
+  const restoreSnapshot = (s: FixtureSnapshot) => {
+    setCustomFixtures(s.fixtures);
+    setActiveSportPesaMeta(s.sportpesaMeta);
+    setActiveMozzartMeta(s.mozzartMeta);
+    setPrefillPreset(s.preset);
+    setSelectedHistoricalEvent(s.historicalEvent);
+    setHasManualEdits(s.manual);
+  };
+
+  // Apply a fixture-replacing change; if rows already exist, offer Undo via toast
+  const runWithUndo = (label: string, mutate: () => void) => {
+    const hadRows = Object.keys(customFixtures).length > 0;
+    const snapshot = takeSnapshot();
+    mutate();
+    if (hadRows) {
+      toast.add({
+        title: `${label} applied`,
+        description: "Your previous fixtures were replaced.",
+        actionProps: { children: "Undo", onClick: () => restoreSnapshot(snapshot) },
+        timeout: 10000,
+      });
+    }
+  };
+
+  // Destructive replace over hand-typed rows requires an explicit confirm first
+  const requestReplace = (label: string, mutate: () => void) => {
+    if (Object.keys(customFixtures).length > 0 && hasManualEdits) {
+      setReplacePrompt({ label, mutate });
+    } else {
+      runWithUndo(label, mutate);
+    }
+  };
 
   // Filter matches based on selected jackpot, month, and year for baseline analysis
   const filteredMatches = useMemo(() => {
@@ -191,7 +257,7 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
   }, [filteredMatches, matches, selectedJackpot]);
 
   // Apply parsed SportPesa jackpot payload into 1..17 fixtures
-  const handleApplySportPesaJackpot = (jp: ParsedSportPesaJackpot) => {
+  const applySportPesaJackpot = (jp: ParsedSportPesaJackpot) => {
     setSelectedJackpot("SportPesa - Mega Jackpot Pro");
     const newFix: Record<number, FixtureEntry> = {};
     for (const m of jp.matches) {
@@ -210,6 +276,7 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
     setActiveSportPesaMeta({ id: jp.id, humanId: jp.humanId, status: jp.bettingStatus });
     setPrefillPreset("sportpesa-live");
     setSelectedHistoricalEvent("");
+    setHasManualEdits(false);
   };
 
   // Quick single-click fetch from SportPesa API
@@ -217,9 +284,15 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
     setIsFetchingSportPesa(true);
     try {
       const jp = await fetchActiveSportPesaJackpot();
-      handleApplySportPesaJackpot(jp);
+      requestReplace("SportPesa live jackpot", () => applySportPesaJackpot(jp));
     } catch (err) {
       console.error("Failed to quick-fetch SportPesa:", err);
+      toast.add({
+        title: "SportPesa live fetch failed",
+        description: "Network or API problem — you can paste the JSON payload manually.",
+        type: "warning",
+        timeout: 6000,
+      });
       setIsSportPesaModalOpen(true);
     } finally {
       setIsFetchingSportPesa(false);
@@ -233,17 +306,11 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
       handleQuickPrefillSportPesa();
     } else if (val === "mozzart-live") {
       handleQuickPrefillMozzart();
-    } else if (val === "clear") {
-      setCustomFixtures({});
-      setActiveSportPesaMeta(null);
-      setActiveMozzartMeta(null);
-      setSelectedHistoricalEvent("");
-      setPrefillPreset("");
     }
   };
 
   // Apply parsed Mozzart jackpot payload into 1..16 fixtures
-  const handleApplyMozzartJackpot = (jp: ParsedMozzartJackpot) => {
+  const applyMozzartJackpot = (jp: ParsedMozzartJackpot) => {
     setSelectedJackpot("Mozzart - Super Jackpot");
     const newFix: Record<number, FixtureEntry> = {};
     for (const m of jp.matches) {
@@ -263,6 +330,7 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
     setActiveSportPesaMeta(null);
     setPrefillPreset("mozzart-live");
     setSelectedHistoricalEvent("");
+    setHasManualEdits(false);
   };
 
   // Quick single-click fetch from Mozzart API
@@ -270,9 +338,15 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
     setIsFetchingMozzart(true);
     try {
       const jp = await fetchActiveMozzartJackpot();
-      handleApplyMozzartJackpot(jp);
+      requestReplace("Mozzart live jackpot", () => applyMozzartJackpot(jp));
     } catch (err) {
       console.error("Failed to quick-fetch Mozzart:", err);
+      toast.add({
+        title: "Mozzart live fetch failed",
+        description: "Network or API problem — you can paste the JSON payload manually.",
+        type: "warning",
+        timeout: 6000,
+      });
       setIsMozzartModalOpen(true);
     } finally {
       setIsFetchingMozzart(false);
@@ -283,27 +357,33 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
   const handleLoadHistoricalEvent = (eventId: string) => {
     setSelectedHistoricalEvent(eventId);
     if (!eventId) {
-      setCustomFixtures({});
-      setActiveSportPesaMeta(null);
-      setPrefillPreset("");
+      runWithUndo("Slip cleared", () => {
+        setCustomFixtures({});
+        setActiveSportPesaMeta(null);
+        setPrefillPreset("");
+      });
       return;
     }
     const found = availableEvents.find((e) => e.id === eventId);
     if (!found) return;
 
-    const newFix: Record<number, FixtureEntry> = {};
-    for (const m of found.matches) {
-      if (m.position >= 1 && m.position <= maxPositions) {
-        newFix[m.position] = { home: m.home_team, away: m.away_team };
+    requestReplace("Past jackpot slip", () => {
+      const newFix: Record<number, FixtureEntry> = {};
+      for (const m of found.matches) {
+        if (m.position >= 1 && m.position <= maxPositions) {
+          newFix[m.position] = { home: m.home_team, away: m.away_team };
+        }
       }
-    }
-    setCustomFixtures(newFix);
-    setActiveSportPesaMeta(null);
-    setPrefillPreset("historical");
+      setCustomFixtures(newFix);
+      setActiveSportPesaMeta(null);
+      setPrefillPreset("historical");
+      setHasManualEdits(false);
+    });
   };
 
   // Update a single fixture team
   const handleUpdateFixture = (pos: number, field: "home" | "away", val: string) => {
+    setHasManualEdits(true);
     setCustomFixtures((prev) => ({
       ...prev,
       [pos]: {
@@ -384,8 +464,11 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
       .map((p) => {
         const pick = p.predictedResult === "home" ? "1" : p.predictedResult === "draw" ? "X" : "2";
         const score = p.mostLikelyScores[0]?.score || "1-1";
-        const teamInfo = p.homeTeam.startsWith("Team ") ? "" : ` (${p.homeTeam} vs ${p.awayTeam})`;
-        return `${p.position}. Pick: ${pick} | Exp: ${score} | Prob: ${p.homeProb}% - ${p.drawProb}% - ${p.awayProb}%${teamInfo}`;
+        const hasFixture = !p.homeTeam.startsWith("Team ") && !p.awayTeam.startsWith("Team ");
+        const suffix = hasFixture
+          ? ` (${p.homeTeam} vs ${p.awayTeam})`
+          : " (position pattern only — no fixture set)";
+        return `${p.position}. Pick: ${pick} | Exp: ${score} | Prob: ${p.homeProb}% - ${p.drawProb}% - ${p.awayProb}%${suffix}`;
       })
       .join("\n");
 
@@ -399,17 +482,9 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
       {/* Top Banner / Hero */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-2 border-b border-border">
         <div>
-          <div className="flex items-center gap-2">
-            <span className="p-1.5 rounded-lg bg-primary/10 text-primary border border-primary/20">
-              <Sparkles className="h-5 w-5" />
-            </span>
-            <h1 className="text-xl font-bold tracking-tight text-foreground">Jackpot Predictor Engine</h1>
-            <Badge variant="secondary" className="text-xs font-mono">
-              Positions 1–{maxPositions}
-            </Badge>
-          </div>
+          <h2 className="text-xl font-bold tracking-tight text-foreground">Predictor</h2>
           <p className="text-xs text-muted-foreground mt-1">
-            Predict upcoming jackpot slips based on historical position biases (1–{maxPositions}), team form, head-to-head records, and Poisson score distributions.
+            Predict upcoming jackpot slips based on historical position biases.
           </p>
         </div>
 
@@ -421,7 +496,7 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
             onClick={handleCopySlip}
             className="text-xs gap-1.5 h-8"
           >
-            {copiedSlip ? <Check className="h-3.5 w-3.5 text-emerald-400" /> : <Copy className="h-3.5 w-3.5 text-muted-foreground" />}
+            {copiedSlip ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5 text-muted-foreground" />}
             <span>{copiedSlip ? "Slip Copied!" : "Copy Prediction Slip"}</span>
           </Button>
 
@@ -429,13 +504,16 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => {
-                setCustomFixtures({});
-                setSelectedHistoricalEvent("");
-                setActiveSportPesaMeta(null);
-                setActiveMozzartMeta(null);
-                setPrefillPreset("");
-              }}
+              onClick={() =>
+                runWithUndo("Fixtures cleared", () => {
+                  setCustomFixtures({});
+                  setSelectedHistoricalEvent("");
+                  setActiveSportPesaMeta(null);
+                  setActiveMozzartMeta(null);
+                  setPrefillPreset("");
+                  setHasManualEdits(false);
+                })
+              }
               className="text-xs text-muted-foreground hover:text-foreground h-8"
             >
               <RotateCcw className="h-3.5 w-3.5 mr-1" />
@@ -446,9 +524,9 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
       </div>
 
       {/* SportPesa Live API Prefill Toolbar */}
-      <div className="rounded-xl border border-blue-500/30 bg-blue-500/5 p-3.5 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 shadow-xs">
+      <div className="rounded-xl border border-primary/30 bg-primary/5 p-3.5 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 shadow-xs">
         <div className="flex items-center gap-3">
-          <div className="h-9 w-9 rounded-xl bg-blue-500/15 border border-blue-500/30 flex items-center justify-center text-blue-400 shrink-0">
+          <div className="h-9 w-9 rounded-xl bg-primary/15 border border-primary/30 flex items-center justify-center text-primary shrink-0">
             <Zap className="h-5 w-5 fill-current" />
           </div>
           <div>
@@ -457,16 +535,16 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
                 SportPesa Mega Jackpot Pro — API Prefill
               </span>
               {activeSportPesaMeta ? (
-                <Badge variant="outline" className="text-[10px] px-1.5 py-0 text-emerald-400 border-emerald-500/30 font-mono">
+                <Badge variant="outline" className="text-xs px-1.5 py-0 text-primary border-primary/30 font-mono">
                   #{activeSportPesaMeta.humanId} Active
                 </Badge>
               ) : (
-                <Badge variant="outline" className="text-[10px] px-1.5 py-0 text-blue-400 border-blue-500/30 font-mono">
+                <Badge variant="outline" className="text-xs px-1.5 py-0 text-muted-foreground border-primary/30 font-mono">
                   17 Matches
                 </Badge>
               )}
             </div>
-            <p className="text-[11px] text-muted-foreground">
+            <p className="text-xs text-muted-foreground">
               {activeSportPesaMeta
                 ? `Active jackpot #${activeSportPesaMeta.humanId} loaded with live 1X2 odds, kickoffs, and tournament data.`
                 : `Instantly prefill all 17 match fixtures from SportPesa's active jackpot API with real-time odds.`}
@@ -476,11 +554,11 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
 
         <div className="flex items-center gap-2 shrink-0">
           <Button
-            variant="default"
+            variant="outline"
             size="sm"
             onClick={handleQuickPrefillSportPesa}
             disabled={isFetchingSportPesa}
-            className="h-8 text-xs font-semibold gap-1.5 bg-blue-600 hover:bg-blue-700 text-white shadow-xs"
+            className="h-8 text-xs font-semibold gap-1.5 border-primary/40 bg-primary/10 text-primary hover:bg-primary/20 hover:text-primary shadow-xs"
           >
             {isFetchingSportPesa ? (
               <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -504,9 +582,9 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
       </div>
 
       {/* Mozzart Live API Prefill Toolbar */}
-      <div className="rounded-xl border border-green-500/30 bg-green-500/5 p-3.5 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 shadow-xs">
+      <div className="rounded-xl border border-primary/30 bg-primary/5 p-3.5 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 shadow-xs">
         <div className="flex items-center gap-3">
-          <div className="h-9 w-9 rounded-xl bg-green-500/15 border border-green-500/30 flex items-center justify-center text-green-400 shrink-0">
+          <div className="h-9 w-9 rounded-xl bg-primary/15 border border-primary/30 flex items-center justify-center text-primary shrink-0">
             <Zap className="h-5 w-5 fill-current" />
           </div>
           <div>
@@ -515,16 +593,16 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
                 Mozzart Super Jackpot — API Prefill
               </span>
               {activeMozzartMeta ? (
-                <Badge variant="outline" className="text-[10px] px-1.5 py-0 text-emerald-400 border-emerald-500/30 font-mono">
+                <Badge variant="outline" className="text-xs px-1.5 py-0 text-primary border-primary/30 font-mono">
                   Round #{activeMozzartMeta.roundId} Active
                 </Badge>
               ) : (
-                <Badge variant="outline" className="text-[10px] px-1.5 py-0 text-green-400 border-green-500/30 font-mono">
+                <Badge variant="outline" className="text-xs px-1.5 py-0 text-primary border-primary/30 font-mono">
                   16 Matches
                 </Badge>
               )}
             </div>
-            <p className="text-[11px] text-muted-foreground">
+            <p className="text-xs text-muted-foreground">
               {activeMozzartMeta
                 ? `Round #${activeMozzartMeta.roundId} loaded with live 1X2 odds and competition data.`
                 : `Instantly prefill all 16 match fixtures from Mozzart's active super jackpot API with real-time odds.`}
@@ -534,11 +612,11 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
 
         <div className="flex items-center gap-2 shrink-0">
           <Button
-            variant="default"
+            variant="outline"
             size="sm"
             onClick={handleQuickPrefillMozzart}
             disabled={isFetchingMozzart}
-            className="h-8 text-xs font-semibold gap-1.5 bg-green-600 hover:bg-green-700 text-white shadow-xs"
+            className="h-8 text-xs font-semibold gap-1.5 border-primary/40 bg-primary/10 text-primary hover:bg-primary/20 shadow-xs"
           >
             {isFetchingMozzart ? (
               <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -565,22 +643,21 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 bg-card border border-border rounded-xl p-4 shadow-xs">
         {/* Prefill Preset Selector */}
         <div>
-          <label className="text-[11px] font-medium text-muted-foreground mb-1 block">Prefill Fixtures</label>
+          <label className="text-xs font-medium text-muted-foreground mb-1 block">Prefill Fixtures</label>
           <NativeSelect
             value={prefillPreset}
             onChange={(e) => handleSelectPreset(e.target.value)}
             className="w-full text-xs font-medium"
           >
             <NativeSelectOption value="">Select prefill source...</NativeSelectOption>
-            <NativeSelectOption value="sportpesa-live">⚡ SportPesa Mega Jackpot Pro (Active)</NativeSelectOption>
-            <NativeSelectOption value="mozzart-live">⚡ Mozzart Super Jackpot (Active)</NativeSelectOption>
-            <NativeSelectOption value="clear">✕ Clear all fixtures</NativeSelectOption>
+            <NativeSelectOption value="sportpesa-live">SportPesa Mega Jackpot Pro (Active)</NativeSelectOption>
+            <NativeSelectOption value="mozzart-live">Mozzart Super Jackpot (Active)</NativeSelectOption>
           </NativeSelect>
         </div>
 
         {/* Jackpot Selector */}
         <div>
-          <label className="text-[11px] font-medium text-muted-foreground mb-1 block">Jackpot</label>
+          <label className="text-xs font-medium text-muted-foreground mb-1 block">Jackpot</label>
           <NativeSelect
             value={selectedJackpot}
             onChange={(e) => {
@@ -600,7 +677,7 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
 
         {/* Month Selector */}
         <div>
-          <label className="text-[11px] font-medium text-muted-foreground mb-1 block">Historical Month</label>
+          <label className="text-xs font-medium text-muted-foreground mb-1 block">Historical Month</label>
           <NativeSelect
             value={selectedMonth}
             onChange={(e) => setSelectedMonth(e.target.value)}
@@ -616,7 +693,7 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
 
         {/* Year Selector */}
         <div>
-          <label className="text-[11px] font-medium text-muted-foreground mb-1 block">Historical Year</label>
+          <label className="text-xs font-medium text-muted-foreground mb-1 block">Historical Year</label>
           <NativeSelect
             value={selectedYear}
             onChange={(e) => setSelectedYear(e.target.value)}
@@ -633,7 +710,7 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
 
         {/* Load Historical Event Dropdown */}
         <div>
-          <label className="text-[11px] font-medium text-muted-foreground mb-1 block">Load Past Jackpot Slip</label>
+          <label className="text-xs font-medium text-muted-foreground mb-1 block">Load Past Jackpot Slip</label>
           <NativeSelect
             value={selectedHistoricalEvent}
             onChange={(e) => handleLoadHistoricalEvent(e.target.value)}
@@ -653,7 +730,7 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
         <Card size="sm" className="bg-card border-border shadow-xs">
           <CardHeader className="pb-1">
-            <CardDescription className="text-[11px] flex items-center gap-1">
+            <CardDescription className="text-xs flex items-center gap-1">
               <History className="h-3 w-3 text-muted-foreground" />
               Analyzed Matches
             </CardDescription>
@@ -665,11 +742,11 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
 
         <Card size="sm" className="bg-card border-border shadow-xs">
           <CardHeader className="pb-1">
-            <CardDescription className="text-[11px] flex items-center gap-1">
-              <span className="h-2 w-2 rounded-full bg-emerald-500 inline-block" />
+            <CardDescription className="text-xs flex items-center gap-1">
+              <span className="h-2 w-2 rounded-full bg-primary inline-block" />
               Home Win %
             </CardDescription>
-            <CardTitle className="text-xl font-bold font-mono text-emerald-400">
+            <CardTitle className="text-xl font-bold font-mono text-primary">
               {overview.homeWinPct}%
             </CardTitle>
           </CardHeader>
@@ -677,11 +754,11 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
 
         <Card size="sm" className="bg-card border-border shadow-xs">
           <CardHeader className="pb-1">
-            <CardDescription className="text-[11px] flex items-center gap-1">
-              <span className="h-2 w-2 rounded-full bg-amber-500 inline-block" />
+            <CardDescription className="text-xs flex items-center gap-1">
+              <span className="h-2 w-2 rounded-full bg-slate-300 inline-block" />
               Draw %
             </CardDescription>
-            <CardTitle className="text-xl font-bold font-mono text-amber-400">
+            <CardTitle className="text-xl font-bold font-mono text-foreground">
               {overview.drawPct}%
             </CardTitle>
           </CardHeader>
@@ -689,11 +766,11 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
 
         <Card size="sm" className="bg-card border-border shadow-xs">
           <CardHeader className="pb-1">
-            <CardDescription className="text-[11px] flex items-center gap-1">
-              <span className="h-2 w-2 rounded-full bg-blue-500 inline-block" />
+            <CardDescription className="text-xs flex items-center gap-1">
+              <span className="h-2 w-2 rounded-full bg-slate-500 inline-block" />
               Away Win %
             </CardDescription>
-            <CardTitle className="text-xl font-bold font-mono text-blue-400">
+            <CardTitle className="text-xl font-bold font-mono text-foreground">
               {overview.awayWinPct}%
             </CardTitle>
           </CardHeader>
@@ -701,7 +778,7 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
 
         <Card size="sm" className="bg-card border-border shadow-xs">
           <CardHeader className="pb-1">
-            <CardDescription className="text-[11px] flex items-center gap-1">
+            <CardDescription className="text-xs flex items-center gap-1">
               <Target className="h-3 w-3 text-primary" />
               Avg Goals / Match
             </CardDescription>
@@ -748,8 +825,16 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
                 return (
                   <tr
                     key={pred.position}
+                    tabIndex={0}
                     onClick={() => setDetailMatch(pred)}
-                    className="hover:bg-muted/40 transition-colors cursor-pointer group"
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        setDetailMatch(pred);
+                      }
+                    }}
+                    aria-label={`Position ${pred.position}: ${pred.homeTeam} vs ${pred.awayTeam}. Press Enter to inspect prediction`}
+                    className="hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring transition-colors cursor-pointer group"
                   >
                     {/* Position Number */}
                     <td className="py-2.5 px-3 text-center">
@@ -771,7 +856,7 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
                             teamAppearances={teamAppearances}
                             className="w-36"
                           />
-                          <span className="text-muted-foreground text-[10px] font-semibold">vs</span>
+                          <span className="text-muted-foreground text-xs font-semibold">vs</span>
                           <TeamSearchInput
                             size="xs"
                             placeholder={`Away Team ${pred.position}`}
@@ -782,7 +867,7 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
                             className="w-36"
                           />
                           {isCustom && (
-                            <Badge variant="outline" className="text-[10px] px-1 py-0 text-emerald-400 border-emerald-500/30">
+                            <Badge variant="outline" className="text-xs px-1 py-0 text-primary border-primary/30">
                               Active
                             </Badge>
                           )}
@@ -790,8 +875,8 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
 
                         {/* SportPesa Live Market Odds & Tournament info */}
                         {pred.bookmakerOdds && (
-                          <div className="flex items-center gap-2 text-[10px] font-mono text-muted-foreground pl-0.5">
-                            <span className="inline-flex items-center gap-1 text-[9px] px-1.5 py-0.5 rounded bg-blue-500/10 text-blue-300 border border-blue-500/20 font-sans font-medium">
+                          <div className="flex items-center gap-2 text-xs font-mono text-muted-foreground pl-0.5">
+                            <span className="inline-flex items-center gap-1 text-xs px-1.5 py-0.5 rounded bg-primary/10 text-primary border border-primary/20 font-sans font-medium">
                               SP Odds: {pred.bookmakerOdds.home?.toFixed(2)} | {pred.bookmakerOdds.draw?.toFixed(2)} | {pred.bookmakerOdds.away?.toFixed(2)}
                             </span>
                             {pred.tournament && (
@@ -807,16 +892,16 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
                     {/* 1X2 Distribution Bar */}
                     <td className="py-2.5 px-3">
                       <div className="flex flex-col gap-1">
-                        <div className="flex items-center justify-between text-[11px] font-mono">
-                          <span className="text-emerald-400 font-medium">{pred.homeProb}%</span>
-                          <span className="text-amber-400 font-medium">{pred.drawProb}%</span>
-                          <span className="text-blue-400 font-medium">{pred.awayProb}%</span>
+                        <div className="flex items-center justify-between text-xs font-mono">
+                          <span className="text-primary font-medium">{pred.homeProb}%</span>
+                          <span className="text-foreground font-medium">{pred.drawProb}%</span>
+                          <span className="text-muted-foreground font-medium">{pred.awayProb}%</span>
                         </div>
                         {/* Visual Split Bar */}
                         <div className="h-1.5 w-full bg-muted rounded-full flex overflow-hidden">
-                          <div style={{ width: `${pred.homeProb}%` }} className="bg-emerald-500 h-full" />
-                          <div style={{ width: `${pred.drawProb}%` }} className="bg-amber-500 h-full" />
-                          <div style={{ width: `${pred.awayProb}%` }} className="bg-blue-500 h-full" />
+                          <div style={{ width: `${pred.homeProb}%` }} className="bg-primary h-full" />
+                          <div style={{ width: `${pred.drawProb}%` }} className="bg-slate-300 h-full" />
+                          <div style={{ width: `${pred.awayProb}%` }} className="bg-slate-500 h-full" />
                         </div>
                       </div>
                     </td>
@@ -831,7 +916,7 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
                       <span className="font-mono font-semibold px-2 py-0.5 rounded bg-muted border border-border text-foreground">
                         {pred.mostLikelyScores[0]?.score || "1-1"}
                       </span>
-                      <span className="text-[10px] text-muted-foreground block mt-0.5 font-mono">
+                      <span className="text-xs text-muted-foreground block mt-0.5 font-mono">
                         ({pred.mostLikelyScores[0]?.probability || 14}%)
                       </span>
                     </td>
@@ -839,30 +924,24 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
                     {/* Predicted Result Badge */}
                     <td className="py-2.5 px-3 text-center">
                       {pred.predictedResult === "home" && (
-                        <Badge variant="default" className="bg-emerald-600 hover:bg-emerald-600 text-white font-bold">
-                          HOME (1)
-                        </Badge>
+                        <Badge variant="home">HOME (1)</Badge>
                       )}
                       {pred.predictedResult === "draw" && (
-                        <Badge variant="default" className="bg-amber-600 hover:bg-amber-600 text-white font-bold">
-                          DRAW (X)
-                        </Badge>
+                        <Badge variant="draw">DRAW (X)</Badge>
                       )}
                       {pred.predictedResult === "away" && (
-                        <Badge variant="default" className="bg-blue-600 hover:bg-blue-600 text-white font-bold">
-                          AWAY (2)
-                        </Badge>
+                        <Badge variant="away">AWAY (2)</Badge>
                       )}
                     </td>
 
                     {/* Confidence Rating */}
                     <td className="py-2.5 px-3 text-center">
                       <span
-                        className={`text-[11px] font-semibold ${
+                        className={`text-xs font-semibold ${
                           pred.confidence === "High"
-                            ? "text-emerald-400"
+                            ? "text-primary"
                             : pred.confidence === "Medium"
-                            ? "text-amber-400"
+                            ? "text-foreground"
                             : "text-muted-foreground"
                         }`}
                       >
@@ -902,49 +981,49 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
               {/* Outcome Probability Summary */}
               <div className="grid grid-cols-3 gap-2 text-center p-3 rounded-xl bg-muted/40 border border-border">
                 <div className="p-2 rounded bg-card border border-border">
-                  <span className="text-muted-foreground text-[10px] block">Home Win (1)</span>
-                  <span className="text-lg font-bold font-mono text-emerald-400">{detailMatch.homeProb}%</span>
+                  <span className="text-muted-foreground text-xs block">Home Win (1)</span>
+                  <span className="text-lg font-bold font-mono text-primary">{detailMatch.homeProb}%</span>
                 </div>
                 <div className="p-2 rounded bg-card border border-border">
-                  <span className="text-muted-foreground text-[10px] block">Draw (X)</span>
-                  <span className="text-lg font-bold font-mono text-amber-400">{detailMatch.drawProb}%</span>
+                  <span className="text-muted-foreground text-xs block">Draw (X)</span>
+                  <span className="text-lg font-bold font-mono text-foreground">{detailMatch.drawProb}%</span>
                 </div>
                 <div className="p-2 rounded bg-card border border-border">
-                  <span className="text-muted-foreground text-[10px] block">Away Win (2)</span>
-                  <span className="text-lg font-bold font-mono text-blue-400">{detailMatch.awayProb}%</span>
+                  <span className="text-muted-foreground text-xs block">Away Win (2)</span>
+                  <span className="text-lg font-bold font-mono text-foreground">{detailMatch.awayProb}%</span>
                 </div>
               </div>
 
               {/* SportPesa Live Market Odds Card if present */}
               {detailMatch.bookmakerOdds && (
-                <div className="p-3 rounded-xl bg-blue-500/5 border border-blue-500/20">
+                <div className="p-3 rounded-xl bg-primary/5 border border-primary/20">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-semibold text-blue-300 flex items-center gap-1.5">
+                    <span className="text-xs font-semibold text-primary flex items-center gap-1.5">
                       <Zap className="h-3.5 w-3.5" />
                       SportPesa Live 1X2 Market Odds
                     </span>
                     {detailMatch.tournament && (
-                      <span className="text-[11px] text-muted-foreground font-mono">
+                      <span className="text-xs text-muted-foreground font-mono">
                         {detailMatch.tournament} {detailMatch.country ? `• ${detailMatch.country}` : ""}
                       </span>
                     )}
                   </div>
                   <div className="grid grid-cols-3 gap-2 text-center">
                     <div className="p-1.5 rounded bg-card border border-border">
-                      <span className="text-[10px] text-muted-foreground block">Home (1)</span>
-                      <span className="text-sm font-bold font-mono text-emerald-400">
+                      <span className="text-xs text-muted-foreground block">Home (1)</span>
+                      <span className="text-sm font-bold font-mono text-primary">
                         {detailMatch.bookmakerOdds.home?.toFixed(2) || "-"}
                       </span>
                     </div>
                     <div className="p-1.5 rounded bg-card border border-border">
-                      <span className="text-[10px] text-muted-foreground block">Draw (X)</span>
-                      <span className="text-sm font-bold font-mono text-amber-400">
+                      <span className="text-xs text-muted-foreground block">Draw (X)</span>
+                      <span className="text-sm font-bold font-mono text-foreground">
                         {detailMatch.bookmakerOdds.draw?.toFixed(2) || "-"}
                       </span>
                     </div>
                     <div className="p-1.5 rounded bg-card border border-border">
-                      <span className="text-[10px] text-muted-foreground block">Away (2)</span>
-                      <span className="text-sm font-bold font-mono text-blue-400">
+                      <span className="text-xs text-muted-foreground block">Away (2)</span>
+                      <span className="text-sm font-bold font-mono text-foreground">
                         {detailMatch.bookmakerOdds.away?.toFixed(2) || "-"}
                       </span>
                     </div>
@@ -960,7 +1039,7 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
                     <CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" />
                     <div>
                       <div className="font-semibold text-foreground">{sig.label}</div>
-                      <div className="text-muted-foreground text-[11px] mt-0.5">{sig.detail}</div>
+                      <div className="text-muted-foreground text-xs mt-0.5">{sig.detail}</div>
                     </div>
                   </div>
                 ))}
@@ -973,7 +1052,7 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
                   {detailMatch.mostLikelyScores.map((sc, i) => (
                     <div key={i} className="p-2 rounded bg-muted/50 border border-border text-center">
                       <span className="font-mono font-bold text-sm text-foreground block">{sc.score}</span>
-                      <span className="text-[10px] text-muted-foreground font-mono">{sc.probability}%</span>
+                      <span className="text-xs text-muted-foreground font-mono">{sc.probability}%</span>
                     </div>
                   ))}
                 </div>
@@ -1005,15 +1084,45 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
       <SportPesaImportModal
         open={isSportPesaModalOpen}
         onOpenChange={setIsSportPesaModalOpen}
-        onApplyJackpot={handleApplySportPesaJackpot}
+        onApplyJackpot={(jp) => requestReplace("SportPesa jackpot", () => applySportPesaJackpot(jp))}
       />
 
       {/* Mozzart API Import / Options Modal */}
       <MozzartImportModal
         open={isMozzartModalOpen}
         onOpenChange={setIsMozzartModalOpen}
-        onApplyJackpot={handleApplyMozzartJackpot}
+        onApplyJackpot={(jp) => requestReplace("Mozzart jackpot", () => applyMozzartJackpot(jp))}
       />
+
+      {/* Confirm before replacing manually edited fixtures */}
+      <AlertDialog
+        open={replacePrompt !== null}
+        onOpenChange={(open) => {
+          if (!open) setReplacePrompt(null);
+        }}
+      >
+        <AlertDialogContent size="sm">
+          <AlertDialogHeader>
+            <AlertDialogTitle>Replace your edits?</AlertDialogTitle>
+            <AlertDialogDescription>
+              You have manually edited fixtures. Loading the {replacePrompt?.label ?? ""} will
+              discard them and replace all {maxPositions} rows.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Keep mine</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                const prompt = replacePrompt;
+                setReplacePrompt(null);
+                if (prompt) runWithUndo(prompt.label, prompt.mutate);
+              }}
+            >
+              Replace
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
