@@ -146,15 +146,13 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
         {/* Clean, unsqueezed Dialog Header without unnecessary row counts */}
         <DialogHeader className="pb-3 border-b border-border text-left">
           <div className="flex items-center gap-2.5">
-            <span className="p-2 rounded-xl bg-primary/10 text-primary border border-primary/20 shrink-0">
-              <Sparkles className="h-4 w-4" />
-            </span>
+
             <div>
               <DialogTitle className="text-base sm:text-lg font-bold text-foreground">
                 Match & Historical Intelligence
               </DialogTitle>
               <DialogDescription className="text-xs text-muted-foreground mt-0.5">
-                {teamA} vs {teamB} · Row #{selectedPosition} Analysis
+                {teamA} vs {teamB}
               </DialogDescription>
             </div>
           </div>
@@ -164,19 +162,19 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
         <Tabs value={activeTab} onValueChange={(val) => setActiveTab(val as ExplorerActionType)}  className="flex flex-col w-full justify-center">
           <TabsList >
             <TabsTrigger value="h2h">
-              <Swords className="h-3.5 w-3.5 text-amber-400 shrink-0" />
+              <Swords className="h-3.5 w-3.5 text-foreground shrink-0" />
               <span>Team vs Team</span>
             </TabsTrigger>
             <TabsTrigger value="position" >
-              <Layers className="h-3.5 w-3.5 text-blue-400 shrink-0" />
+              <Layers className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
               <span>Row Analysis</span>
             </TabsTrigger>
             <TabsTrigger value="likelihood" >
-              <Sparkles className="h-3.5 w-3.5 text-primary shrink-0" />
+              <Sparkles className="h-3.5 w-3.5 shrink-0" />
               <span>Likelihood</span>
             </TabsTrigger>
             <TabsTrigger value="goals">
-              <Goal className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
+              <Goal className="h-3.5 w-3.5 shrink-0" />
               <span>Average Goals</span>
             </TabsTrigger>
           </TabsList>
@@ -186,7 +184,7 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
             {/* Team Selectors: Responsive layout */}
             <div className="p-3 rounded-xl bg-muted/30 border border-border flex flex-col sm:flex-row items-stretch sm:items-end gap-2.5">
               <div className="flex-1">
-                <label className="text-[11px] font-medium text-muted-foreground mb-1 block">Home Team</label>
+                <label className="text-xs font-medium text-muted-foreground mb-1 block">Home Team</label>
                 <TeamSearchInput
                   size="sm"
                   value={teamA}
@@ -210,7 +208,7 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
               </div>
 
               <div className="flex-1">
-                <label className="text-[11px] font-medium text-muted-foreground mb-1 block">Away Team</label>
+                <label className="text-xs font-medium text-muted-foreground mb-1 block">Away Team</label>
                 <TeamSearchInput
                   size="sm"
                   value={teamB}
@@ -228,29 +226,29 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
                 {/* 3 Outcome Cards */}
                 <div className="grid grid-cols-3 gap-2 text-center">
                   <div className="p-3 rounded-xl bg-card border border-border">
-                    <span className="text-[11px] text-muted-foreground block truncate">{teamA}</span>
-                    <span className="text-lg sm:text-xl font-bold font-mono text-emerald-400 block my-0.5">
+                    <span className="text-xs text-muted-foreground block truncate">{teamA}</span>
+                    <span className="text-lg sm:text-xl font-bold font-mono text-primary block my-0.5">
                       {h2h.teamAWins}
                     </span>
-                    <span className="text-[10px] text-muted-foreground font-mono">
+                    <span className="text-xs text-muted-foreground font-mono">
                       {((h2h.teamAWins / h2h.totalMatches) * 100).toFixed(0)}% wins
                     </span>
                   </div>
                   <div className="p-3 rounded-xl bg-card border border-border">
-                    <span className="text-[11px] text-muted-foreground block">Draws</span>
-                    <span className="text-lg sm:text-xl font-bold font-mono text-amber-400 block my-0.5">
+                    <span className="text-xs text-muted-foreground block">Draws</span>
+                    <span className="text-lg sm:text-xl font-bold font-mono text-foreground block my-0.5">
                       {h2h.draws}
                     </span>
-                    <span className="text-[10px] text-muted-foreground font-mono">
+                    <span className="text-xs text-muted-foreground font-mono">
                       {((h2h.draws / h2h.totalMatches) * 100).toFixed(0)}%
                     </span>
                   </div>
                   <div className="p-3 rounded-xl bg-card border border-border">
-                    <span className="text-[11px] text-muted-foreground block truncate">{teamB}</span>
-                    <span className="text-lg sm:text-xl font-bold font-mono text-blue-400 block my-0.5">
+                    <span className="text-xs text-muted-foreground block truncate">{teamB}</span>
+                    <span className="text-lg sm:text-xl font-bold font-mono text-foreground block my-0.5">
                       {h2h.teamBWins}
                     </span>
-                    <span className="text-[10px] text-muted-foreground font-mono">
+                    <span className="text-xs text-muted-foreground font-mono">
                       {((h2h.teamBWins / h2h.totalMatches) * 100).toFixed(0)}% wins
                     </span>
                   </div>
@@ -265,7 +263,7 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
                 <div className="border border-border rounded-xl overflow-hidden bg-card">
                   <div className="bg-muted/40 px-3 py-2 border-b border-border flex items-center justify-between">
                     <span className="font-semibold text-foreground text-xs">Past Encounters in Jackpot Dataset</span>
-                    <span className="text-[11px] text-muted-foreground font-mono">{h2h.recentEncounters.length} recorded</span>
+                    <span className="text-xs text-muted-foreground font-mono">{h2h.recentEncounters.length} recorded</span>
                   </div>
                   <div className="max-h-56 overflow-y-auto divide-y divide-border p-1">
                     {h2h.recentEncounters.map((m) => (
@@ -273,7 +271,7 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
                         key={m.id}
                         className="p-2.5 rounded-lg hover:bg-muted/30 transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-2"
                       >
-                        <div className="flex items-center gap-2 text-[11px] text-muted-foreground font-mono">
+                        <div className="flex items-center gap-2 text-xs text-muted-foreground font-mono">
                           <Calendar className="h-3 w-3 text-muted-foreground/70" />
                           <span>{m.date || "—"}</span>
                           <span className="text-muted-foreground/40">•</span>
@@ -288,8 +286,8 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
                             <span className="truncate max-w-[110px] text-left">{m.away_team}</span>
                           </div>
                           <Badge
-                            variant={m.result === "home" ? "default" : m.result === "draw" ? "secondary" : "outline"}
-                            className="text-[10px] uppercase font-mono shrink-0"
+                            variant={m.result === "home" ? "home" : m.result === "draw" ? "draw" : m.result === "away" ? "away" : "outline"}
+                            className="text-xs uppercase font-mono shrink-0"
                           >
                             {m.result}
                           </Badge>
@@ -341,7 +339,7 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
                   ))}
                 </NativeSelect>
               </div>
-              <span className="text-muted-foreground text-[11px] font-mono">
+              <span className="text-muted-foreground text-xs font-mono">
                 {currentPosStat?.totalMatches.toLocaleString()} historical jackpot events analyzed
               </span>
             </div>
@@ -351,38 +349,38 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
                 {/* 1X2 Split for this row */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-center">
                   <div className="p-3 rounded-xl bg-card border border-border">
-                    <span className="text-[11px] text-muted-foreground block">Row #{selectedPosition} Home Win</span>
-                    <span className="text-xl font-bold font-mono text-emerald-400 block my-0.5">{currentPosStat.homeWinPct}%</span>
-                    <span className="text-[10px] text-muted-foreground font-mono">{currentPosStat.homeWins} wins</span>
+                    <span className="text-xs text-muted-foreground block">Row #{selectedPosition} Home Win</span>
+                    <span className="text-xl font-bold font-mono text-primary block my-0.5">{currentPosStat.homeWinPct}%</span>
+                    <span className="text-xs text-muted-foreground font-mono">{currentPosStat.homeWins} wins</span>
                   </div>
                   <div className="p-3 rounded-xl bg-card border border-border">
-                    <span className="text-[11px] text-muted-foreground block">Row #{selectedPosition} Draw</span>
-                    <span className="text-xl font-bold font-mono text-amber-400 block my-0.5">{currentPosStat.drawPct}%</span>
-                    <span className="text-[10px] text-muted-foreground font-mono">{currentPosStat.draws} draws</span>
+                    <span className="text-xs text-muted-foreground block">Row #{selectedPosition} Draw</span>
+                    <span className="text-xl font-bold font-mono text-foreground block my-0.5">{currentPosStat.drawPct}%</span>
+                    <span className="text-xs text-muted-foreground font-mono">{currentPosStat.draws} draws</span>
                   </div>
                   <div className="p-3 rounded-xl bg-card border border-border">
-                    <span className="text-[11px] text-muted-foreground block">Row #{selectedPosition} Away Win</span>
-                    <span className="text-xl font-bold font-mono text-blue-400 block my-0.5">{currentPosStat.awayWinPct}%</span>
-                    <span className="text-[10px] text-muted-foreground font-mono">{currentPosStat.awayWins} wins</span>
+                    <span className="text-xs text-muted-foreground block">Row #{selectedPosition} Away Win</span>
+                    <span className="text-xl font-bold font-mono text-foreground block my-0.5">{currentPosStat.awayWinPct}%</span>
+                    <span className="text-xs text-muted-foreground font-mono">{currentPosStat.awayWins} wins</span>
                   </div>
                 </div>
 
                 {/* Goal metrics for this row */}
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center">
                   <div className="p-2.5 rounded-xl bg-muted/40 border border-border">
-                    <span className="text-[10px] text-muted-foreground block">Avg Goals</span>
+                    <span className="text-xs text-muted-foreground block">Avg Goals</span>
                     <span className="text-lg font-bold font-mono text-foreground">{currentPosStat.avgGoals}</span>
                   </div>
                   <div className="p-2.5 rounded-xl bg-muted/40 border border-border">
-                    <span className="text-[10px] text-muted-foreground block">Over 2.5 %</span>
+                    <span className="text-xs text-muted-foreground block">Over 2.5 %</span>
                     <span className="text-lg font-bold font-mono text-foreground">{currentPosStat.over25Pct}%</span>
                   </div>
                   <div className="p-2.5 rounded-xl bg-muted/40 border border-border">
-                    <span className="text-[10px] text-muted-foreground block">BTTS %</span>
+                    <span className="text-xs text-muted-foreground block">BTTS %</span>
                     <span className="text-lg font-bold font-mono text-foreground">{currentPosStat.bttsPct}%</span>
                   </div>
                   <div className="p-2.5 rounded-xl bg-muted/40 border border-border">
-                    <span className="text-[10px] text-muted-foreground block">Most Frequent</span>
+                    <span className="text-xs text-muted-foreground block">Most Frequent</span>
                     <span className="text-lg font-bold font-mono text-primary">{currentPosStat.mostLikelyScore}</span>
                   </div>
                 </div>
@@ -394,8 +392,8 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
                     {currentPosStat.topScores.map((ts) => (
                       <div key={ts.score} className="p-2 rounded-lg bg-muted/40 border border-border text-center">
                         <span className="font-mono font-bold text-xs text-foreground block">{ts.score}</span>
-                        <span className="text-[10px] text-primary font-mono block mt-0.5">{ts.pct}%</span>
-                        <span className="text-[9px] text-muted-foreground block">({ts.count} times)</span>
+                        <span className="text-xs text-primary font-mono block mt-0.5">{ts.pct}%</span>
+                        <span className="text-xs text-muted-foreground block">({ts.count} times)</span>
                       </div>
                     ))}
                   </div>
@@ -408,16 +406,16 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
           <TabsContent value="likelihood" className="space-y-4 pt-3 text-xs">
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-center">
               <div className="p-3 rounded-xl bg-card border border-border">
-                <span className="text-muted-foreground text-[10px] block truncate">Home Win ({teamA})</span>
-                <span className="text-xl font-bold font-mono text-emerald-400 block my-0.5">{prediction.homeProb}%</span>
+                <span className="text-muted-foreground text-xs block truncate">Home Win ({teamA})</span>
+                <span className="text-xl font-bold font-mono text-primary block my-0.5">{prediction.homeProb}%</span>
               </div>
               <div className="p-3 rounded-xl bg-card border border-border">
-                <span className="text-muted-foreground text-[10px] block">Draw (X)</span>
-                <span className="text-xl font-bold font-mono text-amber-400 block my-0.5">{prediction.drawProb}%</span>
+                <span className="text-muted-foreground text-xs block">Draw (X)</span>
+                <span className="text-xl font-bold font-mono text-foreground block my-0.5">{prediction.drawProb}%</span>
               </div>
               <div className="p-3 rounded-xl bg-card border border-border">
-                <span className="text-muted-foreground text-[10px] block truncate">Away Win ({teamB})</span>
-                <span className="text-xl font-bold font-mono text-blue-400 block my-0.5">{prediction.awayProb}%</span>
+                <span className="text-muted-foreground text-xs block truncate">Away Win ({teamB})</span>
+                <span className="text-xl font-bold font-mono text-foreground block my-0.5">{prediction.awayProb}%</span>
               </div>
             </div>
 
@@ -428,7 +426,7 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
                   <Badge variant="default" className="text-xs uppercase font-bold">
                     {prediction.predictedResult.toUpperCase()}
                   </Badge>
-                  <span className="text-[11px] text-muted-foreground font-mono">
+                  <span className="text-xs text-muted-foreground font-mono">
                     Confidence: <strong>{prediction.confidence}</strong>
                   </span>
                 </div>
@@ -438,10 +436,10 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
               <div className="space-y-1.5 pt-1">
                 {prediction.signals.map((sig, i) => (
                   <div key={i} className="flex items-start gap-2 p-2 rounded-lg bg-muted/30 border border-border">
-                    <CheckCircle2 className="h-3.5 w-3.5 text-primary shrink-0 mt-0.5" />
+                    <CheckCircle2 className="h-3.5 w-3.5 shrink-0 mt-0.5" />
                     <div>
                       <span className="font-medium text-foreground">{sig.label}:</span>{" "}
-                      <span className="text-muted-foreground text-[11px]">{sig.detail}</span>
+                      <span className="text-muted-foreground text-xs">{sig.detail}</span>
                     </div>
                   </div>
                 ))}
@@ -455,7 +453,7 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
                 {prediction.mostLikelyScores.map((sc) => (
                   <div key={sc.score} className="p-2 rounded-lg bg-muted/40 border border-border text-center">
                     <span className="font-mono font-bold text-sm text-foreground block">{sc.score}</span>
-                    <span className="text-[10px] text-primary font-mono">{sc.probability}%</span>
+                    <span className="text-xs text-primary font-mono">{sc.probability}%</span>
                   </div>
                 ))}
               </div>
@@ -466,36 +464,36 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
           <TabsContent value="goals" className="space-y-4 pt-3 text-xs">
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center">
               <div className="p-3 rounded-xl bg-card border border-border">
-                <span className="text-[10px] text-muted-foreground block truncate">Exp Goals ({teamA})</span>
-                <span className="text-xl font-bold font-mono text-emerald-400 block my-0.5">{goalsModel.lambdaH}</span>
+                <span className="text-xs text-muted-foreground block truncate">Exp Goals ({teamA})</span>
+                <span className="text-xl font-bold font-mono text-primary block my-0.5">{goalsModel.lambdaH}</span>
               </div>
               <div className="p-3 rounded-xl bg-card border border-border">
-                <span className="text-[10px] text-muted-foreground block truncate">Exp Goals ({teamB})</span>
-                <span className="text-xl font-bold font-mono text-blue-400 block my-0.5">{goalsModel.lambdaA}</span>
+                <span className="text-xs text-muted-foreground block truncate">Exp Goals ({teamB})</span>
+                <span className="text-xl font-bold font-mono text-foreground block my-0.5">{goalsModel.lambdaA}</span>
               </div>
               <div className="p-3 rounded-xl bg-card border border-border">
-                <span className="text-[10px] text-muted-foreground block">Total Expected</span>
+                <span className="text-xs text-muted-foreground block">Total Expected</span>
                 <span className="text-xl font-bold font-mono text-primary block my-0.5">
                   {Number((goalsModel.lambdaH + goalsModel.lambdaA).toFixed(2))}
                 </span>
               </div>
               <div className="p-3 rounded-xl bg-card border border-border">
-                <span className="text-[10px] text-muted-foreground block">BTTS %</span>
+                <span className="text-xs text-muted-foreground block">BTTS %</span>
                 <span className="text-xl font-bold font-mono text-foreground block my-0.5">{goalsModel.btts}%</span>
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-center">
               <div className="p-2.5 rounded-xl bg-muted/40 border border-border">
-                <span className="text-[10px] text-muted-foreground block">Over 1.5 Goals %</span>
+                <span className="text-xs text-muted-foreground block">Over 1.5 Goals %</span>
                 <span className="text-base font-bold font-mono text-foreground">{goalsModel.over15}%</span>
               </div>
               <div className="p-2.5 rounded-xl bg-muted/40 border border-border">
-                <span className="text-[10px] text-muted-foreground block">Over 2.5 Goals %</span>
+                <span className="text-xs text-muted-foreground block">Over 2.5 Goals %</span>
                 <span className="text-base font-bold font-mono text-foreground">{goalsModel.over25}%</span>
               </div>
               <div className="p-2.5 rounded-xl bg-muted/40 border border-border">
-                <span className="text-[10px] text-muted-foreground block">Over 3.5 Goals %</span>
+                <span className="text-xs text-muted-foreground block">Over 3.5 Goals %</span>
                 <span className="text-base font-bold font-mono text-foreground">{goalsModel.over35}%</span>
               </div>
             </div>
@@ -507,7 +505,7 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
                 {goalsModel.sim.scores.slice(0, 6).map((sc) => (
                   <div key={sc.score} className="p-2 rounded-lg bg-muted/30 border border-border text-center">
                     <span className="font-mono font-bold text-xs text-foreground block">{sc.score}</span>
-                    <span className="text-[10px] text-primary font-mono">{sc.probability}%</span>
+                    <span className="text-xs text-primary font-mono">{sc.probability}%</span>
                   </div>
                 ))}
               </div>
