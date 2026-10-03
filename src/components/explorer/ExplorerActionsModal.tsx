@@ -20,9 +20,10 @@ import { Badge } from "@/components/ui/badge";
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
 
 import type { Match, PositionStat } from "../../lib/types";
-import { getAllTeams, computeTeamH2H, computeTeamForm } from "../../lib/teams";
+import { getAllTeams, computeTeamH2H, computeTeamForm, getTeamAppearances } from "../../lib/teams";
 import { computePositionStats } from "../../lib/positions";
 import { predictMatch, calculateScoreProbabilities } from "../../lib/predictions";
+import { TeamSearchInput } from "../common/TeamSearchInput";
 
 export type ExplorerActionType = "h2h" | "position" | "likelihood" | "goals";
 
@@ -70,6 +71,7 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
 
   // Unique teams list for autocomplete
   const allTeams = useMemo(() => getAllTeams(allMatches), [allMatches]);
+  const teamAppearances = useMemo(() => getTeamAppearances(allMatches), [allMatches]);
 
   // Position statistics (1..20)
   const positionStats: PositionStat[] = useMemo(() => {
@@ -185,17 +187,14 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
             <div className="p-3 rounded-xl bg-muted/30 border border-border flex flex-col sm:flex-row items-stretch sm:items-end gap-2.5">
               <div className="flex-1">
                 <label className="text-[11px] font-medium text-muted-foreground mb-1 block">Home Team</label>
-                <Input
-                  list="h2h-teams-a"
+                <TeamSearchInput
+                  size="sm"
                   value={teamA}
-                  onChange={(e) => setTeamA(e.target.value)}
-                  className="h-8 text-xs font-semibold"
+                  onChange={setTeamA}
+                  teams={allTeams}
+                  teamAppearances={teamAppearances}
+                  placeholder="Search home team..."
                 />
-                <datalist id="h2h-teams-a">
-                  {allTeams.slice(0, 150).map((t) => (
-                    <option key={t} value={t} />
-                  ))}
-                </datalist>
               </div>
 
               <div className="flex justify-center sm:pb-0.5">
@@ -212,17 +211,14 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
 
               <div className="flex-1">
                 <label className="text-[11px] font-medium text-muted-foreground mb-1 block">Away Team</label>
-                <Input
-                  list="h2h-teams-b"
+                <TeamSearchInput
+                  size="sm"
                   value={teamB}
-                  onChange={(e) => setTeamB(e.target.value)}
-                  className="h-8 text-xs font-semibold"
+                  onChange={setTeamB}
+                  teams={allTeams}
+                  teamAppearances={teamAppearances}
+                  placeholder="Search away team..."
                 />
-                <datalist id="h2h-teams-b">
-                  {allTeams.slice(0, 150).map((t) => (
-                    <option key={t} value={t} />
-                  ))}
-                </datalist>
               </div>
             </div>
 
