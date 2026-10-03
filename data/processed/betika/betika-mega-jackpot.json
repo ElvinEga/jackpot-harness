@@ -1,0 +1,1685 @@
+[
+  {
+    "date": "2023-02-19",
+    "home_team": "Sandhausen",
+    "away_team": "Karlsruher",
+    "league": null,
+    "score": "0-3",
+    "odds": 1.35,
+    "result": "away"
+  },
+  {
+    "date": "2023-02-19",
+    "home_team": "Cercle Brugge",
+    "away_team": "Club Brugge",
+    "league": null,
+    "score": "2-2",
+    "odds": 2.1,
+    "result": "draw"
+  },
+  {
+    "date": "2023-02-19",
+    "home_team": "Odense",
+    "away_team": "Randers",
+    "league": null,
+    "score": "0-0",
+    "odds": 1.35,
+    "result": "draw"
+  },
+  {
+    "date": "2023-02-19",
+    "home_team": "Elche",
+    "away_team": "Espanyol",
+    "league": null,
+    "score": "0-1",
+    "odds": 2.6,
+    "result": "away"
+  },
+  {
+    "date": "2023-02-19",
+    "home_team": "Huesca",
+    "away_team": "Granada",
+    "league": null,
+    "score": "1-1",
+    "odds": 2.8,
+    "result": "draw"
+  },
+  {
+    "date": "2023-02-19",
+    "home_team": "Lorient",
+    "away_team": "Ajaccio",
+    "league": null,
+    "score": "3-0",
+    "odds": 2.05,
+    "result": "home"
+  },
+  {
+    "date": "2023-02-19",
+    "home_team": "Troyes",
+    "away_team": "Montpellier",
+    "league": null,
+    "score": "0-1",
+    "odds": 3.3,
+    "result": "away"
+  },
+  {
+    "date": "2023-02-19",
+    "home_team": "Vallecano",
+    "away_team": "Sevilla",
+    "league": null,
+    "score": "1-1",
+    "odds": 3.1,
+    "result": "draw"
+  },
+  {
+    "date": "2023-02-19",
+    "home_team": "Andorra",
+    "away_team": "Gijon",
+    "league": null,
+    "score": "1-0",
+    "odds": 1.25,
+    "result": "home"
+  },
+  {
+    "date": "2023-02-19",
+    "home_team": "Atl. Madrid",
+    "away_team": "Ath Bilbao",
+    "league": null,
+    "score": "1-0",
+    "odds": 2.05,
+    "result": "home"
+  },
+  {
+    "date": "2023-02-19",
+    "home_team": "Burgos",
+    "away_team": "Albacete",
+    "league": null,
+    "score": "1-1",
+    "odds": 2.75,
+    "result": "draw"
+  },
+  {
+    "date": "2023-02-19",
+    "home_team": "St. Truiden",
+    "away_team": "Westerlo",
+    "league": null,
+    "score": "0-1",
+    "odds": 2.65,
+    "result": "away"
+  },
+  {
+    "date": "2023-02-19",
+    "home_team": "PAOK",
+    "away_team": "AEK Athens",
+    "league": null,
+    "score": "2-0",
+    "odds": 2.95,
+    "result": "home"
+  },
+  {
+    "date": "2023-02-19",
+    "home_team": "Excelsior",
+    "away_team": "NEC Nijmegen",
+    "league": null,
+    "score": "0-3",
+    "odds": 3.1,
+    "result": "away"
+  },
+  {
+    "date": "2023-02-19",
+    "home_team": "Villarreal B",
+    "away_team": "Racing Santander",
+    "league": null,
+    "score": "2-1",
+    "odds": 3.0,
+    "result": "home"
+  },
+  {
+    "date": "2023-02-19",
+    "home_team": "Casa Pia",
+    "away_team": "Vitoria Guimaraes",
+    "league": null,
+    "score": "0-0",
+    "odds": 3.15,
+    "result": "draw"
+  },
+  {
+    "date": "2023-02-19",
+    "home_team": "Getafe",
+    "away_team": "Valencia",
+    "league": null,
+    "score": "1-0",
+    "odds": 2.9,
+    "result": "home"
+  },
+  {
+    "date": "2023-02-12",
+    "home_team": "Getafe",
+    "away_team": "Vallecano",
+    "league": null,
+    "score": "1-1",
+    "odds": 2.8,
+    "result": "draw"
+  },
+  {
+    "date": "2023-02-12",
+    "home_team": "Leeds",
+    "away_team": "Manchester Utd",
+    "league": null,
+    "score": "0-2",
+    "odds": 1.9,
+    "result": "away"
+  },
+  {
+    "date": "2023-02-12",
+    "home_team": "Bologna",
+    "away_team": "Monza",
+    "league": null,
+    "score": "0-1",
+    "odds": 1.3,
+    "result": "away"
+  },
+  {
+    "date": "2023-02-12",
+    "home_team": "Montpellier",
+    "away_team": "Brest",
+    "league": null,
+    "score": "3-0",
+    "odds": 2.35,
+    "result": "home"
+  },
+  {
+    "date": "2023-02-12",
+    "home_team": "Angers",
+    "away_team": "Auxerre",
+    "league": null,
+    "score": "1-1",
+    "odds": 2.25,
+    "result": "draw"
+  },
+  {
+    "date": "2023-02-12",
+    "home_team": "Hertha Berlin",
+    "away_team": "B. Monchengladbach",
+    "league": null,
+    "score": "4-1",
+    "odds": 2.4,
+    "result": "home"
+  },
+  {
+    "date": "2023-02-12",
+    "home_team": "Anderlecht",
+    "away_team": "St. Truiden",
+    "league": null,
+    "score": "3-1",
+    "odds": 1.95,
+    "result": "home"
+  },
+  {
+    "date": "2023-02-12",
+    "home_team": "Celta Vigo",
+    "away_team": "Atletico Madrid",
+    "league": null,
+    "score": "0-1",
+    "odds": 2.2,
+    "result": "away"
+  },
+  {
+    "date": "2023-02-12",
+    "home_team": "Nantes",
+    "away_team": "Lorient",
+    "league": null,
+    "score": "1-0",
+    "odds": 1.25,
+    "result": "home"
+  },
+  {
+    "date": "2023-02-12",
+    "home_team": "Koln",
+    "away_team": "Eintracht Frankfurt",
+    "league": null,
+    "score": "3-0",
+    "odds": 2.5,
+    "result": "home"
+  },
+  {
+    "date": "2023-02-12",
+    "home_team": "Juventus",
+    "away_team": "Fiorentina",
+    "league": null,
+    "score": "1-0",
+    "odds": 1.85,
+    "result": "home"
+  },
+  {
+    "date": "2023-02-12",
+    "home_team": "Valladolid",
+    "away_team": "Osasuna",
+    "league": null,
+    "score": "0-0",
+    "odds": 2.75,
+    "result": "draw"
+  },
+  {
+    "date": "2023-02-12",
+    "home_team": "Aris Thessaloniki",
+    "away_team": "Panathinaikos",
+    "league": null,
+    "score": "1-2",
+    "odds": 1.35,
+    "result": "away"
+  },
+  {
+    "date": "2023-02-12",
+    "home_team": "Sporting",
+    "away_team": "Porto",
+    "league": null,
+    "score": "1-2",
+    "odds": 2.7,
+    "result": "away"
+  },
+  {
+    "date": "2023-02-12",
+    "home_team": "Zulte Waregem",
+    "away_team": "Oostende",
+    "league": null,
+    "score": "1-1",
+    "odds": 2.0,
+    "result": "draw"
+  },
+  {
+    "date": "2023-02-12",
+    "home_team": "Lyon",
+    "away_team": "Lens",
+    "league": null,
+    "score": "2-1",
+    "odds": 3.45,
+    "result": "home"
+  },
+  {
+    "date": "2023-02-12",
+    "home_team": "Villarreal",
+    "away_team": "Barcelona",
+    "league": null,
+    "score": "0-1",
+    "odds": 1.8,
+    "result": "away"
+  },
+  {
+    "date": "2023-02-05",
+    "home_team": "Antwerp",
+    "away_team": "Club Brugge",
+    "league": null,
+    "score": "0-0",
+    "odds": 2.5,
+    "result": "draw"
+  },
+  {
+    "date": "2023-02-05",
+    "home_team": "Hatayspor",
+    "away_team": "Kasimpasa",
+    "league": null,
+    "score": "1-0",
+    "odds": 2.35,
+    "result": "home"
+  },
+  {
+    "date": "2023-02-05",
+    "home_team": "Nottingham",
+    "away_team": "Leeds",
+    "league": null,
+    "score": "1-0",
+    "odds": 2.6,
+    "result": "home"
+  },
+  {
+    "date": "2023-02-05",
+    "home_team": "Torino",
+    "away_team": "Udinese",
+    "league": null,
+    "score": "1-0",
+    "odds": 3.15,
+    "result": "home"
+  },
+  {
+    "date": "2023-02-05",
+    "home_team": "Auxerre",
+    "away_team": "Reims",
+    "league": null,
+    "score": "0-0",
+    "odds": 2.1,
+    "result": "draw"
+  },
+  {
+    "date": "2023-02-05",
+    "home_team": "Strasbourg",
+    "away_team": "Montpellier",
+    "league": null,
+    "score": "2-0",
+    "odds": 2.05,
+    "result": "home"
+  },
+  {
+    "date": "2023-02-05",
+    "home_team": "Ajaccio",
+    "away_team": "Nantes",
+    "league": null,
+    "score": "0-2",
+    "odds": 1.45,
+    "result": "away"
+  },
+  {
+    "date": "2023-02-05",
+    "home_team": "Lorient",
+    "away_team": "Angers",
+    "league": null,
+    "score": "0-0",
+    "odds": 1.9,
+    "result": "draw"
+  },
+  {
+    "date": "2023-02-05",
+    "home_team": "Stuttgart",
+    "away_team": "Bremen",
+    "league": null,
+    "score": "0-2",
+    "odds": 2.05,
+    "result": "away"
+  },
+  {
+    "date": "2023-02-05",
+    "home_team": "KV Mechelen",
+    "away_team": "Charleroi",
+    "league": null,
+    "score": "2-2",
+    "odds": 3.0,
+    "result": "draw"
+  },
+  {
+    "date": "2023-02-05",
+    "home_team": "Girona",
+    "away_team": "Valencia",
+    "league": null,
+    "score": "1-0",
+    "odds": 2.2,
+    "result": "home"
+  },
+  {
+    "date": "2023-02-05",
+    "home_team": "Brest",
+    "away_team": "Lens",
+    "league": null,
+    "score": "1-1",
+    "odds": 1.8,
+    "result": "draw"
+  },
+  {
+    "date": "2023-02-05",
+    "home_team": "Gent",
+    "away_team": "Genk",
+    "league": null,
+    "score": "2-3",
+    "odds": 2.3,
+    "result": "away"
+  },
+  {
+    "date": "2023-02-05",
+    "home_team": "Unam Pumas",
+    "away_team": "Atlas",
+    "league": null,
+    "score": "2-2",
+    "odds": 1.35,
+    "result": "draw"
+  },
+  {
+    "date": "2023-02-05",
+    "home_team": "PAOK",
+    "away_team": "Olympiacos",
+    "league": null,
+    "score": "0-0",
+    "odds": 3.0,
+    "result": "draw"
+  },
+  {
+    "date": "2023-02-05",
+    "home_team": "Inter",
+    "away_team": "Milan",
+    "league": null,
+    "score": "1-0",
+    "odds": 2.0,
+    "result": "home"
+  },
+  {
+    "date": "2023-02-05",
+    "home_team": "Lugo",
+    "away_team": "Ibiza Eivissa",
+    "league": null,
+    "score": "0-0",
+    "odds": 1.35,
+    "result": "draw"
+  },
+  {
+    "date": "2023-01-29",
+    "home_team": "Nice",
+    "away_team": "Lille",
+    "league": null,
+    "score": "1-0",
+    "odds": 2.45,
+    "result": "home"
+  },
+  {
+    "date": "2023-01-29",
+    "home_team": "Anderlecht",
+    "away_team": "Antwerp",
+    "league": null,
+    "score": "0-0",
+    "odds": 2.65,
+    "result": "draw"
+  },
+  {
+    "date": "2023-01-29",
+    "home_team": "Valladolid",
+    "away_team": "Valencia",
+    "league": null,
+    "score": "1-0",
+    "odds": 1.35,
+    "result": "home"
+  },
+  {
+    "date": "2023-01-29",
+    "home_team": "Brighton",
+    "away_team": "Liverpool",
+    "league": null,
+    "score": "2-1",
+    "odds": 2.4,
+    "result": "home"
+  },
+  {
+    "date": "2023-01-29",
+    "home_team": "Strasbourg",
+    "away_team": "Toulouse",
+    "league": null,
+    "score": "1-2",
+    "odds": 3.4,
+    "result": "away"
+  },
+  {
+    "date": "2023-01-29",
+    "home_team": "Clermont",
+    "away_team": "Nantes",
+    "league": null,
+    "score": "0-0",
+    "odds": 1.55,
+    "result": "draw"
+  },
+  {
+    "date": "2023-01-29",
+    "home_team": "Brest",
+    "away_team": "Angers",
+    "league": null,
+    "score": "4-0",
+    "odds": 2.1,
+    "result": "home"
+  },
+  {
+    "date": "2023-01-29",
+    "home_team": "Auxerre",
+    "away_team": "Montpellier",
+    "league": null,
+    "score": "0-2",
+    "odds": 3.4,
+    "result": "away"
+  },
+  {
+    "date": "2023-01-29",
+    "home_team": "Schalke 04",
+    "away_team": "Koln",
+    "league": null,
+    "score": "0-0",
+    "odds": 1.95,
+    "result": "draw"
+  },
+  {
+    "date": "2023-01-29",
+    "home_team": "Cercle Brugge",
+    "away_team": "Gent",
+    "league": null,
+    "score": "3-2",
+    "odds": 2.2,
+    "result": "home"
+  },
+  {
+    "date": "2023-01-29",
+    "home_team": "Osasuna",
+    "away_team": "Atl. Madrid",
+    "league": null,
+    "score": "0-1",
+    "odds": 3.2,
+    "result": "away"
+  },
+  {
+    "date": "2023-01-29",
+    "home_team": "Ajaccio",
+    "away_team": "Lyon",
+    "league": null,
+    "score": "0-2",
+    "odds": 1.8,
+    "result": "away"
+  },
+  {
+    "date": "2023-01-29",
+    "home_team": "Leverkusen",
+    "away_team": "Dortmund",
+    "league": null,
+    "score": "0-2",
+    "odds": 2.65,
+    "result": "away"
+  },
+  {
+    "date": "2023-01-29",
+    "home_team": "Lazio",
+    "away_team": "Fiorentina",
+    "league": null,
+    "score": "1-1",
+    "odds": 2.1,
+    "result": "draw"
+  },
+  {
+    "date": "2023-01-29",
+    "home_team": "Celta Vigo",
+    "away_team": "Ath Bilbao",
+    "league": null,
+    "score": "1-0",
+    "odds": 3.0,
+    "result": "home"
+  },
+  {
+    "date": "2023-01-29",
+    "home_team": "Boavista",
+    "away_team": "Portimonense",
+    "league": null,
+    "score": "4-2",
+    "odds": 2.15,
+    "result": "home"
+  },
+  {
+    "date": "2023-01-29",
+    "home_team": "Platense",
+    "away_team": "Newells Old Boys",
+    "league": null,
+    "score": "2-2",
+    "odds": 1.35,
+    "result": "draw"
+  },
+  {
+    "date": "2023-01-22",
+    "home_team": "Heerenveen",
+    "away_team": "Groningen",
+    "league": null,
+    "score": "3-1",
+    "odds": 1.7,
+    "result": "home"
+  },
+  {
+    "date": "2023-01-22",
+    "home_team": "Sampdoria",
+    "away_team": "Udinese",
+    "league": null,
+    "score": "0-1",
+    "odds": 2.1,
+    "result": "away"
+  },
+  {
+    "date": "2023-01-22",
+    "home_team": "Sunderland",
+    "away_team": "Middlesbrough",
+    "league": null,
+    "score": "2-0",
+    "odds": 2.4,
+    "result": "home"
+  },
+  {
+    "date": "2023-01-22",
+    "home_team": "Kayserispor",
+    "away_team": "Besiktas",
+    "league": null,
+    "score": "0-2",
+    "odds": 2.05,
+    "result": "away"
+  },
+  {
+    "date": "2023-01-22",
+    "home_team": "Sion",
+    "away_team": "Lugano",
+    "league": null,
+    "score": "2-3",
+    "odds": 1.3,
+    "result": "away"
+  },
+  {
+    "date": "2023-01-22",
+    "home_team": "Feyenoord",
+    "away_team": "Ajax",
+    "league": null,
+    "score": "1-1",
+    "odds": 3.5,
+    "result": "draw"
+  },
+  {
+    "date": "2023-01-22",
+    "home_team": "Leeds",
+    "away_team": "Brentford",
+    "league": null,
+    "score": "0-0",
+    "odds": 1.3,
+    "result": "draw"
+  },
+  {
+    "date": "2023-01-22",
+    "home_team": "Monza",
+    "away_team": "Sassuolo",
+    "league": null,
+    "score": "1-1",
+    "odds": 2.25,
+    "result": "draw"
+  },
+  {
+    "date": "2023-01-22",
+    "home_team": "Elche",
+    "away_team": "Osasuna",
+    "league": null,
+    "score": "1-1",
+    "odds": 2.15,
+    "result": "draw"
+  },
+  {
+    "date": "2023-01-22",
+    "home_team": "St. Gallen",
+    "away_team": "Basel",
+    "league": null,
+    "score": "1-1",
+    "odds": 2.25,
+    "result": "draw"
+  },
+  {
+    "date": "2023-01-22",
+    "home_team": "Maritimo",
+    "away_team": "Estoril",
+    "league": null,
+    "score": "1-0",
+    "odds": 2.35,
+    "result": "home"
+  },
+  {
+    "date": "2023-01-22",
+    "home_team": "Borussia (Mg)",
+    "away_team": "Leverkusen",
+    "league": null,
+    "score": "2-3",
+    "odds": 2.4,
+    "result": "away"
+  },
+  {
+    "date": "2023-01-22",
+    "home_team": "Arsenal",
+    "away_team": "Manchester Utd",
+    "league": null,
+    "score": "3-2",
+    "odds": 1.85,
+    "result": "home"
+  },
+  {
+    "date": "2023-01-22",
+    "home_team": "Panathinaikos",
+    "away_team": "PAOK",
+    "league": null,
+    "score": "0-3",
+    "odds": 1.25,
+    "result": "away"
+  },
+  {
+    "date": "2023-01-22",
+    "home_team": "Juventus",
+    "away_team": "Atalanta",
+    "league": null,
+    "score": "3-3",
+    "odds": 2.1,
+    "result": "draw"
+  },
+  {
+    "date": "2023-01-22",
+    "home_team": "Bilbao",
+    "away_team": "Real Madrid",
+    "league": null,
+    "score": "2-3",
+    "odds": 2.4,
+    "result": "away"
+  },
+  {
+    "date": "2023-01-22",
+    "home_team": "Brest",
+    "away_team": "Lens",
+    "league": null,
+    "score": "1-3",
+    "odds": 1.85,
+    "result": "away"
+  },
+  {
+    "date": "2023-01-15",
+    "home_team": "Sassuolo",
+    "away_team": "Lazio",
+    "league": null,
+    "score": "0-2",
+    "odds": 2.2,
+    "result": "away"
+  },
+  {
+    "date": "2023-01-15",
+    "home_team": "Club Brugge",
+    "away_team": "Anderlecht",
+    "league": null,
+    "score": "1-1",
+    "odds": 1.95,
+    "result": "draw"
+  },
+  {
+    "date": "2023-01-15",
+    "home_team": "Getafe",
+    "away_team": "Espanyol",
+    "league": null,
+    "score": "1-2",
+    "odds": 2.5,
+    "result": "away"
+  },
+  {
+    "date": "2023-01-15",
+    "home_team": "G.A. Eagles",
+    "away_team": "Utrecht",
+    "league": null,
+    "score": "2-2",
+    "odds": 2.35,
+    "result": "draw"
+  },
+  {
+    "date": "2023-01-15",
+    "home_team": "Udinese",
+    "away_team": "Bologna",
+    "league": null,
+    "score": "1-2",
+    "odds": 1.95,
+    "result": "away"
+  },
+  {
+    "date": "2023-01-15",
+    "home_team": "Angers",
+    "away_team": "Clermont",
+    "league": null,
+    "score": "1-2",
+    "odds": 2.8,
+    "result": "away"
+  },
+  {
+    "date": "2023-01-15",
+    "home_team": "Montpellier",
+    "away_team": "Nantes",
+    "league": null,
+    "score": "0-3",
+    "odds": 2.7,
+    "result": "away"
+  },
+  {
+    "date": "2023-01-15",
+    "home_team": "Toulouse",
+    "away_team": "Brest",
+    "league": null,
+    "score": "1-1",
+    "odds": 2.0,
+    "result": "draw"
+  },
+  {
+    "date": "2023-01-15",
+    "home_team": "Reims",
+    "away_team": "Nice",
+    "league": null,
+    "score": "0-0",
+    "odds": 1.4,
+    "result": "draw"
+  },
+  {
+    "date": "2023-01-15",
+    "home_team": "Emmen",
+    "away_team": "Cambuur",
+    "league": null,
+    "score": "0-0",
+    "odds": 2.1,
+    "result": "draw"
+  },
+  {
+    "date": "2023-01-15",
+    "home_team": "Tottenham",
+    "away_team": "Arsenal",
+    "league": null,
+    "score": "0-2",
+    "odds": 2.15,
+    "result": "away"
+  },
+  {
+    "date": "2023-01-15",
+    "home_team": "Union Gilloise",
+    "away_team": "Antwerp",
+    "league": null,
+    "score": "2-0",
+    "odds": 1.95,
+    "result": "home"
+  },
+  {
+    "date": "2023-01-15",
+    "home_team": "Madagascar",
+    "away_team": "Ghana",
+    "league": null,
+    "score": "2-1",
+    "odds": 1.85,
+    "result": "home"
+  },
+  {
+    "date": "2023-01-15",
+    "home_team": "Bragantino",
+    "away_team": "Corinthians",
+    "league": null,
+    "score": "1-0",
+    "odds": 1.4,
+    "result": "home"
+  },
+  {
+    "date": "2023-01-15",
+    "home_team": "Roma",
+    "away_team": "Fiorentina",
+    "league": null,
+    "score": "2-0",
+    "odds": 2.0,
+    "result": "home"
+  },
+  {
+    "date": "2023-01-15",
+    "home_team": "Rennes",
+    "away_team": "PSG",
+    "league": null,
+    "score": "1-0",
+    "odds": 1.55,
+    "result": "home"
+  },
+  {
+    "date": "2023-01-15",
+    "home_team": "Charleroi",
+    "away_team": "Cercle Brugge",
+    "league": null,
+    "score": "2-1",
+    "odds": 1.3,
+    "result": "home"
+  },
+  {
+    "date": "2023-01-07",
+    "home_team": "Necaxa",
+    "away_team": "San Luis",
+    "league": null,
+    "score": "2-3",
+    "odds": 2.2,
+    "result": "away"
+  },
+  {
+    "date": "2023-01-07",
+    "home_team": "Salernitana",
+    "away_team": "Torino",
+    "league": null,
+    "score": "1-1",
+    "odds": 2.2,
+    "result": "draw"
+  },
+  {
+    "date": "2023-01-07",
+    "home_team": "Bristol City",
+    "away_team": "Swansea",
+    "league": null,
+    "score": "1-1",
+    "odds": 2.4,
+    "result": "draw"
+  },
+  {
+    "date": "2023-01-07",
+    "home_team": "Genk",
+    "away_team": "Club Brugge",
+    "league": null,
+    "score": "3-1",
+    "odds": 2.1,
+    "result": "home"
+  },
+  {
+    "date": "2023-01-07",
+    "home_team": "Almeria",
+    "away_team": "Real Sociedad",
+    "league": null,
+    "score": "0-2",
+    "odds": 1.95,
+    "result": "away"
+  },
+  {
+    "date": "2023-01-07",
+    "home_team": "Motherwell",
+    "away_team": "Hibernian",
+    "league": null,
+    "score": "2-3",
+    "odds": 3.15,
+    "result": "away"
+  },
+  {
+    "date": "2023-01-07",
+    "home_team": "Spezia",
+    "away_team": "Lecce",
+    "league": null,
+    "score": "0-0",
+    "odds": 3.05,
+    "result": "draw"
+  },
+  {
+    "date": "2023-01-07",
+    "home_team": "Giresunspor",
+    "away_team": "Umraniyespor",
+    "league": null,
+    "score": "0-1",
+    "odds": 2.1,
+    "result": "away"
+  },
+  {
+    "date": "2023-01-07",
+    "home_team": "Zulte Waregem",
+    "away_team": "KV Mechelen",
+    "league": null,
+    "score": "2-0",
+    "odds": 2.2,
+    "result": "home"
+  },
+  {
+    "date": "2023-01-07",
+    "home_team": "Vallecano",
+    "away_team": "Betis",
+    "league": null,
+    "score": "1-2",
+    "odds": 1.35,
+    "result": "away"
+  },
+  {
+    "date": "2023-01-07",
+    "home_team": "Pacos Ferreira",
+    "away_team": "Chaves",
+    "league": null,
+    "score": "1-1",
+    "odds": 2.5,
+    "result": "draw"
+  },
+  {
+    "date": "2023-01-07",
+    "home_team": "Excelsior",
+    "away_team": "Groningen",
+    "league": null,
+    "score": "1-0",
+    "odds": 2.4,
+    "result": "home"
+  },
+  {
+    "date": "2023-01-07",
+    "home_team": "Fenerbahce",
+    "away_team": "Galatasaray",
+    "league": null,
+    "score": "0-3",
+    "odds": 2.35,
+    "result": "away"
+  },
+  {
+    "date": "2023-01-07",
+    "home_team": "Anderlecht",
+    "away_team": "Union Gilloise",
+    "league": null,
+    "score": "1-3",
+    "odds": 1.3,
+    "result": "away"
+  },
+  {
+    "date": "2023-01-07",
+    "home_team": "Atl. Madrid",
+    "away_team": "Barcelona",
+    "league": null,
+    "score": "0-1",
+    "odds": 2.2,
+    "result": "away"
+  },
+  {
+    "date": "2023-01-07",
+    "home_team": "Boavista",
+    "away_team": "Gil Vicente",
+    "league": null,
+    "score": "1-0",
+    "odds": 3.2,
+    "result": "home"
+  },
+  {
+    "date": "2023-01-07",
+    "home_team": "Alanyaspor",
+    "away_team": "Trabzonspor",
+    "league": null,
+    "score": "5-0",
+    "odds": 1.3,
+    "result": "home"
+  },
+  {
+    "date": "2023-01-01",
+    "home_team": "Angers",
+    "away_team": "Lorient",
+    "league": null,
+    "score": "1-2",
+    "odds": 2.45,
+    "result": "away"
+  },
+  {
+    "date": "2023-01-01",
+    "home_team": "Nantes",
+    "away_team": "Auxerre",
+    "league": null,
+    "score": "1-0",
+    "odds": 1.95,
+    "result": "home"
+  },
+  {
+    "date": "2023-01-01",
+    "home_team": "Toulouse",
+    "away_team": "AC Ajaccio",
+    "league": null,
+    "score": "2-0",
+    "odds": 2.0,
+    "result": "home"
+  },
+  {
+    "date": "2023-01-01",
+    "home_team": "Blackpool",
+    "away_team": "Sunderland",
+    "league": null,
+    "score": "1-1",
+    "odds": 2.5,
+    "result": "draw"
+  },
+  {
+    "date": "2023-01-01",
+    "home_team": "Huddersfield",
+    "away_team": "Luton",
+    "league": null,
+    "score": "1-2",
+    "odds": 1.3,
+    "result": "away"
+  },
+  {
+    "date": "2023-01-01",
+    "home_team": "Coventry",
+    "away_team": "Bristol City",
+    "league": null,
+    "score": "1-1",
+    "odds": 2.0,
+    "result": "draw"
+  },
+  {
+    "date": "2023-01-01",
+    "home_team": "Lens",
+    "away_team": "PSG",
+    "league": null,
+    "score": "3-1",
+    "odds": 2.15,
+    "result": "home"
+  },
+  {
+    "date": "2023-01-01",
+    "home_team": "Glasgow Rangers",
+    "away_team": "Celtic",
+    "league": null,
+    "score": "2-2",
+    "odds": 2.25,
+    "result": "draw"
+  },
+  {
+    "date": "2023-01-01",
+    "home_team": "Swansea",
+    "away_team": "Burnley",
+    "league": null,
+    "score": "1-2",
+    "odds": 2.2,
+    "result": "away"
+  },
+  {
+    "date": "2023-01-01",
+    "home_team": "Birmingham",
+    "away_team": "Middlesbrough",
+    "league": null,
+    "score": "1-3",
+    "odds": 2.45,
+    "result": "away"
+  },
+  {
+    "date": "2023-01-01",
+    "home_team": "Norwich",
+    "away_team": "Watford",
+    "league": null,
+    "score": "0-1",
+    "odds": 2.0,
+    "result": "away"
+  },
+  {
+    "date": "2023-01-01",
+    "home_team": "Stoke",
+    "away_team": "Preston",
+    "league": null,
+    "score": "0-1",
+    "odds": 2.25,
+    "result": "away"
+  },
+  {
+    "date": "2023-01-01",
+    "home_team": "Wigan",
+    "away_team": "Hull",
+    "league": null,
+    "score": "1-4",
+    "odds": 1.55,
+    "result": "away"
+  },
+  {
+    "date": "2023-01-01",
+    "home_team": "Hearts",
+    "away_team": "Hibernian",
+    "league": null,
+    "score": "3-0",
+    "odds": 1.25,
+    "result": "home"
+  },
+  {
+    "date": "2023-01-01",
+    "home_team": "Kilmarnock",
+    "away_team": "St. Mirren",
+    "league": null,
+    "score": "0-0",
+    "odds": 2.7,
+    "result": "draw"
+  },
+  {
+    "date": "2023-01-01",
+    "home_team": "St Johnstone",
+    "away_team": "Dundee Utd",
+    "league": null,
+    "score": "0-1",
+    "odds": 2.2,
+    "result": "away"
+  },
+  {
+    "date": "2023-01-01",
+    "home_team": "QPR",
+    "away_team": "Sheffield Utd",
+    "league": null,
+    "score": "1-1",
+    "odds": 2.25,
+    "result": "draw"
+  },
+  {
+    "date": "2022-12-26",
+    "home_team": "Brentford",
+    "away_team": "Tottenham",
+    "league": null,
+    "score": "2-2",
+    "odds": 1.25,
+    "result": "draw"
+  },
+  {
+    "date": "2022-12-26",
+    "home_team": "Sunderland",
+    "away_team": "Blackburn",
+    "league": null,
+    "score": "2-1",
+    "odds": 1.35,
+    "result": "home"
+  },
+  {
+    "date": "2022-12-26",
+    "home_team": "Crystal Palace",
+    "away_team": "Fulham",
+    "league": null,
+    "score": "0-3",
+    "odds": 2.05,
+    "result": "away"
+  },
+  {
+    "date": "2022-12-26",
+    "home_team": "Leicester",
+    "away_team": "Newcastle",
+    "league": null,
+    "score": "0-3",
+    "odds": 3.2,
+    "result": "away"
+  },
+  {
+    "date": "2022-12-26",
+    "home_team": "Everton",
+    "away_team": "Wolves",
+    "league": null,
+    "score": "1-2",
+    "odds": 1.35,
+    "result": "away"
+  },
+  {
+    "date": "2022-12-26",
+    "home_team": "Southampton",
+    "away_team": "Brighton",
+    "league": null,
+    "score": "1-3",
+    "odds": 2.1,
+    "result": "away"
+  },
+  {
+    "date": "2022-12-26",
+    "home_team": "Hull",
+    "away_team": "Blackpool",
+    "league": null,
+    "score": "1-1",
+    "odds": 2.1,
+    "result": "draw"
+  },
+  {
+    "date": "2022-12-26",
+    "home_team": "Bristol City",
+    "away_team": "West Brom",
+    "league": null,
+    "score": "0-2",
+    "odds": 2.3,
+    "result": "away"
+  },
+  {
+    "date": "2022-12-26",
+    "home_team": "Rotherham",
+    "away_team": "Stoke",
+    "league": null,
+    "score": "2-2",
+    "odds": 2.25,
+    "result": "draw"
+  },
+  {
+    "date": "2022-12-26",
+    "home_team": "Annecy",
+    "away_team": "St Etienne",
+    "league": null,
+    "score": "2-1",
+    "odds": 2.25,
+    "result": "home"
+  },
+  {
+    "date": "2022-12-26",
+    "home_team": "Cardiff",
+    "away_team": "QPR",
+    "league": null,
+    "score": "0-0",
+    "odds": 2.95,
+    "result": "draw"
+  },
+  {
+    "date": "2022-12-26",
+    "home_team": "Charleroi",
+    "away_team": "Anderlecht",
+    "league": null,
+    "score": "0-1",
+    "odds": 2.25,
+    "result": "away"
+  },
+  {
+    "date": "2022-12-26",
+    "home_team": "Luton",
+    "away_team": "Norwich",
+    "league": null,
+    "score": "2-1",
+    "odds": 3.25,
+    "result": "home"
+  },
+  {
+    "date": "2022-12-26",
+    "home_team": "Valenciennes",
+    "away_team": "Amiens",
+    "league": null,
+    "score": "1-1",
+    "odds": 3.0,
+    "result": "draw"
+  },
+  {
+    "date": "2022-12-26",
+    "home_team": "Pau FC",
+    "away_team": "Paris FC",
+    "league": null,
+    "score": "0-1",
+    "odds": 3.0,
+    "result": "away"
+  },
+  {
+    "date": "2022-12-26",
+    "home_team": "Nimes",
+    "away_team": "Guingamp",
+    "league": null,
+    "score": "1-2",
+    "odds": 2.9,
+    "result": "away"
+  },
+  {
+    "date": "2022-12-26",
+    "home_team": "Quevilly Rouen",
+    "away_team": "Grenoble",
+    "league": null,
+    "score": "2-0",
+    "odds": 2.9,
+    "result": "home"
+  },
+  {
+    "date": "2022-12-11",
+    "home_team": "U. Cluj",
+    "away_team": "UTA Arad",
+    "league": null,
+    "score": "0-0",
+    "odds": 2.4,
+    "result": "draw"
+  },
+  {
+    "date": "2022-12-11",
+    "home_team": "QPR",
+    "away_team": "Burnley",
+    "league": null,
+    "score": "0-3",
+    "odds": 1.35,
+    "result": "away"
+  },
+  {
+    "date": "2022-12-11",
+    "home_team": "Genclerbirligi",
+    "away_team": "E. Buyuksehir",
+    "league": null,
+    "score": "1-2",
+    "odds": 2.35,
+    "result": "away"
+  },
+  {
+    "date": "2022-12-11",
+    "home_team": "Gillingham",
+    "away_team": "Bradford City",
+    "league": null,
+    "score": "Postp",
+    "odds": 2.2,
+    "result": "postponed"
+  },
+  {
+    "date": "2022-12-11",
+    "home_team": "Roda",
+    "away_team": "Heracles",
+    "league": null,
+    "score": "1-3",
+    "odds": 2.5,
+    "result": "away"
+  },
+  {
+    "date": "2022-12-11",
+    "home_team": "De Graafschap",
+    "away_team": "Eindhoven FC",
+    "league": null,
+    "score": "1-2",
+    "odds": 2.1,
+    "result": "away"
+  },
+  {
+    "date": "2022-12-11",
+    "home_team": "Telstar",
+    "away_team": "Den Bosch",
+    "league": null,
+    "score": "1-0",
+    "odds": 1.95,
+    "result": "home"
+  },
+  {
+    "date": "2022-12-11",
+    "home_team": "Venlo",
+    "away_team": "Maastricht",
+    "league": null,
+    "score": "2-1",
+    "odds": 1.95,
+    "result": "home"
+  },
+  {
+    "date": "2022-12-11",
+    "home_team": "Newtown",
+    "away_team": "Haverfordwest",
+    "league": null,
+    "score": "2-0",
+    "odds": 2.05,
+    "result": "home"
+  },
+  {
+    "date": "2022-12-11",
+    "home_team": "Altinordu",
+    "away_team": "Bodrum",
+    "league": null,
+    "score": "0-2",
+    "odds": 2.05,
+    "result": "away"
+  },
+  {
+    "date": "2022-12-11",
+    "home_team": "AEL Limassol",
+    "away_team": "Aris Limassol",
+    "league": null,
+    "score": "0-0",
+    "odds": 2.1,
+    "result": "draw"
+  },
+  {
+    "date": "2022-12-11",
+    "home_team": "Szeged",
+    "away_team": "MTK Budapest",
+    "league": null,
+    "score": "1-3",
+    "odds": 1.3,
+    "result": "away"
+  },
+  {
+    "date": "2022-12-11",
+    "home_team": "C. Targoviste",
+    "away_team": "FCSB",
+    "league": null,
+    "score": "0-2",
+    "odds": 2.1,
+    "result": "away"
+  },
+  {
+    "date": "2022-12-11",
+    "home_team": "FC U Craiova 1948",
+    "away_team": "Arges",
+    "league": null,
+    "score": "1-0",
+    "odds": 2.1,
+    "result": "home"
+  },
+  {
+    "date": "2022-12-11",
+    "home_team": "Jong Az Alkmaar",
+    "away_team": "Jong PSV",
+    "league": null,
+    "score": "2-3",
+    "odds": 2.65,
+    "result": "away"
+  },
+  {
+    "date": "2022-12-11",
+    "home_team": "Sunderland",
+    "away_team": "West Brom",
+    "league": null,
+    "score": "1-2",
+    "odds": 1.35,
+    "result": "away"
+  },
+  {
+    "date": "2022-12-11",
+    "home_team": "Boavista",
+    "away_team": "V. Guimaraes",
+    "league": null,
+    "score": "0-0",
+    "odds": 2.55,
+    "result": "draw"
+  },
+  {
+    "date": "2022-12-04",
+    "home_team": "Wycombe",
+    "away_team": "Portsmouth",
+    "league": null,
+    "score": "2-0",
+    "odds": 3.3,
+    "result": "home"
+  },
+  {
+    "date": "2022-12-04",
+    "home_team": "Adanaspor",
+    "away_team": "Goztepespor",
+    "league": null,
+    "score": "2-2",
+    "odds": 2.6,
+    "result": "draw"
+  },
+  {
+    "date": "2022-12-04",
+    "home_team": "FC Andorra",
+    "away_team": "Cartagena",
+    "league": null,
+    "score": "0-1",
+    "odds": 2.15,
+    "result": "away"
+  },
+  {
+    "date": "2022-12-04",
+    "home_team": "Ascoli",
+    "away_team": "Como",
+    "league": null,
+    "score": "3-3",
+    "odds": 3.25,
+    "result": "draw"
+  },
+  {
+    "date": "2022-12-04",
+    "home_team": "Brescia",
+    "away_team": "Sp. Reggina 1914",
+    "league": null,
+    "score": "0-2",
+    "odds": 2.5,
+    "result": "away"
+  },
+  {
+    "date": "2022-12-04",
+    "home_team": "Bari 1908",
+    "away_team": "Pisa",
+    "league": null,
+    "score": "0-0",
+    "odds": 3.15,
+    "result": "draw"
+  },
+  {
+    "date": "2022-12-04",
+    "home_team": "Cosenza",
+    "away_team": "Perugia",
+    "league": null,
+    "score": "0-0",
+    "odds": 2.9,
+    "result": "draw"
+  },
+  {
+    "date": "2022-12-04",
+    "home_team": "Sudtirol",
+    "away_team": "Frosinone",
+    "league": null,
+    "score": "1-1",
+    "odds": 2.25,
+    "result": "draw"
+  },
+  {
+    "date": "2022-12-04",
+    "home_team": "Anorthosis",
+    "away_team": "Aris Limassol",
+    "league": null,
+    "score": "0-2",
+    "odds": 1.35,
+    "result": "away"
+  },
+  {
+    "date": "2022-12-04",
+    "home_team": "Racing Santander",
+    "away_team": "Lugo",
+    "league": null,
+    "score": "0-1",
+    "odds": 1.7,
+    "result": "away"
+  },
+  {
+    "date": "2022-12-04",
+    "home_team": "Altay",
+    "away_team": "Boluspor",
+    "league": null,
+    "score": "5-1",
+    "odds": 1.85,
+    "result": "home"
+  },
+  {
+    "date": "2022-12-04",
+    "home_team": "Benevento",
+    "away_team": "Palermo",
+    "league": null,
+    "score": "0-1",
+    "odds": 1.95,
+    "result": "away"
+  },
+  {
+    "date": "2022-12-04",
+    "home_team": "Arges",
+    "away_team": "Rapid B.",
+    "league": null,
+    "score": "1-1",
+    "odds": 1.9,
+    "result": "draw"
+  },
+  {
+    "date": "2022-12-04",
+    "home_team": "Eibar",
+    "away_team": "Huesca",
+    "league": null,
+    "score": "2-1",
+    "odds": 1.8,
+    "result": "home"
+  },
+  {
+    "date": "2022-12-04",
+    "home_team": "Rizespor",
+    "away_team": "Pendikspor",
+    "league": null,
+    "score": "1-1",
+    "odds": 1.35,
+    "result": "draw"
+  },
+  {
+    "date": "2022-12-04",
+    "home_team": "Ponferradina",
+    "away_team": "Burgos",
+    "league": null,
+    "score": "1-2",
+    "odds": 2.95,
+    "result": "away"
+  },
+  {
+    "date": "2022-12-04",
+    "home_team": "Mafra",
+    "away_team": "Vizela",
+    "league": null,
+    "score": "1-1",
+    "odds": 1.35,
+    "result": "draw"
+  }
+]
