@@ -6,6 +6,7 @@ import {
   getPaginationRowModel,
   type SortingState,
   type ColumnDef,
+  type RowSelectionState,
   flexRender,
 } from "@tanstack/react-table";
 import {
@@ -13,6 +14,14 @@ import {
   ArrowUp,
   ArrowDown,
   Inbox,
+  MoreHorizontal,
+  Swords,
+  Layers,
+  Sparkles,
+  Goal,
+  FileSpreadsheet,
+  X,
+  Check,
 } from "lucide-react";
 import {
   Table,
@@ -34,29 +43,97 @@ import {
   PaginationEllipsis,
 } from "@/components/ui/pagination";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuLabel,
+} from "@/components/ui/dropdown-menu";
+
 import type { Match } from "@/lib/types";
+import { exportToCsv, exportToJson } from "@/lib/export";
+import { ExplorerActionsModal, type ExplorerActionType } from "./ExplorerActionsModal";
 
 interface DataTableProps {
   matches: Match[];
+  allMatches?: Match[];
   onSelectMatch: (match: Match) => void;
+  onNavigateToH2H?: (teamA: string, teamB: string) => void;
 }
 
-export const DataTable: React.FC<DataTableProps> = ({ matches, onSelectMatch }) => {
+export const DataTable: React.FC<DataTableProps> = ({
+  matches,
+  allMatches = matches,
+  onSelectMatch,
+  onNavigateToH2H,
+}) => {
   const [sorting, setSorting] = useState<SortingState>([
     { id: "date", desc: true },
   ]);
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
   const [pageSize, setPageSize] = useState<number>(50);
+
+  // Modal action state
+  const [actionModalOpen, setActionModalOpen] = useState(false);
+  const [actionType, setActionType] = useState<ExplorerActionType>("h2h");
+  const [actionTargetMatches, setActionTargetMatches] = useState<Match[]>([]);
+
+  const handleOpenAction = (type: ExplorerActionType, targetMatches: Match[]) => {
+    setActionType(type);
+    setActionTargetMatches(targetMatches);
+    setActionModalOpen(true);
+  };
 
   const columns = useMemo<ColumnDef<Match>[]>(
     () => [
+      // Checkbox Selector Column
+      {
+        id: "select",
+        header: ({ table }) => (
+          <div className="flex items-center justify-center pl-1" onClick={(e) => e.stopPropagation()}>
+            <Checkbox
+              checked={table.getIsAllPageRowsSelected()}
+              onCheckedChange={(val) => table.toggleAllPageRowsSelected(!!val)}
+              aria-label="Select all"
+            />
+          </div>
+        ),
+        cell: ({ row }) => (
+          <div className="flex items-center justify-center pl-1" onClick={(e) => e.stopPropagation()}>
+            <Checkbox
+              checked={row.getIsSelected()}
+              onCheckedChange={(val) => row.toggleSelected(!!val)}
+              aria-label="Select row"
+            />
+          </div>
+        ),
+        enableSorting: false,
+      },
+      // Position #
+      {
+        accessorKey: "position",
+        header: "Pos",
+        cell: (info) => {
+          const val = info.getValue() as number | undefined;
+          return (
+            <span className="font-mono text-xs font-bold text-muted-foreground">
+              {val ? `#${val}` : "—"}
+            </span>
+          );
+        },
+      },
       {
         accessorKey: "date",
         header: "Date",
         cell: (info) => {
           const val = info.getValue() as string | null;
           return (
-            <span className="font-mono text-xs text-muted-foreground">
+            <span className="font-mono text-xs text-muted-foreground whitespace-nowrap">
               {val || "—"}
             </span>
           );
@@ -76,7 +153,7 @@ export const DataTable: React.FC<DataTableProps> = ({ matches, onSelectMatch }) 
         accessorKey: "jackpot",
         header: "Jackpot",
         cell: (info) => (
-          <span className="text-xs text-foreground truncate max-w-[150px] block" title={info.getValue() as string}>
+          <span className="text-xs text-foreground truncate max-w-[140px] block" title={info.getValue() as string}>
             {info.getValue() as string}
           </span>
         ),
@@ -85,7 +162,7 @@ export const DataTable: React.FC<DataTableProps> = ({ matches, onSelectMatch }) 
         accessorKey: "home_team",
         header: "Home Team",
         cell: (info) => (
-          <span className="font-semibold text-xs text-foreground truncate max-w-[180px] block" title={info.getValue() as string}>
+          <span className="font-semibold text-xs text-foreground truncate max-w-[170px] block" title={info.getValue() as string}>
             {info.getValue() as string}
           </span>
         ),
@@ -106,7 +183,7 @@ export const DataTable: React.FC<DataTableProps> = ({ matches, onSelectMatch }) 
         accessorKey: "away_team",
         header: "Away Team",
         cell: (info) => (
-          <span className="font-semibold text-xs text-foreground truncate max-w-[180px] block" title={info.getValue() as string}>
+          <span className="font-semibold text-xs text-foreground truncate max-w-[170px] block" title={info.getValue() as string}>
             {info.getValue() as string}
           </span>
         ),
@@ -142,14 +219,83 @@ export const DataTable: React.FC<DataTableProps> = ({ matches, onSelectMatch }) 
         cell: (info) => {
           const val = info.getValue() as string | null;
           return (
-            <span className="text-xs text-muted-foreground truncate max-w-[170px] block" title={val || ""}>
+            <span className="text-xs text-muted-foreground truncate max-w-[160px] block" title={val || ""}>
               {val || "—"}
             </span>
           );
         },
       },
+      // Row Actions Menu
+      {
+        id: "actions",
+        header: () => <div className="text-right pr-2">Actions</div>,
+        cell: ({ row }) => {
+          const match = row.original;
+          return (
+            <div className="flex justify-end pr-1" onClick={(e) => e.stopPropagation()}>
+              <DropdownMenu>
+                <DropdownMenuTrigger
+                  render={
+                    <Button variant="ghost" size="icon-xs" className="h-7 w-7 text-muted-foreground hover:text-foreground">
+                      <MoreHorizontal className="h-3.5 w-3.5" />
+                    </Button>
+                  }
+                />
+                <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuLabel className="text-[11px] font-mono text-muted-foreground">
+                    Row #{match.position} · {match.home_team} vs {match.away_team}
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+
+                  <DropdownMenuItem
+                    onClick={() => handleOpenAction("h2h", [match])}
+                    className="cursor-pointer gap-2 text-xs"
+                  >
+                    <Swords className="h-3.5 w-3.5 text-amber-400" />
+                    <span>Team vs Team (H2H)</span>
+                  </DropdownMenuItem>
+
+                  <DropdownMenuItem
+                    onClick={() => handleOpenAction("position", [match])}
+                    className="cursor-pointer gap-2 text-xs"
+                  >
+                    <Layers className="h-3.5 w-3.5 text-blue-400" />
+                    <span>Position #{match.position} Analysis</span>
+                  </DropdownMenuItem>
+
+                  <DropdownMenuItem
+                    onClick={() => handleOpenAction("likelihood", [match])}
+                    className="cursor-pointer gap-2 text-xs"
+                  >
+                    <Sparkles className="h-3.5 w-3.5 text-primary" />
+                    <span>Team Likelihood & Prediction</span>
+                  </DropdownMenuItem>
+
+                  <DropdownMenuItem
+                    onClick={() => handleOpenAction("goals", [match])}
+                    className="cursor-pointer gap-2 text-xs"
+                  >
+                    <Goal className="h-3.5 w-3.5 text-emerald-400" />
+                    <span>Average Goals & Over/Under</span>
+                  </DropdownMenuItem>
+
+                  <DropdownMenuSeparator />
+
+                  <DropdownMenuItem
+                    onClick={() => onSelectMatch(match)}
+                    className="cursor-pointer text-xs"
+                  >
+                    View Match Details Sheet
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          );
+        },
+        enableSorting: false,
+      },
     ],
-    []
+    [onSelectMatch]
   );
 
   const table = useReactTable({
@@ -157,6 +303,7 @@ export const DataTable: React.FC<DataTableProps> = ({ matches, onSelectMatch }) 
     columns,
     state: {
       sorting,
+      rowSelection,
     },
     initialState: {
       pagination: {
@@ -164,6 +311,8 @@ export const DataTable: React.FC<DataTableProps> = ({ matches, onSelectMatch }) 
       },
     },
     onSortingChange: setSorting,
+    onRowSelectionChange: setRowSelection,
+    enableRowSelection: true,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -174,6 +323,13 @@ export const DataTable: React.FC<DataTableProps> = ({ matches, onSelectMatch }) 
   const totalRows = matches.length;
   const startRow = totalRows === 0 ? 0 : pageIndex * pageSize + 1;
   const endRow = Math.min((pageIndex + 1) * pageSize, totalRows);
+
+  // Selected matches from the table
+  const selectedMatches = useMemo(() => {
+    return table.getSelectedRowModel().rows.map((r) => r.original);
+  }, [table, rowSelection]);
+
+  const selectedCount = selectedMatches.length;
 
   // Generate pagination window
   const getPageNumbers = () => {
@@ -210,7 +366,7 @@ export const DataTable: React.FC<DataTableProps> = ({ matches, onSelectMatch }) 
   }
 
   return (
-    <div className="flex-1 flex flex-col min-h-0 bg-background">
+    <div className="flex-1 flex flex-col min-h-0 bg-background relative">
       {/* Scrollable table container */}
       <div className="flex-1 overflow-auto">
         <Table>
@@ -219,20 +375,27 @@ export const DataTable: React.FC<DataTableProps> = ({ matches, onSelectMatch }) 
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   const isSorted = header.column.getIsSorted();
+                  const canSort = header.column.getCanSort();
                   return (
                     <TableHead
                       key={header.id}
-                      onClick={header.column.getToggleSortingHandler()}
-                      className="px-3 py-3 text-xs font-semibold text-muted-foreground uppercase cursor-pointer select-none hover:text-foreground transition-colors"
+                      onClick={canSort ? header.column.getToggleSortingHandler() : undefined}
+                      className={`px-3 py-3 text-xs font-semibold text-muted-foreground uppercase select-none transition-colors ${
+                        canSort ? "cursor-pointer hover:text-foreground" : ""
+                      }`}
                     >
                       <div className="flex items-center gap-1.5">
                         {flexRender(header.column.columnDef.header, header.getContext())}
-                        {isSorted === "asc" ? (
-                          <ArrowUp className="h-3.5 w-3.5 text-primary" />
-                        ) : isSorted === "desc" ? (
-                          <ArrowDown className="h-3.5 w-3.5 text-primary" />
-                        ) : (
-                          <ArrowUpDown className="h-3.5 w-3.5 text-muted-foreground/40 opacity-0 group-hover:opacity-100" />
+                        {canSort && (
+                          <>
+                            {isSorted === "asc" ? (
+                              <ArrowUp className="h-3.5 w-3.5 text-primary" />
+                            ) : isSorted === "desc" ? (
+                              <ArrowDown className="h-3.5 w-3.5 text-primary" />
+                            ) : (
+                              <ArrowUpDown className="h-3.5 w-3.5 text-muted-foreground/40 opacity-0 group-hover:opacity-100" />
+                            )}
+                          </>
                         )}
                       </div>
                     </TableHead>
@@ -246,7 +409,10 @@ export const DataTable: React.FC<DataTableProps> = ({ matches, onSelectMatch }) 
               <TableRow
                 key={row.id}
                 onClick={() => onSelectMatch(row.original)}
-                className="cursor-pointer hover:bg-muted/60 transition-colors"
+                data-state={row.getIsSelected() && "selected"}
+                className={`cursor-pointer hover:bg-muted/60 transition-colors ${
+                  row.getIsSelected() ? "bg-primary/5 hover:bg-primary/10" : ""
+                }`}
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id} className="px-3 py-2.5">
@@ -258,6 +424,79 @@ export const DataTable: React.FC<DataTableProps> = ({ matches, onSelectMatch }) 
           </TableBody>
         </Table>
       </div>
+
+      {/* Floating Checkbox Action Toolbar (appears when rows are checked) */}
+      {selectedCount > 0 && (
+        <div className="absolute bottom-16 left-1/2 -translate-x-1/2 z-40 bg-card/95 border border-primary/40 shadow-2xl rounded-2xl px-4 py-2.5 flex items-center gap-2.5 backdrop-blur animate-in fade-in slide-in-from-bottom-3 flex-wrap max-w-[95vw]">
+          <div className="flex items-center gap-2 border-r border-border pr-2.5">
+            <Badge variant="default" className="font-mono text-xs">
+              {selectedCount} selected
+            </Badge>
+          </div>
+
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <Button
+              size="xs"
+              variant="outline"
+              onClick={() => handleOpenAction("h2h", selectedMatches)}
+              className="text-xs h-7 gap-1"
+            >
+              <Swords className="h-3.5 w-3.5 text-amber-400" />
+              <span>Team vs Team</span>
+            </Button>
+
+            <Button
+              size="xs"
+              variant="outline"
+              onClick={() => handleOpenAction("position", selectedMatches)}
+              className="text-xs h-7 gap-1"
+            >
+              <Layers className="h-3.5 w-3.5 text-blue-400" />
+              <span>Position Analysis</span>
+            </Button>
+
+            <Button
+              size="xs"
+              variant="outline"
+              onClick={() => handleOpenAction("likelihood", selectedMatches)}
+              className="text-xs h-7 gap-1"
+            >
+              <Sparkles className="h-3.5 w-3.5 text-primary" />
+              <span>Team Likelihood</span>
+            </Button>
+
+            <Button
+              size="xs"
+              variant="outline"
+              onClick={() => handleOpenAction("goals", selectedMatches)}
+              className="text-xs h-7 gap-1"
+            >
+              <Goal className="h-3.5 w-3.5 text-emerald-400" />
+              <span>Average Goals</span>
+            </Button>
+
+            <Button
+              size="xs"
+              variant="outline"
+              onClick={() => exportToCsv(selectedMatches, `selected_matches_${selectedMatches.length}.csv`)}
+              className="text-xs h-7 gap-1"
+            >
+              <FileSpreadsheet className="h-3.5 w-3.5 text-emerald-400" />
+              <span>Export CSV</span>
+            </Button>
+
+            <Button
+              size="xs"
+              variant="ghost"
+              onClick={() => table.resetRowSelection()}
+              className="text-xs h-7 text-muted-foreground hover:text-foreground px-2"
+            >
+              <X className="h-3.5 w-3.5 mr-1" />
+              Clear
+            </Button>
+          </div>
+        </div>
+      )}
 
       {/* Pagination & Status Footer */}
       <div className="border-t border-border bg-card/70 px-4 py-3 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-muted-foreground">
@@ -337,6 +576,16 @@ export const DataTable: React.FC<DataTableProps> = ({ matches, onSelectMatch }) 
           </PaginationContent>
         </Pagination>
       </div>
+
+      {/* Explorer Actions Modal */}
+      <ExplorerActionsModal
+        isOpen={actionModalOpen}
+        onClose={() => setActionModalOpen(false)}
+        initialAction={actionType}
+        selectedMatches={actionTargetMatches}
+        allMatches={allMatches}
+        onNavigateToH2H={onNavigateToH2H}
+      />
     </div>
   );
 };
