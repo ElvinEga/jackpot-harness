@@ -1,8 +1,9 @@
 # AGENTS.md
 
 Betting jackpot dataset: historical football (soccer) jackpot events scraped from three
-Kenyan/European bookmakers — Betika, Mozzart and SportPesa. The repo currently holds **data
-only** (CSV + one JSON); there is no application code, build system, or dependency manifest yet.
+Kenyan/European bookmakers — Betika, Mozzart and SportPesa. The repo is data first: raw CSVs, a
+normalised JSON mirror under `data/processed/`, and one generator script. There is no build system
+or dependency manifest yet.
 
 ## Repository layout
 
@@ -12,11 +13,12 @@ AGENTS.md
 data/raw/betika/     4 CSVs   — grand, mega, midweek, must-be-won jackpots
 data/raw/mozzart/    6 CSVs   — super-jackpot (1 file + numbered variants), super-grand-jackpot
 data/raw/sportpesa/  2 files  — mega-jackpot-pro as CSV and as the original nested JSON
+data/processed/      JSON mirror of the raw CSVs, same bookmaker folders and filenames
+src/build_json.py    regenerates data/processed from data/raw
 ```
 
-`data/raw/` is the untouched scrape output and is **read-only**: never edit these files in place.
-Derived or normalised tables go under `data/processed/`, analysis code under `src/`, and both
-directories are created on first use.
+`data/raw/` holds the scrape output as collected and is **read-only**: never edit these files in
+place. Derived tables go under `data/processed/`, code under `src/`.
 
 Within `data/raw/`, each subdirectory is one bookmaker and each file inside is one jackpot product.
 Filenames use lowercase bookmaker + hyphenated jackpot name (`betika-midweek-jackpot.csv`).
@@ -44,6 +46,33 @@ calibration/implied-probability statistics across it without splitting by price 
 `Home/Draw/Away` results, plus `JackpotId` grouping rows into individual jackpots. The JSON is the
 same data nested as `{Date, JackpotId, Events: [{Home, Away, Score, Result}]}` — prefer CSV for
 analysis.
+
+## Derived JSON
+
+`uv run python src/build_json.py` regenerates `data/processed/<bookmaker>/<same-stem>.json` from
+`data/raw/`. Each file is a flat JSON array of one object per match row, 42898 records in total:
+
+```json
+{
+  "date": "2023-02-19",
+  "home_team": "Sandhausen",
+  "away_team": "Karlsruher",
+  "league": null,
+  "score": "0-3",
+  "odds": 1.35,
+  "result": "away"
+}
+```
+
+Conversions the generator applies, all lossless apart from the last:
+- SportPesa headers are renamed to the shared snake_case vocabulary (`JackpotId` to `jackpot_id`,
+  `Home` to `home_team`), so every file has one key set; `result` is lowercased throughout.
+- `date` becomes ISO `YYYY-MM-DD` (raw betika/mozzart is `DD-MM-YYYY`, SportPesa an ISO timestamp).
+- `odds` and `jackpot_id` become numbers; `score` uses `-` (`0:1` becomes `0-1`).
+- Empty strings, unparseable dates and non-numeric odds become `null`. 865 rows of
+  `mozzart-super-jackpot2.csv` have a score duplicated into `odds` and therefore null odds, three
+  other rows carry typo prices (`1..35`, `.1.35`), and the 32 `No date found` rows of
+  `mozzart-super-jackpot4.csv` get a null date. Values are never guessed or repaired.
 
 ## Data quirks (verify before computing anything)
 
