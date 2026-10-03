@@ -3,13 +3,18 @@ import { Search, X, RotateCcw, Filter, ChevronDown, SlidersHorizontal, Loader2, 
 import { Button } from "@/components/ui/button";
 import { Input } from "../ui/input";
 import { Checkbox } from "../ui/checkbox";
-import { NativeSelect, NativeSelectOption } from "../ui/native-select";
 import { Popover, PopoverTrigger, PopoverContent } from "../ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import type { DateRange } from "react-day-picker";
 import { format } from "date-fns";
 import type { MatchFilters, Bookmaker } from "../../lib/types";
 import { DATASETS } from "../../lib/data";
+
+const BOOKMAKER_LABELS: Record<Bookmaker, string> = {
+  betika: "Betika",
+  mozzart: "Mozzart",
+  sportpesa: "SportPesa",
+};
 
 interface FilterBarProps {
   filters: MatchFilters;
@@ -26,6 +31,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
 }) => {
   const searchInputRef = useRef<HTMLInputElement>(null);
   const [showAdvanced, setShowAdvanced] = useState(false);
+  const [leagueOpen, setLeagueOpen] = useState(false);
 
   // Debounced search state
   const [searchValue, setSearchValue] = useState(filters.search);
@@ -198,12 +204,18 @@ export const FilterBar: React.FC<FilterBarProps> = ({
   // Distinct jackpots list
   const availableJackpots = Array.from(new Set(DATASETS.map((d) => d.jackpot)));
 
+  const [leagueQuery, setLeagueQuery] = useState("");
+  const visibleLeagues = useMemo(() => {
+    const q = leagueQuery.trim().toLowerCase();
+    return q ? uniqueLeagues.filter((l) => l.toLowerCase().includes(q)) : uniqueLeagues;
+  }, [leagueQuery, uniqueLeagues]);
+
   return (
     <div className="bg-card/70 border-b border-border p-3 lg:px-6 space-y-3">
       {/* Row 1: Search & Primary Filters */}
       <div className="flex flex-col lg:flex-row lg:items-center gap-2.5">
         {/* Search Input */}
-        <div className="relative flex-1 min-w-[280px]">
+        <div className="relative flex-1 min-w-0 sm:min-w-[280px]">
           {isDebouncing ? (
             <Loader2 className="absolute left-3 top-2.5 h-4 w-4 text-primary animate-spin" />
           ) : (
@@ -212,7 +224,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
           <Input
             ref={searchInputRef}
             type="text"
-            placeholder="Search teams, leagues, jackpots, bookmaker... (⌘K or /)"
+            placeholder="Search teams, jackpots, bookmakers... (⌘K or /)"
             value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)}
             onKeyDown={handleSearchKeyDown}
@@ -237,13 +249,14 @@ export const FilterBar: React.FC<FilterBarProps> = ({
               <button
                 key={bm}
                 onClick={() => toggleBookmaker(bm)}
+                aria-pressed={isSelected}
                 className={`text-xs px-2.5 py-1.5 rounded-md border font-medium transition-colors cursor-pointer ${
                   isSelected
                     ? "bg-primary/20 border-primary text-primary shadow-sm"
                     : "bg-background border-border text-muted-foreground hover:text-foreground hover:border-border/80"
                 }`}
               >
-                {bm.charAt(0).toUpperCase() + bm.slice(1)}
+                {BOOKMAKER_LABELS[bm]}
               </button>
             );
           })}
@@ -253,16 +266,17 @@ export const FilterBar: React.FC<FilterBarProps> = ({
         <div className="flex items-center gap-1.5 flex-wrap">
           <span className="text-xs text-muted-foreground mr-1 hidden sm:inline">Result:</span>
           {[
-            { id: "home", label: "Home", color: "hover:border-emerald-700 text-emerald-400" },
-            { id: "draw", label: "Draw", color: "hover:border-amber-700 text-amber-400" },
-            { id: "away", label: "Away", color: "hover:border-sky-700 text-sky-400" },
-            { id: "postponed", label: "Postp", color: "hover:border-purple-700 text-purple-400" },
+            { id: "home", label: "Home", color: "hover:border-primary/50 text-primary" },
+            { id: "draw", label: "Draw", color: "hover:border-border text-foreground" },
+            { id: "away", label: "Away", color: "hover:border-border text-muted-foreground" },
+            { id: "postponed", label: "Postp", color: "hover:border-border text-muted-foreground" },
           ].map((res) => {
             const isSelected = filters.results.includes(res.id);
             return (
               <button
                 key={res.id}
                 onClick={() => toggleResult(res.id)}
+                aria-pressed={isSelected}
                 className={`text-xs px-2.5 py-1.5 rounded-md border font-medium transition-colors cursor-pointer ${
                   isSelected
                     ? "bg-secondary border-border text-foreground shadow-sm ring-1 ring-ring/40"
@@ -297,7 +311,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
             }
           />
           <PopoverContent align="end" className="w-64 max-h-72 overflow-y-auto p-2">
-            <div className="px-2 py-1 text-[11px] font-semibold text-muted-foreground border-b border-border mb-1">
+            <div className="px-2 py-1 text-xs font-semibold text-muted-foreground border-b border-border mb-1">
               Select Jackpots
             </div>
             {availableJackpots.map((jackpot) => {
@@ -352,7 +366,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
 
             {/* Quick Year Presets */}
             <div className="flex items-center gap-1 mb-2 flex-wrap">
-              <span className="text-[11px] text-muted-foreground mr-1">Presets:</span>
+              <span className="text-xs text-muted-foreground mr-1">Presets:</span>
               {[2026, 2025, 2024, 2023, 2022].map((yr) => {
                 const isActive = filters.from === `${yr}-01-01` && filters.to === `${yr}-12-31`;
                 return (
@@ -361,7 +375,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                     variant={isActive ? "secondary" : "outline"}
                     size="xs"
                     onClick={() => setYearPreset(yr)}
-                    className="h-6 text-[11px] px-2"
+                    className="h-7 text-xs px-2.5"
                   >
                     {yr}
                   </Button>
@@ -387,7 +401,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
           className="gap-1.5 text-xs"
         >
           <SlidersHorizontal className="h-3.5 w-3.5 text-muted-foreground" />
-          <span>Filters</span>
+          <span>More filters</span>
         </Button>
 
         {/* Reset Filters Button */}
@@ -457,22 +471,73 @@ export const FilterBar: React.FC<FilterBarProps> = ({
             />
           </div>
 
-          {/* League Dropdown */}
+          {/* League Searchable Filter */}
           <div className="flex items-center gap-2">
             <span className="text-muted-foreground">League:</span>
-            <NativeSelect
-              size="sm"
-              value={filters.league || ""}
-              onChange={(e) => onFilterChange({ ...filters, league: e.target.value || null })}
-              className="max-w-[220px]"
-            >
-              <NativeSelectOption value="">All Leagues</NativeSelectOption>
-              {uniqueLeagues.slice(0, 100).map((league) => (
-                <NativeSelectOption key={league} value={league}>
-                  {league}
-                </NativeSelectOption>
-              ))}
-            </NativeSelect>
+            <Popover open={leagueOpen} onOpenChange={setLeagueOpen}>
+              <PopoverTrigger
+                render={
+                  <button
+                    className={`flex items-center gap-1.5 max-w-[240px] text-xs px-3 py-2 rounded-md border font-medium transition-colors cursor-pointer ${
+                      filters.league
+                        ? "bg-primary/20 border-primary text-primary"
+                        : "bg-background border-border text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    <span className="truncate">
+                      {filters.league || `All leagues (${uniqueLeagues.length})`}
+                    </span>
+                    <ChevronDown className="h-3 w-3 shrink-0 opacity-70" />
+                  </button>
+                }
+              />
+              <PopoverContent align="start" className="w-72 p-2">
+                <div className="relative mb-1.5">
+                  <Search className="absolute left-2.5 top-2 h-3.5 w-3.5 text-muted-foreground" />
+                  <Input
+                    autoFocus
+                    type="text"
+                    placeholder="Search leagues..."
+                    value={leagueQuery}
+                    onChange={(e) => setLeagueQuery(e.target.value)}
+                    className="pl-8 h-8 text-xs"
+                  />
+                </div>
+                {filters.league && (
+                  <button
+                    onClick={() => {
+                      onFilterChange({ ...filters, league: null });
+                      setLeagueOpen(false);
+                    }}
+                    className="w-full text-left text-xs px-2 py-1.5 rounded mb-1 text-destructive hover:bg-destructive/10 cursor-pointer font-medium"
+                  >
+                    Clear league
+                  </button>
+                )}
+                <div className="max-h-56 overflow-y-auto">
+                  {visibleLeagues.length === 0 ? (
+                    <p className="px-2 py-3 text-center text-xs text-muted-foreground">
+                      No league matches “{leagueQuery.trim()}”
+                    </p>
+                  ) : (
+                    visibleLeagues.map((league) => (
+                      <button
+                        key={league}
+                        onClick={() => {
+                          onFilterChange({ ...filters, league });
+                          setLeagueOpen(false);
+                        }}
+                        className={`w-full truncate text-left text-xs px-2 py-1.5 rounded cursor-pointer transition-colors hover:bg-muted ${
+                          league === filters.league ? "bg-muted font-semibold text-foreground" : "text-popover-foreground"
+                        }`}
+                      >
+                        {league}
+                      </button>
+                    ))
+                  )}
+                </div>
+              </PopoverContent>
+            </Popover>
           </div>
         </div>
       )}
