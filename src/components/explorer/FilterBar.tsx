@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Search, X, RotateCcw, Filter, ChevronDown, SlidersHorizontal } from "lucide-react";
+import { Search, X, RotateCcw, Filter, ChevronDown, SlidersHorizontal, Loader2 } from "lucide-react";
 import { Button } from "../ui/Button";
 import type { MatchFilters, Bookmaker } from "../../lib/types";
 import { DATASETS } from "../../lib/data";
@@ -21,6 +21,72 @@ export const FilterBar: React.FC<FilterBarProps> = ({
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [jackpotMenuOpen, setJackpotMenuOpen] = useState(false);
   const jackpotRef = useRef<HTMLDivElement>(null);
+
+  // Debounced search state
+  const [searchValue, setSearchValue] = useState(filters.search);
+  const [isDebouncing, setIsDebouncing] = useState(false);
+  const latestFiltersRef = useRef(filters);
+  const onFilterChangeRef = useRef(onFilterChange);
+
+  useEffect(() => {
+    latestFiltersRef.current = filters;
+    onFilterChangeRef.current = onFilterChange;
+  });
+
+  // Sync if external filter change occurred (e.g. Reset or URL change)
+  useEffect(() => {
+    setSearchValue(filters.search);
+    setIsDebouncing(false);
+  }, [filters.search]);
+
+  // Debounce search by 300ms
+  useEffect(() => {
+    if (searchValue === filters.search) {
+      setIsDebouncing(false);
+      return;
+    }
+
+    setIsDebouncing(true);
+    const timer = setTimeout(() => {
+      onFilterChangeRef.current({
+        ...latestFiltersRef.current,
+        search: searchValue,
+      });
+      setIsDebouncing(false);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [searchValue, filters.search]);
+
+  const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      setIsDebouncing(false);
+      onFilterChangeRef.current({
+        ...latestFiltersRef.current,
+        search: searchValue,
+      });
+    } else if (e.key === "Escape") {
+      e.preventDefault();
+      setSearchValue("");
+      setIsDebouncing(false);
+      onFilterChangeRef.current({
+        ...latestFiltersRef.current,
+        search: "",
+      });
+      searchInputRef.current?.blur();
+    }
+  };
+
+  const handleClearSearch = () => {
+    setSearchValue("");
+    setIsDebouncing(false);
+    onFilterChangeRef.current({
+      ...latestFiltersRef.current,
+      search: "",
+    });
+    searchInputRef.current?.focus();
+  };
 
   // Keyboard shortcut listener for CMD+K or '/'
   useEffect(() => {
@@ -89,18 +155,23 @@ export const FilterBar: React.FC<FilterBarProps> = ({
       <div className="flex flex-col lg:flex-row lg:items-center gap-2.5">
         {/* Search Input */}
         <div className="relative flex-1 min-w-[280px]">
-          <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+          {isDebouncing ? (
+            <Loader2 className="absolute left-3 top-2.5 h-4 w-4 text-primary animate-spin" />
+          ) : (
+            <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+          )}
           <input
             ref={searchInputRef}
             type="text"
             placeholder="Search teams, leagues, jackpots, bookmaker... (⌘K or /)"
-            value={filters.search}
-            onChange={(e) => onFilterChange({ ...filters, search: e.target.value })}
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+            onKeyDown={handleSearchKeyDown}
             className="w-full bg-background border border-border rounded-md pl-9 pr-9 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary transition-colors"
           />
-          {filters.search && (
+          {searchValue && (
             <button
-              onClick={() => onFilterChange({ ...filters, search: "" })}
+              onClick={handleClearSearch}
               className="absolute right-3 top-2.5 text-muted-foreground hover:text-foreground cursor-pointer"
             >
               <X className="h-4 w-4" />
