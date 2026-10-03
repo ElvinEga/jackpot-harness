@@ -9,7 +9,6 @@ import {
   History,
   Target,
   Trophy,
-  Search,
   CheckCircle2,
   ExternalLink,
 } from "lucide-react";
@@ -141,62 +140,51 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto bg-card border-border p-5">
-        <DialogHeader className="pb-3 border-b border-border">
-          <div className="flex items-center justify-between gap-3">
-            <div className="flex items-center gap-2">
-              <span className="p-1.5 rounded-lg bg-primary/10 text-primary border border-primary/20">
-                <Sparkles className="h-4 w-4" />
-              </span>
-              <div>
-                <DialogTitle className="text-base font-bold text-foreground">
-                  Match & Historical Intelligence Actions
-                </DialogTitle>
-                <DialogDescription className="text-xs text-muted-foreground">
-                  {selectedMatches.length > 1
-                    ? `Inspecting ${selectedMatches.length} selected jackpot records`
-                    : focusMatch
-                    ? `${focusMatch.home_team} vs ${focusMatch.away_team} · Position #${focusMatch.position}`
-                    : "Analyze teams, row positions, outcome likelihoods, and goal expectations"}
-                </DialogDescription>
-              </div>
+      <DialogContent className="w-[96vw] max-w-2xl lg:max-w-3xl max-h-[88vh] overflow-y-auto bg-card border-border p-4 sm:p-6 rounded-2xl shadow-2xl">
+        {/* Clean, unsqueezed Dialog Header without unnecessary row counts */}
+        <DialogHeader className="pb-3 border-b border-border text-left">
+          <div className="flex items-center gap-2.5">
+            <span className="p-2 rounded-xl bg-primary/10 text-primary border border-primary/20 shrink-0">
+              <Sparkles className="h-4 w-4" />
+            </span>
+            <div>
+              <DialogTitle className="text-base sm:text-lg font-bold text-foreground">
+                Match & Historical Intelligence
+              </DialogTitle>
+              <DialogDescription className="text-xs text-muted-foreground mt-0.5">
+                {teamA} vs {teamB} · Row #{selectedPosition} Analysis
+              </DialogDescription>
             </div>
-
-            {selectedMatches.length > 0 && (
-              <Badge variant="outline" className="text-xs font-mono">
-                {selectedMatches.length} Row{selectedMatches.length > 1 ? "s" : ""} Selected
-              </Badge>
-            )}
           </div>
         </DialogHeader>
 
-        {/* Tab Navigation */}
+        {/* Tab Navigation: Responsive wrap / grid */}
         <Tabs value={activeTab} onValueChange={(val) => setActiveTab(val as ExplorerActionType)} className="w-full pt-2">
-          <TabsList className="grid grid-cols-4 h-9">
-            <TabsTrigger value="h2h" className="text-xs gap-1.5">
-              <Swords className="h-3.5 w-3.5 text-amber-400" />
+          <TabsList className="grid grid-cols-2 sm:grid-cols-4 h-auto p-1 gap-1 w-full bg-muted/60">
+            <TabsTrigger value="h2h" className="text-xs py-1.5 gap-1.5 justify-center">
+              <Swords className="h-3.5 w-3.5 text-amber-400 shrink-0" />
               <span>Team vs Team</span>
             </TabsTrigger>
-            <TabsTrigger value="position" className="text-xs gap-1.5">
-              <Layers className="h-3.5 w-3.5 text-blue-400" />
-              <span>Position Analysis</span>
+            <TabsTrigger value="position" className="text-xs py-1.5 gap-1.5 justify-center">
+              <Layers className="h-3.5 w-3.5 text-blue-400 shrink-0" />
+              <span>Row Analysis</span>
             </TabsTrigger>
-            <TabsTrigger value="likelihood" className="text-xs gap-1.5">
-              <Sparkles className="h-3.5 w-3.5 text-primary" />
-              <span>Team Likelihood</span>
+            <TabsTrigger value="likelihood" className="text-xs py-1.5 gap-1.5 justify-center">
+              <Sparkles className="h-3.5 w-3.5 text-primary shrink-0" />
+              <span>Likelihood</span>
             </TabsTrigger>
-            <TabsTrigger value="goals" className="text-xs gap-1.5">
-              <Goal className="h-3.5 w-3.5 text-emerald-400" />
+            <TabsTrigger value="goals" className="text-xs py-1.5 gap-1.5 justify-center">
+              <Goal className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
               <span>Average Goals</span>
             </TabsTrigger>
           </TabsList>
 
           {/* 1. Team vs Team View */}
           <TabsContent value="h2h" className="space-y-4 pt-3 text-xs">
-            {/* Team Selectors */}
-            <div className="p-3 rounded-xl bg-muted/30 border border-border flex flex-col sm:flex-row items-center gap-2">
-              <div className="w-full sm:flex-1 relative">
-                <label className="text-[10px] text-muted-foreground font-medium mb-1 block">Home Team</label>
+            {/* Team Selectors: Responsive layout */}
+            <div className="p-3 rounded-xl bg-muted/30 border border-border flex flex-col sm:flex-row items-stretch sm:items-end gap-2.5">
+              <div className="flex-1">
+                <label className="text-[11px] font-medium text-muted-foreground mb-1 block">Home Team</label>
                 <Input
                   list="h2h-teams-a"
                   value={teamA}
@@ -210,14 +198,20 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
                 </datalist>
               </div>
 
-              <div className="pt-4">
-                <Button variant="outline" size="sm" onClick={handleSwap} className="h-8 px-2.5">
+              <div className="flex justify-center sm:pb-0.5">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleSwap}
+                  className="h-8 px-3 text-xs gap-1 text-muted-foreground hover:text-foreground"
+                >
                   <ArrowRightLeft className="h-3.5 w-3.5" />
+                  <span className="sm:hidden">Swap Teams</span>
                 </Button>
               </div>
 
-              <div className="w-full sm:flex-1 relative">
-                <label className="text-[10px] text-muted-foreground font-medium mb-1 block">Away Team</label>
+              <div className="flex-1">
+                <label className="text-[11px] font-medium text-muted-foreground mb-1 block">Away Team</label>
                 <Input
                   list="h2h-teams-b"
                   value={teamB}
@@ -235,58 +229,83 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
             {/* H2H Results */}
             {h2h.totalMatches > 0 ? (
               <div className="space-y-3">
+                {/* 3 Outcome Cards */}
                 <div className="grid grid-cols-3 gap-2 text-center">
-                  <div className="p-3 rounded-lg bg-card border border-border">
-                    <span className="text-[10px] text-muted-foreground block truncate">{teamA} Wins</span>
-                    <span className="text-xl font-bold font-mono text-emerald-400">{h2h.teamAWins}</span>
+                  <div className="p-3 rounded-xl bg-card border border-border">
+                    <span className="text-[11px] text-muted-foreground block truncate">{teamA}</span>
+                    <span className="text-lg sm:text-xl font-bold font-mono text-emerald-400 block my-0.5">
+                      {h2h.teamAWins}
+                    </span>
                     <span className="text-[10px] text-muted-foreground font-mono">
-                      {((h2h.teamAWins / h2h.totalMatches) * 100).toFixed(0)}%
+                      {((h2h.teamAWins / h2h.totalMatches) * 100).toFixed(0)}% wins
                     </span>
                   </div>
-                  <div className="p-3 rounded-lg bg-card border border-border">
-                    <span className="text-[10px] text-muted-foreground block">Draws</span>
-                    <span className="text-xl font-bold font-mono text-amber-400">{h2h.draws}</span>
+                  <div className="p-3 rounded-xl bg-card border border-border">
+                    <span className="text-[11px] text-muted-foreground block">Draws</span>
+                    <span className="text-lg sm:text-xl font-bold font-mono text-amber-400 block my-0.5">
+                      {h2h.draws}
+                    </span>
                     <span className="text-[10px] text-muted-foreground font-mono">
                       {((h2h.draws / h2h.totalMatches) * 100).toFixed(0)}%
                     </span>
                   </div>
-                  <div className="p-3 rounded-lg bg-card border border-border">
-                    <span className="text-[10px] text-muted-foreground block truncate">{teamB} Wins</span>
-                    <span className="text-xl font-bold font-mono text-blue-400">{h2h.teamBWins}</span>
+                  <div className="p-3 rounded-xl bg-card border border-border">
+                    <span className="text-[11px] text-muted-foreground block truncate">{teamB}</span>
+                    <span className="text-lg sm:text-xl font-bold font-mono text-blue-400 block my-0.5">
+                      {h2h.teamBWins}
+                    </span>
                     <span className="text-[10px] text-muted-foreground font-mono">
-                      {((h2h.teamBWins / h2h.totalMatches) * 100).toFixed(0)}%
+                      {((h2h.teamBWins / h2h.totalMatches) * 100).toFixed(0)}% wins
                     </span>
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between text-xs px-2 text-muted-foreground font-mono">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-xs px-1 text-muted-foreground font-mono">
                   <span>Average goals per encounter: <strong className="text-foreground">{h2h.avgGoals}</strong></span>
-                  <span>Total meetings: <strong className="text-foreground">{h2h.totalMatches}</strong></span>
+                  <span>Total recorded meetings: <strong className="text-foreground">{h2h.totalMatches}</strong></span>
                 </div>
 
-                {/* Encounters List */}
-                <div className="border border-border rounded-lg overflow-hidden">
-                  <div className="bg-muted/40 px-3 py-2 border-b border-border font-semibold text-foreground text-xs">
-                    Past Encounters in Jackpot Dataset
+                {/* Structured Encounters List (Not squeezed) */}
+                <div className="border border-border rounded-xl overflow-hidden bg-card">
+                  <div className="bg-muted/40 px-3 py-2 border-b border-border flex items-center justify-between">
+                    <span className="font-semibold text-foreground text-xs">Past Encounters in Jackpot Dataset</span>
+                    <span className="text-[11px] text-muted-foreground font-mono">{h2h.recentEncounters.length} recorded</span>
                   </div>
-                  <div className="max-h-48 overflow-y-auto divide-y divide-border">
+                  <div className="max-h-56 overflow-y-auto divide-y divide-border p-1">
                     {h2h.recentEncounters.map((m) => (
-                      <div key={m.id} className="px-3 py-2 flex items-center justify-between hover:bg-muted/20">
-                        <span className="font-mono text-muted-foreground text-[11px]">{m.date || "N/A"}</span>
-                        <div className="font-medium text-foreground">
-                          {m.home_team} <span className="font-mono font-bold text-primary px-1.5 py-0.5 rounded bg-muted mx-1">{m.score || "—"}</span> {m.away_team}
+                      <div
+                        key={m.id}
+                        className="p-2.5 rounded-lg hover:bg-muted/30 transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-2"
+                      >
+                        <div className="flex items-center gap-2 text-[11px] text-muted-foreground font-mono">
+                          <Calendar className="h-3 w-3 text-muted-foreground/70" />
+                          <span>{m.date || "—"}</span>
+                          <span className="text-muted-foreground/40">•</span>
+                          <span className="truncate max-w-[140px]">{m.bookmaker.toUpperCase()}: {m.jackpot}</span>
                         </div>
-                        <Badge variant="outline" className="text-[10px] uppercase font-mono">
-                          {m.result}
-                        </Badge>
+                        <div className="flex items-center justify-between sm:justify-end gap-3 flex-1">
+                          <div className="flex items-center gap-1.5 text-xs font-semibold">
+                            <span className="truncate max-w-[110px] text-right">{m.home_team}</span>
+                            <span className="font-mono px-2 py-0.5 rounded bg-muted border border-border text-foreground font-bold text-xs shrink-0">
+                              {m.score || "—"}
+                            </span>
+                            <span className="truncate max-w-[110px] text-left">{m.away_team}</span>
+                          </div>
+                          <Badge
+                            variant={m.result === "home" ? "default" : m.result === "draw" ? "secondary" : "outline"}
+                            className="text-[10px] uppercase font-mono shrink-0"
+                          >
+                            {m.result}
+                          </Badge>
+                        </div>
                       </div>
                     ))}
                   </div>
                 </div>
               </div>
             ) : (
-              <div className="p-6 text-center text-muted-foreground text-xs italic bg-muted/20 rounded-lg border border-dashed border-border">
-                No direct historical encounter between {teamA} and {teamB} in the jackpot archives.
+              <div className="p-6 text-center text-muted-foreground text-xs italic bg-muted/20 rounded-xl border border-dashed border-border">
+                No direct historical encounter between {teamA} and {teamB} recorded in the jackpot archives.
               </div>
             )}
 
@@ -311,9 +330,9 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
 
           {/* 2. Position / Row Analysis View */}
           <TabsContent value="position" className="space-y-4 pt-3 text-xs">
-            <div className="flex items-center justify-between p-3 rounded-xl bg-muted/30 border border-border">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3 rounded-xl bg-muted/30 border border-border">
               <div className="flex items-center gap-2">
-                <span className="font-semibold text-foreground">Inspect Row Position:</span>
+                <span className="font-semibold text-foreground">Select Row Position:</span>
                 <NativeSelect
                   value={String(selectedPosition)}
                   onChange={(e) => setSelectedPosition(Number(e.target.value))}
@@ -326,60 +345,62 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
                   ))}
                 </NativeSelect>
               </div>
-              <span className="text-muted-foreground text-[11px]">
-                {currentPosStat?.totalMatches.toLocaleString()} jackpots analyzed
+              <span className="text-muted-foreground text-[11px] font-mono">
+                {currentPosStat?.totalMatches.toLocaleString()} historical jackpot events analyzed
               </span>
             </div>
 
             {currentPosStat && (
               <div className="space-y-3">
                 {/* 1X2 Split for this row */}
-                <div className="grid grid-cols-3 gap-2 text-center">
-                  <div className="p-3 rounded-lg bg-card border border-border">
-                    <span className="text-[10px] text-muted-foreground block">Row #{selectedPosition} Home Win</span>
-                    <span className="text-xl font-bold font-mono text-emerald-400">{currentPosStat.homeWinPct}%</span>
-                    <span className="text-[10px] text-muted-foreground">{currentPosStat.homeWins} wins</span>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-center">
+                  <div className="p-3 rounded-xl bg-card border border-border">
+                    <span className="text-[11px] text-muted-foreground block">Row #{selectedPosition} Home Win</span>
+                    <span className="text-xl font-bold font-mono text-emerald-400 block my-0.5">{currentPosStat.homeWinPct}%</span>
+                    <span className="text-[10px] text-muted-foreground font-mono">{currentPosStat.homeWins} wins</span>
                   </div>
-                  <div className="p-3 rounded-lg bg-card border border-border">
-                    <span className="text-[10px] text-muted-foreground block">Row #{selectedPosition} Draw</span>
-                    <span className="text-xl font-bold font-mono text-amber-400">{currentPosStat.drawPct}%</span>
-                    <span className="text-[10px] text-muted-foreground">{currentPosStat.draws} draws</span>
+                  <div className="p-3 rounded-xl bg-card border border-border">
+                    <span className="text-[11px] text-muted-foreground block">Row #{selectedPosition} Draw</span>
+                    <span className="text-xl font-bold font-mono text-amber-400 block my-0.5">{currentPosStat.drawPct}%</span>
+                    <span className="text-[10px] text-muted-foreground font-mono">{currentPosStat.draws} draws</span>
                   </div>
-                  <div className="p-3 rounded-lg bg-card border border-border">
-                    <span className="text-[10px] text-muted-foreground block">Row #{selectedPosition} Away Win</span>
-                    <span className="text-xl font-bold font-mono text-blue-400">{currentPosStat.awayWinPct}%</span>
-                    <span className="text-[10px] text-muted-foreground">{currentPosStat.awayWins} wins</span>
+                  <div className="p-3 rounded-xl bg-card border border-border">
+                    <span className="text-[11px] text-muted-foreground block">Row #{selectedPosition} Away Win</span>
+                    <span className="text-xl font-bold font-mono text-blue-400 block my-0.5">{currentPosStat.awayWinPct}%</span>
+                    <span className="text-[10px] text-muted-foreground font-mono">{currentPosStat.awayWins} wins</span>
                   </div>
                 </div>
 
                 {/* Goal metrics for this row */}
-                <div className="grid grid-cols-4 gap-2 text-center">
-                  <div className="p-2.5 rounded-lg bg-muted/40 border border-border">
-                    <span className="text-[10px] text-muted-foreground block">Avg Goals / Match</span>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center">
+                  <div className="p-2.5 rounded-xl bg-muted/40 border border-border">
+                    <span className="text-[10px] text-muted-foreground block">Avg Goals</span>
                     <span className="text-lg font-bold font-mono text-foreground">{currentPosStat.avgGoals}</span>
                   </div>
-                  <div className="p-2.5 rounded-lg bg-muted/40 border border-border">
+                  <div className="p-2.5 rounded-xl bg-muted/40 border border-border">
                     <span className="text-[10px] text-muted-foreground block">Over 2.5 %</span>
                     <span className="text-lg font-bold font-mono text-foreground">{currentPosStat.over25Pct}%</span>
                   </div>
-                  <div className="p-2.5 rounded-lg bg-muted/40 border border-border">
+                  <div className="p-2.5 rounded-xl bg-muted/40 border border-border">
                     <span className="text-[10px] text-muted-foreground block">BTTS %</span>
                     <span className="text-lg font-bold font-mono text-foreground">{currentPosStat.bttsPct}%</span>
                   </div>
-                  <div className="p-2.5 rounded-lg bg-muted/40 border border-border">
+                  <div className="p-2.5 rounded-xl bg-muted/40 border border-border">
                     <span className="text-[10px] text-muted-foreground block">Most Frequent</span>
                     <span className="text-lg font-bold font-mono text-primary">{currentPosStat.mostLikelyScore}</span>
                   </div>
                 </div>
 
-                {/* Top 5 Scores for this Row */}
-                <div className="p-3 rounded-lg bg-card border border-border">
+                {/* Top 5 Scores for this Row (Grid format) */}
+                <div className="p-3 rounded-xl bg-card border border-border">
                   <span className="font-semibold text-foreground block mb-2">Most Common Scores in Row #{selectedPosition}:</span>
-                  <div className="flex items-center gap-2 flex-wrap">
+                  <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
                     {currentPosStat.topScores.map((ts) => (
-                      <span key={ts.score} className="px-2 py-1 rounded bg-muted border border-border font-mono text-xs">
-                        <strong className="text-foreground">{ts.score}</strong>: {ts.pct}% ({ts.count} times)
-                      </span>
+                      <div key={ts.score} className="p-2 rounded-lg bg-muted/40 border border-border text-center">
+                        <span className="font-mono font-bold text-xs text-foreground block">{ts.score}</span>
+                        <span className="text-[10px] text-primary font-mono block mt-0.5">{ts.pct}%</span>
+                        <span className="text-[9px] text-muted-foreground block">({ts.count} times)</span>
+                      </div>
                     ))}
                   </div>
                 </div>
@@ -389,18 +410,18 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
 
           {/* 3. Team Likelihood View */}
           <TabsContent value="likelihood" className="space-y-4 pt-3 text-xs">
-            <div className="grid grid-cols-3 gap-2 text-center p-3 rounded-xl bg-muted/40 border border-border">
-              <div className="p-2.5 rounded bg-card border border-border">
-                <span className="text-muted-foreground text-[10px] block">Home Win ({teamA})</span>
-                <span className="text-xl font-bold font-mono text-emerald-400">{prediction.homeProb}%</span>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-center">
+              <div className="p-3 rounded-xl bg-card border border-border">
+                <span className="text-muted-foreground text-[10px] block truncate">Home Win ({teamA})</span>
+                <span className="text-xl font-bold font-mono text-emerald-400 block my-0.5">{prediction.homeProb}%</span>
               </div>
-              <div className="p-2.5 rounded bg-card border border-border">
+              <div className="p-3 rounded-xl bg-card border border-border">
                 <span className="text-muted-foreground text-[10px] block">Draw (X)</span>
-                <span className="text-xl font-bold font-mono text-amber-400">{prediction.drawProb}%</span>
+                <span className="text-xl font-bold font-mono text-amber-400 block my-0.5">{prediction.drawProb}%</span>
               </div>
-              <div className="p-2.5 rounded bg-card border border-border">
-                <span className="text-muted-foreground text-[10px] block">Away Win ({teamB})</span>
-                <span className="text-xl font-bold font-mono text-blue-400">{prediction.awayProb}%</span>
+              <div className="p-3 rounded-xl bg-card border border-border">
+                <span className="text-muted-foreground text-[10px] block truncate">Away Win ({teamB})</span>
+                <span className="text-xl font-bold font-mono text-blue-400 block my-0.5">{prediction.awayProb}%</span>
               </div>
             </div>
 
@@ -420,7 +441,7 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
               {/* Signals */}
               <div className="space-y-1.5 pt-1">
                 {prediction.signals.map((sig, i) => (
-                  <div key={i} className="flex items-start gap-2 p-2 rounded bg-muted/30 border border-border">
+                  <div key={i} className="flex items-start gap-2 p-2 rounded-lg bg-muted/30 border border-border">
                     <CheckCircle2 className="h-3.5 w-3.5 text-primary shrink-0 mt-0.5" />
                     <div>
                       <span className="font-medium text-foreground">{sig.label}:</span>{" "}
@@ -431,12 +452,12 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
               </div>
             </div>
 
-            {/* Likely Scores */}
+            {/* Likely Scores (Grid) */}
             <div className="space-y-2">
-              <span className="font-semibold text-foreground block">Top 5 Predicted Scores (Poisson):</span>
-              <div className="grid grid-cols-5 gap-2">
+              <span className="font-semibold text-foreground block">Top Predicted Scores (Poisson):</span>
+              <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
                 {prediction.mostLikelyScores.map((sc) => (
-                  <div key={sc.score} className="p-2 rounded bg-muted/40 border border-border text-center">
+                  <div key={sc.score} className="p-2 rounded-lg bg-muted/40 border border-border text-center">
                     <span className="font-mono font-bold text-sm text-foreground block">{sc.score}</span>
                     <span className="text-[10px] text-primary font-mono">{sc.probability}%</span>
                   </div>
@@ -448,36 +469,36 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
           {/* 4. Average Goals View */}
           <TabsContent value="goals" className="space-y-4 pt-3 text-xs">
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center">
-              <div className="p-3 rounded-lg bg-card border border-border">
-                <span className="text-[10px] text-muted-foreground block">Expected Goals ({teamA})</span>
-                <span className="text-xl font-bold font-mono text-emerald-400">{goalsModel.lambdaH}</span>
+              <div className="p-3 rounded-xl bg-card border border-border">
+                <span className="text-[10px] text-muted-foreground block truncate">Exp Goals ({teamA})</span>
+                <span className="text-xl font-bold font-mono text-emerald-400 block my-0.5">{goalsModel.lambdaH}</span>
               </div>
-              <div className="p-3 rounded-lg bg-card border border-border">
-                <span className="text-[10px] text-muted-foreground block">Expected Goals ({teamB})</span>
-                <span className="text-xl font-bold font-mono text-blue-400">{goalsModel.lambdaA}</span>
+              <div className="p-3 rounded-xl bg-card border border-border">
+                <span className="text-[10px] text-muted-foreground block truncate">Exp Goals ({teamB})</span>
+                <span className="text-xl font-bold font-mono text-blue-400 block my-0.5">{goalsModel.lambdaA}</span>
               </div>
-              <div className="p-3 rounded-lg bg-card border border-border">
-                <span className="text-[10px] text-muted-foreground block">Total Expected Goals</span>
-                <span className="text-xl font-bold font-mono text-primary">
+              <div className="p-3 rounded-xl bg-card border border-border">
+                <span className="text-[10px] text-muted-foreground block">Total Expected</span>
+                <span className="text-xl font-bold font-mono text-primary block my-0.5">
                   {Number((goalsModel.lambdaH + goalsModel.lambdaA).toFixed(2))}
                 </span>
               </div>
-              <div className="p-3 rounded-lg bg-card border border-border">
-                <span className="text-[10px] text-muted-foreground block">Both To Score (BTTS)</span>
-                <span className="text-xl font-bold font-mono text-foreground">{goalsModel.btts}%</span>
+              <div className="p-3 rounded-xl bg-card border border-border">
+                <span className="text-[10px] text-muted-foreground block">BTTS %</span>
+                <span className="text-xl font-bold font-mono text-foreground block my-0.5">{goalsModel.btts}%</span>
               </div>
             </div>
 
-            <div className="grid grid-cols-3 gap-2 text-center">
-              <div className="p-2.5 rounded-lg bg-muted/40 border border-border">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-center">
+              <div className="p-2.5 rounded-xl bg-muted/40 border border-border">
                 <span className="text-[10px] text-muted-foreground block">Over 1.5 Goals %</span>
                 <span className="text-base font-bold font-mono text-foreground">{goalsModel.over15}%</span>
               </div>
-              <div className="p-2.5 rounded-lg bg-muted/40 border border-border">
+              <div className="p-2.5 rounded-xl bg-muted/40 border border-border">
                 <span className="text-[10px] text-muted-foreground block">Over 2.5 Goals %</span>
                 <span className="text-base font-bold font-mono text-foreground">{goalsModel.over25}%</span>
               </div>
-              <div className="p-2.5 rounded-lg bg-muted/40 border border-border">
+              <div className="p-2.5 rounded-xl bg-muted/40 border border-border">
                 <span className="text-[10px] text-muted-foreground block">Over 3.5 Goals %</span>
                 <span className="text-base font-bold font-mono text-foreground">{goalsModel.over35}%</span>
               </div>
@@ -486,9 +507,9 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
             {/* Top 6 Scores */}
             <div className="space-y-2">
               <span className="font-semibold text-foreground block">Poisson Score Distribution:</span>
-              <div className="grid grid-cols-6 gap-2">
-                {goalsModel.sim.scores.slice(0, 6).map((sc, i) => (
-                  <div key={sc.score} className="p-2 rounded bg-muted/30 border border-border text-center">
+              <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
+                {goalsModel.sim.scores.slice(0, 6).map((sc) => (
+                  <div key={sc.score} className="p-2 rounded-lg bg-muted/30 border border-border text-center">
                     <span className="font-mono font-bold text-xs text-foreground block">{sc.score}</span>
                     <span className="text-[10px] text-primary font-mono">{sc.probability}%</span>
                   </div>
