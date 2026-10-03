@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useDeferredValue } from "react";
 import { Loader2, AlertCircle } from "lucide-react";
 import { Header } from "./components/layout/Header";
 import { FilterBar } from "./components/explorer/FilterBar";
@@ -20,6 +20,8 @@ export function App() {
   const [selectedMatch, setSelectedMatch] = useState<Match | null>(null);
 
   const { filters, setFilters, resetFilters } = useUrlFilters();
+  const deferredFilters = useDeferredValue(filters);
+  const isFiltering = filters !== deferredFilters;
 
   // Compute overall dataset stats
   const datasetStats: AppStats | null = useMemo(() => {
@@ -36,10 +38,10 @@ export function App() {
     return Array.from(set).sort();
   }, [matches]);
 
-  // Filter matches based on current active filters
+  // Filter matches based on current active filters with non-blocking deferred computation
   const filteredMatches = useMemo(() => {
-    return filterMatches(matches, filters);
-  }, [matches, filters]);
+    return filterMatches(matches, deferredFilters);
+  }, [matches, deferredFilters]);
 
   const handleApplyPartialFilter = (partial: Partial<MatchFilters>) => {
     setFilters((prev) => ({ ...prev, ...partial }));
@@ -103,6 +105,7 @@ export function App() {
         activeTab={activeTab}
         onTabChange={setActiveTab}
         filteredMatches={filteredMatches}
+        isFiltering={isFiltering}
       />
 
       {/* Main Content Area */}
