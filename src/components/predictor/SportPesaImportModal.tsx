@@ -95,7 +95,7 @@ export const SportPesaImportModal: React.FC<SportPesaImportModalProps> = ({
       <DialogContent className="max-w-2xl bg-card border-border max-h-[90vh] flex flex-col p-6">
         <DialogHeader>
           <div className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-lg bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400">
+            <div className="h-8 w-8 rounded-lg bg-primary/10 border border-primary/30 flex items-center justify-center text-muted-foreground">
               <Zap className="h-4 w-4" />
             </div>
             <div>
@@ -126,11 +126,11 @@ export const SportPesaImportModal: React.FC<SportPesaImportModalProps> = ({
           <TabsContent value="api" className="space-y-3 min-h-0 flex-1 flex flex-col">
             <div className="p-3 rounded-xl bg-muted/30 border border-border flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div className="space-y-0.5">
-                <span className="text-[11px] font-semibold text-foreground flex items-center gap-1.5">
-                  <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="text-xs font-semibold text-foreground flex items-center gap-1.5">
+                  <span className="h-2 w-2 rounded-full bg-primary animate-pulse" />
                   https://jackpot-offer-api.ke.sportpesa.com/api/jackpots/active
                 </span>
-                <p className="text-[11px] text-muted-foreground">
+                <p className="text-xs text-muted-foreground">
                   Queries active jackpot fixtures using mobile client headers.
                 </p>
               </div>
@@ -148,11 +148,11 @@ export const SportPesaImportModal: React.FC<SportPesaImportModalProps> = ({
             </div>
 
             {/* Cookie & Akamai Info Note */}
-            <div className="p-2.5 rounded-lg border border-blue-500/20 bg-blue-500/5 text-blue-300 text-[11px] flex items-start gap-2">
-              <Info className="h-4 w-4 shrink-0 mt-0.5 text-blue-400" />
+            <div className="p-2.5 rounded-lg border border-primary/20 bg-primary/5 text-primary text-xs flex items-start gap-2">
+              <Info className="h-4 w-4 shrink-0 mt-0.5 text-muted-foreground" />
               <div className="leading-relaxed">
-                <span className="font-semibold text-blue-200">Akamai Bot Protection Bypassed: </span>
-                Standard browsers require <code className="font-mono bg-blue-950/40 px-1 py-0.5 rounded text-[10px]">bm_so</code> / <code className="font-mono bg-blue-950/40 px-1 py-0.5 rounded text-[10px]">bm_sv</code> cookies. This app routes requests via an internal proxy with Android mobile client headers (<code className="font-mono text-[10px]">okhttp/4.9.0</code>), allowing direct access without expiring cookies!
+                <span className="font-semibold text-primary">Akamai Bot Protection Bypassed: </span>
+                Standard browsers require <code className="font-mono bg-muted px-1 py-0.5 rounded text-xs">bm_so</code> / <code className="font-mono bg-muted px-1 py-0.5 rounded text-xs">bm_sv</code> cookies. This app routes requests via an internal proxy with Android mobile client headers (<code className="font-mono text-xs">okhttp/4.9.0</code>), allowing direct access without expiring cookies!
               </div>
             </div>
           </TabsContent>
@@ -175,7 +175,7 @@ export const SportPesaImportModal: React.FC<SportPesaImportModalProps> = ({
                 onClick={handleParseCustomJson}
                 className="text-xs gap-1.5"
               >
-                <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />
+                <CheckCircle2 className="h-3.5 w-3.5" />
                 Parse & Preview Fixtures
               </Button>
             </div>
@@ -198,22 +198,22 @@ export const SportPesaImportModal: React.FC<SportPesaImportModalProps> = ({
                 <span className="font-semibold text-foreground text-xs">
                   Jackpot #{previewJackpot.humanId}
                 </span>
-                <Badge variant="outline" className="text-[10px] px-1.5 py-0 font-mono">
+                <Badge variant="outline" className="text-xs px-1.5 py-0 font-mono">
                   {previewJackpot.numberOfEvents} Fixtures
                 </Badge>
                 <Badge
                   variant="outline"
-                  className={`text-[10px] px-1.5 py-0 ${
+                  className={`text-xs px-1.5 py-0 ${
                     previewJackpot.bettingStatus.toLowerCase() === "open"
-                      ? "text-emerald-400 border-emerald-500/30"
-                      : "text-amber-400 border-amber-500/30"
+                      ? "text-primary border-primary/30"
+                      : "text-foreground border-border"
                   }`}
                 >
                   Status: {previewJackpot.bettingStatus}
                 </Badge>
               </div>
 
-              <span className="text-[11px] text-muted-foreground font-mono">
+              <span className="text-xs text-muted-foreground font-mono">
                 ID: {previewJackpot.id.slice(0, 8)}...
               </span>
             </div>
@@ -223,24 +223,24 @@ export const SportPesaImportModal: React.FC<SportPesaImportModalProps> = ({
               {previewJackpot.matches.map((m) => (
                 <div key={m.order} className="p-2 flex items-center justify-between hover:bg-muted/40 transition-colors">
                   <div className="flex items-center gap-2">
-                    <span className="h-5 w-5 rounded bg-muted text-foreground flex items-center justify-center font-mono text-[10px] font-bold border border-border">
+                    <span className="h-5 w-5 rounded bg-muted text-foreground flex items-center justify-center font-mono text-xs font-bold border border-border">
                       {m.order}
                     </span>
                     <div>
                       <span className="font-medium text-foreground">
-                        {m.homeTeam} <span className="text-muted-foreground text-[10px]">vs</span> {m.awayTeam}
+                        {m.homeTeam} <span className="text-muted-foreground text-xs">vs</span> {m.awayTeam}
                       </span>
-                      <span className="text-[10px] text-muted-foreground block">
+                      <span className="text-xs text-muted-foreground block">
                         {m.tournament} {m.country ? `• ${m.country}` : ""}
                       </span>
                     </div>
                   </div>
 
                   <div className="text-right">
-                    <span className="font-mono text-[11px] font-semibold text-foreground">
+                    <span className="font-mono text-xs font-semibold text-foreground">
                       {m.homeOdds?.toFixed(2) || "-"} / {m.drawOdds?.toFixed(2) || "-"} / {m.awayOdds?.toFixed(2) || "-"}
                     </span>
-                    <span className="text-[10px] text-muted-foreground block font-mono">
+                    <span className="text-xs text-muted-foreground block font-mono">
                       1X2 Odds
                     </span>
                   </div>
@@ -268,7 +268,7 @@ export const SportPesaImportModal: React.FC<SportPesaImportModalProps> = ({
             disabled={!previewJackpot}
             className="text-xs font-semibold gap-1.5"
           >
-            <CheckCircle2 className="h-4 w-4 text-white" />
+            <CheckCircle2 className="h-4 w-4 text-primary-foreground" />
             Apply 17 Matches to Predictor
           </Button>
         </div>
