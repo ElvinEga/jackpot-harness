@@ -425,9 +425,9 @@ export const DataTable: React.FC<DataTableProps> = ({
         </Table>
       </div>
 
-      {/* Floating Checkbox Action Toolbar (appears when rows are checked) */}
+      {/* Floating Checkbox Action Toolbar (fixed in viewport so it stays visible while scrolling) */}
       {selectedCount > 0 && (
-        <div className="absolute bottom-16 left-1/2 -translate-x-1/2 z-40 bg-card/95 border border-primary/40 shadow-2xl rounded-2xl px-4 py-2.5 flex items-center gap-2.5 backdrop-blur animate-in fade-in slide-in-from-bottom-3 flex-wrap max-w-[95vw]">
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-card/95 border-2 border-primary/50 shadow-2xl rounded-2xl px-3 py-2 sm:px-4 sm:py-2.5 flex items-center gap-2 backdrop-blur-md ring-2 ring-primary/20 animate-in fade-in slide-in-from-bottom-4 flex-wrap max-w-[95vw] justify-center">
           <div className="flex items-center gap-2 border-r border-border pr-2.5">
             <Badge variant="default" className="font-mono text-xs">
               {selectedCount} selected
