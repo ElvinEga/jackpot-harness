@@ -5,6 +5,7 @@ import { FilterBar } from "./components/explorer/FilterBar";
 import { DataTable } from "./components/explorer/DataTable";
 import { MatchDetailSheet } from "./components/explorer/MatchDetailSheet";
 import { JackpotPredictor } from "./components/predictor/JackpotPredictor";
+import { Toaster } from "./components/ui/toast";
 import { PositionMatrix } from "./components/positions/PositionMatrix";
 import { TeamVersusTeam } from "./components/teams/TeamVersusTeam";
 import { GoalAnalysisView } from "./components/goals/GoalAnalysisView";
@@ -77,9 +78,6 @@ export function App() {
           <div className="w-full bg-muted rounded-full h-2 overflow-hidden">
             <div className="bg-primary h-full w-2/3 animate-pulse rounded-full" />
           </div>
-          <span className="text-[11px] text-muted-foreground font-mono">
-            TanStack Query · 42,898 records
-          </span>
         </div>
       </div>
     );
@@ -108,7 +106,8 @@ export function App() {
   }
 
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col font-sans">
+    <Toaster>
+      <div className="min-h-screen bg-background text-foreground flex flex-col font-sans">
       {/* Top Header */}
       <Header
         stats={datasetStats}
@@ -164,7 +163,8 @@ export function App() {
         onClose={() => setSelectedMatch(null)}
         onApplyFilter={handleApplyPartialFilter}
       />
-    </div>
+      </div>
+    </Toaster>
   );
 }
 
