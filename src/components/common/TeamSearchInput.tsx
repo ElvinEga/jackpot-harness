@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect, useMemo } from "react";
-import { Search, X, Shield, Trophy } from "lucide-react";
+import { Search, X, Shield } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 
 export interface TeamSearchInputProps {
   value: string;
@@ -185,11 +184,11 @@ export const TeamSearchInput: React.FC<TeamSearchInputProps> = ({
       {isOpen && (
         <div
           ref={listRef}
-          className="absolute left-0 top-full z-50 mt-1 max-h-60 w-full min-w-[240px] max-w-[360px] overflow-y-auto rounded-xl bg-card border border-border shadow-2xl p-1 text-xs outline-none animate-in fade-in-0 zoom-in-95"
+          className="absolute left-0 top-full z-50 mt-1 max-h-60 w-full min-w-[240px] max-w-[min(360px,calc(100vw-2rem))] overflow-y-auto rounded-xl bg-card border border-border shadow-2xl p-1 text-xs outline-none animate-in fade-in-0 zoom-in-95"
         >
           {suggestions.length > 0 ? (
             <>
-              <div className="px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/70 flex items-center justify-between border-b border-border/50 mb-1">
+              <div className="px-2.5 py-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground/70 flex items-center justify-between border-b border-border/50 mb-1">
                 <span>{value.trim() ? "Matching Teams" : "Popular Jackpot Teams"}</span>
                 <span>{suggestions.length} found</span>
               </div>
@@ -208,7 +207,7 @@ export const TeamSearchInput: React.FC<TeamSearchInputProps> = ({
                         ? "bg-accent text-accent-foreground font-semibold"
                         : isSelected
                         ? "bg-primary/10 text-primary font-medium"
-                        : "text-foreground hover:bg-muted/60"
+                        : "text-foreground hover:bg-muted"
                     }`}
                   >
                     <div className="flex items-center gap-2 truncate">
@@ -217,7 +216,7 @@ export const TeamSearchInput: React.FC<TeamSearchInputProps> = ({
                     </div>
 
                     {count !== undefined && (
-                      <span className="text-[10px] font-mono text-muted-foreground shrink-0">
+                      <span className="text-xs font-mono text-muted-foreground shrink-0">
                         {count} games
                       </span>
                     )}
@@ -228,7 +227,7 @@ export const TeamSearchInput: React.FC<TeamSearchInputProps> = ({
           ) : (
             <div className="p-3 text-center text-xs text-muted-foreground">
               <span>No team matching "{value}" found</span>
-              <div className="text-[10px] text-muted-foreground/70 mt-0.5">
+              <div className="text-xs text-muted-foreground/70 mt-0.5">
                 (Press Enter to use this custom team name)
               </div>
             </div>
