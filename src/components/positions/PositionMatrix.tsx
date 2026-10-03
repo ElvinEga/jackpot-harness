@@ -79,19 +79,11 @@ export const PositionMatrix: React.FC<PositionMatrixProps> = ({ matches }) => {
       {/* Title & Description */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-2 border-b border-border">
         <div>
-          <div className="flex items-center gap-2">
-            <span className="p-1.5 rounded-lg bg-primary/10 text-primary border border-primary/20">
-              <Layers className="h-5 w-5" />
-            </span>
-            <h1 className="text-xl font-bold tracking-tight text-foreground">
-              Jackpot Position Analysis (1 to {maxPos})
-            </h1>
-            <Badge variant="outline" className="text-xs font-mono">
-              Dimension: Row #
-            </Badge>
-          </div>
+          <h2 className="text-xl font-bold tracking-tight text-foreground">
+            Position Analysis (1 to {maxPos})
+          </h2>
           <p className="text-xs text-muted-foreground mt-1">
-            Discover historical outcome biases, draw tendencies, and goal averages by row position across jackpot events.
+            Discover historical outcome biases across jackpot events.
           </p>
         </div>
 
@@ -141,17 +133,17 @@ export const PositionMatrix: React.FC<PositionMatrixProps> = ({ matches }) => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           <Card size="sm" className="bg-card border-border shadow-xs">
             <CardHeader className="pb-1">
-              <CardDescription className="text-[11px] flex items-center gap-1.5 text-emerald-400">
+              <CardDescription className="text-xs flex items-center gap-1.5 text-primary">
                 <Flame className="h-3.5 w-3.5" />
                 Strongest Home Position
               </CardDescription>
               <CardTitle className="text-lg font-bold font-mono text-foreground flex items-center gap-2">
                 <span>Position #{anomalies.highestHome.position}</span>
-                <Badge variant="outline" className="text-emerald-400 border-emerald-500/30 font-mono">
+                <Badge variant="outline" className="text-primary border-primary/30 font-mono">
                   {anomalies.highestHome.homeWinPct}% Home
                 </Badge>
               </CardTitle>
-              <span className="text-[10px] text-muted-foreground">
+              <span className="text-xs text-muted-foreground">
                 {anomalies.highestHome.homeWins} wins in {anomalies.highestHome.totalMatches} matches
               </span>
             </CardHeader>
@@ -159,17 +151,17 @@ export const PositionMatrix: React.FC<PositionMatrixProps> = ({ matches }) => {
 
           <Card size="sm" className="bg-card border-border shadow-xs">
             <CardHeader className="pb-1">
-              <CardDescription className="text-[11px] flex items-center gap-1.5 text-amber-400">
+              <CardDescription className="text-xs flex items-center gap-1.5 text-foreground">
                 <ShieldAlert className="h-3.5 w-3.5" />
                 Highest Draw Tendency
               </CardDescription>
               <CardTitle className="text-lg font-bold font-mono text-foreground flex items-center gap-2">
                 <span>Position #{anomalies.highestDraw.position}</span>
-                <Badge variant="outline" className="text-amber-400 border-amber-500/30 font-mono">
+                <Badge variant="outline" className="text-foreground border-border font-mono">
                   {anomalies.highestDraw.drawPct}% Draw
                 </Badge>
               </CardTitle>
-              <span className="text-[10px] text-muted-foreground">
+              <span className="text-xs text-muted-foreground">
                 {anomalies.highestDraw.draws} draws in {anomalies.highestDraw.totalMatches} matches
               </span>
             </CardHeader>
@@ -177,17 +169,17 @@ export const PositionMatrix: React.FC<PositionMatrixProps> = ({ matches }) => {
 
           <Card size="sm" className="bg-card border-border shadow-xs">
             <CardHeader className="pb-1">
-              <CardDescription className="text-[11px] flex items-center gap-1.5 text-blue-400">
+              <CardDescription className="text-xs flex items-center gap-1.5 text-muted-foreground">
                 <TrendingUp className="h-3.5 w-3.5" />
                 Highest Away Win Rate
               </CardDescription>
               <CardTitle className="text-lg font-bold font-mono text-foreground flex items-center gap-2">
                 <span>Position #{anomalies.highestAway.position}</span>
-                <Badge variant="outline" className="text-blue-400 border-blue-500/30 font-mono">
+                <Badge variant="outline" className="text-muted-foreground border-primary/30 font-mono">
                   {anomalies.highestAway.awayWinPct}% Away
                 </Badge>
               </CardTitle>
-              <span className="text-[10px] text-muted-foreground">
+              <span className="text-xs text-muted-foreground">
                 {anomalies.highestAway.awayWins} wins in {anomalies.highestAway.totalMatches} matches
               </span>
             </CardHeader>
@@ -195,7 +187,7 @@ export const PositionMatrix: React.FC<PositionMatrixProps> = ({ matches }) => {
 
           <Card size="sm" className="bg-card border-border shadow-xs">
             <CardHeader className="pb-1">
-              <CardDescription className="text-[11px] flex items-center gap-1.5 text-primary">
+              <CardDescription className="text-xs flex items-center gap-1.5 text-primary">
                 <Goal className="h-3.5 w-3.5" />
                 Highest Scoring Position
               </CardDescription>
@@ -205,7 +197,7 @@ export const PositionMatrix: React.FC<PositionMatrixProps> = ({ matches }) => {
                   {anomalies.highestGoals.avgGoals} G/M
                 </Badge>
               </CardTitle>
-              <span className="text-[10px] text-muted-foreground">
+              <span className="text-xs text-muted-foreground">
                 Most frequent score: {anomalies.highestGoals.mostLikelyScore}
               </span>
             </CardHeader>
@@ -225,7 +217,7 @@ export const PositionMatrix: React.FC<PositionMatrixProps> = ({ matches }) => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="h-72 w-full">
+          <div className="h-72 w-full" role="img" aria-label="Bar chart of home win, draw, and away win percentages for each jackpot position. The full-positions table below lists the same values.">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={chartData1X2} margin={{ top: 10, right: 10, left: -15, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" opacity={0.5} />
@@ -241,9 +233,9 @@ export const PositionMatrix: React.FC<PositionMatrixProps> = ({ matches }) => {
                   formatter={(value: any) => [`${value}%`]}
                 />
                 <Legend wrapperStyle={{ fontSize: "11px", paddingTop: "8px" }} />
-                <Bar dataKey="Home Win %" fill="#10b981" radius={[3, 3, 0, 0]} />
-                <Bar dataKey="Draw %" fill="#f59e0b" radius={[3, 3, 0, 0]} />
-                <Bar dataKey="Away Win %" fill="#3b82f6" radius={[3, 3, 0, 0]} />
+                <Bar dataKey="Home Win %" fill="var(--primary)" radius={[3, 3, 0, 0]} />
+                <Bar dataKey="Draw %" fill="#cbd5e1" radius={[3, 3, 0, 0]} />
+                <Bar dataKey="Away Win %" fill="#64748b" radius={[3, 3, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -288,18 +280,18 @@ export const PositionMatrix: React.FC<PositionMatrixProps> = ({ matches }) => {
                   <td className="py-2.5 px-3 text-center font-mono text-muted-foreground">
                     {s.totalMatches.toLocaleString()}
                   </td>
-                  <td className="py-2.5 px-3 text-center font-mono font-medium text-emerald-400">
+                  <td className="py-2.5 px-3 text-center font-mono font-medium text-primary">
                     {s.homeWinPct}%
                   </td>
-                  <td className="py-2.5 px-3 text-center font-mono font-medium text-amber-400">
+                  <td className="py-2.5 px-3 text-center font-mono font-medium text-foreground">
                     {s.drawPct}%
                   </td>
-                  <td className="py-2.5 px-3 text-center font-mono font-medium text-blue-400">
+                  <td className="py-2.5 px-3 text-center font-mono font-medium text-foreground">
                     {s.awayWinPct}%
                   </td>
                   <td className="py-2.5 px-3 text-center font-mono">
                     <span className="font-semibold text-foreground">{s.avgGoals}</span>
-                    <span className="text-[10px] text-muted-foreground ml-1">
+                    <span className="text-xs text-muted-foreground ml-1">
                       ({s.avgHomeGoals} - {s.avgAwayGoals})
                     </span>
                   </td>
@@ -317,7 +309,7 @@ export const PositionMatrix: React.FC<PositionMatrixProps> = ({ matches }) => {
                   <td className="py-2.5 px-3">
                     <div className="flex items-center gap-1.5 flex-wrap">
                       {s.topScores.slice(0, 3).map((ts) => (
-                        <span key={ts.score} className="text-[10px] font-mono px-1 rounded bg-muted/60 text-muted-foreground">
+                        <span key={ts.score} className="text-xs font-mono px-1 rounded bg-muted text-muted-foreground">
                           {ts.score} ({ts.pct}%)
                         </span>
                       ))}
