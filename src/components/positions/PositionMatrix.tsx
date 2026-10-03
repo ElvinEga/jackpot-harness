@@ -75,7 +75,7 @@ export const PositionMatrix: React.FC<PositionMatrixProps> = ({ matches }) => {
   }, [stats]);
 
   return (
-    <div className="flex-1 flex flex-col p-4 lg:p-6 space-y-6 max-w-7xl mx-auto w-full">
+    <div className="flex-1 flex flex-col p-4 lg:p-6 space-y-6  mx-auto w-full">
       {/* Title & Description */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-2 border-b border-border">
         <div>
