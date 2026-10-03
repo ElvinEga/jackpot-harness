@@ -151,7 +151,9 @@ export function App() {
           />
           <DataTable
             matches={filteredMatches}
+            allMatches={matches}
             onSelectMatch={setSelectedMatch}
+            onNavigateToH2H={handleOpenH2H}
           />
         </div>
       )}
