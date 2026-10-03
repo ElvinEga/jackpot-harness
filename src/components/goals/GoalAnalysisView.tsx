@@ -82,19 +82,11 @@ export const GoalAnalysisView: React.FC<GoalAnalysisViewProps> = ({ matches }) =
       {/* Title */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-2 border-b border-border">
         <div>
-          <div className="flex items-center gap-2">
-            <span className="p-1.5 rounded-lg bg-primary/10 text-primary border border-primary/20">
-              <Goal className="h-5 w-5" />
-            </span>
-            <h1 className="text-xl font-bold tracking-tight text-foreground">
-              Goal & Score Frequency Analytics
-            </h1>
-            <Badge variant="outline" className="text-xs font-mono">
-              Temporal Dimensions
-            </Badge>
-          </div>
+          <h2 className="text-xl font-bold tracking-tight text-foreground">
+            Goal & Score Frequency Analytics
+          </h2>
           <p className="text-xs text-muted-foreground mt-1">
-            Historical goal averages analyzed across months, days of the week, and score distribution profiles.
+            Historical goal averages analyzed across distribution profiles.
           </p>
         </div>
       </div>
@@ -103,7 +95,7 @@ export const GoalAnalysisView: React.FC<GoalAnalysisViewProps> = ({ matches }) =
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
         <Card size="sm" className="bg-card border-border shadow-xs">
           <CardHeader className="pb-1">
-            <CardDescription className="text-[11px] flex items-center gap-1">
+            <CardDescription className="text-xs flex items-center gap-1">
               <Goal className="h-3 w-3 text-primary" />
               Overall Avg Goals
             </CardDescription>
@@ -115,11 +107,11 @@ export const GoalAnalysisView: React.FC<GoalAnalysisViewProps> = ({ matches }) =
 
         <Card size="sm" className="bg-card border-border shadow-xs">
           <CardHeader className="pb-1">
-            <CardDescription className="text-[11px] flex items-center gap-1">
-              <Target className="h-3 w-3 text-emerald-400" />
+            <CardDescription className="text-xs flex items-center gap-1">
+              <Target className="h-3 w-3 text-primary" />
               Avg Home Goals
             </CardDescription>
-            <CardTitle className="text-xl font-bold font-mono text-emerald-400">
+            <CardTitle className="text-xl font-bold font-mono text-primary">
               {overall.avgHomeGoals}
             </CardTitle>
           </CardHeader>
@@ -127,11 +119,11 @@ export const GoalAnalysisView: React.FC<GoalAnalysisViewProps> = ({ matches }) =
 
         <Card size="sm" className="bg-card border-border shadow-xs">
           <CardHeader className="pb-1">
-            <CardDescription className="text-[11px] flex items-center gap-1">
-              <Target className="h-3 w-3 text-blue-400" />
+            <CardDescription className="text-xs flex items-center gap-1">
+              <Target className="h-3 w-3 text-muted-foreground" />
               Avg Away Goals
             </CardDescription>
-            <CardTitle className="text-xl font-bold font-mono text-blue-400">
+            <CardTitle className="text-xl font-bold font-mono text-foreground">
               {overall.avgAwayGoals}
             </CardTitle>
           </CardHeader>
@@ -139,7 +131,7 @@ export const GoalAnalysisView: React.FC<GoalAnalysisViewProps> = ({ matches }) =
 
         <Card size="sm" className="bg-card border-border shadow-xs">
           <CardHeader className="pb-1">
-            <CardDescription className="text-[11px]">Over 1.5 Goals %</CardDescription>
+            <CardDescription className="text-xs">Over 1.5 Goals %</CardDescription>
             <CardTitle className="text-xl font-bold font-mono text-foreground">
               {overall.over15Pct}%
             </CardTitle>
@@ -148,7 +140,7 @@ export const GoalAnalysisView: React.FC<GoalAnalysisViewProps> = ({ matches }) =
 
         <Card size="sm" className="bg-card border-border shadow-xs">
           <CardHeader className="pb-1">
-            <CardDescription className="text-[11px]">Over 2.5 Goals %</CardDescription>
+            <CardDescription className="text-xs">Over 2.5 Goals %</CardDescription>
             <CardTitle className="text-xl font-bold font-mono text-foreground">
               {overall.over25Pct}%
             </CardTitle>
@@ -157,7 +149,7 @@ export const GoalAnalysisView: React.FC<GoalAnalysisViewProps> = ({ matches }) =
 
         <Card size="sm" className="bg-card border-border shadow-xs">
           <CardHeader className="pb-1">
-            <CardDescription className="text-[11px]">BTTS (Both Score)</CardDescription>
+            <CardDescription className="text-xs">BTTS (Both Score)</CardDescription>
             <CardTitle className="text-xl font-bold font-mono text-foreground">
               {overall.bttsPct}%
             </CardTitle>
@@ -179,7 +171,7 @@ export const GoalAnalysisView: React.FC<GoalAnalysisViewProps> = ({ matches }) =
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="h-64 w-full">
+            <div className="h-64 w-full" role="img" aria-label="Chart of average goals per match and over 2.5 percent by calendar month.">
               <ResponsiveContainer width="100%" height="100%">
                 <ComposedChart data={monthlyStats} margin={{ top: 10, right: 10, left: -15, bottom: 0 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" opacity={0.5} />
@@ -196,7 +188,7 @@ export const GoalAnalysisView: React.FC<GoalAnalysisViewProps> = ({ matches }) =
                   />
                   <Legend wrapperStyle={{ fontSize: "11px", paddingTop: "6px" }} />
                   <Bar yAxisId="left" dataKey="avgGoals" name="Avg Goals" fill="var(--primary)" radius={[3, 3, 0, 0]} />
-                  <Line yAxisId="right" type="monotone" dataKey="over25Pct" name="Over 2.5 %" stroke="#10b981" strokeWidth={2} dot={{ r: 3 }} />
+                  <Line yAxisId="right" type="monotone" dataKey="over25Pct" name="Over 2.5 %" stroke="var(--primary)" strokeWidth={2} dot={{ r: 3 }} />
                 </ComposedChart>
               </ResponsiveContainer>
             </div>
@@ -215,7 +207,7 @@ export const GoalAnalysisView: React.FC<GoalAnalysisViewProps> = ({ matches }) =
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="h-64 w-full">
+            <div className="h-64 w-full" role="img" aria-label="Bar chart of average goals per match by day of week.">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={dailyStats} margin={{ top: 10, right: 10, left: -15, bottom: 0 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" opacity={0.5} />
@@ -229,7 +221,7 @@ export const GoalAnalysisView: React.FC<GoalAnalysisViewProps> = ({ matches }) =
                       fontSize: "12px",
                     }}
                   />
-                  <Bar dataKey="avgGoals" name="Avg Goals / Match" fill="#3b82f6" radius={[3, 3, 0, 0]} />
+                  <Bar dataKey="avgGoals" name="Avg Goals / Match" fill="var(--primary)" radius={[3, 3, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -252,10 +244,10 @@ export const GoalAnalysisView: React.FC<GoalAnalysisViewProps> = ({ matches }) =
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
             {scoreDist.topScores.map((sc, i) => (
               <div key={sc.score} className="p-3 rounded-lg border border-border bg-muted/20 text-center">
-                <span className="text-[10px] text-muted-foreground block">Rank #{i + 1}</span>
+                <span className="text-xs text-muted-foreground block">Rank #{i + 1}</span>
                 <span className="text-lg font-bold font-mono text-foreground block mt-0.5">{sc.score}</span>
                 <span className="text-xs font-mono font-medium text-primary block mt-0.5">{sc.pct}%</span>
-                <span className="text-[10px] text-muted-foreground font-mono">
+                <span className="text-xs text-muted-foreground font-mono">
                   {sc.count.toLocaleString()} times
                 </span>
               </div>
