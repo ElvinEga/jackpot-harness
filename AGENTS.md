@@ -84,6 +84,10 @@ Conversions the generator applies, all lossless apart from the last:
 - Coverage overlaps between files within a bookmaker (e.g. `mozzart-super-jackpot*.csv` are
   consecutive extracts, not distinct products). Dedupe on `(date, home_team, away_team)` before
   aggregating.
+- **`mozzart-super-jackpot.json` through `mozzart-super-jackpot5.json` are ONE mozzart
+  super jackpot product** (`mozzart-super-grand-jackpot.json` is a separate product). Treat
+  them as a single dataset: concatenate and dedupe on `(date, home_team, away_team)`, never
+  analyse them as separate jackpots.
 - Normalise the two schemes into one canonical shape (lowercase snake_case columns, ISO dates,
   consistent `score` separator, consistent result casing) before cross-bookmaker analysis.
 
