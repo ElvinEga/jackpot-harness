@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React from "react";
 import {
   Database,
   BarChart3,
@@ -11,8 +11,15 @@ import {
   ChevronDown,
   Loader2,
 } from "lucide-react";
-import { Button } from "../ui/Button";
-import { Badge } from "../ui/Badge";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
 import type { AppStats, Match } from "../../lib/types";
 import { exportToCsv, exportToJson } from "../../lib/export";
 
@@ -35,19 +42,6 @@ export const Header: React.FC<HeaderProps> = ({
   filteredMatches,
   isFiltering = false,
 }) => {
-  const [exportOpen, setExportOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setExportOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
   const isFiltered = filteredCount !== totalCount;
 
   return (
@@ -115,69 +109,54 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
 
           {/* Navigation View Switch */}
-          <div className="flex items-center bg-muted/60 border border-border rounded-lg p-0.5">
-            <button
-              onClick={() => onTabChange("explorer")}
-              className={`flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-md transition-all cursor-pointer ${
-                activeTab === "explorer"
-                  ? "bg-primary text-primary-foreground shadow"
-                  : "text-muted-foreground hover:text-foreground hover:bg-muted"
-              }`}
-            >
-              <TableIcon className="h-3.5 w-3.5" />
-              Explorer
-            </button>
-            <button
-              onClick={() => onTabChange("analytics")}
-              className={`flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-md transition-all cursor-pointer ${
-                activeTab === "analytics"
-                  ? "bg-primary text-primary-foreground shadow"
-                  : "text-muted-foreground hover:text-foreground hover:bg-muted"
-              }`}
-            >
-              <BarChart3 className="h-3.5 w-3.5" />
-              Analytics
-            </button>
-          </div>
+          <Tabs
+            value={activeTab}
+            onValueChange={(val) => onTabChange(val as "explorer" | "analytics")}
+          >
+            <TabsList>
+              <TabsTrigger value="explorer" className="flex items-center gap-1.5 text-xs">
+                <TableIcon className="h-3.5 w-3.5" />
+                Explorer
+              </TabsTrigger>
+              <TabsTrigger value="analytics" className="flex items-center gap-1.5 text-xs">
+                <BarChart3 className="h-3.5 w-3.5" />
+                Analytics
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
 
           {/* Export Dropdown */}
-          <div className="relative" ref={dropdownRef}>
-            <Button
-              variant="outline"
-              size="sm"
-              className="gap-1.5"
-              onClick={() => setExportOpen((prev) => !prev)}
-            >
-              <Download className="h-3.5 w-3.5 text-muted-foreground" />
-              <span>Export</span>
-              <ChevronDown className="h-3 w-3 text-muted-foreground" />
-            </Button>
-
-            {exportOpen && (
-              <div className="absolute right-0 mt-1 w-48 rounded-md bg-popover border border-border shadow-xl z-50 py-1 text-xs animate-in fade-in zoom-in-95 duration-100 text-popover-foreground">
-                <button
-                  className="flex items-center gap-2 w-full px-3 py-2 hover:bg-muted text-left transition-colors cursor-pointer"
-                  onClick={() => {
-                    exportToCsv(filteredMatches, `jackpot_matches_${filteredMatches.length}.csv`);
-                    setExportOpen(false);
-                  }}
-                >
-                  <FileSpreadsheet className="h-4 w-4 text-emerald-400" />
-                  <span>Export to CSV ({filteredMatches.length.toLocaleString()})</span>
-                </button>
-                <button
-                  className="flex items-center gap-2 w-full px-3 py-2 hover:bg-muted text-left transition-colors cursor-pointer"
-                  onClick={() => {
-                    exportToJson(filteredMatches, `jackpot_matches_${filteredMatches.length}.json`);
-                    setExportOpen(false);
-                  }}
-                >
-                  <FileCode className="h-4 w-4 text-primary" />
-                  <span>Export to JSON ({filteredMatches.length.toLocaleString()})</span>
-                </button>
-              </div>
-            )}
-          </div>
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              render={
+                <Button variant="outline" size="sm" className="gap-1.5">
+                  <Download className="h-3.5 w-3.5 text-muted-foreground" />
+                  <span>Export</span>
+                  <ChevronDown className="h-3 w-3 text-muted-foreground" />
+                </Button>
+              }
+            />
+            <DropdownMenuContent align="end" className="w-52">
+              <DropdownMenuItem
+                onClick={() => {
+                  exportToCsv(filteredMatches, `jackpot_matches_${filteredMatches.length}.csv`);
+                }}
+                className="cursor-pointer"
+              >
+                <FileSpreadsheet className="h-4 w-4 text-emerald-400" />
+                <span>Export to CSV ({filteredMatches.length.toLocaleString()})</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  exportToJson(filteredMatches, `jackpot_matches_${filteredMatches.length}.json`);
+                }}
+                className="cursor-pointer"
+              >
+                <FileCode className="h-4 w-4 text-primary" />
+                <span>Export to JSON ({filteredMatches.length.toLocaleString()})</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </header>
