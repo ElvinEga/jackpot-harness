@@ -66,11 +66,12 @@ export function App() {
     return (
       <div className="min-h-screen bg-background flex flex-col items-center justify-center p-6 text-center">
         <div className="w-full max-w-sm p-6 rounded-2xl bg-card border border-border shadow-2xl flex flex-col items-center space-y-4 text-card-foreground">
-          <div className="h-12 w-12 rounded-xl bg-primary/10 border border-primary/30 flex items-center justify-center text-primary">
-            <Loader2 className="h-6 w-6 animate-spin" />
-          </div>
+          <img src="/logo.png" alt="Football Jackpot Harness" className="h-14 w-14 rounded-xl" />
           <div className="space-y-1">
-            <h2 className="text-base font-bold text-foreground">Loading Jackpot Archives</h2>
+            <h2 className="text-base font-bold text-foreground flex items-center gap-2">
+              <Loader2 className="h-4 w-4 animate-spin text-primary" />
+              Loading Jackpot Archives
+            </h2>
             <p className="text-xs text-muted-foreground">
               Retrieving historical match records across Betika, Mozzart, and SportPesa...
             </p>
