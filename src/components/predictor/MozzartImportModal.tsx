@@ -103,9 +103,6 @@ export const MozzartImportModal: React.FC<MozzartImportModalProps> = ({
       <DialogContent className="max-w-2xl bg-card border-border max-h-[90vh] flex flex-col p-6">
         <DialogHeader>
           <div className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-lg bg-primary/10 border border-primary/30 flex items-center justify-center text-primary">
-              <Zap className="h-4 w-4" />
-            </div>
             <div>
               <DialogTitle className="text-base font-bold text-foreground">
                 Mozzart Super Jackpot — API Prefill
@@ -155,16 +152,7 @@ export const MozzartImportModal: React.FC<MozzartImportModalProps> = ({
               </Button>
             </div>
 
-            {/* Info Note */}
-            <div className="p-2.5 rounded-lg border border-primary/20 bg-primary/5 text-xs flex items-start gap-2">
-              <Info className="h-4 w-4 shrink-0 mt-0.5 text-primary" />
-              <div className="leading-relaxed">
-                <span className="font-semibold text-primary">okhttp/4.9.0 User-Agent: </span>
-                Mozzart's public API returns JSON directly when requests carry an Android mobile client
-                user-agent. This app proxies requests server-side so the browser never touches the
-                external endpoint.
-              </div>
-            </div>
+
           </TabsContent>
 
           {/* TAB 2: Paste JSON */}
@@ -208,19 +196,17 @@ export const MozzartImportModal: React.FC<MozzartImportModalProps> = ({
                 <span className="font-semibold text-foreground text-xs">
                   Round #{previewJackpot.roundId}
                 </span>
-                <Badge variant="outline" className="text-xs px-1.5 py-0 font-mono">
+                {/*<Badge variant="outline" className="text-xs px-1.5 py-0 font-mono">
                   {previewJackpot.totalRows} Fixtures
-                </Badge>
-                {previewJackpot.jackpotAmount !== null && (
-                  <Badge variant="outline" className="text-xs px-1.5 py-0 text-primary border-primary/30 font-mono">
-                    {formatJackpotAmount(previewJackpot.jackpotAmount)}
-                  </Badge>
-                )}
+                </Badge>*/}
+
               </div>
 
-              <span className="text-xs text-muted-foreground font-mono">
-                ID: {previewJackpot.id}
-              </span>
+              {previewJackpot.jackpotAmount !== null && (
+                <Badge variant="outline" className="text-xs px-1.5 py-0 text-primary border-primary/30 font-mono">
+                  {formatJackpotAmount(previewJackpot.jackpotAmount)}
+                </Badge>
+              )}
             </div>
 
             {/* Scrollable Fixture Preview */}
