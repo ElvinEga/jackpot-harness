@@ -19,7 +19,7 @@ import { useJackpotMatches } from "./hooks/useJackpotMatches";
 export function App() {
   const { data: matches = [], isLoading: loading, error, refetch } = useJackpotMatches();
 
-  const [activeTab, setActiveTab] = useState<AppTab>("predictor");
+  const [activeTab, setActiveTab] = useState<AppTab>("explorer");
   const [selectedMatch, setSelectedMatch] = useState<Match | null>(null);
 
   // Teams to pre-fill when transferring from Predictor to H2H view
