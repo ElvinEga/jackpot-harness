@@ -99,16 +99,11 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
       {/* Title */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-2 border-b border-border">
         <div>
-          <div className="flex items-center gap-2">
-            <span className="p-1.5 rounded-lg bg-primary/10 text-primary border border-primary/20">
-              <Swords className="h-5 w-5" />
-            </span>
-            <h1 className="text-xl font-bold tracking-tight text-foreground">
-              Team vs Team & Poisson Score Engine
-            </h1>
-          </div>
+          <h2 className="text-xl font-bold tracking-tight text-foreground">
+            Head to Head & Teams
+          </h2>
           <p className="text-xs text-muted-foreground mt-1">
-            Compare Head-to-Head records, analyze recent goal threats, and generate exact score probabilities with Poisson modeling.
+            Compare Head-to-Head records & analyze recent goal threats.
           </p>
         </div>
       </div>
@@ -118,7 +113,7 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
         <div className="flex flex-col md:flex-row items-center justify-between gap-3">
           {/* Home Team Input */}
           <div className="w-full md:flex-1">
-            <label className="text-[11px] font-medium text-muted-foreground mb-1 block">
+            <label className="text-xs font-medium text-muted-foreground mb-1 block">
               Home Team
             </label>
             <TeamSearchInput
@@ -145,7 +140,7 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
 
           {/* Away Team Input */}
           <div className="w-full md:flex-1">
-            <label className="text-[11px] font-medium text-muted-foreground mb-1 block">
+            <label className="text-xs font-medium text-muted-foreground mb-1 block">
               Away Team
             </label>
             <TeamSearchInput
@@ -179,23 +174,23 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
               <>
                 <div className="grid grid-cols-3 gap-2 text-center">
                   <div className="p-3 rounded-lg bg-muted/40 border border-border">
-                    <span className="text-[10px] text-muted-foreground block truncate">{teamA} Wins</span>
-                    <span className="text-xl font-bold font-mono text-emerald-400">{h2h.teamAWins}</span>
-                    <span className="text-[10px] text-muted-foreground block">
+                    <span className="text-xs text-muted-foreground block truncate">{teamA} Wins</span>
+                    <span className="text-xl font-bold font-mono text-primary">{h2h.teamAWins}</span>
+                    <span className="text-xs text-muted-foreground block">
                       ({((h2h.teamAWins / h2h.totalMatches) * 100).toFixed(0)}%)
                     </span>
                   </div>
                   <div className="p-3 rounded-lg bg-muted/40 border border-border">
-                    <span className="text-[10px] text-muted-foreground block">Draws</span>
-                    <span className="text-xl font-bold font-mono text-amber-400">{h2h.draws}</span>
-                    <span className="text-[10px] text-muted-foreground block">
+                    <span className="text-xs text-muted-foreground block">Draws</span>
+                    <span className="text-xl font-bold font-mono text-foreground">{h2h.draws}</span>
+                    <span className="text-xs text-muted-foreground block">
                       ({((h2h.draws / h2h.totalMatches) * 100).toFixed(0)}%)
                     </span>
                   </div>
                   <div className="p-3 rounded-lg bg-muted/40 border border-border">
-                    <span className="text-[10px] text-muted-foreground block truncate">{teamB} Wins</span>
-                    <span className="text-xl font-bold font-mono text-blue-400">{h2h.teamBWins}</span>
-                    <span className="text-[10px] text-muted-foreground block">
+                    <span className="text-xs text-muted-foreground block truncate">{teamB} Wins</span>
+                    <span className="text-xl font-bold font-mono text-foreground">{h2h.teamBWins}</span>
+                    <span className="text-xs text-muted-foreground block">
                       ({((h2h.teamBWins / h2h.totalMatches) * 100).toFixed(0)}%)
                     </span>
                   </div>
@@ -234,19 +229,19 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
                   {formA.recentResults.slice(0, 5).map((r, i) => (
                     <span
                       key={i}
-                      className={`h-5 w-5 rounded text-[10px] font-bold flex items-center justify-center ${
+                      className={`h-5 w-5 rounded text-xs font-bold flex items-center justify-center ${
                         r === "W"
-                          ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
+                          ? "bg-primary/15 text-primary border border-primary/30"
                           : r === "D"
-                          ? "bg-amber-500/20 text-amber-400 border border-amber-500/30"
-                          : "bg-rose-500/20 text-rose-400 border border-rose-500/30"
+                          ? "bg-muted-foreground/20 text-foreground border border-border"
+                          : "bg-muted text-muted-foreground border border-border"
                       }`}
                     >
                       {r}
                     </span>
                   ))}
                 </div>
-                <div className="space-y-1 text-[11px] text-muted-foreground font-mono">
+                <div className="space-y-1 text-xs text-muted-foreground font-mono">
                   <div>Win Rate: <strong className="text-foreground">{formA.winRate}%</strong></div>
                   <div>Home Win Rate: <strong className="text-foreground">{formA.homeWinRate}%</strong></div>
                   <div>Avg Goals Scored: <strong className="text-foreground">{formA.avgGF}</strong></div>
@@ -261,19 +256,19 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
                   {formB.recentResults.slice(0, 5).map((r, i) => (
                     <span
                       key={i}
-                      className={`h-5 w-5 rounded text-[10px] font-bold flex items-center justify-center ${
+                      className={`h-5 w-5 rounded text-xs font-bold flex items-center justify-center ${
                         r === "W"
-                          ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
+                          ? "bg-primary/15 text-primary border border-primary/30"
                           : r === "D"
-                          ? "bg-amber-500/20 text-amber-400 border border-amber-500/30"
-                          : "bg-rose-500/20 text-rose-400 border border-rose-500/30"
+                          ? "bg-muted-foreground/20 text-foreground border border-border"
+                          : "bg-muted text-muted-foreground border border-border"
                       }`}
                     >
                       {r}
                     </span>
                   ))}
                 </div>
-                <div className="space-y-1 text-[11px] text-muted-foreground font-mono">
+                <div className="space-y-1 text-xs text-muted-foreground font-mono">
                   <div>Win Rate: <strong className="text-foreground">{formB.winRate}%</strong></div>
                   <div>Away Win Rate: <strong className="text-foreground">{formB.awayWinRate}%</strong></div>
                   <div>Avg Goals Scored: <strong className="text-foreground">{formB.avgGF}</strong></div>
@@ -300,27 +295,27 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
           {/* 1X2 Probabilities & Over/Under row */}
           <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-2 text-center text-xs">
             <div className="p-2.5 rounded-lg bg-muted/40 border border-border">
-              <span className="text-[10px] text-muted-foreground block">Home Win (1)</span>
-              <span className="text-lg font-bold font-mono text-emerald-400">{poisson.sim.homeProb}%</span>
+              <span className="text-xs text-muted-foreground block">Home Win (1)</span>
+              <span className="text-lg font-bold font-mono text-primary">{poisson.sim.homeProb}%</span>
             </div>
             <div className="p-2.5 rounded-lg bg-muted/40 border border-border">
-              <span className="text-[10px] text-muted-foreground block">Draw (X)</span>
-              <span className="text-lg font-bold font-mono text-amber-400">{poisson.sim.drawProb}%</span>
+              <span className="text-xs text-muted-foreground block">Draw (X)</span>
+              <span className="text-lg font-bold font-mono text-foreground">{poisson.sim.drawProb}%</span>
             </div>
             <div className="p-2.5 rounded-lg bg-muted/40 border border-border">
-              <span className="text-[10px] text-muted-foreground block">Away Win (2)</span>
-              <span className="text-lg font-bold font-mono text-blue-400">{poisson.sim.awayProb}%</span>
+              <span className="text-xs text-muted-foreground block">Away Win (2)</span>
+              <span className="text-lg font-bold font-mono text-foreground">{poisson.sim.awayProb}%</span>
             </div>
             <div className="p-2.5 rounded-lg bg-muted/40 border border-border">
-              <span className="text-[10px] text-muted-foreground block">Over 1.5 Goals</span>
+              <span className="text-xs text-muted-foreground block">Over 1.5 Goals</span>
               <span className="text-lg font-bold font-mono text-foreground">{poisson.over15}%</span>
             </div>
             <div className="p-2.5 rounded-lg bg-muted/40 border border-border">
-              <span className="text-[10px] text-muted-foreground block">Over 2.5 Goals</span>
+              <span className="text-xs text-muted-foreground block">Over 2.5 Goals</span>
               <span className="text-lg font-bold font-mono text-foreground">{poisson.over25}%</span>
             </div>
             <div className="p-2.5 rounded-lg bg-muted/40 border border-border">
-              <span className="text-[10px] text-muted-foreground block">Both To Score (BTTS)</span>
+              <span className="text-xs text-muted-foreground block">Both To Score (BTTS)</span>
               <span className="text-lg font-bold font-mono text-foreground">{poisson.btts}%</span>
             </div>
           </div>
@@ -341,10 +336,10 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
                   }`}
                 >
                   <span className="text-sm font-bold font-mono text-foreground block">{sc.score}</span>
-                  <span className="text-[11px] font-mono font-medium text-primary block mt-0.5">
+                  <span className="text-xs font-mono font-medium text-primary block mt-0.5">
                     {sc.probability}%
                   </span>
-                  <span className="text-[9px] text-muted-foreground">
+                  <span className="text-xs text-muted-foreground">
                     Rank #{i + 1}
                   </span>
                 </div>
@@ -395,8 +390,8 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
                     </td>
                     <td className="py-2.5 px-3 text-center">
                       <Badge
-                        variant={m.result === "home" ? "default" : m.result === "draw" ? "secondary" : "outline"}
-                        className="text-[10px] uppercase font-mono"
+                        variant={m.result === "home" ? "home" : m.result === "draw" ? "draw" : m.result === "away" ? "away" : "outline"}
+                        className="text-xs uppercase font-mono"
                       >
                         {m.result || "N/A"}
                       </Badge>
