@@ -10,6 +10,7 @@ export const DEFAULT_FILTERS: MatchFilters = {
   minOdds: null,
   maxOdds: null,
   league: null,
+  position: null,
 };
 
 export function filterMatches(matches: Match[], filters: MatchFilters): Match[] {
@@ -28,6 +29,7 @@ export function filterMatches(matches: Match[], filters: MatchFilters): Match[] 
   const hasMinOdds = filters.minOdds !== null && !isNaN(filters.minOdds);
   const hasMaxOdds = filters.maxOdds !== null && !isNaN(filters.maxOdds);
   const hasLeague = !!filters.league;
+  const hasPosition = filters.position !== undefined && filters.position !== null;
 
   return matches.filter((m) => {
     // 1. Search term check
@@ -76,6 +78,11 @@ export function filterMatches(matches: Match[], filters: MatchFilters): Match[] 
 
     // 7. Specific League
     if (hasLeague && m.league !== filters.league) {
+      return false;
+    }
+
+    // 8. Specific Position (1..17)
+    if (hasPosition && m.position !== filters.position) {
       return false;
     }
 
