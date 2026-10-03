@@ -22,6 +22,7 @@ export type Match = {
   jackpot: string;
   jackpot_id?: number | null;
   source_file: string;
+  searchText?: string;
 };
 
 export type MatchFilters = {
