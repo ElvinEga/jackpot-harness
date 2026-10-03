@@ -77,7 +77,7 @@ export const MatchDetailSheet: React.FC<MatchDetailSheetProps> = ({
             {/* Match Scoreboard Card */}
             <div className="p-4 rounded-xl bg-background border border-border shadow-inner">
               <div className="text-center text-xs text-muted-foreground mb-3 flex items-center justify-center gap-1.5">
-                <Calendar className="h-3.5 w-3.5 text-primary" />
+                <Calendar className="h-3.5 w-3.5" />
                 <span>{match.date || "Date Not Recorded"}</span>
               </div>
 
@@ -86,7 +86,7 @@ export const MatchDetailSheet: React.FC<MatchDetailSheetProps> = ({
                   <p className="font-bold text-foreground text-sm md:text-base leading-tight">
                     {match.home_team}
                   </p>
-                  <span className="text-[11px] text-muted-foreground">Home</span>
+                  <span className="text-xs text-muted-foreground">Home</span>
                 </div>
 
                 <div className="col-span-1 flex flex-col items-center">
@@ -100,7 +100,7 @@ export const MatchDetailSheet: React.FC<MatchDetailSheetProps> = ({
                   <p className="font-bold text-foreground text-sm md:text-base leading-tight">
                     {match.away_team}
                   </p>
-                  <span className="text-[11px] text-muted-foreground">Away</span>
+                  <span className="text-xs text-muted-foreground">Away</span>
                 </div>
               </div>
 
@@ -130,7 +130,7 @@ export const MatchDetailSheet: React.FC<MatchDetailSheetProps> = ({
                       {match.odds !== null ? match.odds.toFixed(2) : "N/A"}
                     </span>
                     {match.odds !== null && (
-                      <span className="text-[10px] text-muted-foreground">(1X2 / DC)</span>
+                      <span className="text-xs text-muted-foreground">(1X2 / DC)</span>
                     )}
                   </div>
                 </div>
@@ -144,7 +144,7 @@ export const MatchDetailSheet: React.FC<MatchDetailSheetProps> = ({
 
                 <div className="p-3 rounded-lg bg-background border border-border col-span-2">
                   <span className="text-muted-foreground block mb-1">Source File</span>
-                  <span className="font-mono text-[11px] text-muted-foreground truncate block">
+                  <span className="font-mono text-xs text-muted-foreground truncate block">
                     data/processed/{match.source_file}
                   </span>
                 </div>
@@ -152,8 +152,8 @@ export const MatchDetailSheet: React.FC<MatchDetailSheetProps> = ({
 
               {/* Odds Caveat Reminder */}
               {match.odds !== null && (
-                <div className="p-2.5 rounded-lg bg-amber-950/20 border border-amber-800/40 text-[11px] text-amber-300 flex items-start gap-2">
-                  <AlertCircle className="h-4 w-4 text-amber-400 shrink-0 mt-0.5" />
+                <div className="p-2.5 rounded-lg bg-muted border border-border text-xs text-foreground flex items-start gap-2">
+                  <AlertCircle className="h-4 w-4 text-foreground shrink-0 mt-0.5" />
                   <p>
                     Odds may represent full-time 1X2 or double chance (DC). Tipster pick is omitted in raw records.
                   </p>
@@ -176,7 +176,7 @@ export const MatchDetailSheet: React.FC<MatchDetailSheetProps> = ({
                     onClose();
                   }}
                 >
-                  <Search className="h-3.5 w-3.5 text-primary" />
+                  <Search className="h-3.5 w-3.5" />
                   <span>Find head-to-head matches</span>
                 </Button>
 
@@ -189,7 +189,7 @@ export const MatchDetailSheet: React.FC<MatchDetailSheetProps> = ({
                     onClose();
                   }}
                 >
-                  <Shield className="h-3.5 w-3.5 text-emerald-400" />
+                  <Shield className="h-3.5 w-3.5" />
                   <span>Show all matches with {match.home_team}</span>
                 </Button>
 
@@ -202,7 +202,7 @@ export const MatchDetailSheet: React.FC<MatchDetailSheetProps> = ({
                     onClose();
                   }}
                 >
-                  <Shield className="h-3.5 w-3.5 text-sky-400" />
+                  <Shield className="h-3.5 w-3.5 text-muted-foreground" />
                   <span>Show all matches with {match.away_team}</span>
                 </Button>
 
@@ -215,7 +215,7 @@ export const MatchDetailSheet: React.FC<MatchDetailSheetProps> = ({
                     onClose();
                   }}
                 >
-                  <Layers className="h-3.5 w-3.5 text-primary" />
+                  <Layers className="h-3.5 w-3.5" />
                   <span>Filter to {match.jackpot}</span>
                 </Button>
               </div>
@@ -240,13 +240,13 @@ export const MatchDetailSheet: React.FC<MatchDetailSheetProps> = ({
                   onClick={handleCopyJson}
                   className="gap-1 text-xs text-muted-foreground hover:text-foreground cursor-pointer"
                 >
-                  {copied ? <Check className="h-3.5 w-3.5 text-emerald-400" /> : <Copy className="h-3.5 w-3.5" />}
+                  {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
                   <span>{copied ? "Copied" : "Copy"}</span>
                 </Button>
               </div>
 
               {showJson && (
-                <pre className="p-3 rounded-lg bg-background border border-border text-[11px] font-mono text-muted-foreground overflow-x-auto max-h-56">
+                <pre className="p-3 rounded-lg bg-background border border-border text-xs font-mono text-muted-foreground overflow-x-auto max-h-56">
                   {JSON.stringify(match, null, 2)}
                 </pre>
               )}
