@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-import { Dialog as DialogPrimitive } from "@base-ui/react/dialog";
 import {
-  X,
   Calendar,
   Shield,
   Layers,
@@ -11,8 +9,14 @@ import {
   AlertCircle,
   FileText
 } from "lucide-react";
-import { Badge } from "../ui/Badge";
-import { Button } from "../ui/Button";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 import type { Match, MatchFilters } from "../../lib/types";
 
 interface MatchDetailSheetProps {
@@ -53,30 +57,23 @@ export const MatchDetailSheet: React.FC<MatchDetailSheetProps> = ({
   };
 
   return (
-    <DialogPrimitive.Root open={!!match} onOpenChange={(open) => { if (!open) onClose(); }}>
-      <DialogPrimitive.Portal>
-        <DialogPrimitive.Backdrop className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs transition-opacity duration-200" />
-        <DialogPrimitive.Popup
-          className="fixed top-0 right-0 z-50 w-full max-w-md bg-card border-l border-border h-full flex flex-col shadow-2xl overflow-y-auto animate-in slide-in-from-right duration-200 text-card-foreground"
-        >
-          {/* Header */}
-          <div className="p-4 border-b border-border flex items-center justify-between sticky top-0 bg-card/95 backdrop-blur z-10">
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                Match Details
-              </span>
-              {getBookmakerBadge()}
-            </div>
-            <button
-              onClick={onClose}
-              className="p-1.5 rounded-md hover:bg-muted text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
-            >
-              <X className="h-4 w-4" />
-            </button>
+    <Sheet open={!!match} onOpenChange={(open) => { if (!open) onClose(); }}>
+      <SheetContent
+        side="right"
+        className="w-full max-w-md sm:max-w-md p-0 flex flex-col overflow-y-auto"
+      >
+        {/* Header */}
+        <SheetHeader className="p-4 border-b border-border flex flex-row items-center justify-between sticky top-0 bg-card/95 backdrop-blur z-10 space-y-0">
+          <div className="flex items-center gap-2">
+            <SheetTitle className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              Match Details
+            </SheetTitle>
+            {getBookmakerBadge()}
           </div>
+        </SheetHeader>
 
-          {/* Content */}
-          <div className="p-5 space-y-6 flex-1">
+        {/* Content */}
+        <div className="p-5 space-y-6 flex-1">
             {/* Match Scoreboard Card */}
             <div className="p-4 rounded-xl bg-background border border-border shadow-inner">
               <div className="text-center text-xs text-muted-foreground mb-3 flex items-center justify-center gap-1.5">
@@ -227,21 +224,25 @@ export const MatchDetailSheet: React.FC<MatchDetailSheetProps> = ({
             {/* Raw JSON Record Inspector */}
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <button
+                <Button
+                  variant="ghost"
+                  size="xs"
                   onClick={() => setShowJson((prev) => !prev)}
-                  className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1 font-medium cursor-pointer"
+                  className="gap-1 text-xs text-muted-foreground hover:text-foreground cursor-pointer"
                 >
                   <FileText className="h-3.5 w-3.5" />
                   <span>{showJson ? "Hide Raw JSON" : "View Raw JSON Record"}</span>
-                </button>
+                </Button>
 
-                <button
+                <Button
+                  variant="ghost"
+                  size="xs"
                   onClick={handleCopyJson}
-                  className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1 cursor-pointer"
+                  className="gap-1 text-xs text-muted-foreground hover:text-foreground cursor-pointer"
                 >
                   {copied ? <Check className="h-3.5 w-3.5 text-emerald-400" /> : <Copy className="h-3.5 w-3.5" />}
                   <span>{copied ? "Copied" : "Copy"}</span>
-                </button>
+                </Button>
               </div>
 
               {showJson && (
@@ -251,8 +252,7 @@ export const MatchDetailSheet: React.FC<MatchDetailSheetProps> = ({
               )}
             </div>
           </div>
-        </DialogPrimitive.Popup>
-      </DialogPrimitive.Portal>
-    </DialogPrimitive.Root>
+      </SheetContent>
+    </Sheet>
   );
 };
