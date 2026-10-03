@@ -33,6 +33,8 @@ import { DATASETS } from "../../lib/data";
 import { TeamSearchInput } from "../common/TeamSearchInput";
 import { SportPesaImportModal } from "./SportPesaImportModal";
 import { fetchActiveSportPesaJackpot, type ParsedSportPesaJackpot } from "../../lib/sportpesa";
+import { MozzartImportModal } from "./MozzartImportModal";
+import { fetchActiveMozzartJackpot, type ParsedMozzartJackpot } from "../../lib/mozzart";
 
 export interface FixtureEntry {
   home: string;
@@ -84,6 +86,11 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
   const [isFetchingSportPesa, setIsFetchingSportPesa] = useState(false);
   const [activeSportPesaMeta, setActiveSportPesaMeta] = useState<{ id: string; humanId: number; status: string } | null>(null);
   const [prefillPreset, setPrefillPreset] = useState<string>("");
+
+  // Mozzart API prefill & state
+  const [isMozzartModalOpen, setIsMozzartModalOpen] = useState(false);
+  const [isFetchingMozzart, setIsFetchingMozzart] = useState(false);
+  const [activeMozzartMeta, setActiveMozzartMeta] = useState<{ id: number; roundId: number; jackpotAmount: number | null } | null>(null);
 
   // Fixtures for positions 1..17
   const [customFixtures, setCustomFixtures] = useState<Record<number, FixtureEntry>>({});
@@ -224,11 +231,51 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
     setPrefillPreset(val);
     if (val === "sportpesa-live") {
       handleQuickPrefillSportPesa();
+    } else if (val === "mozzart-live") {
+      handleQuickPrefillMozzart();
     } else if (val === "clear") {
       setCustomFixtures({});
       setActiveSportPesaMeta(null);
+      setActiveMozzartMeta(null);
       setSelectedHistoricalEvent("");
       setPrefillPreset("");
+    }
+  };
+
+  // Apply parsed Mozzart jackpot payload into 1..16 fixtures
+  const handleApplyMozzartJackpot = (jp: ParsedMozzartJackpot) => {
+    setSelectedJackpot("Mozzart - Super Jackpot");
+    const newFix: Record<number, FixtureEntry> = {};
+    for (const m of jp.matches) {
+      newFix[m.rowNumber] = {
+        home: m.homeTeam,
+        away: m.awayTeam,
+        homeOdds: m.homeOdds,
+        drawOdds: m.drawOdds,
+        awayOdds: m.awayOdds,
+        tournament: m.competition,
+        country: m.country,
+        kickOffTime: m.kickOffTime,
+      };
+    }
+    setCustomFixtures(newFix);
+    setActiveMozzartMeta({ id: jp.id, roundId: jp.roundId, jackpotAmount: jp.jackpotAmount });
+    setActiveSportPesaMeta(null);
+    setPrefillPreset("mozzart-live");
+    setSelectedHistoricalEvent("");
+  };
+
+  // Quick single-click fetch from Mozzart API
+  const handleQuickPrefillMozzart = async () => {
+    setIsFetchingMozzart(true);
+    try {
+      const jp = await fetchActiveMozzartJackpot();
+      handleApplyMozzartJackpot(jp);
+    } catch (err) {
+      console.error("Failed to quick-fetch Mozzart:", err);
+      setIsMozzartModalOpen(true);
+    } finally {
+      setIsFetchingMozzart(false);
     }
   };
 
@@ -386,6 +433,7 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
                 setCustomFixtures({});
                 setSelectedHistoricalEvent("");
                 setActiveSportPesaMeta(null);
+                setActiveMozzartMeta(null);
                 setPrefillPreset("");
               }}
               className="text-xs text-muted-foreground hover:text-foreground h-8"
@@ -455,6 +503,64 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
         </div>
       </div>
 
+      {/* Mozzart Live API Prefill Toolbar */}
+      <div className="rounded-xl border border-green-500/30 bg-green-500/5 p-3.5 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 shadow-xs">
+        <div className="flex items-center gap-3">
+          <div className="h-9 w-9 rounded-xl bg-green-500/15 border border-green-500/30 flex items-center justify-center text-green-400 shrink-0">
+            <Zap className="h-5 w-5 fill-current" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-bold text-foreground">
+                Mozzart Super Jackpot — API Prefill
+              </span>
+              {activeMozzartMeta ? (
+                <Badge variant="outline" className="text-[10px] px-1.5 py-0 text-emerald-400 border-emerald-500/30 font-mono">
+                  Round #{activeMozzartMeta.roundId} Active
+                </Badge>
+              ) : (
+                <Badge variant="outline" className="text-[10px] px-1.5 py-0 text-green-400 border-green-500/30 font-mono">
+                  16 Matches
+                </Badge>
+              )}
+            </div>
+            <p className="text-[11px] text-muted-foreground">
+              {activeMozzartMeta
+                ? `Round #${activeMozzartMeta.roundId} loaded with live 1X2 odds and competition data.`
+                : `Instantly prefill all 16 match fixtures from Mozzart's active super jackpot API with real-time odds.`}
+            </p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 shrink-0">
+          <Button
+            variant="default"
+            size="sm"
+            onClick={handleQuickPrefillMozzart}
+            disabled={isFetchingMozzart}
+            className="h-8 text-xs font-semibold gap-1.5 bg-green-600 hover:bg-green-700 text-white shadow-xs"
+          >
+            {isFetchingMozzart ? (
+              <Loader2 className="h-3.5 w-3.5 animate-spin" />
+            ) : (
+              <Download className="h-3.5 w-3.5" />
+            )}
+            <span>{isFetchingMozzart ? "Fetching..." : "Prefill from Mozzart API"}</span>
+          </Button>
+
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setIsMozzartModalOpen(true)}
+            className="h-8 text-xs gap-1.5"
+            title="Inspect Mozzart API payload or paste custom JSON"
+          >
+            <SlidersHorizontal className="h-3.5 w-3.5" />
+            <span>API Options</span>
+          </Button>
+        </div>
+      </div>
+
       {/* Filter / Controls Section */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 bg-card border border-border rounded-xl p-4 shadow-xs">
         {/* Prefill Preset Selector */}
@@ -467,6 +573,7 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
           >
             <NativeSelectOption value="">Select prefill source...</NativeSelectOption>
             <NativeSelectOption value="sportpesa-live">⚡ SportPesa Mega Jackpot Pro (Active)</NativeSelectOption>
+            <NativeSelectOption value="mozzart-live">⚡ Mozzart Super Jackpot (Active)</NativeSelectOption>
             <NativeSelectOption value="clear">✕ Clear all fixtures</NativeSelectOption>
           </NativeSelect>
         </div>
@@ -899,6 +1006,13 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
         open={isSportPesaModalOpen}
         onOpenChange={setIsSportPesaModalOpen}
         onApplyJackpot={handleApplySportPesaJackpot}
+      />
+
+      {/* Mozzart API Import / Options Modal */}
+      <MozzartImportModal
+        open={isMozzartModalOpen}
+        onOpenChange={setIsMozzartModalOpen}
+        onApplyJackpot={handleApplyMozzartJackpot}
       />
     </div>
   );
