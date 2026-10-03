@@ -80,7 +80,7 @@ export const PositionMatrix: React.FC<PositionMatrixProps> = ({ matches }) => {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-2 border-b border-border">
         <div>
           <h2 className="text-xl font-bold tracking-tight text-foreground">
-            Position Analysis (1 to {maxPos})
+            Position Analysis
           </h2>
           <p className="text-xs text-muted-foreground mt-1">
             Discover historical outcome biases across jackpot events.
