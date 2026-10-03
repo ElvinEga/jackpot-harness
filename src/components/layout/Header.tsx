@@ -44,7 +44,7 @@ export type AppTab = "explorer" | "predictor" | "positions" | "teams" | "goals";
 const NAV_ITEMS: { value: AppTab; label: string; icon: LucideIcon }[] = [
   { value: "explorer", label: "Explorer", icon: TableIcon },
   { value: "predictor", label: "Predictor", icon: Sparkles },
-  { value: "positions", label: "Positions 1–17", icon: Layers },
+  { value: "positions", label: "Positions", icon: Layers },
   { value: "teams", label: "H2H & Teams", icon: Swords },
   { value: "goals", label: "Goals", icon: Goal },
 ];
@@ -219,7 +219,7 @@ export const Header: React.FC<HeaderProps> = ({
 
       {/* Closable sidebar: nav menus + theme + export below lg */}
       <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
-        <SheetContent side="left" className="gap-0 p-0 max-w-[20rem]">
+        <SheetContent side="left" className="gap-0 p-0 max-w-[20rem]!">
           <SheetHeader className="border-b border-border px-4 py-4 text-left">
             <SheetTitle>Jackpot Harness</SheetTitle>
             <SheetDescription className="flex items-center gap-1.5">
