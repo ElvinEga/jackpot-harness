@@ -1,10 +1,13 @@
 import React, { useState, useMemo, useDeferredValue } from "react";
 import { Loader2, AlertCircle } from "lucide-react";
-import { Header } from "./components/layout/Header";
+import { Header, type AppTab } from "./components/layout/Header";
 import { FilterBar } from "./components/explorer/FilterBar";
 import { DataTable } from "./components/explorer/DataTable";
 import { MatchDetailSheet } from "./components/explorer/MatchDetailSheet";
-import { AnalyticsView } from "./components/analytics/AnalyticsView";
+import { JackpotPredictor } from "./components/predictor/JackpotPredictor";
+import { PositionMatrix } from "./components/positions/PositionMatrix";
+import { TeamVersusTeam } from "./components/teams/TeamVersusTeam";
+import { GoalAnalysisView } from "./components/goals/GoalAnalysisView";
 import { Button } from "./components/ui/button";
 
 import type { Match, AppStats, MatchFilters } from "./lib/types";
@@ -16,8 +19,12 @@ import { useJackpotMatches } from "./hooks/useJackpotMatches";
 export function App() {
   const { data: matches = [], isLoading: loading, error, refetch } = useJackpotMatches();
 
-  const [activeTab, setActiveTab] = useState<"explorer" | "analytics">("explorer");
+  const [activeTab, setActiveTab] = useState<AppTab>("predictor");
   const [selectedMatch, setSelectedMatch] = useState<Match | null>(null);
+
+  // Teams to pre-fill when transferring from Predictor to H2H view
+  const [h2hTeamA, setH2hTeamA] = useState<string>("Arsenal");
+  const [h2hTeamB, setH2hTeamB] = useState<string>("Chelsea");
 
   const { filters, setFilters, resetFilters } = useUrlFilters();
   const deferredFilters = useDeferredValue(filters);
@@ -47,6 +54,12 @@ export function App() {
     setFilters((prev) => ({ ...prev, ...partial }));
   };
 
+  const handleOpenH2H = (teamA: string, teamB: string) => {
+    setH2hTeamA(teamA);
+    setH2hTeamB(teamB);
+    setActiveTab("teams");
+  };
+
   // Loading Screen
   if (loading) {
     return (
@@ -61,7 +74,6 @@ export function App() {
               Retrieving historical match records across Betika, Mozzart, and SportPesa...
             </p>
           </div>
-          {/* Pulsing placeholder indicator */}
           <div className="w-full bg-muted rounded-full h-2 overflow-hidden">
             <div className="bg-primary h-full w-2/3 animate-pulse rounded-full" />
           </div>
@@ -109,7 +121,27 @@ export function App() {
       />
 
       {/* Main Content Area */}
-      {activeTab === "explorer" ? (
+      {activeTab === "predictor" && (
+        <JackpotPredictor matches={matches} onSelectTeamForH2H={handleOpenH2H} />
+      )}
+
+      {activeTab === "positions" && (
+        <PositionMatrix matches={matches} />
+      )}
+
+      {activeTab === "teams" && (
+        <TeamVersusTeam
+          matches={matches}
+          initialTeamA={h2hTeamA}
+          initialTeamB={h2hTeamB}
+        />
+      )}
+
+      {activeTab === "goals" && (
+        <GoalAnalysisView matches={matches} />
+      )}
+
+      {activeTab === "explorer" && (
         <div className="flex-1 flex flex-col min-h-0">
           <FilterBar
             filters={filters}
@@ -122,11 +154,9 @@ export function App() {
             onSelectMatch={setSelectedMatch}
           />
         </div>
-      ) : (
-        <AnalyticsView matches={filteredMatches} />
       )}
 
-      {/* Match Detail Drawer / Sheet (Base UI Dialog) */}
+      {/* Match Detail Drawer / Sheet */}
       <MatchDetailSheet
         match={selectedMatch}
         onClose={() => setSelectedMatch(null)}
