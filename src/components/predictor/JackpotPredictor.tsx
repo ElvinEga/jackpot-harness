@@ -14,6 +14,10 @@ import {
   Check,
   RotateCcw,
   BarChart2,
+  Zap,
+  Download,
+  Loader2,
+  SlidersHorizontal,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -27,6 +31,19 @@ import { predictMatch } from "../../lib/predictions";
 import { getAllTeams, getTeamAppearances } from "../../lib/teams";
 import { DATASETS } from "../../lib/data";
 import { TeamSearchInput } from "../common/TeamSearchInput";
+import { SportPesaImportModal } from "./SportPesaImportModal";
+import { fetchActiveSportPesaJackpot, type ParsedSportPesaJackpot } from "../../lib/sportpesa";
+
+export interface FixtureEntry {
+  home: string;
+  away: string;
+  homeOdds?: number;
+  drawOdds?: number;
+  awayOdds?: number;
+  tournament?: string;
+  country?: string;
+  kickOffTime?: string;
+}
 
 interface JackpotPredictorProps {
   matches: Match[];
@@ -62,8 +79,14 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
   const [selectedYear, setSelectedYear] = useState<string>("all");
   const [selectedHistoricalEvent, setSelectedHistoricalEvent] = useState<string>("");
 
+  // SportPesa API prefill & state
+  const [isSportPesaModalOpen, setIsSportPesaModalOpen] = useState(false);
+  const [isFetchingSportPesa, setIsFetchingSportPesa] = useState(false);
+  const [activeSportPesaMeta, setActiveSportPesaMeta] = useState<{ id: string; humanId: number; status: string } | null>(null);
+  const [prefillPreset, setPrefillPreset] = useState<string>("");
+
   // Fixtures for positions 1..17
-  const [customFixtures, setCustomFixtures] = useState<Record<number, { home: string; away: string }>>({});
+  const [customFixtures, setCustomFixtures] = useState<Record<number, FixtureEntry>>({});
   const [copiedSlip, setCopiedSlip] = useState(false);
   const [detailMatch, setDetailMatch] = useState<MatchPrediction | null>(null);
 
@@ -160,23 +183,76 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
       .slice(0, 30);
   }, [filteredMatches, matches, selectedJackpot]);
 
+  // Apply parsed SportPesa jackpot payload into 1..17 fixtures
+  const handleApplySportPesaJackpot = (jp: ParsedSportPesaJackpot) => {
+    setSelectedJackpot("SportPesa - Mega Jackpot Pro");
+    const newFix: Record<number, FixtureEntry> = {};
+    for (const m of jp.matches) {
+      newFix[m.order] = {
+        home: m.homeTeam,
+        away: m.awayTeam,
+        homeOdds: m.homeOdds,
+        drawOdds: m.drawOdds,
+        awayOdds: m.awayOdds,
+        tournament: m.tournament,
+        country: m.country,
+        kickOffTime: m.kickOffTime,
+      };
+    }
+    setCustomFixtures(newFix);
+    setActiveSportPesaMeta({ id: jp.id, humanId: jp.humanId, status: jp.bettingStatus });
+    setPrefillPreset("sportpesa-live");
+    setSelectedHistoricalEvent("");
+  };
+
+  // Quick single-click fetch from SportPesa API
+  const handleQuickPrefillSportPesa = async () => {
+    setIsFetchingSportPesa(true);
+    try {
+      const jp = await fetchActiveSportPesaJackpot();
+      handleApplySportPesaJackpot(jp);
+    } catch (err) {
+      console.error("Failed to quick-fetch SportPesa:", err);
+      setIsSportPesaModalOpen(true);
+    } finally {
+      setIsFetchingSportPesa(false);
+    }
+  };
+
+  // Selector preset change handler
+  const handleSelectPreset = (val: string) => {
+    setPrefillPreset(val);
+    if (val === "sportpesa-live") {
+      handleQuickPrefillSportPesa();
+    } else if (val === "clear") {
+      setCustomFixtures({});
+      setActiveSportPesaMeta(null);
+      setSelectedHistoricalEvent("");
+      setPrefillPreset("");
+    }
+  };
+
   // Load a historical jackpot slip into the 1..17 fixtures
   const handleLoadHistoricalEvent = (eventId: string) => {
     setSelectedHistoricalEvent(eventId);
     if (!eventId) {
       setCustomFixtures({});
+      setActiveSportPesaMeta(null);
+      setPrefillPreset("");
       return;
     }
     const found = availableEvents.find((e) => e.id === eventId);
     if (!found) return;
 
-    const newFix: Record<number, { home: string; away: string }> = {};
+    const newFix: Record<number, FixtureEntry> = {};
     for (const m of found.matches) {
       if (m.position >= 1 && m.position <= maxPositions) {
         newFix[m.position] = { home: m.home_team, away: m.away_team };
       }
     }
     setCustomFixtures(newFix);
+    setActiveSportPesaMeta(null);
+    setPrefillPreset("historical");
   };
 
   // Update a single fixture team
@@ -184,6 +260,7 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
     setCustomFixtures((prev) => ({
       ...prev,
       [pos]: {
+        ...prev[pos],
         home: field === "home" ? val : prev[pos]?.home || "",
         away: field === "away" ? val : prev[pos]?.away || "",
       },
@@ -199,7 +276,17 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
       const aTeam = fix?.away?.trim() || "";
 
       if (hTeam && aTeam) {
-        list.push(predictMatch(matches, hTeam, aTeam, p, positionStats));
+        list.push(
+          predictMatch(matches, hTeam, aTeam, p, positionStats, {
+            odds:
+              fix?.homeOdds && fix?.drawOdds && fix?.awayOdds
+                ? { home: fix.homeOdds, draw: fix.drawOdds, away: fix.awayOdds }
+                : undefined,
+            tournament: fix?.tournament,
+            country: fix?.country,
+            kickOffTime: fix?.kickOffTime,
+          })
+        );
       } else {
         // Fallback to pure position historical pattern if no teams specified
         const posStat = positionStats.find((s) => s.position === p);
@@ -298,6 +385,8 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
               onClick={() => {
                 setCustomFixtures({});
                 setSelectedHistoricalEvent("");
+                setActiveSportPesaMeta(null);
+                setPrefillPreset("");
               }}
               className="text-xs text-muted-foreground hover:text-foreground h-8"
             >
@@ -308,8 +397,80 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
         </div>
       </div>
 
+      {/* SportPesa Live API Prefill Toolbar */}
+      <div className="rounded-xl border border-blue-500/30 bg-blue-500/5 p-3.5 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 shadow-xs">
+        <div className="flex items-center gap-3">
+          <div className="h-9 w-9 rounded-xl bg-blue-500/15 border border-blue-500/30 flex items-center justify-center text-blue-400 shrink-0">
+            <Zap className="h-5 w-5 fill-current" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-bold text-foreground">
+                SportPesa Mega Jackpot Pro — API Prefill
+              </span>
+              {activeSportPesaMeta ? (
+                <Badge variant="outline" className="text-[10px] px-1.5 py-0 text-emerald-400 border-emerald-500/30 font-mono">
+                  #{activeSportPesaMeta.humanId} Active
+                </Badge>
+              ) : (
+                <Badge variant="outline" className="text-[10px] px-1.5 py-0 text-blue-400 border-blue-500/30 font-mono">
+                  17 Matches
+                </Badge>
+              )}
+            </div>
+            <p className="text-[11px] text-muted-foreground">
+              {activeSportPesaMeta
+                ? `Active jackpot #${activeSportPesaMeta.humanId} loaded with live 1X2 odds, kickoffs, and tournament data.`
+                : `Instantly prefill all 17 match fixtures from SportPesa's active jackpot API with real-time odds.`}
+            </p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 shrink-0">
+          <Button
+            variant="default"
+            size="sm"
+            onClick={handleQuickPrefillSportPesa}
+            disabled={isFetchingSportPesa}
+            className="h-8 text-xs font-semibold gap-1.5 bg-blue-600 hover:bg-blue-700 text-white shadow-xs"
+          >
+            {isFetchingSportPesa ? (
+              <Loader2 className="h-3.5 w-3.5 animate-spin" />
+            ) : (
+              <Download className="h-3.5 w-3.5" />
+            )}
+            <span>{isFetchingSportPesa ? "Fetching..." : "Prefill from SportPesa API"}</span>
+          </Button>
+
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setIsSportPesaModalOpen(true)}
+            className="h-8 text-xs gap-1.5"
+            title="Inspect SportPesa API payload or paste custom JSON"
+          >
+            <SlidersHorizontal className="h-3.5 w-3.5" />
+            <span>API Options</span>
+          </Button>
+        </div>
+      </div>
+
       {/* Filter / Controls Section */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 bg-card border border-border rounded-xl p-4 shadow-xs">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 bg-card border border-border rounded-xl p-4 shadow-xs">
+        {/* Prefill Preset Selector */}
+        <div>
+          <label className="text-[11px] font-medium text-muted-foreground mb-1 block">Prefill Fixtures</label>
+          <NativeSelect
+            value={prefillPreset}
+            onChange={(e) => handleSelectPreset(e.target.value)}
+            className="w-full text-xs font-medium"
+          >
+            <NativeSelectOption value="">Select prefill source...</NativeSelectOption>
+            <NativeSelectOption value="sportpesa-live">⚡ SportPesa Mega Jackpot Pro (Active)</NativeSelectOption>
+            <NativeSelectOption value="clear">✕ Clear all fixtures</NativeSelectOption>
+          </NativeSelect>
+        </div>
+
         {/* Jackpot Selector */}
         <div>
           <label className="text-[11px] font-medium text-muted-foreground mb-1 block">Jackpot</label>
@@ -492,30 +653,46 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
 
                     {/* Match Fixture Input / Display */}
                     <td className="py-2 px-3" onClick={(e) => e.stopPropagation()}>
-                      <div className="flex items-center gap-1.5">
-                        <TeamSearchInput
-                          size="xs"
-                          placeholder={`Home Team ${pred.position}`}
-                          value={customFixtures[pred.position]?.home || ""}
-                          onChange={(val) => handleUpdateFixture(pred.position, "home", val)}
-                          teams={allTeams}
-                          teamAppearances={teamAppearances}
-                          className="w-36"
-                        />
-                        <span className="text-muted-foreground text-[10px] font-semibold">vs</span>
-                        <TeamSearchInput
-                          size="xs"
-                          placeholder={`Away Team ${pred.position}`}
-                          value={customFixtures[pred.position]?.away || ""}
-                          onChange={(val) => handleUpdateFixture(pred.position, "away", val)}
-                          teams={allTeams}
-                          teamAppearances={teamAppearances}
-                          className="w-36"
-                        />
-                        {isCustom && (
-                          <Badge variant="outline" className="text-[10px] px-1 py-0 text-emerald-400 border-emerald-500/30">
-                            Active
-                          </Badge>
+                      <div className="flex flex-col gap-1">
+                        <div className="flex items-center gap-1.5">
+                          <TeamSearchInput
+                            size="xs"
+                            placeholder={`Home Team ${pred.position}`}
+                            value={customFixtures[pred.position]?.home || ""}
+                            onChange={(val) => handleUpdateFixture(pred.position, "home", val)}
+                            teams={allTeams}
+                            teamAppearances={teamAppearances}
+                            className="w-36"
+                          />
+                          <span className="text-muted-foreground text-[10px] font-semibold">vs</span>
+                          <TeamSearchInput
+                            size="xs"
+                            placeholder={`Away Team ${pred.position}`}
+                            value={customFixtures[pred.position]?.away || ""}
+                            onChange={(val) => handleUpdateFixture(pred.position, "away", val)}
+                            teams={allTeams}
+                            teamAppearances={teamAppearances}
+                            className="w-36"
+                          />
+                          {isCustom && (
+                            <Badge variant="outline" className="text-[10px] px-1 py-0 text-emerald-400 border-emerald-500/30">
+                              Active
+                            </Badge>
+                          )}
+                        </div>
+
+                        {/* SportPesa Live Market Odds & Tournament info */}
+                        {pred.bookmakerOdds && (
+                          <div className="flex items-center gap-2 text-[10px] font-mono text-muted-foreground pl-0.5">
+                            <span className="inline-flex items-center gap-1 text-[9px] px-1.5 py-0.5 rounded bg-blue-500/10 text-blue-300 border border-blue-500/20 font-sans font-medium">
+                              SP Odds: {pred.bookmakerOdds.home?.toFixed(2)} | {pred.bookmakerOdds.draw?.toFixed(2)} | {pred.bookmakerOdds.away?.toFixed(2)}
+                            </span>
+                            {pred.tournament && (
+                              <span className="text-muted-foreground truncate max-w-[170px] font-sans">
+                                {pred.tournament} {pred.country ? `(${pred.country})` : ""}
+                              </span>
+                            )}
+                          </div>
                         )}
                       </div>
                     </td>
@@ -631,6 +808,43 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
                 </div>
               </div>
 
+              {/* SportPesa Live Market Odds Card if present */}
+              {detailMatch.bookmakerOdds && (
+                <div className="p-3 rounded-xl bg-blue-500/5 border border-blue-500/20">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-xs font-semibold text-blue-300 flex items-center gap-1.5">
+                      <Zap className="h-3.5 w-3.5" />
+                      SportPesa Live 1X2 Market Odds
+                    </span>
+                    {detailMatch.tournament && (
+                      <span className="text-[11px] text-muted-foreground font-mono">
+                        {detailMatch.tournament} {detailMatch.country ? `• ${detailMatch.country}` : ""}
+                      </span>
+                    )}
+                  </div>
+                  <div className="grid grid-cols-3 gap-2 text-center">
+                    <div className="p-1.5 rounded bg-card border border-border">
+                      <span className="text-[10px] text-muted-foreground block">Home (1)</span>
+                      <span className="text-sm font-bold font-mono text-emerald-400">
+                        {detailMatch.bookmakerOdds.home?.toFixed(2) || "-"}
+                      </span>
+                    </div>
+                    <div className="p-1.5 rounded bg-card border border-border">
+                      <span className="text-[10px] text-muted-foreground block">Draw (X)</span>
+                      <span className="text-sm font-bold font-mono text-amber-400">
+                        {detailMatch.bookmakerOdds.draw?.toFixed(2) || "-"}
+                      </span>
+                    </div>
+                    <div className="p-1.5 rounded bg-card border border-border">
+                      <span className="text-[10px] text-muted-foreground block">Away (2)</span>
+                      <span className="text-sm font-bold font-mono text-blue-400">
+                        {detailMatch.bookmakerOdds.away?.toFixed(2) || "-"}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {/* Signals and Rationale */}
               <div className="space-y-2">
                 <span className="font-semibold text-foreground text-xs block">Key Contributing Signals:</span>
@@ -679,6 +893,13 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
           </DialogContent>
         </Dialog>
       )}
+
+      {/* SportPesa API Import / Options Modal */}
+      <SportPesaImportModal
+        open={isSportPesaModalOpen}
+        onOpenChange={setIsSportPesaModalOpen}
+        onApplyJackpot={handleApplySportPesaJackpot}
+      />
     </div>
   );
 };
