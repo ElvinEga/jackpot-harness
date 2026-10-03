@@ -1,60 +1,25 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useState, useMemo } from "react";
 import { Loader2, AlertCircle } from "lucide-react";
 import { Header } from "./components/layout/Header";
 import { FilterBar } from "./components/explorer/FilterBar";
-import { MatchTable } from "./components/explorer/MatchTable";
+import { DataTable } from "./components/explorer/DataTable";
 import { MatchDetailSheet } from "./components/explorer/MatchDetailSheet";
 import { AnalyticsView } from "./components/analytics/AnalyticsView";
 import { Button } from "./components/ui/Button";
 
 import type { Match, AppStats, MatchFilters } from "./lib/types";
-import { loadAllMatches, computeDatasetStats } from "./lib/data";
+import { computeDatasetStats } from "./lib/data";
 import { filterMatches } from "./lib/filters";
 import { useUrlFilters } from "./hooks/useUrlFilters";
+import { useJackpotMatches } from "./hooks/useJackpotMatches";
 
 export function App() {
-  const [matches, setMatches] = useState<Match[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [loadProgress, setLoadProgress] = useState<{ loaded: number; total: number }>({
-    loaded: 0,
-    total: 11,
-  });
-  const [error, setError] = useState<string | null>(null);
+  const { data: matches = [], isLoading: loading, error, refetch } = useJackpotMatches();
 
   const [activeTab, setActiveTab] = useState<"explorer" | "analytics">("explorer");
   const [selectedMatch, setSelectedMatch] = useState<Match | null>(null);
 
   const { filters, setFilters, resetFilters } = useUrlFilters();
-
-  // Load datasets on mount
-  useEffect(() => {
-    let isMounted = true;
-    setLoading(true);
-    setError(null);
-
-    loadAllMatches((loaded, total) => {
-      if (isMounted) {
-        setLoadProgress({ loaded, total });
-      }
-    })
-      .then((data) => {
-        if (isMounted) {
-          setMatches(data);
-          setLoading(false);
-        }
-      })
-      .catch((err) => {
-        if (isMounted) {
-          console.error("Failed to load jackpot datasets:", err);
-          setError(err.message || "Failed to load jackpot records");
-          setLoading(false);
-        }
-      });
-
-    return () => {
-      isMounted = false;
-    };
-  }, []);
 
   // Compute overall dataset stats
   const datasetStats: AppStats | null = useMemo(() => {
@@ -91,18 +56,15 @@ export function App() {
           <div className="space-y-1">
             <h2 className="text-base font-bold text-foreground">Loading Jackpot Archives</h2>
             <p className="text-xs text-muted-foreground">
-              Loading {loadProgress.loaded} of {loadProgress.total} datasets (42,898 records)...
+              Retrieving historical match records across Betika, Mozzart, and SportPesa...
             </p>
           </div>
-          {/* Progress bar */}
+          {/* Pulsing placeholder indicator */}
           <div className="w-full bg-muted rounded-full h-2 overflow-hidden">
-            <div
-              className="bg-primary h-full transition-all duration-200"
-              style={{ width: `${(loadProgress.loaded / loadProgress.total) * 100}%` }}
-            />
+            <div className="bg-primary h-full w-2/3 animate-pulse rounded-full" />
           </div>
           <span className="text-[11px] text-muted-foreground font-mono">
-            Betika · Mozzart · SportPesa
+            TanStack Query · 42,898 records
           </span>
         </div>
       </div>
@@ -117,12 +79,12 @@ export function App() {
           <AlertCircle className="h-10 w-10 text-destructive" />
           <div className="space-y-1">
             <h2 className="text-base font-bold text-foreground">Failed to load datasets</h2>
-            <p className="text-xs text-muted-foreground">{error}</p>
+            <p className="text-xs text-muted-foreground">{error instanceof Error ? error.message : "Network error"}</p>
           </div>
           <Button
             variant="default"
             size="sm"
-            onClick={() => window.location.reload()}
+            onClick={() => refetch()}
           >
             Retry Loading
           </Button>
@@ -152,7 +114,7 @@ export function App() {
             onReset={resetFilters}
             uniqueLeagues={uniqueLeagues}
           />
-          <MatchTable
+          <DataTable
             matches={filteredMatches}
             onSelectMatch={setSelectedMatch}
           />
