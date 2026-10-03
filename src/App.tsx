@@ -83,25 +83,25 @@ export function App() {
   // Loading Screen
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-6 text-center">
-        <div className="w-full max-w-sm p-6 rounded-2xl bg-slate-900 border border-slate-800 shadow-2xl flex flex-col items-center space-y-4">
-          <div className="h-12 w-12 rounded-xl bg-blue-600/10 border border-blue-500/30 flex items-center justify-center text-blue-400">
+      <div className="min-h-screen bg-background flex flex-col items-center justify-center p-6 text-center">
+        <div className="w-full max-w-sm p-6 rounded-2xl bg-card border border-border shadow-2xl flex flex-col items-center space-y-4 text-card-foreground">
+          <div className="h-12 w-12 rounded-xl bg-primary/10 border border-primary/30 flex items-center justify-center text-primary">
             <Loader2 className="h-6 w-6 animate-spin" />
           </div>
           <div className="space-y-1">
-            <h2 className="text-base font-bold text-slate-100">Loading Jackpot Archives</h2>
-            <p className="text-xs text-slate-400">
+            <h2 className="text-base font-bold text-foreground">Loading Jackpot Archives</h2>
+            <p className="text-xs text-muted-foreground">
               Loading {loadProgress.loaded} of {loadProgress.total} datasets (42,898 records)...
             </p>
           </div>
           {/* Progress bar */}
-          <div className="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+          <div className="w-full bg-muted rounded-full h-2 overflow-hidden">
             <div
-              className="bg-blue-600 h-full transition-all duration-200"
+              className="bg-primary h-full transition-all duration-200"
               style={{ width: `${(loadProgress.loaded / loadProgress.total) * 100}%` }}
             />
           </div>
-          <span className="text-[11px] text-slate-500 font-mono">
+          <span className="text-[11px] text-muted-foreground font-mono">
             Betika · Mozzart · SportPesa
           </span>
         </div>
@@ -112,12 +112,12 @@ export function App() {
   // Error Screen
   if (error) {
     return (
-      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-6 text-center">
-        <div className="w-full max-w-md p-6 rounded-xl bg-slate-900 border border-red-900/50 flex flex-col items-center space-y-4">
-          <AlertCircle className="h-10 w-10 text-red-400" />
+      <div className="min-h-screen bg-background flex flex-col items-center justify-center p-6 text-center">
+        <div className="w-full max-w-md p-6 rounded-xl bg-card border border-destructive/50 flex flex-col items-center space-y-4 text-card-foreground">
+          <AlertCircle className="h-10 w-10 text-destructive" />
           <div className="space-y-1">
-            <h2 className="text-base font-bold text-slate-100">Failed to load datasets</h2>
-            <p className="text-xs text-slate-400">{error}</p>
+            <h2 className="text-base font-bold text-foreground">Failed to load datasets</h2>
+            <p className="text-xs text-muted-foreground">{error}</p>
           </div>
           <Button
             variant="default"
@@ -132,7 +132,7 @@ export function App() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
+    <div className="min-h-screen bg-background text-foreground flex flex-col font-sans">
       {/* Top Header */}
       <Header
         stats={datasetStats}
@@ -161,7 +161,7 @@ export function App() {
         <AnalyticsView matches={filteredMatches} />
       )}
 
-      {/* Match Detail Drawer / Sheet */}
+      {/* Match Detail Drawer / Sheet (Base UI Dialog) */}
       <MatchDetailSheet
         match={selectedMatch}
         onClose={() => setSelectedMatch(null)}
