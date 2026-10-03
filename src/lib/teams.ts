@@ -9,6 +9,15 @@ export function getAllTeams(matches: Match[]): string[] {
   return Array.from(teams).sort();
 }
 
+export function getTeamAppearances(matches: Match[]): Map<string, number> {
+  const counts = new Map<string, number>();
+  for (const m of matches) {
+    if (m.home_team) counts.set(m.home_team, (counts.get(m.home_team) || 0) + 1);
+    if (m.away_team) counts.set(m.away_team, (counts.get(m.away_team) || 0) + 1);
+  }
+  return counts;
+}
+
 export function computeTeamH2H(
   matches: Match[],
   teamA: string,
