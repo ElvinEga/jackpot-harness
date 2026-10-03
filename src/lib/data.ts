@@ -23,6 +23,13 @@ export const DATASETS: DatasetMeta[] = [
     file: "betika/betika-must-be-won-jackpot.json",
   },
 
+  // SportPesa (1 jackpot)
+  {
+    bookmaker: "sportpesa",
+    jackpot: "Mega Jackpot Pro",
+    file: "sportpesa/sportpesa-mega-jackpot-pro.json",
+  },
+
   // Mozzart (6 jackpots / extract batches)
   {
     bookmaker: "mozzart",
@@ -54,14 +61,56 @@ export const DATASETS: DatasetMeta[] = [
     jackpot: "Super Jackpot 5",
     file: "mozzart/mozzart-super-jackpot5.json",
   },
-
-  // SportPesa (1 jackpot)
-  {
-    bookmaker: "sportpesa",
-    jackpot: "Mega Jackpot Pro",
-    file: "sportpesa/sportpesa-mega-jackpot-pro.json",
-  },
 ];
+
+export const INITIAL_DATASETS = DATASETS.slice(0, 5); // Betika + SportPesa (~10,552 records)
+export const SECONDARY_DATASETS = DATASETS.slice(5); // Mozzart (~32,346 records)
+
+async function fetchDataset(ds: DatasetMeta): Promise<Match[]> {
+  const response = await fetch(`/data/${ds.file}`);
+  if (!response.ok) {
+    throw new Error(`Failed to load dataset: ${ds.file} (${response.status} ${response.statusText})`);
+  }
+  const rawRows: Record<string, unknown>[] = await response.json();
+
+  return rawRows.map((row, idx): Match => {
+    const home_team = String(row.home_team || "").trim();
+    const away_team = String(row.away_team || "").trim();
+    const league = typeof row.league === "string" && row.league.trim() ? row.league.trim() : null;
+    const score = typeof row.score === "string" && row.score.trim() ? row.score.trim() : null;
+    const date = typeof row.date === "string" ? row.date : null;
+    const odds = typeof row.odds === "number" && !isNaN(row.odds) ? row.odds : null;
+    const result = (typeof row.result === "string" ? row.result.toLowerCase() : null) as Match["result"];
+    const jackpot_id = typeof row.jackpot_id === "number" ? row.jackpot_id : null;
+    const searchText = `${home_team} ${away_team} ${league || ""} ${ds.bookmaker} ${ds.jackpot} ${score || ""}`.toLowerCase();
+
+    return {
+      id: `${ds.file}:${idx}`,
+      date,
+      home_team,
+      away_team,
+      league,
+      score,
+      odds,
+      result,
+      bookmaker: ds.bookmaker,
+      jackpot: ds.jackpot,
+      jackpot_id,
+      source_file: ds.file,
+      searchText,
+    };
+  });
+}
+
+export async function loadInitialMatches(): Promise<Match[]> {
+  const results = await Promise.all(INITIAL_DATASETS.map(fetchDataset));
+  return results.flat();
+}
+
+export async function loadRemainingMatches(): Promise<Match[]> {
+  const results = await Promise.all(SECONDARY_DATASETS.map(fetchDataset));
+  return results.flat();
+}
 
 export async function loadAllMatches(
   onProgress?: (loaded: number, total: number) => void
@@ -71,30 +120,12 @@ export async function loadAllMatches(
 
   const datasetResults = await Promise.all(
     DATASETS.map(async (ds) => {
-      const response = await fetch(`/data/${ds.file}`);
-      if (!response.ok) {
-        throw new Error(`Failed to load dataset: ${ds.file} (${response.status} ${response.statusText})`);
-      }
-      const rawRows: Record<string, unknown>[] = await response.json();
+      const matches = await fetchDataset(ds);
       loadedCount++;
       if (onProgress) {
         onProgress(loadedCount, total);
       }
-
-      return rawRows.map((row, idx): Match => ({
-        id: `${ds.file}:${idx}`,
-        date: typeof row.date === "string" ? row.date : null,
-        home_team: String(row.home_team || "").trim(),
-        away_team: String(row.away_team || "").trim(),
-        league: typeof row.league === "string" && row.league.trim() ? row.league.trim() : null,
-        score: typeof row.score === "string" && row.score.trim() ? row.score.trim() : null,
-        odds: typeof row.odds === "number" && !isNaN(row.odds) ? row.odds : null,
-        result: (typeof row.result === "string" ? row.result.toLowerCase() : null) as Match["result"],
-        bookmaker: ds.bookmaker,
-        jackpot: ds.jackpot,
-        jackpot_id: typeof row.jackpot_id === "number" ? row.jackpot_id : null,
-        source_file: ds.file,
-      }));
+      return matches;
     })
   );
 
