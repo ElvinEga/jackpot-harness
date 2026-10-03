@@ -32,7 +32,7 @@ export function filterMatches(matches: Match[], filters: MatchFilters): Match[] 
   return matches.filter((m) => {
     // 1. Search term check
     if (hasSearch) {
-      const matchText = `${m.home_team} ${m.away_team} ${m.league || ""} ${m.bookmaker} ${m.jackpot} ${m.score || ""}`.toLowerCase();
+      const matchText = m.searchText || `${m.home_team} ${m.away_team} ${m.league || ""} ${m.bookmaker} ${m.jackpot} ${m.score || ""}`.toLowerCase();
       for (const term of searchTerms) {
         if (!matchText.includes(term)) {
           return false;
