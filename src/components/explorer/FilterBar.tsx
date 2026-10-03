@@ -1,6 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Search, X, RotateCcw, Filter, ChevronDown, SlidersHorizontal, Loader2 } from "lucide-react";
-import { Button } from "../ui/Button";
+import { Button } from "@/components/ui/button";
+import { Input } from "../ui/input";
+import { Checkbox } from "../ui/checkbox";
+import { NativeSelect, NativeSelectOption } from "../ui/native-select";
+import { Popover, PopoverTrigger, PopoverContent } from "../ui/popover";
 import type { MatchFilters, Bookmaker } from "../../lib/types";
 import { DATASETS } from "../../lib/data";
 
@@ -19,8 +23,6 @@ export const FilterBar: React.FC<FilterBarProps> = ({
 }) => {
   const searchInputRef = useRef<HTMLInputElement>(null);
   const [showAdvanced, setShowAdvanced] = useState(false);
-  const [jackpotMenuOpen, setJackpotMenuOpen] = useState(false);
-  const jackpotRef = useRef<HTMLDivElement>(null);
 
   // Debounced search state
   const [searchValue, setSearchValue] = useState(filters.search);
@@ -103,16 +105,6 @@ export const FilterBar: React.FC<FilterBarProps> = ({
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  // Click outside to close jackpot menu
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (jackpotRef.current && !jackpotRef.current.contains(e.target as Node)) {
-        setJackpotMenuOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
 
   const hasActiveFilters =
     Boolean(filters.search) ||
@@ -160,14 +152,14 @@ export const FilterBar: React.FC<FilterBarProps> = ({
           ) : (
             <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
           )}
-          <input
+          <Input
             ref={searchInputRef}
             type="text"
             placeholder="Search teams, leagues, jackpots, bookmaker... (⌘K or /)"
             value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)}
             onKeyDown={handleSearchKeyDown}
-            className="w-full bg-background border border-border rounded-md pl-9 pr-9 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary transition-colors"
+            className="pl-9 pr-9"
           />
           {searchValue && (
             <button
@@ -226,50 +218,48 @@ export const FilterBar: React.FC<FilterBarProps> = ({
           })}
         </div>
 
-        {/* Jackpot Dropdown */}
-        <div className="relative" ref={jackpotRef}>
-          <button
-            onClick={() => setJackpotMenuOpen((prev) => !prev)}
-            className={`flex items-center gap-1.5 text-xs px-3 py-2 rounded-md border font-medium transition-colors cursor-pointer ${
-              filters.jackpots.length > 0
-                ? "bg-primary/20 border-primary text-primary"
-                : "bg-background border-border text-muted-foreground hover:text-foreground"
-            }`}
-          >
-            <Filter className="h-3 w-3" />
-            <span>
-              {filters.jackpots.length > 0
-                ? `${filters.jackpots.length} Jackpot${filters.jackpots.length > 1 ? "s" : ""}`
-                : "Jackpots"}
-            </span>
-            <ChevronDown className="h-3 w-3 text-muted-foreground" />
-          </button>
-
-          {jackpotMenuOpen && (
-            <div className="absolute right-0 mt-1 w-60 max-h-72 overflow-y-auto rounded-md bg-popover border border-border shadow-xl z-50 p-1.5 text-xs animate-in fade-in duration-100 text-popover-foreground">
-              <div className="px-2 py-1 text-[11px] font-semibold text-muted-foreground border-b border-border mb-1">
-                Select Jackpots
-              </div>
-              {availableJackpots.map((jackpot) => {
-                const checked = filters.jackpots.includes(jackpot);
-                return (
-                  <label
-                    key={jackpot}
-                    className="flex items-center gap-2 px-2 py-1.5 rounded hover:bg-muted cursor-pointer text-popover-foreground"
-                  >
-                    <input
-                      type="checkbox"
-                      checked={checked}
-                      onChange={() => toggleJackpot(jackpot)}
-                      className="rounded border-border bg-background text-primary focus:ring-primary h-3.5 w-3.5 cursor-pointer"
-                    />
-                    <span>{jackpot}</span>
-                  </label>
-                );
-              })}
+        {/* Jackpot Popover */}
+        <Popover>
+          <PopoverTrigger
+            render={
+              <button
+                className={`flex items-center gap-1.5 text-xs px-3 py-2 rounded-md border font-medium transition-colors cursor-pointer ${
+                  filters.jackpots.length > 0
+                    ? "bg-primary/20 border-primary text-primary"
+                    : "bg-background border-border text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <Filter className="h-3 w-3" />
+                <span>
+                  {filters.jackpots.length > 0
+                    ? `${filters.jackpots.length} Jackpot${filters.jackpots.length > 1 ? "s" : ""}`
+                    : "Jackpots"}
+                </span>
+                <ChevronDown className="h-3 w-3 text-muted-foreground" />
+              </button>
+            }
+          />
+          <PopoverContent align="end" className="w-64 max-h-72 overflow-y-auto p-2">
+            <div className="px-2 py-1 text-[11px] font-semibold text-muted-foreground border-b border-border mb-1">
+              Select Jackpots
             </div>
-          )}
-        </div>
+            {availableJackpots.map((jackpot) => {
+              const checked = filters.jackpots.includes(jackpot);
+              return (
+                <label
+                  key={jackpot}
+                  className="flex items-center gap-2 px-2 py-1.5 rounded hover:bg-muted cursor-pointer text-popover-foreground text-xs select-none"
+                >
+                  <Checkbox
+                    checked={checked}
+                    onCheckedChange={() => toggleJackpot(jackpot)}
+                  />
+                  <span>{jackpot}</span>
+                </label>
+              );
+            })}
+          </PopoverContent>
+        </Popover>
 
         {/* Toggle Advanced Filters Button */}
         <Button
@@ -302,25 +292,25 @@ export const FilterBar: React.FC<FilterBarProps> = ({
           {/* Date Range */}
           <div className="flex items-center gap-2">
             <span className="text-muted-foreground">Date:</span>
-            <input
+            <Input
               type="date"
               value={filters.from || ""}
               onChange={(e) => onFilterChange({ ...filters, from: e.target.value || null })}
-              className="bg-background border border-border rounded px-2 py-1 text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+              className="h-8 w-36 text-xs"
             />
             <span className="text-muted-foreground">to</span>
-            <input
+            <Input
               type="date"
               value={filters.to || ""}
               onChange={(e) => onFilterChange({ ...filters, to: e.target.value || null })}
-              className="bg-background border border-border rounded px-2 py-1 text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+              className="h-8 w-36 text-xs"
             />
           </div>
 
           {/* Odds Range */}
           <div className="flex items-center gap-2">
             <span className="text-muted-foreground">Odds:</span>
-            <input
+            <Input
               type="number"
               step="0.05"
               placeholder="Min"
@@ -331,10 +321,10 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                   minOdds: e.target.value ? parseFloat(e.target.value) : null,
                 })
               }
-              className="w-16 bg-background border border-border rounded px-2 py-1 text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+              className="w-20 h-8 text-xs"
             />
             <span className="text-muted-foreground">-</span>
-            <input
+            <Input
               type="number"
               step="0.05"
               placeholder="Max"
@@ -345,25 +335,26 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                   maxOdds: e.target.value ? parseFloat(e.target.value) : null,
                 })
               }
-              className="w-16 bg-background border border-border rounded px-2 py-1 text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+              className="w-20 h-8 text-xs"
             />
           </div>
 
           {/* League Dropdown */}
           <div className="flex items-center gap-2">
             <span className="text-muted-foreground">League:</span>
-            <select
+            <NativeSelect
+              size="sm"
               value={filters.league || ""}
               onChange={(e) => onFilterChange({ ...filters, league: e.target.value || null })}
-              className="bg-background border border-border rounded px-2 py-1 text-foreground max-w-[220px] focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer"
+              className="max-w-[220px]"
             >
-              <option value="">All Leagues</option>
+              <NativeSelectOption value="">All Leagues</NativeSelectOption>
               {uniqueLeagues.slice(0, 100).map((league) => (
-                <option key={league} value={league}>
+                <NativeSelectOption key={league} value={league}>
                   {league}
-                </option>
+                </NativeSelectOption>
               ))}
-            </select>
+            </NativeSelect>
           </div>
         </div>
       )}
