@@ -34,6 +34,13 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+} from "@/components/ui/sheet";
 import { toast } from "@/components/ui/toast";
 
 import type { Match, PositionStat, MatchPrediction } from "../../lib/types";
@@ -93,6 +100,7 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
   const [selectedHistoricalEvent, setSelectedHistoricalEvent] = useState<string>("");
 
   // SportPesa API prefill & state
+  const [apiSheetOpen, setApiSheetOpen] = useState(false);
   const [isSportPesaModalOpen, setIsSportPesaModalOpen] = useState(false);
   const [isFetchingSportPesa, setIsFetchingSportPesa] = useState(false);
   const [activeSportPesaMeta, setActiveSportPesaMeta] = useState<{ id: string; humanId: number; status: string } | null>(null);
@@ -488,8 +496,18 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
           </p>
         </div>
 
-        {/* Controls: Copy Prediction Slip */}
+        {/* Controls: API Prefill & Copy Prediction Slip */}
         <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setApiSheetOpen(true)}
+            className="text-xs gap-1.5 h-8"
+          >
+            <Zap className="h-3.5 w-3.5 text-muted-foreground" />
+            <span>API Prefill</span>
+          </Button>
+
           <Button
             variant="outline"
             size="sm"
@@ -523,8 +541,19 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
         </div>
       </div>
 
+      {/* API Prefill sheet — live prefill toolbars for both bookmakers */}
+      <Sheet open={apiSheetOpen} onOpenChange={setApiSheetOpen}>
+        <SheetContent side="right" className="w-full! sm:max-w-lg! gap-0 p-0 overflow-y-auto">
+          <SheetHeader className="border-b border-border px-4 py-4 text-left">
+            <SheetTitle>API Prefill</SheetTitle>
+            <SheetDescription>
+              Pull live jackpot fixtures and real-time odds straight from the bookmaker APIs.
+            </SheetDescription>
+          </SheetHeader>
+          <div className="p-4 space-y-4">
+
       {/* SportPesa Live API Prefill Toolbar */}
-      <div className="rounded-xl border border-primary/30 bg-primary/5 p-3.5 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 shadow-xs">
+      <div className="rounded-xl border border-primary/30 bg-primary/5 p-3.5 flex flex-col  items-stretch sm:items-center justify-between gap-3 shadow-xs">
         <div className="flex items-center gap-3">
           <div className="h-9 w-9 rounded-xl bg-primary/15 border border-primary/30 flex items-center justify-center text-primary shrink-0">
             <Zap className="h-5 w-5 fill-current" />
@@ -571,7 +600,10 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
           <Button
             variant="outline"
             size="sm"
-            onClick={() => setIsSportPesaModalOpen(true)}
+            onClick={() => {
+              setApiSheetOpen(false);
+              setIsSportPesaModalOpen(true);
+            }}
             className="h-8 text-xs gap-1.5"
             title="Inspect SportPesa API payload or paste custom JSON"
           >
@@ -582,7 +614,7 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
       </div>
 
       {/* Mozzart Live API Prefill Toolbar */}
-      <div className="rounded-xl border border-primary/30 bg-primary/5 p-3.5 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 shadow-xs">
+      <div className="rounded-xl border border-primary/30 bg-primary/5 p-3.5 flex flex-col  items-stretch sm:items-center justify-between gap-3 shadow-xs">
         <div className="flex items-center gap-3">
           <div className="h-9 w-9 rounded-xl bg-primary/15 border border-primary/30 flex items-center justify-center text-primary shrink-0">
             <Zap className="h-5 w-5 fill-current" />
@@ -629,7 +661,10 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
           <Button
             variant="outline"
             size="sm"
-            onClick={() => setIsMozzartModalOpen(true)}
+            onClick={() => {
+              setApiSheetOpen(false);
+              setIsMozzartModalOpen(true);
+            }}
             className="h-8 text-xs gap-1.5"
             title="Inspect Mozzart API payload or paste custom JSON"
           >
@@ -638,6 +673,10 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
           </Button>
         </div>
       </div>
+
+          </div>
+        </SheetContent>
+      </Sheet>
 
       {/* Filter / Controls Section */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 bg-card border border-border rounded-xl p-4 shadow-xs">
