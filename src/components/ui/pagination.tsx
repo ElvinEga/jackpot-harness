@@ -1,6 +1,6 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/Button"
+import { Button } from "@/components/ui/button"
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -41,8 +41,8 @@ function PaginationItem({ ...props }: React.ComponentProps<"li">) {
 type PaginationLinkProps = {
   isActive?: boolean
   disabled?: boolean
-} & Pick<React.ComponentProps<typeof Button>, "size"> &
-  React.ButtonHTMLAttributes<HTMLButtonElement>
+  size?: React.ComponentProps<typeof Button>["size"]
+} & Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "size">
 
 function PaginationLink({
   className,
@@ -68,12 +68,13 @@ function PaginationLink({
 function PaginationFirst({
   className,
   text = "First",
+  size = "default",
   ...props
 }: React.ComponentProps<typeof PaginationLink> & { text?: string }) {
   return (
     <PaginationLink
       aria-label="Go to first page"
-      size="default"
+      size={size}
       className={cn("pl-2.5 gap-1", className)}
       {...props}
     >
@@ -86,12 +87,13 @@ function PaginationFirst({
 function PaginationPrevious({
   className,
   text = "Previous",
+  size = "default",
   ...props
 }: React.ComponentProps<typeof PaginationLink> & { text?: string }) {
   return (
     <PaginationLink
       aria-label="Go to previous page"
-      size="default"
+      size={size}
       className={cn("pl-2.5 gap-1", className)}
       {...props}
     >
@@ -104,12 +106,13 @@ function PaginationPrevious({
 function PaginationNext({
   className,
   text = "Next",
+  size = "default",
   ...props
 }: React.ComponentProps<typeof PaginationLink> & { text?: string }) {
   return (
     <PaginationLink
       aria-label="Go to next page"
-      size="default"
+      size={size}
       className={cn("pr-2.5 gap-1", className)}
       {...props}
     >
@@ -122,12 +125,13 @@ function PaginationNext({
 function PaginationLast({
   className,
   text = "Last",
+  size = "default",
   ...props
 }: React.ComponentProps<typeof PaginationLink> & { text?: string }) {
   return (
     <PaginationLink
       aria-label="Go to last page"
-      size="default"
+      size={size}
       className={cn("pr-2.5 gap-1", className)}
       {...props}
     >
