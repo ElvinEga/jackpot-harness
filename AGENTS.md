@@ -1,0 +1,74 @@
+# AGENTS.md
+
+Betting jackpot dataset: historical football (soccer) jackpot events scraped from three
+Kenyan/European bookmakers — Betika, Mozzart and SportPesa. The repo currently holds **data
+only** (CSV + one JSON); there is no application code, build system, or dependency manifest yet.
+
+## Repository layout
+
+```
+AGENTS.md
+.gitignore
+data/raw/betika/     4 CSVs   — grand, mega, midweek, must-be-won jackpots
+data/raw/mozzart/    9 CSVs   — super-jackpot (1 file + numbered variants), super-grand-jackpot (1 + variants)
+data/raw/sportpesa/  2 files  — mega-jackpot-pro as CSV and as the original nested JSON
+```
+
+`data/raw/` is the untouched scrape output and is **read-only**: never edit these files in place.
+Derived or normalised tables go under `data/processed/`, analysis code under `src/`, and both
+directories are created on first use.
+
+Within `data/raw/`, each subdirectory is one bookmaker and each file inside is one jackpot product.
+Filenames use lowercase bookmaker + hyphenated jackpot name (`betika-midweek-jackpot.csv`).
+
+## Schemas
+
+**`data/raw/betika/*` and most of `data/raw/mozzart/*`** — 9 columns, one match per row:
+`date,home_team,away_team,league,score,odds,bet_type,pick,result`
+
+| field | notes |
+|---|---|
+| `date` | `DD-MM-YYYY` |
+| `score` | `H-A` (e.g. `0-3`); `Postp` / `Abn` when postponed or abandoned |
+| `odds` | decimal odds as text, 2dp |
+| `bet_type` | `FT` (full time 1X2) or `DC` (double chance) |
+| `pick` | `1`, `X`, `2` for FT; `12`, `1X`, `X2` for DC |
+| `result` | `home`, `draw`, `away`, `postponed`, `abandoned`, occasionally `unknown` |
+| `league` | `Country – League name` with an **en dash**, frequently blank |
+
+**`data/raw/mozzart/mozzart-super-grand-jackpot{1,2,3}.csv`** — reduced 5 columns, no odds/pick:
+`date,home_team,away_team,score,result`
+
+**`data/raw/sportpesa/*`** — 6 columns, PascalCase headers, ISO timestamps, `H:A` scores,
+`Home/Draw/Away` results, plus `JackpotId` grouping rows into individual jackpots. The JSON is the
+same data nested as `{Date, JackpotId, Events: [{Home, Away, Score, Result}]}` — prefer CSV for
+analysis.
+
+## Data quirks (verify before computing anything)
+
+- Line endings differ by file (mostly CRLF; `mozzart-super-grand-jackpot.csv` and both sportpesa
+  files are LF) and `result` values can carry a trailing `\r`. Use `csv.DictReader` with
+  `newline=''`, never naive `split(',')`.
+- Encodings are mixed UTF-8 / plain ASCII across files; always open with `encoding='utf-8'`.
+- `mozzart-super-jackpot4.csv` contains ~32 literal `No date found` values in `date`.
+- Coverage overlaps between files within a bookmaker (e.g. `mozzart-super-jackpot*.csv` are
+  consecutive extracts, not distinct products). Dedupe on `(date, home_team, away_team)` before
+  aggregating.
+- Normalise the three schemes into one canonical shape (lowercase snake_case columns, ISO dates,
+  consistent `score` separator, consistent result casing) before cross-bookmaker analysis.
+
+## Conventions
+
+- Python 3.14 is available at `/opt/homebrew/bin/python3`; **`uv` is the entry point** for any
+  script or one-off analysis: `uv run python <script>.py`, ad-hoc via `uv run python - <<'EOF'`.
+  Add dependencies with `uv add` rather than hand-writing a `requirements.txt`.
+- The project path contains a space (`betting data`). Quote paths in every shell command.
+- Probe HTTP/API endpoints with `uv run python` + `requests`, never `curl`.
+- Read from `data/raw/`, write to `data/processed/`. The raw CSVs are inputs only.
+- Analysis scripts should be reproducible from files alone — no network calls for data already in
+  the repo.
+
+## Git
+
+Repository is initialised locally with `main` as the default branch. Commit or push only when
+explicitly asked.

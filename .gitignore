@@ -1,0 +1,16 @@
+# macOS
+.DS_Store
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+.uv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Environments & local artifacts
+.env
+*.log
+notebooks/.ipynb_checkpoints/
