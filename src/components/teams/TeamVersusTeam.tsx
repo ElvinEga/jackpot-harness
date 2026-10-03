@@ -17,8 +17,9 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { Badge } from "@/components/ui/badge";
 
 import type { Match, TeamH2H, TeamForm } from "../../lib/types";
-import { getAllTeams, computeTeamH2H, computeTeamForm } from "../../lib/teams";
+import { getAllTeams, computeTeamH2H, computeTeamForm, getTeamAppearances } from "../../lib/teams";
 import { calculateScoreProbabilities } from "../../lib/predictions";
+import { TeamSearchInput } from "../common/TeamSearchInput";
 
 interface TeamVersusTeamProps {
   matches: Match[];
@@ -36,6 +37,7 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
 
   // Get list of all unique teams for autocomplete
   const allTeams = useMemo(() => getAllTeams(matches), [matches]);
+  const teamAppearances = useMemo(() => getTeamAppearances(matches), [matches]);
 
   // Compute Head to Head
   const h2h: TeamH2H = useMemo(() => {
@@ -119,21 +121,13 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
             <label className="text-[11px] font-medium text-muted-foreground mb-1 block">
               Home Team
             </label>
-            <div className="relative">
-              <Input
-                list="teams-list-a"
-                value={teamA}
-                onChange={(e) => setTeamA(e.target.value)}
-                placeholder="Type home team..."
-                className="h-9 text-xs font-semibold pr-8"
-              />
-              <Search className="h-3.5 w-3.5 text-muted-foreground absolute right-2.5 top-2.5" />
-              <datalist id="teams-list-a">
-                {allTeams.slice(0, 200).map((t) => (
-                  <option key={t} value={t} />
-                ))}
-              </datalist>
-            </div>
+            <TeamSearchInput
+              value={teamA}
+              onChange={setTeamA}
+              teams={allTeams}
+              teamAppearances={teamAppearances}
+              placeholder="Search home team..."
+            />
           </div>
 
           {/* Swap Button */}
@@ -154,21 +148,13 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
             <label className="text-[11px] font-medium text-muted-foreground mb-1 block">
               Away Team
             </label>
-            <div className="relative">
-              <Input
-                list="teams-list-b"
-                value={teamB}
-                onChange={(e) => setTeamB(e.target.value)}
-                placeholder="Type away team..."
-                className="h-9 text-xs font-semibold pr-8"
-              />
-              <Search className="h-3.5 w-3.5 text-muted-foreground absolute right-2.5 top-2.5" />
-              <datalist id="teams-list-b">
-                {allTeams.slice(0, 200).map((t) => (
-                  <option key={t} value={t} />
-                ))}
-              </datalist>
-            </div>
+            <TeamSearchInput
+              value={teamB}
+              onChange={setTeamB}
+              teams={allTeams}
+              teamAppearances={teamAppearances}
+              placeholder="Search away team..."
+            />
           </div>
         </div>
       </div>
