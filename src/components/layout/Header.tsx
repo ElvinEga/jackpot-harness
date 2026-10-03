@@ -89,9 +89,11 @@ export const Header: React.FC<HeaderProps> = ({
         <div className="flex items-center justify-between gap-3">
           {/* Left: Branding */}
           <div className="flex items-center gap-3 min-w-0">
-            <div className="h-9 w-9 rounded-xl bg-primary/10 border border-primary/30 flex items-center justify-center text-primary shrink-0">
-              <Sparkles className="h-5 w-5" />
-            </div>
+            <img
+              src="/logo.png"
+              alt="Football Jackpot Harness"
+              className="h-9 w-9 shrink-0"
+            />
             <h1 className="text-base font-bold text-foreground tracking-tight truncate">Jackpot Harness</h1>
           </div>
 
