@@ -27,8 +27,10 @@ import {
   PaginationContent,
   PaginationItem,
   PaginationLink,
+  PaginationFirst,
   PaginationPrevious,
   PaginationNext,
+  PaginationLast,
   PaginationEllipsis,
 } from "@/components/ui/pagination";
 import { Badge } from "@/components/ui/Badge";
@@ -289,6 +291,13 @@ export const DataTable: React.FC<DataTableProps> = ({ matches, onSelectMatch }) 
         <Pagination className="mx-0 w-auto justify-end">
           <PaginationContent>
             <PaginationItem>
+              <PaginationFirst
+                onClick={() => table.setPageIndex(0)}
+                disabled={!table.getCanPreviousPage()}
+              />
+            </PaginationItem>
+
+            <PaginationItem>
               <PaginationPrevious
                 onClick={() => table.previousPage()}
                 disabled={!table.getCanPreviousPage()}
@@ -313,6 +322,13 @@ export const DataTable: React.FC<DataTableProps> = ({ matches, onSelectMatch }) 
             <PaginationItem>
               <PaginationNext
                 onClick={() => table.nextPage()}
+                disabled={!table.getCanNextPage()}
+              />
+            </PaginationItem>
+
+            <PaginationItem>
+              <PaginationLast
+                onClick={() => table.setPageIndex(pageCount - 1)}
                 disabled={!table.getCanNextPage()}
               />
             </PaginationItem>
