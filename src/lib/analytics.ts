@@ -108,10 +108,10 @@ export function getResultDistribution(matches: Match[]): ResultDistribution[] {
 
   const total = matches.length || 1;
   return [
-    { name: "Home Win", count: home, percentage: (home / total) * 100, color: "#10b981" },
-    { name: "Draw", count: draw, percentage: (draw / total) * 100, color: "#f59e0b" },
-    { name: "Away Win", count: away, percentage: (away / total) * 100, color: "#3b82f6" },
-    { name: "Postp / Abn", count: postponed, percentage: (postponed / total) * 100, color: "#8b5cf6" },
+    { name: "Home Win", count: home, percentage: (home / total) * 100, color: "#0d9488" },
+    { name: "Draw", count: draw, percentage: (draw / total) * 100, color: "#cbd5e1" },
+    { name: "Away Win", count: away, percentage: (away / total) * 100, color: "#64748b" },
+    { name: "Postp / Abn", count: postponed, percentage: (postponed / total) * 100, color: "#475569" },
     ...(other > 0 ? [{ name: "Other / Unknown", count: other, percentage: (other / total) * 100, color: "#64748b" }] : []),
   ];
 }
