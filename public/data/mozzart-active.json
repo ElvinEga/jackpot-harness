@@ -1,0 +1,912 @@
+[
+  {
+    "id": 1000029772,
+    "roundId": 2481,
+    "totalRows": 16,
+    "fixRows": 16,
+    "fixedPayInAmount": 20.0,
+    "minPayInAmount": null,
+    "maxPayInAmount": null,
+    "fixedPayOutAmount": 20000000.0,
+    "minPayOutAmount": null,
+    "maxPayOutAmount": null,
+    "code": "16",
+    "totalOdd": null,
+    "description": "",
+    "ticketType": "VAR_SUBGAMES",
+    "ticketCreationTime": 1791048851581,
+    "matches": [
+      {
+        "rowNumber": 1,
+        "id": 9999937,
+        "matchNumber": 10599,
+        "competition": {
+          "id": 3102,
+          "name": "Spain 3 - Group 1",
+          "shortName": "SP3 1",
+          "countryCode": "es",
+          "description": "  "
+        },
+        "time": 1791124200000,
+        "home": "Ponferradina",
+        "visitor": "Mirandes",
+        "homeResult": null,
+        "visitorResult": null,
+        "shortResultDesc": null,
+        "odds": [
+          {
+            "bettingGameId": 1,
+            "bettingSubGameId": 1,
+            "bettingGameName": "Final Result",
+            "bettingGameShortName": "fr",
+            "bettingGameDesctiption": "Ponferradina will win the match",
+            "bettingSubGameName": "1",
+            "bettingSubGameDescription": "Ponferradina will win the match",
+            "bettingSubGameOdds": "2.60",
+            "specialOddValue": null,
+            "specialOddValueType": null
+          },
+          {
+            "bettingGameId": 1,
+            "bettingSubGameId": 2,
+            "bettingGameName": "Final Result",
+            "bettingGameShortName": "fr",
+            "bettingGameDesctiption": "Ponferradina will win the match",
+            "bettingSubGameName": "X",
+            "bettingSubGameDescription": "The match will end with draw result",
+            "bettingSubGameOdds": "3.05",
+            "specialOddValue": null,
+            "specialOddValueType": null
+          },
+          {
+            "bettingGameId": 1,
+            "bettingSubGameId": 3,
+            "bettingGameName": "Final Result",
+            "bettingGameShortName": "fr",
+            "bettingGameDesctiption": "Ponferradina will win the match",
+            "bettingSubGameName": "2",
+            "bettingSubGameDescription": "Mirandes will win the match",
+            "bettingSubGameOdds": "2.70",
+            "specialOddValue": null,
+            "specialOddValueType": null
+          }
+        ]
+      },
+      {
+        "rowNumber": 2,
+        "id": 10005213,
+        "matchNumber": 5961,
+        "competition": {
+          "id": 1497,
+          "name": "Georgia - Erovnuli Liga",
+          "shortName": "GEO 1",
+          "countryCode": "ge"
+        },
+        "time": 1791126000000,
+        "home": "Iberia 1999",
+        "visitor": "Dinamo Tibilisi",
+        "homeResult": null,
+        "visitorResult": null,
+        "shortResultDesc": null,
+        "odds": [
+          {
+            "bettingGameId": 1,
+            "bettingSubGameId": 1,
+            "bettingGameName": "Final Result",
+            "bettingGameShortName": "fr",
+            "bettingGameDesctiption": "Iberia 1999 will win the match",
+            "bettingSubGameName": "1",
+            "bettingSubGameDescription": "Iberia 1999 will win the match",
+            "bettingSubGameOdds": "2.20",
+            "specialOddValue": null,
+            "specialOddValueType": null
+          },
+          {
+            "bettingGameId": 1,
+            "bettingSubGameId": 2,
+            "bettingGameName": "Final Result",
+            "bettingGameShortName": "fr",
+            "bettingGameDesctiption": "Iberia 1999 will win the match",
+            "bettingSubGameName": "X",
+            "bettingSubGameDescription": "The match will end with draw result",
+            "bettingSubGameOdds": "3.30",
+            "specialOddValue": null,
+            "specialOddValueType": null
+          },
+          {
+            "bettingGameId": 1,
+            "bettingSubGameId": 3,
+            "bettingGameName": "Final Result",
+            "bettingGameShortName": "fr",
+            "bettingGameDesctiption": "Iberia 1999 will win the match",
+            "bettingSubGameName": "2",
+            "bettingSubGameDescription": "Dinamo Tibilisi will win the match",
+            "bettingSubGameOdds": "3.10",
+            "specialOddValue": null,
+            "specialOddValueType": null
+          }
+        ]
+      },
+      {
+        "rowNumber": 3,
+        "id": 9999668,
+        "matchNumber": 1168,
+        "competition": {
+          "id": 44,
+          "name": "Italy - Lega Pro 1 B",
+          "shortName": "ITA3B",
+          "countryCode": "it",
+          "description": "  "
+        },
+        "time": 1791127800000,
+        "home": "Reggiana",
+        "visitor": "Spezia",
+        "homeResult": null,
+        "visitorResult": null,
+        "shortResultDesc": null,
+        "odds": [
+          {
+            "bettingGameId": 1,
+            "bettingSubGameId": 1,
+            "bettingGameName": "Final Result",
+            "bettingGameShortName": "fr",
+            "bettingGameDesctiption": "Reggiana will win the match",
+            "bettingSubGameName": "1",
+            "bettingSubGameDescription": "Reggiana will win the match",
+            "bettingSubGameOdds": "2.50",
+            "specialOddValue": null,
+            "specialOddValueType": null
+          },
+          {
+            "bettingGameId": 1,
+            "bettingSubGameId": 2,
+            "bettingGameName": "Final Result",
+            "bettingGameShortName": "fr",
+            "bettingGameDesctiption": "Reggiana will win the match",
+            "bettingSubGameName": "X",
+            "bettingSubGameDescription": "The match will end with draw result",
+            "bettingSubGameOdds": "3.20",
+            "specialOddValue": null,
+            "specialOddValueType": null
+          },
+          {
+            "bettingGameId": 1,
+            "bettingSubGameId": 3,
+            "bettingGameName": "Final Result",
+            "bettingGameShortName": "fr",
+            "bettingGameDesctiption": "Reggiana will win the match",
+            "bettingSubGameName": "2",
+            "bettingSubGameDescription": "Spezia will win the match",
+            "bettingSubGameOdds": "2.70",
+            "specialOddValue": null,
+            "specialOddValueType": null
+          }
+        ]
+      },
+      {
+        "rowNumber": 4,
+        "id": 9999688,
+        "matchNumber": 1146,
+        "competition": {
+          "id": 43,
+          "name": "Italy - Lega Pro 1 A",
+          "shortName": "ITA3A",
+          "countryCode": "it",
+          "description": "  "
+        },
+        "time": 1791127800000,
+        "home": "Dolomiti Bellunesi",
+        "visitor": "Novara",
+        "homeResult": null,
+        "visitorResult": null,
+        "shortResultDesc": null,
+        "odds": [
+          {
+            "bettingGameId": 1,
+            "bettingSubGameId": 1,
+            "bettingGameName": "Final Result",
+            "bettingGameShortName": "fr",
+            "bettingGameDesctiption": "Dolomiti Bellunesi will win the match",
+            "bettingSubGameName": "1",
+            "bettingSubGameDescription": "Dolomiti Bellunesi will win the match",
+            "bettingSubGameOdds": "2.80",
+            "specialOddValue": null,
+            "specialOddValueType": null
+          },
+          {
+            "bettingGameId": 1,
+            "bettingSubGameId": 2,
+            "bettingGameName": "Final Result",
+            "bettingGameShortName": "fr",
+            "bettingGameDesctiption": "Dolomiti Bellunesi will win the match",
+            "bettingSubGameName": "X",
+            "bettingSubGameDescription": "The match will end with draw result",
+            "bettingSubGameOdds": "2.90",
+            "specialOddValue": null,
+            "specialOddValueType": null
+          },
+          {
+            "bettingGameId": 1,
+            "bettingSubGameId": 3,
+            "bettingGameName": "Final Result",
+            "bettingGameShortName": "fr",
+            "bettingGameDesctiption": "Dolomiti Bellunesi will win the match",
+            "bettingSubGameName": "2",
+            "bettingSubGameDescription": "Novara will win the match",
+            "bettingSubGameOdds": "2.65",
+            "specialOddValue": null,
+            "specialOddValueType": null
+          }
+        ]
+      },
+      {
+        "rowNumber": 5,
+        "id": 10003071,
+        "matchNumber": 1358,
+        "competition": {
+          "id": 1554,
+          "name": "Uruguay - Clausura",
+          "shortName": "URY 1",
+          "countryCode": "uy"
+        },
+        "time": 1791129600000,
+        "home": "Boston River",
+        "visitor": "Juventud L.P.",
+        "homeResult": null,
+        "visitorResult": null,
+        "shortResultDesc": null,
+        "odds": [
+          {
+            "bettingGameId": 1,
+            "bettingSubGameId": 1,
+            "bettingGameName": "Final Result",
+            "bettingGameShortName": "fr",
+            "bettingGameDesctiption": "Boston River will win the match",
+            "bettingSubGameName": "1",
+            "bettingSubGameDescription": "Boston River will win the match",
+            "bettingSubGameOdds": "2.70",
+            "specialOddValue": null,
+            "specialOddValueType": null
+          },
+          {
+            "bettingGameId": 1,
+            "bettingSubGameId": 2,
+            "bettingGameName": "Final Result",
+            "bettingGameShortName": "fr",
+            "bettingGameDesctiption": "Boston River will win the match",
+            "bettingSubGameName": "X",
+            "bettingSubGameDescription": "The match will end with draw result",
+            "bettingSubGameOdds": "3.25",
+            "specialOddValue": null,
+            "specialOddValueType": null
+          },
+          {
+            "bettingGameId": 1,
+            "bettingSubGameId": 3,
+            "bettingGameName": "Final Result",
+            "bettingGameShortName": "fr",
+            "bettingGameDesctiption": "Boston River will win the match",
+            "bettingSubGameName": "2",
+            "bettingSubGameDescription": "Juventud L.P. will win the match",
+            "bettingSubGameOdds": "2.50",
+            "specialOddValue": null,
+            "specialOddValueType": null
+          }
+        ]
+      },
+      {
+        "rowNumber": 6,
+        "id": 10000223,
+        "matchNumber": 6093,
+        "competition": {
+          "id": 10710,
+          "name": "Uefa - Nations League B",
+          "shortName": "LNB",
+          "priority": 40,
+          "description": "in groups"
+        },
+        "time": 1791129600000,
+        "home": "Kosovo",
+        "visitor": "Austria",
+        "homeResult": null,
+        "visitorResult": null,
+        "shortResultDesc": null,
+        "odds": [
+          {
+            "bettingGameId": 1,
+            "bettingSubGameId": 1,
+            "bettingGameName": "Final Result",
+            "bettingGameShortName": "fr",
+            "bettingGameDesctiption": "Kosovo will win the match",
+            "bettingSubGameName": "1",
+            "bettingSubGameDescription": "Kosovo will win the match",
+            "bettingSubGameOdds": "3.25",
+            "specialOddValue": null,
+            "specialOddValueType": null
+          },
+          {
+            "bettingGameId": 1,
+            "bettingSubGameId": 2,
+            "bettingGameName": "Final Result",
+            "bettingGameShortName": "fr",
+            "bettingGameDesctiption": "Kosovo will win the match",
+            "bettingSubGameName": "X",
+            "bettingSubGameDescription": "The match will end with draw result",
+            "bettingSubGameOdds": "3.45",
+            "specialOddValue": null,
+            "specialOddValueType": null
+          },
+          {
+            "bettingGameId": 1,
+            "bettingSubGameId": 3,
+            "bettingGameName": "Final Result",
+            "bettingGameShortName": "fr",
+            "bettingGameDesctiption": "Kosovo will win the match",
+            "bettingSubGameName": "2",
+            "bettingSubGameDescription": "Austria will win the match",
+            "bettingSubGameOdds": "2.20",
+            "specialOddValue": null,
+            "specialOddValueType": null
+          }
+        ]
+      },
+      {
+        "rowNumber": 7,
+        "id": 10000353,
+        "matchNumber": 4037,
+        "competition": {
+          "id": 45,
+          "name": "Spain - Segunda Division",
+          "shortName": "ESP 2",
+          "countryCode": "es",
+          "description": "  "
+        },
+        "time": 1791131400000,
+        "home": "Las Palmas",
+        "visitor": "Valladolid",
+        "homeResult": null,
+        "visitorResult": null,
+        "shortResultDesc": null,
+        "odds": [
+          {
+            "bettingGameId": 1,
+            "bettingSubGameId": 1,
+            "bettingGameName": "Final Result",
+            "bettingGameShortName": "fr",
+            "bettingGameDesctiption": "Las Palmas will win the match",
+            "bettingSubGameName": "1",
+            "bettingSubGameDescription": "Las Palmas will win the match",
+            "bettingSubGameOdds": "2.20",
+            "specialOddValue": null,
+            "specialOddValueType": null
+          },
+          {
+            "bettingGameId": 1,
+            "bettingSubGameId": 2,
+            "bettingGameName": "Final Result",
+            "bettingGameShortName": "fr",
+            "bettingGameDesctiption": "Las Palmas will win the match",
+            "bettingSubGameName": "X",
+            "bettingSubGameDescription": "The match will end with draw result",
+            "bettingSubGameOdds": "3.40",
+            "specialOddValue": null,
+            "specialOddValueType": null
+          },
+          {
+            "bettingGameId": 1,
+            "bettingSubGameId": 3,
+            "bettingGameName": "Final Result",
+            "bettingGameShortName": "fr",
+            "bettingGameDesctiption": "Las Palmas will win the match",
+            "bettingSubGameName": "2",
+            "bettingSubGameDescription": "Valladolid will win the match",
+            "bettingSubGameOdds": "3.30",
+            "specialOddValue": null,
+            "specialOddValueType": null
+          }
+        ]
+      },
+      {
+        "rowNumber": 8,
+        "id": 10003076,
+        "matchNumber": 10611,
+        "competition": {
+          "id": 3102,
+          "name": "Spain 3 - Group 1",
+          "shortName": "SP3 1",
+          "countryCode": "es",
+          "description": "  "
+        },
+        "time": 1791132300000,
+        "home": "Merida D.",
+        "visitor": "Cacereno ",
+        "homeResult": null,
+        "visitorResult": null,
+        "shortResultDesc": null,
+        "odds": [
+          {
+            "bettingGameId": 1,
+            "bettingSubGameId": 1,
+            "bettingGameName": "Final Result",
+            "bettingGameShortName": "fr",
+            "bettingGameDesctiption": "Merida D. will win the match",
+            "bettingSubGameName": "1",
+            "bettingSubGameDescription": "Merida D. will win the match",
+            "bettingSubGameOdds": "2.00",
+            "specialOddValue": null,
+            "specialOddValueType": null
+          },
+          {
+            "bettingGameId": 1,
+            "bettingSubGameId": 2,
+            "bettingGameName": "Final Result",
+            "bettingGameShortName": "fr",
+            "bettingGameDesctiption": "Merida D. will win the match",
+            "bettingSubGameName": "X",
+            "bettingSubGameDescription": "The match will end with draw result",
+            "bettingSubGameOdds": "3.35",
+            "specialOddValue": null,
+            "specialOddValueType": null
+          },
+          {
+            "bettingGameId": 1,
+            "bettingSubGameId": 3,
+            "bettingGameName": "Final Result",
+            "bettingGameShortName": "fr",
+            "bettingGameDesctiption": "Merida D. will win the match",
+            "bettingSubGameName": "2",
+            "bettingSubGameDescription": "Cacereno  will win the match",
+            "bettingSubGameOdds": "3.50",
+            "specialOddValue": null,
+            "specialOddValueType": null
+          }
+        ]
+      },
+      {
+        "rowNumber": 9,
+        "id": 10003166,
+        "matchNumber": 1407,
+        "competition": {
+          "id": 9700,
+          "name": "Chile 2",
+          "shortName": "CHIL2",
+          "countryCode": "cl"
+        },
+        "time": 1791136800000,
+        "home": "Union San Felipe",
+        "visitor": "Deportes Iquique",
+        "homeResult": null,
+        "visitorResult": null,
+        "shortResultDesc": null,
+        "odds": [
+          {
+            "bettingGameId": 1,
+            "bettingSubGameId": 1,
+            "bettingGameName": "Final Result",
+            "bettingGameShortName": "fr",
+            "bettingGameDesctiption": "Union San Felipe will win the match",
+            "bettingSubGameName": "1",
+            "bettingSubGameDescription": "Union San Felipe will win the match",
+            "bettingSubGameOdds": "3.05",
+            "specialOddValue": null,
+            "specialOddValueType": null
+          },
+          {
+            "bettingGameId": 1,
+            "bettingSubGameId": 2,
+            "bettingGameName": "Final Result",
+            "bettingGameShortName": "fr",
+            "bettingGameDesctiption": "Union San Felipe will win the match",
+            "bettingSubGameName": "X",
+            "bettingSubGameDescription": "The match will end with draw result",
+            "bettingSubGameOdds": "3.25",
+            "specialOddValue": null,
+            "specialOddValueType": null
+          },
+          {
+            "bettingGameId": 1,
+            "bettingSubGameId": 3,
+            "bettingGameName": "Final Result",
+            "bettingGameShortName": "fr",
+            "bettingGameDesctiption": "Union San Felipe will win the match",
+            "bettingSubGameName": "2",
+            "bettingSubGameDescription": "Deportes Iquique will win the match",
+            "bettingSubGameOdds": "2.25",
+            "specialOddValue": null,
+            "specialOddValueType": null
+          }
+        ]
+      },
+      {
+        "rowNumber": 10,
+        "id": 9999699,
+        "matchNumber": 1147,
+        "competition": {
+          "id": 43,
+          "name": "Italy - Lega Pro 1 A",
+          "shortName": "ITA3A",
+          "countryCode": "it",
+          "description": "  "
+        },
+        "time": 1791138600000,
+        "home": "Alcione M.",
+        "visitor": "Trento",
+        "homeResult": null,
+        "visitorResult": null,
+        "shortResultDesc": null,
+        "odds": [
+          {
+            "bettingGameId": 1,
+            "bettingSubGameId": 1,
+            "bettingGameName": "Final Result",
+            "bettingGameShortName": "fr",
+            "bettingGameDesctiption": "Alcione M. will win the match",
+            "bettingSubGameName": "1",
+            "bettingSubGameDescription": "Alcione M. will win the match",
+            "bettingSubGameOdds": "3.20",
+            "specialOddValue": null,
+            "specialOddValueType": null
+          },
+          {
+            "bettingGameId": 1,
+            "bettingSubGameId": 2,
+            "bettingGameName": "Final Result",
+            "bettingGameShortName": "fr",
+            "bettingGameDesctiption": "Alcione M. will win the match",
+            "bettingSubGameName": "X",
+            "bettingSubGameDescription": "The match will end with draw result",
+            "bettingSubGameOdds": "3.30",
+            "specialOddValue": null,
+            "specialOddValueType": null
+          },
+          {
+            "bettingGameId": 1,
+            "bettingSubGameId": 3,
+            "bettingGameName": "Final Result",
+            "bettingGameShortName": "fr",
+            "bettingGameDesctiption": "Alcione M. will win the match",
+            "bettingSubGameName": "2",
+            "bettingSubGameDescription": "Trento will win the match",
+            "bettingSubGameOdds": "2.15",
+            "specialOddValue": null,
+            "specialOddValueType": null
+          }
+        ]
+      },
+      {
+        "rowNumber": 11,
+        "id": 9999717,
+        "matchNumber": 1187,
+        "competition": {
+          "id": 6894,
+          "name": "Italy - Lega Pro 1 C",
+          "shortName": "ITA3C",
+          "countryCode": "it",
+          "description": "  "
+        },
+        "time": 1791138600000,
+        "home": "Salernitana",
+        "visitor": "Bari",
+        "homeResult": null,
+        "visitorResult": null,
+        "shortResultDesc": null,
+        "odds": [
+          {
+            "bettingGameId": 1,
+            "bettingSubGameId": 1,
+            "bettingGameName": "Final Result",
+            "bettingGameShortName": "fr",
+            "bettingGameDesctiption": "Salernitana will win the match",
+            "bettingSubGameName": "1",
+            "bettingSubGameDescription": "Salernitana will win the match",
+            "bettingSubGameOdds": "2.10",
+            "specialOddValue": null,
+            "specialOddValueType": null
+          },
+          {
+            "bettingGameId": 1,
+            "bettingSubGameId": 2,
+            "bettingGameName": "Final Result",
+            "bettingGameShortName": "fr",
+            "bettingGameDesctiption": "Salernitana will win the match",
+            "bettingSubGameName": "X",
+            "bettingSubGameDescription": "The match will end with draw result",
+            "bettingSubGameOdds": "3.30",
+            "specialOddValue": null,
+            "specialOddValueType": null
+          },
+          {
+            "bettingGameId": 1,
+            "bettingSubGameId": 3,
+            "bettingGameName": "Final Result",
+            "bettingGameShortName": "fr",
+            "bettingGameDesctiption": "Salernitana will win the match",
+            "bettingSubGameName": "2",
+            "bettingSubGameDescription": "Bari will win the match",
+            "bettingSubGameOdds": "3.30",
+            "specialOddValue": null,
+            "specialOddValueType": null
+          }
+        ]
+      },
+      {
+        "rowNumber": 12,
+        "id": 10003031,
+        "matchNumber": 6172,
+        "competition": {
+          "id": 10709,
+          "name": "Uefa - Nations League A",
+          "shortName": "LNA",
+          "priority": 39,
+          "description": "in groups"
+        },
+        "time": 1791139500000,
+        "home": "Wales",
+        "visitor": "Denmark",
+        "homeResult": null,
+        "visitorResult": null,
+        "shortResultDesc": null,
+        "odds": [
+          {
+            "bettingGameId": 1,
+            "bettingSubGameId": 1,
+            "bettingGameName": "Final Result",
+            "bettingGameShortName": "fr",
+            "bettingGameDesctiption": "Wales will win the match",
+            "bettingSubGameName": "1",
+            "bettingSubGameDescription": "Wales will win the match",
+            "bettingSubGameOdds": "3.70",
+            "specialOddValue": null,
+            "specialOddValueType": null
+          },
+          {
+            "bettingGameId": 1,
+            "bettingSubGameId": 2,
+            "bettingGameName": "Final Result",
+            "bettingGameShortName": "fr",
+            "bettingGameDesctiption": "Wales will win the match",
+            "bettingSubGameName": "X",
+            "bettingSubGameDescription": "The match will end with draw result",
+            "bettingSubGameOdds": "3.50",
+            "specialOddValue": null,
+            "specialOddValueType": null
+          },
+          {
+            "bettingGameId": 1,
+            "bettingSubGameId": 3,
+            "bettingGameName": "Final Result",
+            "bettingGameShortName": "fr",
+            "bettingGameDesctiption": "Wales will win the match",
+            "bettingSubGameName": "2",
+            "bettingSubGameDescription": "Denmark will win the match",
+            "bettingSubGameOdds": "2.00",
+            "specialOddValue": null,
+            "specialOddValueType": null
+          }
+        ]
+      },
+      {
+        "rowNumber": 13,
+        "id": 10003036,
+        "matchNumber": 6171,
+        "competition": {
+          "id": 10710,
+          "name": "Uefa - Nations League B",
+          "shortName": "LNB",
+          "priority": 40,
+          "description": "in groups"
+        },
+        "time": 1791139500000,
+        "home": "R.Ireland",
+        "visitor": "Israel",
+        "homeResult": null,
+        "visitorResult": null,
+        "shortResultDesc": null,
+        "odds": [
+          {
+            "bettingGameId": 1,
+            "bettingSubGameId": 1,
+            "bettingGameName": "Final Result",
+            "bettingGameShortName": "fr",
+            "bettingGameDesctiption": "R.Ireland will win the match",
+            "bettingSubGameName": "1",
+            "bettingSubGameDescription": "R.Ireland will win the match",
+            "bettingSubGameOdds": "2.20",
+            "specialOddValue": null,
+            "specialOddValueType": null
+          },
+          {
+            "bettingGameId": 1,
+            "bettingSubGameId": 2,
+            "bettingGameName": "Final Result",
+            "bettingGameShortName": "fr",
+            "bettingGameDesctiption": "R.Ireland will win the match",
+            "bettingSubGameName": "X",
+            "bettingSubGameDescription": "The match will end with draw result",
+            "bettingSubGameOdds": "3.35",
+            "specialOddValue": null,
+            "specialOddValueType": null
+          },
+          {
+            "bettingGameId": 1,
+            "bettingSubGameId": 3,
+            "bettingGameName": "Final Result",
+            "bettingGameShortName": "fr",
+            "bettingGameDesctiption": "R.Ireland will win the match",
+            "bettingSubGameName": "2",
+            "bettingSubGameDescription": "Israel will win the match",
+            "bettingSubGameOdds": "3.35",
+            "specialOddValue": null,
+            "specialOddValueType": null
+          }
+        ]
+      },
+      {
+        "rowNumber": 14,
+        "id": 10000369,
+        "matchNumber": 4038,
+        "competition": {
+          "id": 45,
+          "name": "Spain - Segunda Division",
+          "shortName": "ESP 2",
+          "countryCode": "es",
+          "description": "  "
+        },
+        "time": 1791140400000,
+        "home": "Girona",
+        "visitor": "Mallorca",
+        "homeResult": null,
+        "visitorResult": null,
+        "shortResultDesc": null,
+        "odds": [
+          {
+            "bettingGameId": 1,
+            "bettingSubGameId": 1,
+            "bettingGameName": "Final Result",
+            "bettingGameShortName": "fr",
+            "bettingGameDesctiption": "Girona will win the match",
+            "bettingSubGameName": "1",
+            "bettingSubGameDescription": "Girona will win the match",
+            "bettingSubGameOdds": "2.25",
+            "specialOddValue": null,
+            "specialOddValueType": null
+          },
+          {
+            "bettingGameId": 1,
+            "bettingSubGameId": 2,
+            "bettingGameName": "Final Result",
+            "bettingGameShortName": "fr",
+            "bettingGameDesctiption": "Girona will win the match",
+            "bettingSubGameName": "X",
+            "bettingSubGameDescription": "The match will end with draw result",
+            "bettingSubGameOdds": "3.40",
+            "specialOddValue": null,
+            "specialOddValueType": null
+          },
+          {
+            "bettingGameId": 1,
+            "bettingSubGameId": 3,
+            "bettingGameName": "Final Result",
+            "bettingGameShortName": "fr",
+            "bettingGameDesctiption": "Girona will win the match",
+            "bettingSubGameName": "2",
+            "bettingSubGameDescription": "Mallorca will win the match",
+            "bettingSubGameOdds": "3.20",
+            "specialOddValue": null,
+            "specialOddValueType": null
+          }
+        ]
+      },
+      {
+        "rowNumber": 15,
+        "id": 10003001,
+        "matchNumber": 1278,
+        "competition": {
+          "id": 2078,
+          "name": "Colombia - Clausura",
+          "shortName": "COL 1",
+          "countryCode": "co"
+        },
+        "time": 1791140400000,
+        "home": "Deportivo Pasto",
+        "visitor": "Fortaleza",
+        "homeResult": null,
+        "visitorResult": null,
+        "shortResultDesc": null,
+        "odds": [
+          {
+            "bettingGameId": 1,
+            "bettingSubGameId": 1,
+            "bettingGameName": "Final Result",
+            "bettingGameShortName": "fr",
+            "bettingGameDesctiption": "Deportivo Pasto will win the match",
+            "bettingSubGameName": "1",
+            "bettingSubGameDescription": "Deportivo Pasto will win the match",
+            "bettingSubGameOdds": "2.15",
+            "specialOddValue": null,
+            "specialOddValueType": null
+          },
+          {
+            "bettingGameId": 1,
+            "bettingSubGameId": 2,
+            "bettingGameName": "Final Result",
+            "bettingGameShortName": "fr",
+            "bettingGameDesctiption": "Deportivo Pasto will win the match",
+            "bettingSubGameName": "X",
+            "bettingSubGameDescription": "The match will end with draw result",
+            "bettingSubGameOdds": "3.25",
+            "specialOddValue": null,
+            "specialOddValueType": null
+          },
+          {
+            "bettingGameId": 1,
+            "bettingSubGameId": 3,
+            "bettingGameName": "Final Result",
+            "bettingGameShortName": "fr",
+            "bettingGameDesctiption": "Deportivo Pasto will win the match",
+            "bettingSubGameName": "2",
+            "bettingSubGameDescription": "Fortaleza will win the match",
+            "bettingSubGameOdds": "3.25",
+            "specialOddValue": null,
+            "specialOddValueType": null
+          }
+        ]
+      },
+      {
+        "rowNumber": 16,
+        "id": 10003073,
+        "matchNumber": 1360,
+        "competition": {
+          "id": 1554,
+          "name": "Uruguay - Clausura",
+          "shortName": "URY 1",
+          "countryCode": "uy"
+        },
+        "time": 1791140400000,
+        "home": "Cerro ",
+        "visitor": "Wanderers ",
+        "homeResult": null,
+        "visitorResult": null,
+        "shortResultDesc": null,
+        "odds": [
+          {
+            "bettingGameId": 1,
+            "bettingSubGameId": 1,
+            "bettingGameName": "Final Result",
+            "bettingGameShortName": "fr",
+            "bettingGameDesctiption": "Cerro  will win the match",
+            "bettingSubGameName": "1",
+            "bettingSubGameDescription": "Cerro  will win the match",
+            "bettingSubGameOdds": "3.00",
+            "specialOddValue": null,
+            "specialOddValueType": null
+          },
+          {
+            "bettingGameId": 1,
+            "bettingSubGameId": 2,
+            "bettingGameName": "Final Result",
+            "bettingGameShortName": "fr",
+            "bettingGameDesctiption": "Cerro  will win the match",
+            "bettingSubGameName": "X",
+            "bettingSubGameDescription": "The match will end with draw result",
+            "bettingSubGameOdds": "3.10",
+            "specialOddValue": null,
+            "specialOddValueType": null
+          },
+          {
+            "bettingGameId": 1,
+            "bettingSubGameId": 3,
+            "bettingGameName": "Final Result",
+            "bettingGameShortName": "fr",
+            "bettingGameDesctiption": "Cerro  will win the match",
+            "bettingSubGameName": "2",
+            "bettingSubGameDescription": "Wanderers  will win the match",
+            "bettingSubGameOdds": "2.35",
+            "specialOddValue": null,
+            "specialOddValueType": null
+          }
+        ]
+      }
+    ]
+  }
+]
