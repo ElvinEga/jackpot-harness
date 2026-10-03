@@ -11,6 +11,10 @@ import {
   FileCode,
   ChevronDown,
   Loader2,
+  Sun,
+  Moon,
+  Monitor,
+  Check,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -20,9 +24,12 @@ import {
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import type { AppStats, Match } from "../../lib/types";
 import { exportToCsv, exportToJson } from "../../lib/export";
+import { useTheme, type Theme } from "../../hooks/useTheme";
 
 export type AppTab = "explorer" | "predictor" | "positions" | "teams" | "goals";
 
@@ -46,6 +53,13 @@ export const Header: React.FC<HeaderProps> = ({
   isFiltering = false,
 }) => {
   const isFiltered = filteredCount !== totalCount;
+  const { theme, setTheme, resolvedTheme } = useTheme();
+
+  const themeOptions: { value: Theme; label: string; icon: React.ReactNode }[] = [
+    { value: "light", label: "Light", icon: <Sun className="h-4 w-4" /> },
+    { value: "dark", label: "Dark", icon: <Moon className="h-4 w-4" /> },
+    { value: "system", label: "System", icon: <Monitor className="h-4 w-4" /> },
+  ];
 
   return (
     <header className="border-b border-border bg-card/95 backdrop-blur sticky top-0 z-30 px-4 lg:px-6 py-2.5">
@@ -56,14 +70,9 @@ export const Header: React.FC<HeaderProps> = ({
             <Sparkles className="h-5 w-5" />
           </div>
           <div>
-            <div className="flex items-center gap-2">
-              <h1 className="text-base font-bold text-foreground tracking-tight">Jackpot Predictor & Analyzer</h1>
-              <Badge variant="outline" className="text-[10px] text-primary border-primary/30 font-mono">
-                1–17 Engine
-              </Badge>
-            </div>
-            <p className="text-[11px] text-muted-foreground">
-              Betika · Mozzart · SportPesa historical prediction intelligence
+            <h1 className="text-base font-bold text-foreground tracking-tight">Jackpot Harness</h1>
+            <p className="text-xs text-muted-foreground">
+              Historical prediction intelligence
             </p>
           </div>
         </div>
@@ -80,19 +89,19 @@ export const Header: React.FC<HeaderProps> = ({
                 <span>Explorer</span>
               </TabsTrigger>
               <TabsTrigger value="predictor" className="flex items-center gap-1.5 text-xs h-7">
-                <Sparkles className="h-3.5 w-3.5 text-primary" />
+                <Sparkles className="h-3.5 w-3.5" />
                 <span>Predictor</span>
               </TabsTrigger>
               <TabsTrigger value="positions" className="flex items-center gap-1.5 text-xs h-7">
-                <Layers className="h-3.5 w-3.5 text-blue-400" />
+                <Layers className="h-3.5 w-3.5 text-muted-foreground" />
                 <span>Positions 1–17</span>
               </TabsTrigger>
               <TabsTrigger value="teams" className="flex items-center gap-1.5 text-xs h-7">
-                <Swords className="h-3.5 w-3.5 text-amber-400" />
+                <Swords className="h-3.5 w-3.5 text-foreground" />
                 <span>H2H & Teams</span>
               </TabsTrigger>
               <TabsTrigger value="goals" className="flex items-center gap-1.5 text-xs h-7">
-                <Goal className="h-3.5 w-3.5 text-emerald-400" />
+                <Goal className="h-3.5 w-3.5" />
                 <span>Goals</span>
               </TabsTrigger>
             </TabsList>
@@ -101,12 +110,14 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* Right: Quick Stats & Export Dropdown */}
         <div className="flex items-center gap-2 self-end lg:self-auto">
-          {/* Filter Match Count Pill */}
-          <div className="text-xs px-2.5 py-1 rounded-md bg-muted/60 border border-border text-muted-foreground flex items-center gap-1.5">
-            {isFiltering && <Loader2 className="h-3 w-3 text-primary animate-spin" />}
-            {isFiltered ? (
+          {/* Match Count Pill — filter counts only apply to the Explorer table */}
+          <div className="text-xs px-2.5 py-1 rounded-md bg-muted border border-border text-muted-foreground flex items-center gap-1.5">
+            {isFiltering && activeTab === "explorer" && (
+              <Loader2 className="h-3 w-3 text-primary animate-spin" />
+            )}
+            {activeTab === "explorer" && isFiltered ? (
               <span>
-                Filtered: <strong className="text-emerald-400">{filteredCount.toLocaleString()}</strong> of {totalCount.toLocaleString()}
+                Filtered: <strong className="text-primary">{filteredCount.toLocaleString()}</strong> of {totalCount.toLocaleString()}
               </span>
             ) : (
               <span>
@@ -114,6 +125,40 @@ export const Header: React.FC<HeaderProps> = ({
               </span>
             )}
           </div>
+
+          {/* Theme Switcher */}
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              render={
+                <Button variant="outline" size="sm" className="gap-1.5 h-8 text-xs" aria-label="Toggle theme">
+                  {resolvedTheme === "dark" ? (
+                    <Moon className="h-3.5 w-3.5 text-muted-foreground" />
+                  ) : (
+                    <Sun className="h-3.5 w-3.5 text-muted-foreground" />
+                  )}
+                  <span className="capitalize">{theme}</span>
+                  <ChevronDown className="h-3 w-3 text-muted-foreground" />
+                </Button>
+              }
+            />
+            <DropdownMenuContent align="end" className="w-40">
+              <DropdownMenuLabel className="text-xs font-normal text-muted-foreground">
+                Theme
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              {themeOptions.map((opt) => (
+                <DropdownMenuItem
+                  key={opt.value}
+                  onClick={() => setTheme(opt.value)}
+                  className="cursor-pointer"
+                >
+                  {opt.icon}
+                  <span className="flex-1">{opt.label}</span>
+                  {theme === opt.value && <Check className="h-3.5 w-3.5" />}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
 
           {/* Export Dropdown */}
           <DropdownMenu>
@@ -126,14 +171,18 @@ export const Header: React.FC<HeaderProps> = ({
                 </Button>
               }
             />
-            <DropdownMenuContent align="end" className="w-52">
+            <DropdownMenuContent align="end" className="w-60">
+              <DropdownMenuLabel className="text-xs font-normal text-muted-foreground">
+                Exports the Explorer tab&apos;s current filter ({filteredMatches.length.toLocaleString()} of {totalCount.toLocaleString()} matches)
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
               <DropdownMenuItem
                 onClick={() => {
                   exportToCsv(filteredMatches, `jackpot_matches_${filteredMatches.length}.csv`);
                 }}
                 className="cursor-pointer"
               >
-                <FileSpreadsheet className="h-4 w-4 text-emerald-400" />
+                <FileSpreadsheet className="h-4 w-4 text-primary" />
                 <span>Export to CSV ({filteredMatches.length.toLocaleString()})</span>
               </DropdownMenuItem>
               <DropdownMenuItem
