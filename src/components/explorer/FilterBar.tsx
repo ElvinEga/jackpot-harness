@@ -84,24 +84,24 @@ export const FilterBar: React.FC<FilterBarProps> = ({
   const availableJackpots = Array.from(new Set(DATASETS.map((d) => d.jackpot)));
 
   return (
-    <div className="bg-slate-900/90 border-b border-slate-800 p-3 lg:px-6 space-y-3">
+    <div className="bg-card/70 border-b border-border p-3 lg:px-6 space-y-3">
       {/* Row 1: Search & Primary Filters */}
       <div className="flex flex-col lg:flex-row lg:items-center gap-2.5">
         {/* Search Input */}
         <div className="relative flex-1 min-w-[280px]">
-          <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+          <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
           <input
             ref={searchInputRef}
             type="text"
             placeholder="Search teams, leagues, jackpots, bookmaker... (⌘K or /)"
             value={filters.search}
             onChange={(e) => onFilterChange({ ...filters, search: e.target.value })}
-            className="w-full bg-slate-950 border border-slate-800 rounded-md pl-9 pr-9 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors"
+            className="w-full bg-background border border-border rounded-md pl-9 pr-9 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary transition-colors"
           />
           {filters.search && (
             <button
               onClick={() => onFilterChange({ ...filters, search: "" })}
-              className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-200"
+              className="absolute right-3 top-2.5 text-muted-foreground hover:text-foreground cursor-pointer"
             >
               <X className="h-4 w-4" />
             </button>
@@ -110,17 +110,17 @@ export const FilterBar: React.FC<FilterBarProps> = ({
 
         {/* Bookmaker Toggles */}
         <div className="flex items-center gap-1.5 flex-wrap">
-          <span className="text-xs text-slate-400 mr-1 hidden sm:inline">Bookmaker:</span>
+          <span className="text-xs text-muted-foreground mr-1 hidden sm:inline">Bookmaker:</span>
           {(["betika", "mozzart", "sportpesa"] as Bookmaker[]).map((bm) => {
             const isSelected = filters.bookmakers.includes(bm);
             return (
               <button
                 key={bm}
                 onClick={() => toggleBookmaker(bm)}
-                className={`text-xs px-2.5 py-1.5 rounded-md border font-medium transition-colors ${
+                className={`text-xs px-2.5 py-1.5 rounded-md border font-medium transition-colors cursor-pointer ${
                   isSelected
-                    ? "bg-blue-600/20 border-blue-500 text-blue-300 shadow-sm"
-                    : "bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-700"
+                    ? "bg-primary/20 border-primary text-primary shadow-sm"
+                    : "bg-background border-border text-muted-foreground hover:text-foreground hover:border-border/80"
                 }`}
               >
                 {bm.charAt(0).toUpperCase() + bm.slice(1)}
@@ -131,7 +131,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
 
         {/* Result Toggles */}
         <div className="flex items-center gap-1.5 flex-wrap">
-          <span className="text-xs text-slate-400 mr-1 hidden sm:inline">Result:</span>
+          <span className="text-xs text-muted-foreground mr-1 hidden sm:inline">Result:</span>
           {[
             { id: "home", label: "Home", color: "hover:border-emerald-700 text-emerald-400" },
             { id: "draw", label: "Draw", color: "hover:border-amber-700 text-amber-400" },
@@ -143,10 +143,10 @@ export const FilterBar: React.FC<FilterBarProps> = ({
               <button
                 key={res.id}
                 onClick={() => toggleResult(res.id)}
-                className={`text-xs px-2.5 py-1.5 rounded-md border font-medium transition-colors ${
+                className={`text-xs px-2.5 py-1.5 rounded-md border font-medium transition-colors cursor-pointer ${
                   isSelected
-                    ? "bg-slate-800 border-slate-600 text-white shadow-sm ring-1 ring-slate-500"
-                    : `bg-slate-950 border-slate-800 text-slate-400 ${res.color}`
+                    ? "bg-secondary border-border text-foreground shadow-sm ring-1 ring-ring/40"
+                    : `bg-background border-border text-muted-foreground ${res.color}`
                 }`}
               >
                 {res.label}
@@ -159,10 +159,10 @@ export const FilterBar: React.FC<FilterBarProps> = ({
         <div className="relative" ref={jackpotRef}>
           <button
             onClick={() => setJackpotMenuOpen((prev) => !prev)}
-            className={`flex items-center gap-1.5 text-xs px-3 py-2 rounded-md border font-medium transition-colors ${
+            className={`flex items-center gap-1.5 text-xs px-3 py-2 rounded-md border font-medium transition-colors cursor-pointer ${
               filters.jackpots.length > 0
-                ? "bg-blue-600/20 border-blue-500 text-blue-300"
-                : "bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200"
+                ? "bg-primary/20 border-primary text-primary"
+                : "bg-background border-border text-muted-foreground hover:text-foreground"
             }`}
           >
             <Filter className="h-3 w-3" />
@@ -171,12 +171,12 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                 ? `${filters.jackpots.length} Jackpot${filters.jackpots.length > 1 ? "s" : ""}`
                 : "Jackpots"}
             </span>
-            <ChevronDown className="h-3 w-3 text-slate-500" />
+            <ChevronDown className="h-3 w-3 text-muted-foreground" />
           </button>
 
           {jackpotMenuOpen && (
-            <div className="absolute right-0 mt-1 w-60 max-h-72 overflow-y-auto rounded-md bg-slate-900 border border-slate-800 shadow-xl z-50 p-1.5 text-xs animate-in fade-in duration-100">
-              <div className="px-2 py-1 text-[11px] font-semibold text-slate-400 border-b border-slate-800 mb-1">
+            <div className="absolute right-0 mt-1 w-60 max-h-72 overflow-y-auto rounded-md bg-popover border border-border shadow-xl z-50 p-1.5 text-xs animate-in fade-in duration-100 text-popover-foreground">
+              <div className="px-2 py-1 text-[11px] font-semibold text-muted-foreground border-b border-border mb-1">
                 Select Jackpots
               </div>
               {availableJackpots.map((jackpot) => {
@@ -184,13 +184,13 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                 return (
                   <label
                     key={jackpot}
-                    className="flex items-center gap-2 px-2 py-1.5 rounded hover:bg-slate-800 cursor-pointer text-slate-300"
+                    className="flex items-center gap-2 px-2 py-1.5 rounded hover:bg-muted cursor-pointer text-popover-foreground"
                   >
                     <input
                       type="checkbox"
                       checked={checked}
                       onChange={() => toggleJackpot(jackpot)}
-                      className="rounded border-slate-700 bg-slate-950 text-blue-600 focus:ring-blue-500 h-3.5 w-3.5"
+                      className="rounded border-border bg-background text-primary focus:ring-primary h-3.5 w-3.5 cursor-pointer"
                     />
                     <span>{jackpot}</span>
                   </label>
@@ -205,9 +205,9 @@ export const FilterBar: React.FC<FilterBarProps> = ({
           variant={showAdvanced ? "secondary" : "outline"}
           size="sm"
           onClick={() => setShowAdvanced((prev) => !prev)}
-          className="gap-1.5 text-xs bg-slate-950 border-slate-800"
+          className="gap-1.5 text-xs"
         >
-          <SlidersHorizontal className="h-3.5 w-3.5 text-slate-400" />
+          <SlidersHorizontal className="h-3.5 w-3.5 text-muted-foreground" />
           <span>Filters</span>
         </Button>
 
@@ -217,7 +217,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
             variant="ghost"
             size="sm"
             onClick={onReset}
-            className="gap-1 text-xs text-rose-400 hover:text-rose-300 hover:bg-rose-950/20"
+            className="gap-1 text-xs text-destructive hover:text-destructive hover:bg-destructive/10"
           >
             <RotateCcw className="h-3 w-3" />
             <span>Reset</span>
@@ -227,28 +227,28 @@ export const FilterBar: React.FC<FilterBarProps> = ({
 
       {/* Row 2: Advanced filters (Date range, Odds range, League) */}
       {showAdvanced && (
-        <div className="flex flex-wrap items-center gap-3 pt-2 border-t border-slate-800/60 text-xs">
+        <div className="flex flex-wrap items-center gap-3 pt-2 border-t border-border/60 text-xs">
           {/* Date Range */}
           <div className="flex items-center gap-2">
-            <span className="text-slate-400">Date:</span>
+            <span className="text-muted-foreground">Date:</span>
             <input
               type="date"
               value={filters.from || ""}
               onChange={(e) => onFilterChange({ ...filters, from: e.target.value || null })}
-              className="bg-slate-950 border border-slate-800 rounded px-2 py-1 text-slate-200 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              className="bg-background border border-border rounded px-2 py-1 text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
             />
-            <span className="text-slate-500">to</span>
+            <span className="text-muted-foreground">to</span>
             <input
               type="date"
               value={filters.to || ""}
               onChange={(e) => onFilterChange({ ...filters, to: e.target.value || null })}
-              className="bg-slate-950 border border-slate-800 rounded px-2 py-1 text-slate-200 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              className="bg-background border border-border rounded px-2 py-1 text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
             />
           </div>
 
           {/* Odds Range */}
           <div className="flex items-center gap-2">
-            <span className="text-slate-400">Odds:</span>
+            <span className="text-muted-foreground">Odds:</span>
             <input
               type="number"
               step="0.05"
@@ -260,9 +260,9 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                   minOdds: e.target.value ? parseFloat(e.target.value) : null,
                 })
               }
-              className="w-16 bg-slate-950 border border-slate-800 rounded px-2 py-1 text-slate-200 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              className="w-16 bg-background border border-border rounded px-2 py-1 text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
             />
-            <span className="text-slate-500">-</span>
+            <span className="text-muted-foreground">-</span>
             <input
               type="number"
               step="0.05"
@@ -274,17 +274,17 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                   maxOdds: e.target.value ? parseFloat(e.target.value) : null,
                 })
               }
-              className="w-16 bg-slate-950 border border-slate-800 rounded px-2 py-1 text-slate-200 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              className="w-16 bg-background border border-border rounded px-2 py-1 text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
             />
           </div>
 
           {/* League Dropdown */}
           <div className="flex items-center gap-2">
-            <span className="text-slate-400">League:</span>
+            <span className="text-muted-foreground">League:</span>
             <select
               value={filters.league || ""}
               onChange={(e) => onFilterChange({ ...filters, league: e.target.value || null })}
-              className="bg-slate-950 border border-slate-800 rounded px-2 py-1 text-slate-200 max-w-[220px] focus:outline-none focus:ring-1 focus:ring-blue-500"
+              className="bg-background border border-border rounded px-2 py-1 text-foreground max-w-[220px] focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer"
             >
               <option value="">All Leagues</option>
               {uniqueLeagues.slice(0, 100).map((league) => (
