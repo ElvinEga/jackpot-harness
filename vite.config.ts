@@ -8,7 +8,30 @@ function serveProcessedData() {
   return {
     name: 'serve-processed-data',
     configureServer(server: any) {
-      server.middlewares.use((req: any, res: any, next: any) => {
+      server.middlewares.use(async (req: any, res: any, next: any) => {
+        // Proxy SportPesa active jackpot API with mobile okhttp User-Agent to bypass Akamai bot challenge
+        if (req.url && (req.url === '/api/sportpesa/active' || req.url.startsWith('/api/sportpesa/active'))) {
+          try {
+            const upstreamRes = await fetch('https://jackpot-offer-api.ke.sportpesa.com/api/jackpots/active', {
+              headers: {
+                'User-Agent': 'okhttp/4.9.0',
+                'Accept': 'application/json, text/plain, */*',
+              },
+            })
+            const data = await upstreamRes.text()
+            res.setHeader('Content-Type', 'application/json')
+            res.setHeader('Access-Control-Allow-Origin', '*')
+            res.statusCode = upstreamRes.status
+            res.end(data)
+            return
+          } catch (err: any) {
+            res.statusCode = 502
+            res.setHeader('Content-Type', 'application/json')
+            res.end(JSON.stringify({ error: err.message }))
+            return
+          }
+        }
+
         if (req.url && req.url.startsWith('/data/')) {
           const relativePath = req.url.replace(/^\/data\//, '').split('?')[0]
           const targetFile = path.resolve(import.meta.dirname, 'data/processed', relativePath)
