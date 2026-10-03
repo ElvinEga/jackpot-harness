@@ -33,7 +33,8 @@ import {
   PaginationLast,
   PaginationEllipsis,
 } from "@/components/ui/pagination";
-import { Badge } from "@/components/ui/Badge";
+import { Badge } from "@/components/ui/badge";
+import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
 import type { Match } from "@/lib/types";
 
 interface DataTableProps {
@@ -269,21 +270,22 @@ export const DataTable: React.FC<DataTableProps> = ({ matches, onSelectMatch }) 
 
           <div className="flex items-center gap-1.5 ml-2">
             <span>Rows:</span>
-            <select
+            <NativeSelect
+              size="sm"
               value={pageSize}
               onChange={(e) => {
                 const newSize = Number(e.target.value);
                 setPageSize(newSize);
                 table.setPageSize(newSize);
               }}
-              className="bg-background border border-border rounded px-2 py-1 text-foreground focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer"
+              className="w-20"
             >
               {[25, 50, 100, 250].map((size) => (
-                <option key={size} value={size}>
+                <NativeSelectOption key={size} value={size}>
                   {size}
-                </option>
+                </NativeSelectOption>
               ))}
-            </select>
+            </NativeSelect>
           </div>
         </div>
 
