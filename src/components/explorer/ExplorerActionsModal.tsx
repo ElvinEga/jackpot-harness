@@ -140,7 +140,7 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="w-[96vw] max-w-2xl lg:max-w-3xl max-h-[88vh] overflow-y-auto bg-card border-border p-4 sm:p-6 rounded-2xl shadow-2xl">
+      <DialogContent className="w-full sm:max-w-3xl max-h-[90vh] overflow-y-auto bg-card border-border p-4 sm:p-6 rounded-2xl shadow-2xl">
         {/* Clean, unsqueezed Dialog Header without unnecessary row counts */}
         <DialogHeader className="pb-3 border-b border-border text-left">
           <div className="flex items-center gap-2.5">
@@ -159,21 +159,21 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
         </DialogHeader>
 
         {/* Tab Navigation: Responsive wrap / grid */}
-        <Tabs value={activeTab} onValueChange={(val) => setActiveTab(val as ExplorerActionType)} className="w-full pt-2">
-          <TabsList className="grid grid-cols-2 sm:grid-cols-4 h-auto p-1 gap-1 w-full bg-muted/60">
-            <TabsTrigger value="h2h" className="text-xs py-1.5 gap-1.5 justify-center">
+        <Tabs value={activeTab} onValueChange={(val) => setActiveTab(val as ExplorerActionType)}  className="flex flex-col w-full justify-center">
+          <TabsList >
+            <TabsTrigger value="h2h">
               <Swords className="h-3.5 w-3.5 text-amber-400 shrink-0" />
               <span>Team vs Team</span>
             </TabsTrigger>
-            <TabsTrigger value="position" className="text-xs py-1.5 gap-1.5 justify-center">
+            <TabsTrigger value="position" >
               <Layers className="h-3.5 w-3.5 text-blue-400 shrink-0" />
               <span>Row Analysis</span>
             </TabsTrigger>
-            <TabsTrigger value="likelihood" className="text-xs py-1.5 gap-1.5 justify-center">
+            <TabsTrigger value="likelihood" >
               <Sparkles className="h-3.5 w-3.5 text-primary shrink-0" />
               <span>Likelihood</span>
             </TabsTrigger>
-            <TabsTrigger value="goals" className="text-xs py-1.5 gap-1.5 justify-center">
+            <TabsTrigger value="goals">
               <Goal className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
               <span>Average Goals</span>
             </TabsTrigger>
