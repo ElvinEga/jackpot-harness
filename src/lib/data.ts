@@ -6,21 +6,25 @@ export const DATASETS: DatasetMeta[] = [
     bookmaker: "betika",
     jackpot: "Grand Jackpot",
     file: "betika/betika-grand-jackpot.json",
+    defaultSize: 17,
   },
   {
     bookmaker: "betika",
     jackpot: "Mega Jackpot",
     file: "betika/betika-mega-jackpot.json",
+    defaultSize: 17,
   },
   {
     bookmaker: "betika",
     jackpot: "Midweek Jackpot",
     file: "betika/betika-midweek-jackpot.json",
+    defaultSize: 15,
   },
   {
     bookmaker: "betika",
     jackpot: "Must Be Won Jackpot",
     file: "betika/betika-must-be-won-jackpot.json",
+    defaultSize: 15,
   },
 
   // SportPesa (1 jackpot)
@@ -28,6 +32,7 @@ export const DATASETS: DatasetMeta[] = [
     bookmaker: "sportpesa",
     jackpot: "Mega Jackpot Pro",
     file: "sportpesa/sportpesa-mega-jackpot-pro.json",
+    defaultSize: 17,
   },
 
   // Mozzart (6 jackpots / extract batches)
@@ -35,31 +40,37 @@ export const DATASETS: DatasetMeta[] = [
     bookmaker: "mozzart",
     jackpot: "Super Grand Jackpot",
     file: "mozzart/mozzart-super-grand-jackpot.json",
+    defaultSize: 20,
   },
   {
     bookmaker: "mozzart",
     jackpot: "Super Jackpot",
     file: "mozzart/mozzart-super-jackpot.json",
+    defaultSize: 16,
   },
   {
     bookmaker: "mozzart",
     jackpot: "Super Jackpot 2",
     file: "mozzart/mozzart-super-jackpot2.json",
+    defaultSize: 16,
   },
   {
     bookmaker: "mozzart",
     jackpot: "Super Jackpot 3",
     file: "mozzart/mozzart-super-jackpot3.json",
+    defaultSize: 16,
   },
   {
     bookmaker: "mozzart",
     jackpot: "Super Jackpot 4",
     file: "mozzart/mozzart-super-jackpot4.json",
+    defaultSize: 16,
   },
   {
     bookmaker: "mozzart",
     jackpot: "Super Jackpot 5",
     file: "mozzart/mozzart-super-jackpot5.json",
+    defaultSize: 16,
   },
 ];
 
@@ -73,6 +84,10 @@ async function fetchDataset(ds: DatasetMeta): Promise<Match[]> {
   }
   const rawRows: Record<string, unknown>[] = await response.json();
 
+  let curEventKey: string | null = null;
+  let curPos = 0;
+  let eventIdx = 0;
+
   return rawRows.map((row, idx): Match => {
     const home_team = String(row.home_team || "").trim();
     const away_team = String(row.away_team || "").trim();
@@ -82,6 +97,31 @@ async function fetchDataset(ds: DatasetMeta): Promise<Match[]> {
     const odds = typeof row.odds === "number" && !isNaN(row.odds) ? row.odds : null;
     const result = (typeof row.result === "string" ? row.result.toLowerCase() : null) as Match["result"];
     const jackpot_id = typeof row.jackpot_id === "number" ? row.jackpot_id : null;
+
+    // Parse numeric goals if score is formatted as "H-A"
+    let home_goals: number | null = null;
+    let away_goals: number | null = null;
+    let total_goals: number | null = null;
+    if (score && score.includes("-")) {
+      const parts = score.split("-").map((v) => parseInt(v.trim(), 10));
+      if (parts.length === 2 && !isNaN(parts[0]) && !isNaN(parts[1])) {
+        home_goals = parts[0];
+        away_goals = parts[1];
+        total_goals = parts[0] + parts[1];
+      }
+    }
+
+    // Determine jackpot event and position (1-indexed 1..N)
+    const eventIdentifier = jackpot_id !== null ? `id_${jackpot_id}` : (date || `row_${Math.floor(idx / ds.defaultSize)}`);
+    if (eventIdentifier !== curEventKey || curPos >= ds.defaultSize) {
+      curEventKey = eventIdentifier;
+      curPos = 1;
+      eventIdx++;
+    } else {
+      curPos++;
+    }
+
+    const jackpot_event_id = `${ds.bookmaker}-${ds.jackpot.toLowerCase().replace(/\s+/g, "-")}-${eventIdentifier}-${eventIdx}`;
     const searchText = `${home_team} ${away_team} ${league || ""} ${ds.bookmaker} ${ds.jackpot} ${score || ""}`.toLowerCase();
 
     return {
@@ -91,11 +131,16 @@ async function fetchDataset(ds: DatasetMeta): Promise<Match[]> {
       away_team,
       league,
       score,
+      home_goals,
+      away_goals,
+      total_goals,
       odds,
       result,
       bookmaker: ds.bookmaker,
       jackpot: ds.jackpot,
       jackpot_id,
+      position: curPos,
+      jackpot_event_id,
       source_file: ds.file,
       searchText,
     };
