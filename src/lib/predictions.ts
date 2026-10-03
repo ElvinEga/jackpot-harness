@@ -71,7 +71,13 @@ export function predictMatch(
   homeTeam: string,
   awayTeam: string,
   position = 1,
-  positionStats?: PositionStat[]
+  positionStats?: PositionStat[],
+  fixtureMeta?: {
+    odds?: { home?: number; draw?: number; away?: number };
+    tournament?: string;
+    country?: string;
+    kickOffTime?: string;
+  }
 ): MatchPrediction {
   const h2h = computeTeamH2H(matches, homeTeam, awayTeam);
   const homeForm = computeTeamForm(matches, homeTeam);
@@ -192,6 +198,44 @@ export function predictMatch(
     impact: poisson.homeProb > poisson.awayProb ? "home" : "away",
   });
 
+  // Signal 5: Bookmaker Live Odds (if provided from SportPesa API)
+  if (
+    fixtureMeta?.odds?.home &&
+    fixtureMeta?.odds?.draw &&
+    fixtureMeta?.odds?.away &&
+    fixtureMeta.odds.home > 1 &&
+    fixtureMeta.odds.draw > 1 &&
+    fixtureMeta.odds.away > 1
+  ) {
+    const invHome = 1 / fixtureMeta.odds.home;
+    const invDraw = 1 / fixtureMeta.odds.draw;
+    const invAway = 1 / fixtureMeta.odds.away;
+    const sumInv = invHome + invDraw + invAway;
+
+    const bookmakerHome = invHome / sumInv;
+    const bookmakerDraw = invDraw / sumInv;
+    const bookmakerAway = invAway / sumInv;
+
+    const wOdds = 0.35;
+    homeScore += bookmakerHome * wOdds;
+    drawScore += bookmakerDraw * wOdds;
+    awayScore += bookmakerAway * wOdds;
+    totalWeights += wOdds;
+
+    const topOddsOutcome =
+      bookmakerHome > bookmakerAway && bookmakerHome > bookmakerDraw
+        ? "home"
+        : bookmakerAway > bookmakerHome && bookmakerAway > bookmakerDraw
+        ? "away"
+        : "draw";
+
+    signals.push({
+      label: "SportPesa Live 1X2 Market Odds",
+      detail: `Bookmaker priced: Home ${fixtureMeta.odds.home.toFixed(2)}, Draw ${fixtureMeta.odds.draw.toFixed(2)}, Away ${fixtureMeta.odds.away.toFixed(2)} (Implied: ${(bookmakerHome * 100).toFixed(1)}% / ${(bookmakerDraw * 100).toFixed(1)}% / ${(bookmakerAway * 100).toFixed(1)}%).`,
+      impact: topOddsOutcome,
+    });
+  }
+
   // Calculate final normalized probabilities
   const finalHomeProb = Number(((homeScore / totalWeights) * 100).toFixed(1));
   const finalDrawProb = Number(((drawScore / totalWeights) * 100).toFixed(1));
@@ -210,7 +254,7 @@ export function predictMatch(
   const margin = maxProb - secondProb;
 
   let confidence: "High" | "Medium" | "Low" = "Low";
-  if (margin >= 18 && (h2h.totalMatches >= 2 || homeForm.matchesCount >= 5)) {
+  if (margin >= 18 && (h2h.totalMatches >= 2 || homeForm.matchesCount >= 5 || fixtureMeta?.odds?.home)) {
     confidence = "High";
   } else if (margin >= 9) {
     confidence = "Medium";
@@ -232,5 +276,9 @@ export function predictMatch(
     h2hMatchesCount: h2h.totalMatches,
     positionSampleSize: posStat ? posStat.totalMatches : 0,
     signals,
+    bookmakerOdds: fixtureMeta?.odds,
+    tournament: fixtureMeta?.tournament,
+    country: fixtureMeta?.country,
+    kickOffTime: fixtureMeta?.kickOffTime,
   };
 }
