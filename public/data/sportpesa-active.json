@@ -1,0 +1,450 @@
+{
+  "id": "a5406708-a839-4d18-a540-094c56ae8882",
+  "humanId": 202,
+  "settings": {
+    "numberOfEvents": 17,
+    "jackpotTypes": [
+      "17/17",
+      "16/16",
+      "15/15",
+      "14/14",
+      "13/13"
+    ]
+  },
+  "betCombinationsLimits": {
+    "maxOnlyDoubles": 10,
+    "maxOnlyTriples": 5,
+    "maxCombining": 10,
+    "maxCombiningDoubles": 9,
+    "maxCombiningTriples": 5
+  },
+  "bettingStatus": "Closed",
+  "events": [
+    {
+      "id": "sr:match:72203922",
+      "utcKickOffTime": "2026-10-03T14:00:00Z",
+      "bettingStatus": "Closed",
+      "competitors": [
+        {
+          "competitorName": "Queen of the South FC",
+          "isHome": true
+        },
+        {
+          "competitorName": "Cove Rangers FC",
+          "isHome": false
+        }
+      ],
+      "tournamentName": "League 1",
+      "countryIsoCode": "SCO",
+      "countryName": "Scotland",
+      "home": 2.6,
+      "draw": 3.35,
+      "away": 2.33,
+      "score": {
+        "home": 4,
+        "away": 3
+      },
+      "publicDraw": null,
+      "order": 1
+    },
+    {
+      "id": "sr:match:72204288",
+      "utcKickOffTime": "2026-10-03T14:00:00Z",
+      "bettingStatus": "Closed",
+      "competitors": [
+        {
+          "competitorName": "Elgin City FC",
+          "isHome": true
+        },
+        {
+          "competitorName": "Clyde FC",
+          "isHome": false
+        }
+      ],
+      "tournamentName": "League 2",
+      "countryIsoCode": "SCO",
+      "countryName": "Scotland",
+      "home": 2.35,
+      "draw": 3.4,
+      "away": 2.5,
+      "score": {
+        "home": 6,
+        "away": 2
+      },
+      "publicDraw": null,
+      "order": 2
+    },
+    {
+      "id": "sr:match:72341232",
+      "utcKickOffTime": "2026-10-03T14:00:00Z",
+      "bettingStatus": "Closed",
+      "competitors": [
+        {
+          "competitorName": "Reading FC",
+          "isHome": true
+        },
+        {
+          "competitorName": "Bradford City FC",
+          "isHome": false
+        }
+      ],
+      "tournamentName": "League One",
+      "countryIsoCode": "ENG",
+      "countryName": "England",
+      "home": 1.97,
+      "draw": 3.5,
+      "away": 3.5,
+      "score": {
+        "home": 1,
+        "away": 1
+      },
+      "publicDraw": null,
+      "order": 3
+    },
+    {
+      "id": "sr:match:72342110",
+      "utcKickOffTime": "2026-10-03T14:00:00Z",
+      "bettingStatus": "Closed",
+      "competitors": [
+        {
+          "competitorName": "Crewe Alexandra",
+          "isHome": true
+        },
+        {
+          "competitorName": "Bristol Rovers",
+          "isHome": false
+        }
+      ],
+      "tournamentName": "League Two",
+      "countryIsoCode": "ENG",
+      "countryName": "England",
+      "home": 2.75,
+      "draw": 3.25,
+      "away": 2.34,
+      "score": {
+        "home": 3,
+        "away": 1
+      },
+      "publicDraw": null,
+      "order": 4
+    },
+    {
+      "id": "sr:match:72342114",
+      "utcKickOffTime": "2026-10-03T14:00:00Z",
+      "bettingStatus": "Closed",
+      "competitors": [
+        {
+          "competitorName": "Exeter City",
+          "isHome": true
+        },
+        {
+          "competitorName": "Rotherham United",
+          "isHome": false
+        }
+      ],
+      "tournamentName": "League Two",
+      "countryIsoCode": "ENG",
+      "countryName": "England",
+      "home": 2.37,
+      "draw": 3.25,
+      "away": 2.7,
+      "score": {
+        "home": 1,
+        "away": 0
+      },
+      "publicDraw": null,
+      "order": 5
+    },
+    {
+      "id": "sr:match:72342130",
+      "utcKickOffTime": "2026-10-03T14:00:00Z",
+      "bettingStatus": "Closed",
+      "competitors": [
+        {
+          "competitorName": "Rochdale AFC",
+          "isHome": true
+        },
+        {
+          "competitorName": "Swindon Town",
+          "isHome": false
+        }
+      ],
+      "tournamentName": "League Two",
+      "countryIsoCode": "ENG",
+      "countryName": "England",
+      "home": 2.18,
+      "draw": 3.45,
+      "away": 2.85,
+      "score": {
+        "home": 1,
+        "away": 0
+      },
+      "publicDraw": null,
+      "order": 6
+    },
+    {
+      "id": "sr:match:68321014",
+      "utcKickOffTime": "2026-10-03T16:15:00Z",
+      "bettingStatus": "Closed",
+      "competitors": [
+        {
+          "competitorName": "IFK Lidingo FK",
+          "isHome": true
+        },
+        {
+          "competitorName": "Bollstanas SK",
+          "isHome": false
+        }
+      ],
+      "tournamentName": "Division 2",
+      "countryIsoCode": "SWE",
+      "countryName": "Sweden",
+      "home": 2.03,
+      "draw": 3.55,
+      "away": 2.95,
+      "score": null,
+      "publicDraw": null,
+      "order": 7
+    },
+    {
+      "id": "sr:match:72477454",
+      "utcKickOffTime": "2026-10-03T16:30:00Z",
+      "bettingStatus": "Closed",
+      "competitors": [
+        {
+          "competitorName": "Cadiz CF",
+          "isHome": true
+        },
+        {
+          "competitorName": "CD Leganes",
+          "isHome": false
+        }
+      ],
+      "tournamentName": "LaLiga 2",
+      "countryIsoCode": "ESP",
+      "countryName": "Spain",
+      "home": 2.85,
+      "draw": 3.1,
+      "away": 2.48,
+      "score": null,
+      "publicDraw": null,
+      "order": 8
+    },
+    {
+      "id": "sr:match:73293230",
+      "utcKickOffTime": "2026-10-03T18:30:00Z",
+      "bettingStatus": "Closed",
+      "competitors": [
+        {
+          "competitorName": "Pro Vercelli 1892",
+          "isHome": true
+        },
+        {
+          "competitorName": "AC Carpi",
+          "isHome": false
+        }
+      ],
+      "tournamentName": "Serie C, Group A",
+      "countryIsoCode": "ITA",
+      "countryName": "Italy",
+      "home": 2.09,
+      "draw": 3.3,
+      "away": 3.0,
+      "score": null,
+      "publicDraw": null,
+      "order": 9
+    },
+    {
+      "id": "sr:match:72523956",
+      "utcKickOffTime": "2026-10-03T18:45:00Z",
+      "bettingStatus": "Closed",
+      "competitors": [
+        {
+          "competitorName": "FC Fleury 91",
+          "isHome": true
+        },
+        {
+          "competitorName": "SM Caen",
+          "isHome": false
+        }
+      ],
+      "tournamentName": "Ligue 3",
+      "countryIsoCode": "FRA",
+      "countryName": "France",
+      "home": 2.41,
+      "draw": 3.35,
+      "away": 2.46,
+      "score": null,
+      "publicDraw": null,
+      "order": 10
+    },
+    {
+      "id": "sr:match:67118006",
+      "utcKickOffTime": "2026-10-03T18:00:00Z",
+      "bettingStatus": "Closed",
+      "competitors": [
+        {
+          "competitorName": "CA San Miguel",
+          "isHome": true
+        },
+        {
+          "competitorName": "Mitre Santiago del Estero",
+          "isHome": false
+        }
+      ],
+      "tournamentName": "Primera Nacional",
+      "countryIsoCode": "ARG",
+      "countryName": "Argentina",
+      "home": 2.22,
+      "draw": 2.95,
+      "away": 3.25,
+      "score": null,
+      "publicDraw": null,
+      "order": 11
+    },
+    {
+      "id": "sr:match:73265358",
+      "utcKickOffTime": "2026-10-03T20:00:00Z",
+      "bettingStatus": "Closed",
+      "competitors": [
+        {
+          "competitorName": "Newell's Old Boys",
+          "isHome": true
+        },
+        {
+          "competitorName": "CA Lanus",
+          "isHome": false
+        }
+      ],
+      "tournamentName": "Primera LPF",
+      "countryIsoCode": "ARG",
+      "countryName": "Argentina",
+      "home": 2.6,
+      "draw": 2.8,
+      "away": 2.7,
+      "score": null,
+      "publicDraw": null,
+      "order": 12
+    },
+    {
+      "id": "sr:match:67173010",
+      "utcKickOffTime": "2026-10-04T00:00:00Z",
+      "bettingStatus": "Closed",
+      "competitors": [
+        {
+          "competitorName": "FC Tulsa",
+          "isHome": true
+        },
+        {
+          "competitorName": "Sacramento Republic FC",
+          "isHome": false
+        }
+      ],
+      "tournamentName": "USL Championship",
+      "countryIsoCode": "USA",
+      "countryName": "United States of America",
+      "home": 2.65,
+      "draw": 3.0,
+      "away": 2.45,
+      "score": null,
+      "publicDraw": null,
+      "order": 13
+    },
+    {
+      "id": "sr:match:72151204",
+      "utcKickOffTime": "2026-10-04T10:00:00Z",
+      "bettingStatus": "Closed",
+      "competitors": [
+        {
+          "competitorName": "Tegevajaro Miyazaki",
+          "isHome": true
+        },
+        {
+          "competitorName": "RB Omiya Ardija",
+          "isHome": false
+        }
+      ],
+      "tournamentName": "J2 League",
+      "countryIsoCode": "JPN",
+      "countryName": "Japan",
+      "home": 2.49,
+      "draw": 3.3,
+      "away": 2.44,
+      "score": null,
+      "publicDraw": null,
+      "order": 14
+    },
+    {
+      "id": "sr:match:72578488",
+      "utcKickOffTime": "2026-10-04T11:30:00Z",
+      "bettingStatus": "Closed",
+      "competitors": [
+        {
+          "competitorName": "FK Veles Moscow",
+          "isHome": true
+        },
+        {
+          "competitorName": "FC Volga Ulyanovsk",
+          "isHome": false
+        }
+      ],
+      "tournamentName": "1. Liga",
+      "countryIsoCode": "RUS",
+      "countryName": "Russian Federation",
+      "home": 2.26,
+      "draw": 3.15,
+      "away": 2.8,
+      "score": null,
+      "publicDraw": null,
+      "order": 15
+    },
+    {
+      "id": "sr:match:72477466",
+      "utcKickOffTime": "2026-10-04T12:00:00Z",
+      "bettingStatus": "Closed",
+      "competitors": [
+        {
+          "competitorName": "Real Sociedad San Sebastian B",
+          "isHome": true
+        },
+        {
+          "competitorName": "Granada CF",
+          "isHome": false
+        }
+      ],
+      "tournamentName": "LaLiga 2",
+      "countryIsoCode": "ESP",
+      "countryName": "Spain",
+      "home": 2.5,
+      "draw": 3.2,
+      "away": 2.7,
+      "score": null,
+      "publicDraw": null,
+      "order": 16
+    },
+    {
+      "id": "sr:match:72044708",
+      "utcKickOffTime": "2026-10-04T12:30:00Z",
+      "bettingStatus": "Closed",
+      "competitors": [
+        {
+          "competitorName": "VVV Venlo",
+          "isHome": true
+        },
+        {
+          "competitorName": "Roda JC Kerkrade",
+          "isHome": false
+        }
+      ],
+      "tournamentName": "Eerste Divisie",
+      "countryIsoCode": "NLD",
+      "countryName": "Netherlands",
+      "home": 2.32,
+      "draw": 3.6,
+      "away": 2.55,
+      "score": null,
+      "publicDraw": null,
+      "order": 17
+    }
+  ]
+}
