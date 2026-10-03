@@ -5,7 +5,7 @@ import { FilterBar } from "./components/explorer/FilterBar";
 import { DataTable } from "./components/explorer/DataTable";
 import { MatchDetailSheet } from "./components/explorer/MatchDetailSheet";
 import { AnalyticsView } from "./components/analytics/AnalyticsView";
-import { Button } from "./components/ui/Button";
+import { Button } from "./components/ui/button";
 
 import type { Match, AppStats, MatchFilters } from "./lib/types";
 import { computeDatasetStats } from "./lib/data";
