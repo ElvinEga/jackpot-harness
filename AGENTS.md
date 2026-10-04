@@ -18,6 +18,8 @@ data/seasons/premier_league/  6 CSVs (2021-2022 … 2026-2027) + notes.txt (sour
 data/seasons/laliga_primera/  6 CSVs (same seasons) — same column vocabulary, division code SP1
 data/seasons/bundesliga_1/    6 CSVs (same seasons) — division code D1, 306 matches per season
 data/seasons/serie_a/         6 CSVs (same seasons) — division code I1, 380 matches per season
+data/seasons/le_championnat/  6 CSVs (same seasons) — division code F1, 380 then 306 per season
+data/seasons/eredivisie/      6 CSVs (same seasons) — division code N1, 306 matches per season
 data/processed/      JSON mirror of the raw CSVs, same bookmaker folders and filenames
 data/processed/seasons/<competition>/  one JSON per season + index.json
 src/build_json.py    regenerates data/processed from data/raw
@@ -84,7 +86,7 @@ Conversions the generator applies, all lossless apart from the last:
 
 ## Season data (Football-Data.co.uk)
 
-`data/seasons/<competition>/<season>.csv` holds per-match league fixtures with 106–132 wide,
+`data/seasons/<competition>/<season>.csv` holds per-match league fixtures with 105–131 wide,
 PascalCase/abbreviated columns. The source's own column key is `data/seasons/notes.txt` — read it
 rather than guessing an abbreviation. Every raw column header and cell is preserved verbatim in the
 CSVs; nothing is renamed or repaired there.
@@ -95,10 +97,12 @@ CSVs; nothing is renamed or repaired there.
 `/data/seasons/premier_league/<season>.json` exactly like the jackpot mirror is at
 `/data/<bookmaker>/`.
 
-7435 matches in total across the four competitions (380 per completed season for EPL, La Liga and
-Serie A, 306 for Bundesliga; the in-progress 2026-2027 files hold 50 EPL, 69 La Liga, 36 Bundesliga
-and 50 Serie A matches). One object per match, sorted by `(date, home_team)`; the ~100 source
-columns are reduced to 19 fields with the variable parts grouped:
+10751 matches in total across the six competitions (380 per completed season for EPL, La Liga and
+Serie A, 306 for Bundesliga and Eredivisie; Ligue 1 has 380 for 2021-2022 and 2022-2023 then 306
+from 2023-2024, when it dropped to 18 clubs). The in-progress 2026-2027 files hold 50 EPL, 69 La
+Liga, 36 Bundesliga, 50 Serie A, 45 Ligue 1 and 63 Eredivisie matches. One object per match, sorted
+by `(date, home_team)`; the ~100 source columns are reduced to 19 fields with the variable parts
+grouped:
 
 ```json
 {
@@ -117,8 +121,11 @@ columns are reduced to 19 fields with the variable parts grouped:
 What the generator does:
 - Core field names are flattened to the jackpot vocabulary (`FTHG`/`FTAG`/`FTR` →
   `home_goals`/`away_goals`/`result`, `H`/`D`/`A` → `home`/`draw`/`away`), so season rows are
-  drop-in comparable with `Match` rows. `league` is filled from `division` (`E0` → the Premier
-  League string used by the jackpot CSVs, en dash included).
+  drop-in comparable with `Match` rows. `league` is filled from `division` with the exact string the
+  jackpot CSVs use (en dash included): `E0` → `England – Premier League`, `SP1` → `Spain – La Liga`,
+  `D1` → `Germany – Bundesliga`, `I1` → `Italy – Serie A`, `F1` → `France – Ligue 1`, `N1` →
+  `Netherlands – Eredivisie`. The folder names do not match those strings (`le_championnat`,
+  `eredivisie`).
 - Dates `dd/mm/yyyy` → ISO. `season` is derived from the kickoff month (July onwards belongs to the
   season starting that year), so the file stem, `season` and `index.json` agree.
 - **Only market-average and market-maximum prices are kept.** The individual bookmaker columns
@@ -129,12 +136,13 @@ What the generator does:
 - Keys are emitted per competition from the columns actually present, and are then the same for
   every season file within that competition (`home_xg`/`away_xg` exist only from 2026-2027, so the
   earlier seasons carry them as `null`). `referee` is omitted entirely for competitions that have no
-  `Referee` column — only the Premier League has one, so La Liga, Bundesliga and Serie A rows have 18
-  fields instead of 19. Missing cells become `null`, never
-  guessed (e.g. Union Berlin v Bochum, 2024-12-14 carries a full-time score and result but blank
-  half-time and stats in the source, so those fields are `null` there).
+  `Referee` column — only the Premier League has one, so the other five competitions' rows have 18
+  fields instead of 19. Missing cells become `null`, never guessed (e.g. Union Berlin v Bochum,
+  2024-12-14 carries a full-time score and result but blank half-time and stats in the source, so
+  those fields are `null` there).
 - The source data is complete for these files: every row has a full-time result; one row per
-  competition may lack half-time or stats; scattered odds cells are blank (0–7% per file).
+  competition may lack half-time or stats (none of the Ligue 1 or Eredivisie rows do); scattered
+  odds cells are blank (0–7% per file, and not one in `le_championnat`).
 
 ## Data quirks (verify before computing anything)
 
@@ -142,7 +150,7 @@ What the generator does:
   files are LF) and `result` values can carry a trailing `\r`. Use `csv.DictReader` with
   `newline=''`, never naive `split(',')`.
 - The season CSVs are all CRLF and most carry a UTF-8 **BOM** before `Div` (EPL: 2021-2022,
-  2024-2025, 2025-2026, 2026-2027; La Liga, Bundesliga and Serie A: their last three seasons);
+  2024-2025, 2025-2026, 2026-2027; every other competition: its last three seasons);
   open them with `encoding='utf-8-sig'` or the first column becomes `'\ufeffDiv'`.
 - Encodings are mixed UTF-8 / plain ASCII across files; always open with `encoding='utf-8'`.
 - `mozzart-super-jackpot4.csv` contains ~32 literal `No date found` values in `date`.
