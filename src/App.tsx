@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useDeferredValue } from "react";
 import { Loader2, AlertCircle } from "lucide-react";
-import { Header, type AppTab } from "./components/layout/Header";
+import { Header, type AppTab, type AppMode } from "./components/layout/Header";
 import { FilterBar } from "./components/explorer/FilterBar";
 import { DataTable } from "./components/explorer/DataTable";
 import { MatchDetailSheet } from "./components/explorer/MatchDetailSheet";
@@ -9,6 +9,7 @@ import { Toaster } from "./components/ui/toast";
 import { PositionMatrix } from "./components/positions/PositionMatrix";
 import { TeamVersusTeam } from "./components/teams/TeamVersusTeam";
 import { GoalAnalysisView } from "./components/goals/GoalAnalysisView";
+import { SeasonsDashboard } from "./components/seasons/SeasonsDashboard";
 import { Button } from "./components/ui/button";
 
 import type { Match, AppStats, MatchFilters } from "./lib/types";
@@ -20,6 +21,7 @@ import { useJackpotMatches } from "./hooks/useJackpotMatches";
 export function App() {
   const { data: matches = [], isLoading: loading, error, refetch } = useJackpotMatches();
 
+  const [appMode, setAppMode] = useState<AppMode>("jackpot");
   const [activeTab, setActiveTab] = useState<AppTab>("explorer");
   const [selectedMatch, setSelectedMatch] = useState<Match | null>(null);
 
@@ -118,52 +120,60 @@ export function App() {
         onTabChange={setActiveTab}
         filteredMatches={filteredMatches}
         isFiltering={isFiltering}
+        appMode={appMode}
+        onModeChange={setAppMode}
       />
 
       {/* Main Content Area */}
-      {activeTab === "predictor" && (
-        <JackpotPredictor matches={matches} onSelectTeamForH2H={handleOpenH2H} />
-      )}
+      {appMode === "seasons" ? (
+        <SeasonsDashboard />
+      ) : (
+        <>
+          {activeTab === "predictor" && (
+            <JackpotPredictor matches={matches} onSelectTeamForH2H={handleOpenH2H} />
+          )}
 
-      {activeTab === "positions" && (
-        <PositionMatrix matches={matches} />
-      )}
+          {activeTab === "positions" && (
+            <PositionMatrix matches={matches} />
+          )}
 
-      {activeTab === "teams" && (
-        <TeamVersusTeam
-          matches={matches}
-          initialTeamA={h2hTeamA}
-          initialTeamB={h2hTeamB}
-        />
-      )}
+          {activeTab === "teams" && (
+            <TeamVersusTeam
+              matches={matches}
+              initialTeamA={h2hTeamA}
+              initialTeamB={h2hTeamB}
+            />
+          )}
 
-      {activeTab === "goals" && (
-        <GoalAnalysisView matches={matches} />
-      )}
+          {activeTab === "goals" && (
+            <GoalAnalysisView matches={matches} />
+          )}
 
-      {activeTab === "explorer" && (
-        <div className="flex-1 flex flex-col min-h-0">
-          <FilterBar
-            filters={filters}
-            onFilterChange={setFilters}
-            onReset={resetFilters}
-            uniqueLeagues={uniqueLeagues}
+          {activeTab === "explorer" && (
+            <div className="flex-1 flex flex-col min-h-0">
+              <FilterBar
+                filters={filters}
+                onFilterChange={setFilters}
+                onReset={resetFilters}
+                uniqueLeagues={uniqueLeagues}
+              />
+              <DataTable
+                matches={filteredMatches}
+                allMatches={matches}
+                onSelectMatch={setSelectedMatch}
+                onNavigateToH2H={handleOpenH2H}
+              />
+            </div>
+          )}
+
+          {/* Match Detail Drawer / Sheet */}
+          <MatchDetailSheet
+            match={selectedMatch}
+            onClose={() => setSelectedMatch(null)}
+            onApplyFilter={handleApplyPartialFilter}
           />
-          <DataTable
-            matches={filteredMatches}
-            allMatches={matches}
-            onSelectMatch={setSelectedMatch}
-            onNavigateToH2H={handleOpenH2H}
-          />
-        </div>
+        </>
       )}
-
-      {/* Match Detail Drawer / Sheet */}
-      <MatchDetailSheet
-        match={selectedMatch}
-        onClose={() => setSelectedMatch(null)}
-        onApplyFilter={handleApplyPartialFilter}
-      />
       </div>
     </Toaster>
   );
