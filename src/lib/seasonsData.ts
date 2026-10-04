@@ -20,6 +20,13 @@ export const AVAILABLE_COMPETITIONS = [
     countryCode: "ESP",
     division: "SP1",
   },
+  {
+    id: "bundesliga_1",
+    name: "Bundesliga",
+    country: "Germany",
+    countryCode: "DEU",
+    division: "D1",
+  },
 ];
 
 /**
