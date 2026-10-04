@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "build:data": "uv run python src/build_json.py",
+    "build:seasons": "uv run python src/build_seasons.py",
     "lint": "oxlint",
     "preview": "vite preview"
   },
