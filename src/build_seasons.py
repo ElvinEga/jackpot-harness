@@ -19,6 +19,7 @@ LEAGUES = {
     "E0": "England – Premier League",
     "SP1": "Spain – La Liga",
     "D1": "Germany – Bundesliga",
+    "I1": "Italy – Serie A",
 }
 
 RESULT = {"H": "home", "D": "draw", "A": "away"}
