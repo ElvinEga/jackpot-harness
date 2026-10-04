@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
+import { AVAILABLE_COMPETITIONS } from "../../lib/seasonsData";
 
 export interface SeasonFiltersState {
   search: string;
@@ -21,6 +22,8 @@ interface SeasonFilterBarProps {
   availableTeams: string[];
   filteredCount: number;
   totalCount: number;
+  activeCompetition?: string;
+  onCompetitionChange?: (competition: string) => void;
 }
 
 export const SeasonFilterBar: React.FC<SeasonFilterBarProps> = ({
@@ -31,6 +34,8 @@ export const SeasonFilterBar: React.FC<SeasonFilterBarProps> = ({
   availableTeams,
   filteredCount,
   totalCount,
+  activeCompetition,
+  onCompetitionChange,
 }) => {
   const isFiltered =
     filters.search !== "" ||
@@ -58,6 +63,22 @@ export const SeasonFilterBar: React.FC<SeasonFilterBarProps> = ({
 
         {/* Filters Group */}
         <div className="flex items-center gap-2 flex-wrap">
+          {/* League / Competition Filter */}
+          {activeCompetition && onCompetitionChange && (
+            <NativeSelect
+              size="sm"
+              value={activeCompetition}
+              onChange={(e) => onCompetitionChange(e.target.value)}
+              className="w-36 text-xs h-8 font-semibold"
+            >
+              {AVAILABLE_COMPETITIONS.map((c) => (
+                <NativeSelectOption key={c.id} value={c.id}>
+                  {c.countryCode === "ESP" ? "🇪🇸" : "🏴󠁧󠁢󠁥󠁮󠁧󠁿"} {c.name}
+                </NativeSelectOption>
+              ))}
+            </NativeSelect>
+          )}
+
           {/* Season Filter */}
           <NativeSelect
             size="sm"
