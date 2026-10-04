@@ -87,6 +87,10 @@ export const SeasonsDashboard: React.FC<SeasonsDashboardProps> = ({
       setSelectedTeam("Bayern Munich");
       setPredHome("Bayern Munich");
       setPredAway("Dortmund");
+    } else if (compId === "serie_a") {
+      setSelectedTeam("Inter");
+      setPredHome("Inter");
+      setPredAway("Milan");
     } else {
       setSelectedTeam("Arsenal");
       setPredHome("Liverpool");
@@ -238,6 +242,8 @@ export const SeasonsDashboard: React.FC<SeasonsDashboardProps> = ({
                     ? "🇪🇸"
                     : currentCompConfig.countryCode === "DEU"
                     ? "🇩🇪"
+                    : currentCompConfig.countryCode === "ITA"
+                    ? "🇮🇹"
                     : "🏴󠁧󠁢󠁥󠁮󠁧󠁿"}
                 </span>
                 <span>{currentCompConfig.name} Seasons</span>
@@ -266,6 +272,8 @@ export const SeasonsDashboard: React.FC<SeasonsDashboardProps> = ({
                       ? "🇪🇸"
                       : c.countryCode === "DEU"
                       ? "🇩🇪"
+                      : c.countryCode === "ITA"
+                      ? "🇮🇹"
                       : "🏴󠁧󠁢󠁥󠁮󠁧󠁿"}{" "}
                     {c.name}
                   </NativeSelectOption>
