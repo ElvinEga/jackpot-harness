@@ -22,6 +22,8 @@ LEAGUES = {
     "I1": "Italy – Serie A",
     "F1": "France – Ligue 1",
     "N1": "Netherlands – Eredivisie",
+    "P1": "Portugal – Primeira Liga",
+    "B1": "Belgium – Jupiler Pro League",
 }
 
 RESULT = {"H": "home", "D": "draw", "A": "away"}
