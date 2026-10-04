@@ -20,6 +20,8 @@ LEAGUES = {
     "SP1": "Spain – La Liga",
     "D1": "Germany – Bundesliga",
     "I1": "Italy – Serie A",
+    "F1": "France – Ligue 1",
+    "N1": "Netherlands – Eredivisie",
 }
 
 RESULT = {"H": "home", "D": "draw", "A": "away"}
