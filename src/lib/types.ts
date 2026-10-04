@@ -77,6 +77,9 @@ export type PositionStat = {
   bttsPct: number;
   mostLikelyScore: string;
   topScores: { score: string; count: number; pct: number }[];
+  topHomeScore?: { score: string; count: number; pct: number };
+  topAwayScore?: { score: string; count: number; pct: number };
+  topDrawScore?: { score: string; count: number; pct: number };
 };
 
 export type ScoreProbability = {
