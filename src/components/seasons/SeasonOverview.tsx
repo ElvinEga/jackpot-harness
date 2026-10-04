@@ -13,6 +13,14 @@ import {
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableHead,
+  TableRow,
+  TableCell,
+} from "@/components/ui/table";
 import type { SeasonMatch, LeagueStandingRow } from "../../lib/seasonTypes";
 import { computeStandings, computeSeasonOverview } from "../../lib/seasonsAnalytics";
 
@@ -209,26 +217,26 @@ export const SeasonOverview: React.FC<SeasonOverviewProps> = ({
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs border-collapse">
-            <thead>
-              <tr className="border-b border-border bg-muted/50 text-muted-foreground font-semibold">
-                <th className="py-2.5 px-3 text-center w-12">#</th>
-                <th className="py-2.5 px-3">Team</th>
-                <th className="py-2.5 px-2 text-center w-12">Pld</th>
-                <th className="py-2.5 px-2 text-center w-12">W</th>
-                <th className="py-2.5 px-2 text-center w-12">D</th>
-                <th className="py-2.5 px-2 text-center w-12">L</th>
-                <th className="py-2.5 px-2 text-center w-14">GF</th>
-                <th className="py-2.5 px-2 text-center w-14">GA</th>
-                <th className="py-2.5 px-2 text-center w-14">GD</th>
-                <th className="py-2.5 px-3 text-center w-16 font-bold text-foreground">Pts</th>
+          <Table>
+            <TableHeader>
+              <TableRow className="bg-muted/50 text-muted-foreground font-semibold">
+                <TableHead className="py-2.5 px-3 text-center w-12">#</TableHead>
+                <TableHead className="py-2.5 px-3">Team</TableHead>
+                <TableHead className="py-2.5 px-2 text-center w-12">Pld</TableHead>
+                <TableHead className="py-2.5 px-2 text-center w-12">W</TableHead>
+                <TableHead className="py-2.5 px-2 text-center w-12">D</TableHead>
+                <TableHead className="py-2.5 px-2 text-center w-12">L</TableHead>
+                <TableHead className="py-2.5 px-2 text-center w-14">GF</TableHead>
+                <TableHead className="py-2.5 px-2 text-center w-14">GA</TableHead>
+                <TableHead className="py-2.5 px-2 text-center w-14">GD</TableHead>
+                <TableHead className="py-2.5 px-3 text-center w-16 font-bold text-foreground">Pts</TableHead>
                 {standingsTab === "overall" && (
-                  <th className="py-2.5 px-3 text-center w-36">Recent Form</th>
+                  <TableHead className="py-2.5 px-3 text-center w-36">Recent Form</TableHead>
                 )}
-                <th className="py-2.5 px-3 text-right">Action</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-border">
+                <TableHead className="py-2.5 px-3 text-right">Action</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {displayStandings.map((row) => {
                 const isHome = standingsTab === "home";
                 const isAway = standingsTab === "away";
@@ -252,43 +260,43 @@ export const SeasonOverview: React.FC<SeasonOverviewProps> = ({
                     : "bg-muted text-muted-foreground border-border";
 
                 return (
-                  <tr
+                  <TableRow
                     key={row.team}
                     className="hover:bg-muted/40 transition-colors group cursor-pointer"
                     onClick={() => onSelectTeam && onSelectTeam(row.team)}
                   >
-                    <td className="py-2.5 px-3 text-center">
+                    <TableCell className="py-2.5 px-3 text-center">
                       <span
                         className={`inline-flex items-center justify-center h-5 w-5 rounded text-[11px] font-mono border ${rankColor}`}
                       >
                         {row.rank}
                       </span>
-                    </td>
-                    <td className="py-2.5 px-3 font-semibold text-foreground group-hover:text-primary transition-colors">
+                    </TableCell>
+                    <TableCell className="py-2.5 px-3 font-semibold text-foreground group-hover:text-primary transition-colors">
                       {row.team}
-                    </td>
-                    <td className="py-2.5 px-2 text-center font-mono text-muted-foreground">{pld}</td>
-                    <td className="py-2.5 px-2 text-center font-mono font-medium text-emerald-500">
+                    </TableCell>
+                    <TableCell className="py-2.5 px-2 text-center font-mono text-muted-foreground">{pld}</TableCell>
+                    <TableCell className="py-2.5 px-2 text-center font-mono font-medium text-emerald-500">
                       {won}
-                    </td>
-                    <td className="py-2.5 px-2 text-center font-mono font-medium text-amber-500">
+                    </TableCell>
+                    <TableCell className="py-2.5 px-2 text-center font-mono font-medium text-amber-500">
                       {drawn}
-                    </td>
-                    <td className="py-2.5 px-2 text-center font-mono font-medium text-destructive">
+                    </TableCell>
+                    <TableCell className="py-2.5 px-2 text-center font-mono font-medium text-destructive">
                       {lost}
-                    </td>
-                    <td className="py-2.5 px-2 text-center font-mono text-muted-foreground">{gf}</td>
-                    <td className="py-2.5 px-2 text-center font-mono text-muted-foreground">{ga}</td>
-                    <td className="py-2.5 px-2 text-center font-mono font-semibold">
+                    </TableCell>
+                    <TableCell className="py-2.5 px-2 text-center font-mono text-muted-foreground">{gf}</TableCell>
+                    <TableCell className="py-2.5 px-2 text-center font-mono text-muted-foreground">{ga}</TableCell>
+                    <TableCell className="py-2.5 px-2 text-center font-mono font-semibold">
                       <span className={gd > 0 ? "text-emerald-500" : gd < 0 ? "text-destructive" : "text-muted-foreground"}>
                         {gd > 0 ? `+${gd}` : gd}
                       </span>
-                    </td>
-                    <td className="py-2.5 px-3 text-center font-mono font-bold text-sm text-foreground bg-muted/20">
+                    </TableCell>
+                    <TableCell className="py-2.5 px-3 text-center font-mono font-bold text-sm text-foreground bg-muted/20">
                       {pts}
-                    </td>
+                    </TableCell>
                     {standingsTab === "overall" && (
-                      <td className="py-2.5 px-3 text-center">
+                      <TableCell className="py-2.5 px-3 text-center">
                         <div className="flex items-center justify-center gap-1">
                           {row.form.map((res, i) => (
                             <span
@@ -305,9 +313,9 @@ export const SeasonOverview: React.FC<SeasonOverviewProps> = ({
                             </span>
                           ))}
                         </div>
-                      </td>
+                      </TableCell>
                     )}
-                    <td className="py-2.5 px-3 text-right">
+                    <TableCell className="py-2.5 px-3 text-right">
                       <Button
                         variant="ghost"
                         size="xs"
@@ -320,12 +328,12 @@ export const SeasonOverview: React.FC<SeasonOverviewProps> = ({
                         Deep Dive
                         <ChevronRight className="h-3 w-3" />
                       </Button>
-                    </td>
-                  </tr>
+                    </TableCell>
+                  </TableRow>
                 );
               })}
-            </tbody>
-          </table>
+            </TableBody>
+          </Table>
         </div>
       </div>
     </div>
