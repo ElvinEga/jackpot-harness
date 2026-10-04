@@ -1,9 +1,10 @@
 # AGENTS.md
 
 Betting jackpot dataset: historical football (soccer) jackpot events scraped from three
-Kenyan/European bookmakers — Betika, Mozzart and SportPesa. The repo is data first: raw CSVs, a
-normalised JSON mirror under `data/processed/`, and one generator script. There is no build system
-or dependency manifest yet.
+Kenyan/European bookmakers — Betika, Mozzart and SportPesa, plus per-season league fixtures from
+Football-Data.co.uk under `data/seasons/`. The repo is data first: raw CSVs, a normalised JSON
+mirror under `data/processed/`, and two generator scripts in `src/`. A React + Vite dashboard SPA
+in `src/` consumes the processed JSON.
 
 ## Repository layout
 
@@ -13,12 +14,16 @@ AGENTS.md
 data/raw/betika/     4 CSVs   — grand, mega, midweek, must-be-won jackpots
 data/raw/mozzart/    6 CSVs   — super-jackpot (1 file + numbered variants), super-grand-jackpot
 data/raw/sportpesa/  2 files  — mega-jackpot-pro as CSV and as the original nested JSON
+data/seasons/premier_league/  6 CSVs (2021-2022 … 2026-2027) + notes.txt (source's own column key)
 data/processed/      JSON mirror of the raw CSVs, same bookmaker folders and filenames
+data/processed/seasons/<competition>/  one JSON per season + index.json
 src/build_json.py    regenerates data/processed from data/raw
+src/build_seasons.py regenerates data/processed/seasons from data/seasons
 ```
 
 `data/raw/` holds the scrape output as collected and is **read-only**: never edit these files in
-place. Derived tables go under `data/processed/`, code under `src/`.
+place. `data/seasons/` is likewise collected input (untouched CSVs) — its JSON output lives under
+`data/processed/seasons/`. Derived tables go under `data/processed/`, code under `src/`.
 
 Within `data/raw/`, each subdirectory is one bookmaker and each file inside is one jackpot product.
 Filenames use lowercase bookmaker + hyphenated jackpot name (`betika-midweek-jackpot.csv`).
@@ -74,11 +79,63 @@ Conversions the generator applies, all lossless apart from the last:
   other rows carry typo prices (`1..35`, `.1.35`), and the 32 `No date found` rows of
   `mozzart-super-jackpot4.csv` get a null date. Values are never guessed or repaired.
 
+## Season data (Football-Data.co.uk)
+
+`data/seasons/<competition>/<season>.csv` holds per-match league fixtures with 106–132 wide,
+PascalCase/abbreviated columns. The source's own column key is `data/seasons/notes.txt` — read it
+rather than guessing an abbreviation. Every raw column header and cell is preserved verbatim in the
+CSVs; nothing is renamed or repaired there.
+
+`uv run python src/build_seasons.py` (also `bun run build:seasons`) regenerates
+`data/processed/seasons/<competition>/` from those CSVs: one JSON array per season file plus an
+`index.json`. These files are **separate from the jackpot data** — served by the Vite middleware at
+`/data/seasons/premier_league/<season>.json` exactly like the jackpot mirror is at
+`/data/<bookmaker>/`.
+
+1950 matches in total (380 per completed season, 50 in the in-progress 2026-2027 file). One object
+per match, sorted by `(date, home_team)`; the ~100 source columns are reduced to 19 fields with the
+variable parts grouped:
+
+```json
+{
+  "season": "2021-2022", "date": "2021-08-13", "kickoff_time": "20:00",
+  "home_team": "Brentford", "away_team": "Arsenal",
+  "division": "E0", "league": "England – Premier League",
+  "score": "2-0", "home_goals": 2, "away_goals": 0, "total_goals": 2, "result": "home",
+  "half_time_score": "1-0", "half_time_home_goals": 1, "half_time_away_goals": 0,
+  "half_time_result": "home", "referee": "M Oliver",
+  "stats": { "home_xg": null, "home_shots": 8, "away_corners": 5, "home_yellow": 0 },
+  "odds":  { "home": 4.02, "draw": 3.43, "away": 2.02, "home_close": 3.89,
+             "over_2_5": 2.16, "handicap": 0.5, "handicap_home": 1.87 }
+}
+```
+
+What the generator does:
+- Core field names are flattened to the jackpot vocabulary (`FTHG`/`FTAG`/`FTR` →
+  `home_goals`/`away_goals`/`result`, `H`/`D`/`A` → `home`/`draw`/`away`), so season rows are
+  drop-in comparable with `Match` rows. `league` is filled from `division` (`E0` → the Premier
+  League string used by the jackpot CSVs, en dash included).
+- Dates `dd/mm/yyyy` → ISO. `season` is derived from the kickoff month (July onwards belongs to the
+  season starting that year), so the file stem, `season` and `index.json` agree.
+- **Only market-average and market-maximum prices are kept.** The individual bookmaker columns
+  (`B365*`, `PS*`, `WH*`, `BW*`, `IW*`, `BFE*`, …) are dropped: which firms appear changes between
+  seasons, so they cannot be compared across files. `odds.home/draw/away` is `AvgH/AvgD/AvgA`
+  (pre-closing market average), `*_max` is `Max*`, `*_close` is `AvgC*`; `over_2_5`/`under_2_5` and
+  `handicap*` likewise come from the `Avg*`/`Max*`/`AvgC*` columns, with `handicap` the `AHh` line.
+- Keys are emitted per competition from the columns actually present (e.g. `home_xg`/`away_xg` only
+  exist from 2026-2027), and are the same for every season file within a competition. Missing cells
+  become `null`, never guessed.
+- The source data is complete for these files: all 1950 rows have a full-time result, both half-time
+  scores, referee and stats; only scattered odds cells are blank (0–7% per file).
+
 ## Data quirks (verify before computing anything)
 
 - Line endings differ by file (mostly CRLF; `mozzart-super-grand-jackpot.csv` and both sportpesa
   files are LF) and `result` values can carry a trailing `\r`. Use `csv.DictReader` with
   `newline=''`, never naive `split(',')`.
+- The season CSVs are all CRLF and four of the six (2021-2022, 2024-2025, 2025-2026, 2026-2027)
+  carry a UTF-8 **BOM** before `Div`; open them with `encoding='utf-8-sig'` or the first column
+  becomes `'\ufeffDiv'`.
 - Encodings are mixed UTF-8 / plain ASCII across files; always open with `encoding='utf-8'`.
 - `mozzart-super-jackpot4.csv` contains ~32 literal `No date found` values in `date`.
 - Coverage overlaps between files within a bookmaker (e.g. `mozzart-super-jackpot*.csv` are
@@ -98,7 +155,8 @@ Conversions the generator applies, all lossless apart from the last:
   Add dependencies with `uv add` rather than hand-writing a `requirements.txt`.
 - The project path contains a space (`betting data`). Quote paths in every shell command.
 - Probe HTTP/API endpoints with `uv run python` + `requests`, never `curl`.
-- Read from `data/raw/`, write to `data/processed/`. The raw CSVs are inputs only.
+- Read from `data/raw/` and `data/seasons/`, write to `data/processed/`. The input CSVs are inputs
+  only; `data/processed/seasons/` is kept apart from the jackpot mirror so the two never mix.
 - Analysis scripts should be reproducible from files alone — no network calls for data already in
   the repo.
 
