@@ -42,7 +42,7 @@ export const SeasonTeamAnalysis: React.FC<SeasonTeamAnalysisProps> = ({
   onPredictWithTeam,
 }) => {
   const allTeams = useMemo(() => getAllSeasonTeams(matches), [matches]);
-  const activeTeam = selectedTeam || allTeams[0] || "Arsenal";
+  const activeTeam = (allTeams.includes(selectedTeam) ? selectedTeam : allTeams[0]) || "Arsenal";
 
   const [formLimit, setFormLimit] = useState<number>(10);
 
