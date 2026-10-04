@@ -57,7 +57,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import type { SeasonMatch } from "../../lib/seasonTypes";
-import { exportToCsv } from "../../lib/export";
+import { exportSeasonMatchesToCsv } from "../../lib/export";
 import { SeasonActionsModal, type SeasonActionType } from "./SeasonActionsModal";
 
 interface SeasonDataTableProps {
@@ -502,8 +502,8 @@ export const SeasonDataTable: React.FC<SeasonDataTableProps> = ({
               size="xs"
               variant="outline"
               onClick={() =>
-                exportToCsv(
-                  selectedMatches as unknown as Record<string, unknown>[],
+                exportSeasonMatchesToCsv(
+                  selectedMatches,
                   `season_matches_${selectedMatches.length}.csv`
                 )
               }
