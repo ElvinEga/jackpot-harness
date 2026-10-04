@@ -97,6 +97,8 @@ export const Header: React.FC<HeaderProps> = ({
   totalCount,
   activeTab,
   onTabChange,
+  seasonsTab,
+  onSeasonsTabChange,
   filteredMatches,
   isFiltering = false,
   appMode,
