@@ -15,7 +15,11 @@ ROOT = Path(__file__).resolve().parent.parent
 RAW = ROOT / "data" / "seasons"
 OUT = ROOT / "data" / "processed" / "seasons"
 
-LEAGUES = {"E0": "England – Premier League", "SP1": "Spain – La Liga"}
+LEAGUES = {
+    "E0": "England – Premier League",
+    "SP1": "Spain – La Liga",
+    "D1": "Germany – Bundesliga",
+}
 
 RESULT = {"H": "home", "D": "draw", "A": "away"}
 
