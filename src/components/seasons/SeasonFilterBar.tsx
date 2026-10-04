@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
-import { AVAILABLE_COMPETITIONS } from "../../lib/seasonsData";
+import { AVAILABLE_COMPETITIONS, getCompetitionFlag } from "../../lib/seasonsData";
 
 export interface SeasonFiltersState {
   search: string;
@@ -73,14 +73,7 @@ export const SeasonFilterBar: React.FC<SeasonFilterBarProps> = ({
             >
               {AVAILABLE_COMPETITIONS.map((c) => (
                 <NativeSelectOption key={c.id} value={c.id}>
-                  {c.countryCode === "ESP"
-                    ? "🇪🇸"
-                    : c.countryCode === "DEU"
-                    ? "🇩🇪"
-                    : c.countryCode === "ITA"
-                    ? "🇮🇹"
-                    : "🏴󠁧󠁢󠁥󠁮󠁧󠁿"}{" "}
-                  {c.name}
+                  {getCompetitionFlag(c.countryCode)} {c.name}
                 </NativeSelectOption>
               ))}
             </NativeSelect>
