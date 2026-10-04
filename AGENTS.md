@@ -158,10 +158,6 @@ What the generator does:
 - The season CSVs are all CRLF and most carry a UTF-8 **BOM** before `Div` (EPL: 2021-2022,
   2024-2025, 2025-2026, 2026-2027; every other competition: its last three seasons). Open them with
   `encoding='utf-8-sig'` or the first column becomes `'\ufeffDiv'`.
-- **Two season files are named for the wrong season**: `data/seasons/eredivisie/2024-2025.csv` holds
-  the 2025-2026 fixtures (2025-08-08 … 2026-05-17) and `2025-2026.csv` the 2024-2025 ones. The other
-  46 season files agree with their name. Trust the row-level `season` and `index.json` over the
-  filename until those two are renamed.
 - Encodings are mixed UTF-8 / plain ASCII across files; always open with `encoding='utf-8'`.
 - `mozzart-super-jackpot4.csv` contains ~32 literal `No date found` values in `date`.
 - Coverage overlaps between files within a bookmaker (e.g. `mozzart-super-jackpot*.csv` are
