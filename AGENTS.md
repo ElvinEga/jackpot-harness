@@ -148,7 +148,7 @@ What the generator does:
   six rows only — one Bundesliga fixture (Union Berlin v Bochum, 2024-12-14) and five in
   `jupiter_league`, every one of them a 5-0 or 0-5 scoreline, the shape an awarded fixture takes
   here. On all six, every stat is `null` too. Scattered odds cells are blank (0–7% per file, and not
-  one in `le_championnat`, `liga_1`, the Eredivisie or La Liga).
+  one in `le_championnat`, `liga_1`, La Liga or the Eredivisie bar the one blanked row below).
 
 ## Data quirks (verify before computing anything)
 
@@ -158,6 +158,11 @@ What the generator does:
 - The season CSVs are all CRLF and most carry a UTF-8 **BOM** before `Div` (EPL: 2021-2022,
   2024-2025, 2025-2026, 2026-2027; every other competition: its last three seasons). Open them with
   `encoding='utf-8-sig'` or the first column becomes `'\ufeffDiv'`.
+- One scrape defect was blanked at source: the Utrecht v Go Ahead Eagles row (08/09/2026) of
+  `data/seasons/eredivisie/2026-2027.csv` carried a corrupted odds block — a negative under-2.5
+  price, all five `Max*` below their `Avg*`, and `AHh` holding a price. Its 85 populated odds cells
+  are now empty, so that match has null odds in the JSON; its score, half-time and stats are intact.
+  Every other odds row in the season set satisfies Max >= Avg with all prices above 1.
 - Encodings are mixed UTF-8 / plain ASCII across files; always open with `encoding='utf-8'`.
 - `mozzart-super-jackpot4.csv` contains ~32 literal `No date found` values in `date`.
 - Coverage overlaps between files within a bookmaker (e.g. `mozzart-super-jackpot*.csv` are
