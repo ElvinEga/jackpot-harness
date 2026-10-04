@@ -15,7 +15,7 @@ ROOT = Path(__file__).resolve().parent.parent
 RAW = ROOT / "data" / "seasons"
 OUT = ROOT / "data" / "processed" / "seasons"
 
-LEAGUES = {"E0": "England – Premier League"}
+LEAGUES = {"E0": "England – Premier League", "SP1": "Spain – La Liga"}
 
 RESULT = {"H": "home", "D": "draw", "A": "away"}
 
@@ -127,7 +127,7 @@ def build_match(row, source, header):
         "half_time_home_goals": ht_home,
         "half_time_away_goals": ht_away,
         "half_time_result": RESULT.get(text(row.get("HTR")), None),
-        "referee": text(row.get("Referee")),
+        **({"referee": text(row.get("Referee"))} if "Referee" in header else {}),
         "stats": {key: number(f, row.get(f, "")) for f, key in STATS.items() if f in header},
         "odds": {key: number(f, row.get(f, "")) for f, key in ODDS.items() if f in header},
     }
