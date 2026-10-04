@@ -17,6 +17,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableHead,
+  TableRow,
+  TableCell,
+} from "@/components/ui/table";
 import type { SeasonMatch } from "../../lib/seasonTypes";
 
 interface SeasonFixturesTableProps {
@@ -96,22 +104,22 @@ export const SeasonFixturesTable: React.FC<SeasonFixturesTableProps> = ({
       {/* Match Table */}
       <div className="bg-card border border-border rounded-xl shadow-xs overflow-hidden">
         <div className="overflow-x-auto max-h-[600px] overflow-y-auto">
-          <table className="w-full text-left text-xs border-collapse">
-            <thead className="sticky top-0 bg-muted/95 backdrop-blur z-10">
-              <tr className="border-b border-border text-muted-foreground font-semibold">
-                <th className="py-2.5 px-3">Date</th>
-                <th className="py-2.5 px-2">Time</th>
-                <th className="py-2.5 px-3">Match</th>
-                <th className="py-2.5 px-2 text-center">Score</th>
-                <th className="py-2.5 px-2 text-center">HT</th>
-                <th className="py-2.5 px-2 text-center">Shots (SoT)</th>
-                <th className="py-2.5 px-2 text-center">Corners</th>
-                <th className="py-2.5 px-2 text-center">Cards</th>
-                <th className="py-2.5 px-2 text-right">Avg Odds (H/D/A)</th>
-                <th className="py-2.5 px-3 text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-border font-mono">
+          <Table>
+            <TableHeader className="sticky top-0 bg-muted/95 backdrop-blur z-10">
+              <TableRow className="border-b border-border text-muted-foreground font-semibold">
+                <TableHead className="py-2.5 px-3">Date</TableHead>
+                <TableHead className="py-2.5 px-2">Time</TableHead>
+                <TableHead className="py-2.5 px-3">Match</TableHead>
+                <TableHead className="py-2.5 px-2 text-center">Score</TableHead>
+                <TableHead className="py-2.5 px-2 text-center">HT</TableHead>
+                <TableHead className="py-2.5 px-2 text-center">Shots (SoT)</TableHead>
+                <TableHead className="py-2.5 px-2 text-center">Corners</TableHead>
+                <TableHead className="py-2.5 px-2 text-center">Cards</TableHead>
+                <TableHead className="py-2.5 px-2 text-right">Avg Odds (H/D/A)</TableHead>
+                <TableHead className="py-2.5 px-3 text-right">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody className="font-mono">
               {filteredMatches.map((m, idx) => {
                 const resBadge =
                   m.result === "home"
@@ -134,41 +142,41 @@ export const SeasonFixturesTable: React.FC<SeasonFixturesTableProps> = ({
                 const ar = m.stats.away_red ?? 0;
 
                 return (
-                  <tr
+                  <TableRow
                     key={idx}
                     className="hover:bg-muted/40 transition-colors cursor-pointer"
                     onClick={() => setSelectedMatch(m)}
                   >
-                    <td className="py-2.5 px-3 text-muted-foreground font-sans">{m.date}</td>
-                    <td className="py-2.5 px-2 text-muted-foreground">{m.kickoff_time || "-"}</td>
-                    <td className="py-2.5 px-3 font-sans font-medium text-foreground">
+                    <TableCell className="py-2.5 px-3 text-muted-foreground font-sans">{m.date}</TableCell>
+                    <TableCell className="py-2.5 px-2 text-muted-foreground">{m.kickoff_time || "-"}</TableCell>
+                    <TableCell className="py-2.5 px-3 font-sans font-medium text-foreground">
                       <span className="hover:text-primary transition-colors">{m.home_team}</span>
                       <span className="text-muted-foreground font-normal mx-1">vs</span>
                       <span className="hover:text-primary transition-colors">{m.away_team}</span>
-                    </td>
-                    <td className="py-2.5 px-2 text-center font-bold text-foreground">
+                    </TableCell>
+                    <TableCell className="py-2.5 px-2 text-center font-bold text-foreground">
                       <span className={`inline-block px-1.5 py-0.5 rounded text-[11px] border ${resBadge}`}>
                         {m.score}
                       </span>
-                    </td>
-                    <td className="py-2.5 px-2 text-center text-muted-foreground">
+                    </TableCell>
+                    <TableCell className="py-2.5 px-2 text-center text-muted-foreground">
                       {m.half_time_score || "-"}
-                    </td>
-                    <td className="py-2.5 px-2 text-center text-muted-foreground">
+                    </TableCell>
+                    <TableCell className="py-2.5 px-2 text-center text-muted-foreground">
                       {hs}:{as} ({hst}:{ast})
-                    </td>
-                    <td className="py-2.5 px-2 text-center text-muted-foreground">
+                    </TableCell>
+                    <TableCell className="py-2.5 px-2 text-center text-muted-foreground">
                       {hc}:{ac}
-                    </td>
-                    <td className="py-2.5 px-2 text-center text-muted-foreground">
+                    </TableCell>
+                    <TableCell className="py-2.5 px-2 text-center text-muted-foreground">
                       {hy + ay > 0 && <span>{hy + ay}Y</span>}
                       {hr + ar > 0 && <span className="text-destructive font-bold ml-1">{hr + ar}R</span>}
                       {hy + ay === 0 && hr + ar === 0 && <span>0</span>}
-                    </td>
-                    <td className="py-2.5 px-2 text-right text-muted-foreground">
+                    </TableCell>
+                    <TableCell className="py-2.5 px-2 text-right text-muted-foreground">
                       {m.odds.home?.toFixed(2) || "-"} / {m.odds.draw?.toFixed(2) || "-"} / {m.odds.away?.toFixed(2) || "-"}
-                    </td>
-                    <td className="py-2.5 px-3 text-right">
+                    </TableCell>
+                    <TableCell className="py-2.5 px-3 text-right">
                       <Button
                         variant="ghost"
                         size="xs"
@@ -181,12 +189,12 @@ export const SeasonFixturesTable: React.FC<SeasonFixturesTableProps> = ({
                         <Eye className="h-3 w-3 mr-1" />
                         Stats
                       </Button>
-                    </td>
-                  </tr>
+                    </TableCell>
+                  </TableRow>
                 );
               })}
-            </tbody>
-          </table>
+            </TableBody>
+          </Table>
         </div>
       </div>
 
