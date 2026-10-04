@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useDeferredValue } from "react";
 import { Loader2, AlertCircle } from "lucide-react";
-import { Header, type AppTab, type AppMode } from "./components/layout/Header";
+import { Header, type AppTab, type AppMode, type SeasonsTab } from "./components/layout/Header";
 import { FilterBar } from "./components/explorer/FilterBar";
 import { DataTable } from "./components/explorer/DataTable";
 import { MatchDetailSheet } from "./components/explorer/MatchDetailSheet";
@@ -23,6 +23,7 @@ export function App() {
 
   const [appMode, setAppMode] = useState<AppMode>("jackpot");
   const [activeTab, setActiveTab] = useState<AppTab>("explorer");
+  const [seasonsTab, setSeasonsTab] = useState<SeasonsTab>("explorer");
   const [selectedMatch, setSelectedMatch] = useState<Match | null>(null);
 
   // Teams to pre-fill when transferring from Predictor to H2H view
@@ -118,6 +119,8 @@ export function App() {
         totalCount={matches.length}
         activeTab={activeTab}
         onTabChange={setActiveTab}
+        seasonsTab={seasonsTab}
+        onSeasonsTabChange={setSeasonsTab}
         filteredMatches={filteredMatches}
         isFiltering={isFiltering}
         appMode={appMode}
@@ -126,7 +129,7 @@ export function App() {
 
       {/* Main Content Area */}
       {appMode === "seasons" ? (
-        <SeasonsDashboard />
+        <SeasonsDashboard activeTab={seasonsTab} onTabChange={setSeasonsTab} />
       ) : (
         <>
           {activeTab === "predictor" && (
