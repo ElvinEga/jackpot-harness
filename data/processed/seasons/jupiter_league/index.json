@@ -1,0 +1,54 @@
+{
+  "competition": "jupiter_league",
+  "source": "data/seasons/jupiter_league",
+  "seasons": [
+    {
+      "season": "2021-2022",
+      "file": "2021-2022.json",
+      "matches": 306,
+      "date_min": "2021-07-23",
+      "date_max": "2022-04-10",
+      "teams": 18
+    },
+    {
+      "season": "2022-2023",
+      "file": "2022-2023.json",
+      "matches": 306,
+      "date_min": "2022-07-22",
+      "date_max": "2023-04-23",
+      "teams": 18
+    },
+    {
+      "season": "2023-2024",
+      "file": "2023-2024.json",
+      "matches": 312,
+      "date_min": "2023-07-28",
+      "date_max": "2024-06-02",
+      "teams": 16
+    },
+    {
+      "season": "2024-2025",
+      "file": "2024-2025.json",
+      "matches": 312,
+      "date_min": "2024-07-26",
+      "date_max": "2025-05-25",
+      "teams": 16
+    },
+    {
+      "season": "2025-2026",
+      "file": "2025-2026.json",
+      "matches": 311,
+      "date_min": "2025-07-25",
+      "date_max": "2026-05-24",
+      "teams": 16
+    },
+    {
+      "season": "2026-2027",
+      "file": "2026-2027.json",
+      "matches": 63,
+      "date_min": "2026-08-07",
+      "date_max": "2026-09-20",
+      "teams": 18
+    }
+  ]
+}
