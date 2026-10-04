@@ -29,6 +29,9 @@ interface SeasonTrendsProps {
 export const SeasonTrends: React.FC<SeasonTrendsProps> = ({ allMatches }) => {
   const comparisons = useMemo(() => computeSeasonComparison(allMatches), [allMatches]);
   const calendar = useMemo(() => computeCalendarAnalytics(allMatches), [allMatches]);
+  const leagueName = useMemo(() => {
+    return allMatches[0]?.league?.replace(/.*–\s*/, "") || "League";
+  }, [allMatches]);
 
   return (
     <div className="space-y-6">
@@ -38,7 +41,7 @@ export const SeasonTrends: React.FC<SeasonTrendsProps> = ({ allMatches }) => {
           <div className="flex items-center gap-2">
             <TrendingUp className="h-4 w-4 text-primary" />
             <h3 className="text-sm font-bold text-foreground">
-              Premier League Evolution: Season-to-Season Comparison (2021–2027)
+              {leagueName} Evolution: Season-to-Season Comparison (2021–2027)
             </h3>
           </div>
           <Badge variant="outline" className="text-xs font-mono">
