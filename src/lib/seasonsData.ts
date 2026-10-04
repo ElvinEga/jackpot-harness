@@ -27,6 +27,13 @@ export const AVAILABLE_COMPETITIONS = [
     countryCode: "DEU",
     division: "D1",
   },
+  {
+    id: "serie_a",
+    name: "Serie A",
+    country: "Italy",
+    countryCode: "ITA",
+    division: "I1",
+  },
 ];
 
 /**
