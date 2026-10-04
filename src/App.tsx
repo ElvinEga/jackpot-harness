@@ -24,6 +24,7 @@ export function App() {
   const [appMode, setAppMode] = useState<AppMode>("jackpot");
   const [activeTab, setActiveTab] = useState<AppTab>("explorer");
   const [seasonsTab, setSeasonsTab] = useState<SeasonsTab>("explorer");
+  const [seasonsCompetition, setSeasonsCompetition] = useState<string>("premier_league");
   const [selectedMatch, setSelectedMatch] = useState<Match | null>(null);
 
   // Teams to pre-fill when transferring from Predictor to H2H view
@@ -129,7 +130,12 @@ export function App() {
 
       {/* Main Content Area */}
       {appMode === "seasons" ? (
-        <SeasonsDashboard activeTab={seasonsTab} onTabChange={setSeasonsTab} />
+        <SeasonsDashboard
+          activeTab={seasonsTab}
+          onTabChange={setSeasonsTab}
+          competition={seasonsCompetition}
+          onCompetitionChange={setSeasonsCompetition}
+        />
       ) : (
         <>
           {activeTab === "predictor" && (
