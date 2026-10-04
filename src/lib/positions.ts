@@ -14,6 +14,9 @@ export function computePositionStats(matches: Match[], maxPos = 17): PositionSta
     over25Count: number;
     bttsCount: number;
     scores: Map<string, number>;
+    homeScores: Map<string, number>;
+    drawScores: Map<string, number>;
+    awayScores: Map<string, number>;
   }>();
 
   for (let p = 1; p <= maxPos; p++) {
@@ -30,6 +33,9 @@ export function computePositionStats(matches: Match[], maxPos = 17): PositionSta
       over25Count: 0,
       bttsCount: 0,
       scores: new Map<string, number>(),
+      homeScores: new Map<string, number>(),
+      drawScores: new Map<string, number>(),
+      awayScores: new Map<string, number>(),
     });
   }
 
@@ -59,6 +65,14 @@ export function computePositionStats(matches: Match[], maxPos = 17): PositionSta
       if (m.score) {
         const scoreKey = m.score.trim();
         stat.scores.set(scoreKey, (stat.scores.get(scoreKey) || 0) + 1);
+
+        if (m.home_goals > m.away_goals) {
+          stat.homeScores.set(scoreKey, (stat.homeScores.get(scoreKey) || 0) + 1);
+        } else if (m.home_goals === m.away_goals) {
+          stat.drawScores.set(scoreKey, (stat.drawScores.get(scoreKey) || 0) + 1);
+        } else {
+          stat.awayScores.set(scoreKey, (stat.awayScores.get(scoreKey) || 0) + 1);
+        }
       }
     }
   }
@@ -81,6 +95,21 @@ export function computePositionStats(matches: Match[], maxPos = 17): PositionSta
 
     const mostLikelyScore = sortedScores.length > 0 ? sortedScores[0].score : "1-1";
 
+    const getTopScoreForMap = (map: Map<string, number>) => {
+      if (map.size === 0) return undefined;
+      const sorted = Array.from(map.entries()).sort((a, b) => b[1] - a[1]);
+      const [score, count] = sorted[0];
+      return {
+        score,
+        count,
+        pct: Number(((count / scoredTot) * 100).toFixed(1)),
+      };
+    };
+
+    const topHomeScore = getTopScoreForMap(s.homeScores);
+    const topAwayScore = getTopScoreForMap(s.awayScores);
+    const topDrawScore = getTopScoreForMap(s.drawScores);
+
     result.push({
       position: p,
       totalMatches: s.total,
@@ -98,6 +127,9 @@ export function computePositionStats(matches: Match[], maxPos = 17): PositionSta
       bttsPct: Number(((s.bttsCount / scoredTot) * 100).toFixed(1)),
       mostLikelyScore,
       topScores: sortedScores.slice(0, 5),
+      topHomeScore,
+      topAwayScore,
+      topDrawScore,
     });
   }
 
