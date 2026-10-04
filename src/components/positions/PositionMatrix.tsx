@@ -8,6 +8,7 @@ import {
   Percent,
   Goal,
   Filter,
+  Info,
 } from "lucide-react";
 import {
   BarChart,
@@ -242,12 +243,33 @@ export const PositionMatrix: React.FC<PositionMatrixProps> = ({ matches }) => {
         </CardContent>
       </Card>
 
+      {/* Statistical Context Note on Score Modality */}
+      <div className="p-3.5 bg-muted/40 border border-border rounded-xl flex items-start gap-3 text-xs leading-relaxed">
+        <Info className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+        <div className="space-y-1">
+          <div className="font-semibold text-foreground flex items-center gap-1.5">
+            <span>Statistical Note: Why is 1-1 the overall top score across every row position?</span>
+          </div>
+          <p className="text-muted-foreground">
+            In football jackpots, <strong className="text-foreground">Home Wins</strong> are the most frequent outcome (<span className="text-emerald-500 font-medium">~42%</span>), but they are dispersed across many different scorelines (1-0 at 10%, 2-1 at 8.5%, 2-0 at 5.9%, 3-1 at 3.4%). <strong className="text-foreground">Away Wins</strong> (<span className="text-blue-500 font-medium">~30%</span>) are similarly split (0-1 at 9%, 1-2 at 8%, 0-2 at 5.4%). In contrast, <strong className="text-foreground">Draws</strong> (<span className="text-amber-500 font-medium">~28%</span>) are heavily clustered into just two scores: <strong className="text-foreground">1-1 (~13.4%)</strong> and <strong className="text-foreground">0-0 (~9.1%)</strong>.
+          </p>
+          <p className="text-muted-foreground">
+            Because nearly half of all draws finish 1-1, it is mathematically the single highest individual exact scoreline for every position unconditionally. Use the <strong className="text-foreground">Top Win (H / A)</strong> and color-coded <strong className="text-foreground">Frequent Scores</strong> columns below to see the dominant decisive victory scorelines for each row.
+          </p>
+        </div>
+      </div>
+
       {/* Comprehensive Table of Positions */}
       <div className="bg-card border border-border rounded-xl shadow-xs overflow-hidden">
         <div className="px-4 py-3 border-b border-border bg-muted/30 flex items-center justify-between">
-          <h2 className="text-sm font-bold text-foreground">
-            Complete Metrics Matrix by Row Position
-          </h2>
+          <div>
+            <h2 className="text-sm font-bold text-foreground">
+              Complete Metrics Matrix by Row Position
+            </h2>
+            <p className="text-[11px] text-muted-foreground mt-0.5">
+              Historical outcome rates and score distributions partitioned by jackpot position
+            </p>
+          </div>
           <span className="text-xs text-muted-foreground font-mono">
             Analyzed {filteredMatches.length.toLocaleString()} total match rows
           </span>
@@ -265,7 +287,8 @@ export const PositionMatrix: React.FC<PositionMatrixProps> = ({ matches }) => {
                 <th className="py-2.5 px-3 text-center">Avg Goals (H - A)</th>
                 <th className="py-2.5 px-3 text-center">Over 2.5 %</th>
                 <th className="py-2.5 px-3 text-center">BTTS %</th>
-                <th className="py-2.5 px-3 text-center">Top Score</th>
+                <th className="py-2.5 px-3 text-center">Top Score (All)</th>
+                <th className="py-2.5 px-3 text-center">Top Win (H / A)</th>
                 <th className="py-2.5 px-3">Frequent Scores</th>
               </tr>
             </thead>
@@ -280,13 +303,13 @@ export const PositionMatrix: React.FC<PositionMatrixProps> = ({ matches }) => {
                   <td className="py-2.5 px-3 text-center font-mono text-muted-foreground">
                     {s.totalMatches.toLocaleString()}
                   </td>
-                  <td className="py-2.5 px-3 text-center font-mono font-medium text-primary">
+                  <td className="py-2.5 px-3 text-center font-mono font-medium text-emerald-500">
                     {s.homeWinPct}%
                   </td>
-                  <td className="py-2.5 px-3 text-center font-mono font-medium text-foreground">
+                  <td className="py-2.5 px-3 text-center font-mono font-medium text-amber-500">
                     {s.drawPct}%
                   </td>
-                  <td className="py-2.5 px-3 text-center font-mono font-medium text-foreground">
+                  <td className="py-2.5 px-3 text-center font-mono font-medium text-blue-500">
                     {s.awayWinPct}%
                   </td>
                   <td className="py-2.5 px-3 text-center font-mono">
@@ -302,17 +325,55 @@ export const PositionMatrix: React.FC<PositionMatrixProps> = ({ matches }) => {
                     {s.bttsPct}%
                   </td>
                   <td className="py-2.5 px-3 text-center">
-                    <span className="font-mono font-bold px-1.5 py-0.5 rounded bg-muted border border-border text-foreground">
+                    <span className="font-mono font-bold px-1.5 py-0.5 rounded bg-amber-500/10 border border-amber-500/20 text-amber-500" title={`Overall modal score: ${s.mostLikelyScore}`}>
                       {s.mostLikelyScore}
                     </span>
                   </td>
+                  <td className="py-2.5 px-3 text-center">
+                    <div className="flex items-center justify-center gap-1.5 font-mono">
+                      {s.topHomeScore ? (
+                        <span
+                          className="px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 font-semibold text-[11px]"
+                          title={`Top Home Win Score: ${s.topHomeScore.score} (${s.topHomeScore.pct}%)`}
+                        >
+                          H: {s.topHomeScore.score}
+                        </span>
+                      ) : (
+                        <span className="text-muted-foreground">-</span>
+                      )}
+                      {s.topAwayScore ? (
+                        <span
+                          className="px-1.5 py-0.5 rounded bg-blue-500/10 text-blue-500 border border-blue-500/20 font-semibold text-[11px]"
+                          title={`Top Away Win Score: ${s.topAwayScore.score} (${s.topAwayScore.pct}%)`}
+                        >
+                          A: {s.topAwayScore.score}
+                        </span>
+                      ) : (
+                        <span className="text-muted-foreground">-</span>
+                      )}
+                    </div>
+                  </td>
                   <td className="py-2.5 px-3">
                     <div className="flex items-center gap-1.5 flex-wrap">
-                      {s.topScores.slice(0, 3).map((ts) => (
-                        <span key={ts.score} className="text-xs font-mono px-1 rounded bg-muted text-muted-foreground">
-                          {ts.score} ({ts.pct}%)
-                        </span>
-                      ))}
+                      {s.topScores.slice(0, 4).map((ts) => {
+                        const parts = ts.score.split("-").map(Number);
+                        const isHome = parts[0] > parts[1];
+                        const isDraw = parts[0] === parts[1];
+                        const badgeColor = isHome
+                          ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20"
+                          : isDraw
+                          ? "bg-amber-500/10 text-amber-500 border-amber-500/20"
+                          : "bg-blue-500/10 text-blue-500 border-blue-500/20";
+                        return (
+                          <span
+                            key={ts.score}
+                            className={`text-xs font-mono px-1.5 py-0.5 rounded border ${badgeColor}`}
+                            title={`${ts.score}: ${ts.count} times (${ts.pct}%)`}
+                          >
+                            {ts.score} <span className="opacity-75 text-[10px]">({ts.pct}%)</span>
+                          </span>
+                        );
+                      })}
                     </div>
                   </td>
                 </tr>
