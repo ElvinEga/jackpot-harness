@@ -1,17 +1,8 @@
 import React, { useState, useMemo } from "react";
 import {
-  Sparkles,
   ArrowRightLeft,
-  Target,
-  Goal,
-  Flame,
-  TrendingUp,
-  Percent,
   CheckCircle2,
-  AlertCircle,
-  HelpCircle,
 } from "lucide-react";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
