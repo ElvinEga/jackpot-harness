@@ -73,7 +73,7 @@ export const SeasonFilterBar: React.FC<SeasonFilterBarProps> = ({
             >
               {AVAILABLE_COMPETITIONS.map((c) => (
                 <NativeSelectOption key={c.id} value={c.id}>
-                  {c.countryCode === "ESP" ? "🇪🇸" : "🏴󠁧󠁢󠁥󠁮󠁧󠁿"} {c.name}
+                  {c.countryCode === "ESP" ? "🇪🇸" : c.countryCode === "DEU" ? "🇩🇪" : "🏴󠁧󠁢󠁥󠁮󠁧󠁿"} {c.name}
                 </NativeSelectOption>
               ))}
             </NativeSelect>
