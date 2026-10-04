@@ -162,7 +162,7 @@ export const Header: React.FC<HeaderProps> = ({
                 )}
               >
                 <span>🏆</span>
-                <span>Seasons Mode (EPL)</span>
+                <span>Seasons Mode</span>
               </button>
             </div>
           </div>
