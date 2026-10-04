@@ -10,6 +10,7 @@ import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select"
 
 import type { SeasonMatch } from "../../lib/seasonTypes";
 import { useSeasonMatches, useSeasonIndex } from "../../hooks/useSeasonMatches";
+import { AVAILABLE_COMPETITIONS } from "../../lib/seasonsData";
 import { SeasonOverview } from "./SeasonOverview";
 import { SeasonTeamAnalysis } from "./SeasonTeamAnalysis";
 import { SeasonMatchPredictor } from "./SeasonMatchPredictor";
@@ -26,14 +27,28 @@ export type { SeasonsTab } from "../layout/Header";
 interface SeasonsDashboardProps {
   activeTab?: SeasonsTab;
   onTabChange?: (tab: SeasonsTab) => void;
+  competition?: string;
+  onCompetitionChange?: (comp: string) => void;
 }
 
 export const SeasonsDashboard: React.FC<SeasonsDashboardProps> = ({
   activeTab: controlledTab,
   onTabChange: setControlledTab,
+  competition: controlledCompetition,
+  onCompetitionChange: setControlledCompetition,
 }) => {
-  const { data: allMatches = [], isLoading, error, refetch } = useSeasonMatches("premier_league");
-  const { data: seasonIndex } = useSeasonIndex("premier_league");
+  const [internalCompetition, setInternalCompetition] = useState<string>("premier_league");
+  const activeCompetition = controlledCompetition ?? internalCompetition;
+
+  const currentCompConfig = useMemo(() => {
+    return (
+      AVAILABLE_COMPETITIONS.find((c) => c.id === activeCompetition) ||
+      AVAILABLE_COMPETITIONS[0]
+    );
+  }, [activeCompetition]);
+
+  const { data: allMatches = [], isLoading, error, refetch } = useSeasonMatches(activeCompetition);
+  const { data: seasonIndex } = useSeasonIndex(activeCompetition);
 
   const [activeSeason, setActiveSeason] = useState<string>("2025-2026");
   const [internalTab, setInternalTab] = useState<SeasonsTab>("explorer");
@@ -56,6 +71,26 @@ export const SeasonsDashboard: React.FC<SeasonsDashboardProps> = ({
   const [selectedTeam, setSelectedTeam] = useState<string>("Arsenal");
   const [predHome, setPredHome] = useState<string>("Liverpool");
   const [predAway, setPredAway] = useState<string>("Arsenal");
+
+  const handleCompetitionChange = (compId: string) => {
+    if (setControlledCompetition) {
+      setControlledCompetition(compId);
+    } else {
+      setInternalCompetition(compId);
+    }
+
+    if (compId === "laliga_primera") {
+      setSelectedTeam("Real Madrid");
+      setPredHome("Real Madrid");
+      setPredAway("Barcelona");
+    } else {
+      setSelectedTeam("Arsenal");
+      setPredHome("Liverpool");
+      setPredAway("Arsenal");
+    }
+
+    setExplorerFilters((prev) => ({ ...prev, team: "all" }));
+  };
 
   // Explorer state
   const [selectedDetailMatch, setSelectedDetailMatch] = useState<SeasonMatch | null>(null);
@@ -163,7 +198,7 @@ export const SeasonsDashboard: React.FC<SeasonsDashboardProps> = ({
     return (
       <div className="flex-1 flex flex-col items-center justify-center p-12 text-center">
         <Loader2 className="h-8 w-8 text-primary animate-spin mb-3" />
-        <h3 className="text-sm font-bold text-foreground">Loading Premier League Seasons Data</h3>
+        <h3 className="text-sm font-bold text-foreground">Loading {currentCompConfig.name} Seasons Data</h3>
         <p className="text-xs text-muted-foreground mt-1 max-w-sm">
           Ingesting multi-season fixture stats (2021–2027) with shots, corners, cards, and bookmaker odds...
         </p>
@@ -190,35 +225,55 @@ export const SeasonsDashboard: React.FC<SeasonsDashboardProps> = ({
     <div className="flex-1 flex flex-col space-y-6  mx-auto w-full">
       {/* Top Banner & Season Selector Bar */}
       {currentTab !== "explorer" && (
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-4 border-b border-border">
-        <div>
-          <div className="flex items-center gap-2">
-            <h1 className="text-xl font-bold tracking-tight text-foreground">
-              Seasons
-            </h1>
-          </div>
-          <p className="text-xs text-muted-foreground mt-1">
-            Deep analysis across Football-Data fixtures.
-          </p>
-        </div>
-
-        {/* Season Selector (used by Overview, Teams, Fixtures) */}
-          <div className="flex items-center gap-2 shrink-0">
-            <label className="text-xs font-medium text-muted-foreground">Select Season:</label>
-            <NativeSelect
-              value={activeSeason}
-              onChange={(e) => setActiveSeason(e.target.value)}
-              className="text-xs font-semibold h-8 min-w-40"
-            >
-              <NativeSelectOption value="all">All Seasons Combined (2021–2027)</NativeSelectOption>
-              {availableSeasons.map((s) => (
-                <NativeSelectOption key={s} value={s}>
-                  Season {s}
-                </NativeSelectOption>
-              ))}
-            </NativeSelect>
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-4 border-b border-border">
+          <div>
+            <div className="flex items-center gap-2">
+              <h1 className="text-xl font-bold tracking-tight text-foreground flex items-center gap-2">
+                <span>{currentCompConfig.countryCode === "ESP" ? "🇪🇸" : "🏴󠁧󠁢󠁥󠁮󠁧󠁿"}</span>
+                <span>{currentCompConfig.name} Seasons</span>
+              </h1>
+              <Badge variant="outline" className="text-xs font-mono">
+                {availableSeasons.length} Seasons ({allMatches.length.toLocaleString()} Matches)
+              </Badge>
+            </div>
+            <p className="text-xs text-muted-foreground mt-1">
+              Deep analysis across Football-Data fixtures ({currentCompConfig.division} · {currentCompConfig.country}).
+            </p>
           </div>
 
+          {/* Competition & Season Selectors */}
+          <div className="flex items-center gap-3 shrink-0 flex-wrap">
+            <div className="flex items-center gap-2">
+              <label className="text-xs font-medium text-muted-foreground">League:</label>
+              <NativeSelect
+                value={activeCompetition}
+                onChange={(e) => handleCompetitionChange(e.target.value)}
+                className="text-xs font-semibold h-8 min-w-36"
+              >
+                {AVAILABLE_COMPETITIONS.map((c) => (
+                  <NativeSelectOption key={c.id} value={c.id}>
+                    {c.countryCode === "ESP" ? "🇪🇸" : "🏴󠁧󠁢󠁥󠁮󠁧󠁿"} {c.name}
+                  </NativeSelectOption>
+                ))}
+              </NativeSelect>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <label className="text-xs font-medium text-muted-foreground">Season:</label>
+              <NativeSelect
+                value={activeSeason}
+                onChange={(e) => setActiveSeason(e.target.value)}
+                className="text-xs font-semibold h-8 min-w-40"
+              >
+                <NativeSelectOption value="all">All Seasons Combined (2021–2027)</NativeSelectOption>
+                {availableSeasons.map((s) => (
+                  <NativeSelectOption key={s} value={s}>
+                    Season {s}
+                  </NativeSelectOption>
+                ))}
+              </NativeSelect>
+            </div>
+          </div>
         </div>
       )}
 
@@ -241,6 +296,8 @@ export const SeasonsDashboard: React.FC<SeasonsDashboardProps> = ({
             availableTeams={availableTeams}
             filteredCount={explorerFilteredMatches.length}
             totalCount={allMatches.length}
+            activeCompetition={activeCompetition}
+            onCompetitionChange={handleCompetitionChange}
           />
           <SeasonDataTable
             matches={explorerFilteredMatches}
@@ -256,6 +313,7 @@ export const SeasonsDashboard: React.FC<SeasonsDashboardProps> = ({
         <SeasonOverview
           matches={seasonFilteredMatches}
           seasonName={activeSeason === "all" ? "All Seasons (2021–2027)" : `Season ${activeSeason}`}
+          leagueName={currentCompConfig.name}
           onSelectTeam={handleSelectTeamFromStandings}
         />
       )}
@@ -264,7 +322,7 @@ export const SeasonsDashboard: React.FC<SeasonsDashboardProps> = ({
         <SeasonTeamAnalysis
           matches={seasonFilteredMatches}
           seasonName={activeSeason === "all" ? "All Seasons" : `Season ${activeSeason}`}
-          selectedTeam={selectedTeam}
+          selectedTeam={availableTeams.includes(selectedTeam) ? selectedTeam : (availableTeams[0] || "Arsenal")}
           onSelectTeam={setSelectedTeam}
           onPredictWithTeam={handlePredictMatchup}
         />
