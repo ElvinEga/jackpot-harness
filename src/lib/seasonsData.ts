@@ -3,7 +3,7 @@ import type { SeasonIndex, SeasonMatch } from "./seasonTypes";
 // In-memory caches to avoid redundant HTTP requests
 const seasonIndexCache = new Map<string, SeasonIndex>();
 const seasonMatchesCache = new Map<string, SeasonMatch[]>();
-let allMatchesCache: { competition: string; matches: SeasonMatch[] } | null = null;
+const allMatchesCache = new Map<string, SeasonMatch[]>();
 
 export const AVAILABLE_COMPETITIONS = [
   {
@@ -12,6 +12,13 @@ export const AVAILABLE_COMPETITIONS = [
     country: "England",
     countryCode: "ENG",
     division: "E0",
+  },
+  {
+    id: "laliga_primera",
+    name: "La Liga",
+    country: "Spain",
+    countryCode: "ESP",
+    division: "SP1",
   },
 ];
 
@@ -73,8 +80,8 @@ export async function fetchAllSeasonMatches(
   competition = "premier_league",
   onProgress?: (loaded: number, total: number) => void
 ): Promise<SeasonMatch[]> {
-  if (allMatchesCache && allMatchesCache.competition === competition) {
-    return allMatchesCache.matches;
+  if (allMatchesCache.has(competition)) {
+    return allMatchesCache.get(competition)!;
   }
 
   const index = await fetchSeasonIndex(competition);
@@ -100,6 +107,6 @@ export async function fetchAllSeasonMatches(
     return a.home_team.localeCompare(b.home_team);
   });
 
-  allMatchesCache = { competition, matches: flatMatches };
+  allMatchesCache.set(competition, flatMatches);
   return flatMatches;
 }
