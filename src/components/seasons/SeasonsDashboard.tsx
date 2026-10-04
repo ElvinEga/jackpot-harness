@@ -187,28 +187,22 @@ export const SeasonsDashboard: React.FC<SeasonsDashboardProps> = ({
   }
 
   return (
-    <div className="flex-1 flex flex-col p-4 lg:p-6 space-y-6 max-w-7xl mx-auto w-full">
+    <div className="flex-1 flex flex-col space-y-6  mx-auto w-full">
       {/* Top Banner & Season Selector Bar */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-3 border-b border-border">
+      {currentTab !== "explorer" && (
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-4 border-b border-border">
         <div>
           <div className="flex items-center gap-2">
-            <span className="p-1.5 rounded-lg bg-primary/10 text-primary border border-primary/20">
-              <Trophy className="h-5 w-5" />
-            </span>
             <h1 className="text-xl font-bold tracking-tight text-foreground">
-              Premier League Seasons Intelligence
+              Seasons
             </h1>
-            <Badge variant="outline" className="text-xs font-mono font-bold text-primary border-primary/30">
-              6 Seasons (1,950 Matches)
-            </Badge>
           </div>
           <p className="text-xs text-muted-foreground mt-1">
-            Deep analysis across 132-column Football-Data fixtures: Expected goals (xG), Poisson matrices, team ratings, and walk-forward backtests.
+            Deep analysis across Football-Data fixtures.
           </p>
         </div>
 
         {/* Season Selector (used by Overview, Teams, Fixtures) */}
-        {currentTab !== "explorer" && (
           <div className="flex items-center gap-2 shrink-0">
             <label className="text-xs font-medium text-muted-foreground">Select Season:</label>
             <NativeSelect
@@ -224,12 +218,13 @@ export const SeasonsDashboard: React.FC<SeasonsDashboardProps> = ({
               ))}
             </NativeSelect>
           </div>
-        )}
-      </div>
+
+        </div>
+      )}
 
       {/* Active Tab Content Area */}
       {currentTab === "explorer" && (
-        <div className="space-y-4">
+        <div>
           <SeasonFilterBar
             filters={explorerFilters}
             onFilterChange={setExplorerFilters}
