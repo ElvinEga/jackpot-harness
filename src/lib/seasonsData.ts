@@ -34,7 +34,56 @@ export const AVAILABLE_COMPETITIONS = [
     countryCode: "ITA",
     division: "I1",
   },
+  {
+    id: "le_championnat",
+    name: "Ligue 1",
+    country: "France",
+    countryCode: "FRA",
+    division: "F1",
+  },
+  {
+    id: "eredivisie",
+    name: "Eredivisie",
+    country: "Netherlands",
+    countryCode: "NLD",
+    division: "N1",
+  },
+  {
+    id: "liga_1",
+    name: "Primeira Liga",
+    country: "Portugal",
+    countryCode: "PRT",
+    division: "P1",
+  },
+  {
+    id: "jupiter_league",
+    name: "Jupiler Pro League",
+    country: "Belgium",
+    countryCode: "BEL",
+    division: "B1",
+  },
 ];
+
+export function getCompetitionFlag(countryCode: string): string {
+  switch (countryCode) {
+    case "ESP":
+      return "🇪🇸";
+    case "DEU":
+      return "🇩🇪";
+    case "ITA":
+      return "🇮🇹";
+    case "FRA":
+      return "🇫🇷";
+    case "NLD":
+      return "🇳🇱";
+    case "PRT":
+      return "🇵🇹";
+    case "BEL":
+      return "🇧🇪";
+    default:
+      return "🏴󠁧󠁢󠁥󠁮󠁧󠁿";
+  }
+}
 
 /**
  * Fetches the index metadata for a given competition.
