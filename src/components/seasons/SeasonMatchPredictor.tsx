@@ -30,15 +30,42 @@ export const SeasonMatchPredictor: React.FC<SeasonMatchPredictorProps> = ({
     allTeams.includes(defaultAwayTeam) ? defaultAwayTeam : allTeams[1] || "Arsenal"
   );
 
-  // Quick Preset Matches from the recent seasons (e.g. big Premier League derbies)
-  const PRESET_MATCHUPS = [
-    { home: "Liverpool", away: "Arsenal" },
-    { home: "Man City", away: "Liverpool" },
-    { home: "Arsenal", away: "Chelsea" },
-    { home: "Man United", away: "Man City" },
-    { home: "Tottenham", away: "Arsenal" },
-    { home: "Newcastle", away: "Aston Villa" },
-  ];
+  // Synchronize teams when league changes or defaults update
+  React.useEffect(() => {
+    if (allTeams.includes(defaultHomeTeam)) {
+      setHomeTeam(defaultHomeTeam);
+    } else if (allTeams.length > 0) {
+      setHomeTeam(allTeams[0]);
+    }
+
+    if (allTeams.includes(defaultAwayTeam)) {
+      setAwayTeam(defaultAwayTeam);
+    } else if (allTeams.length > 1) {
+      setAwayTeam(allTeams[1]);
+    }
+  }, [defaultHomeTeam, defaultAwayTeam, allTeams]);
+
+  // Quick Preset Matches dynamically tailored to the active league
+  const presetMatchups = useMemo(() => {
+    if (allTeams.includes("Real Madrid")) {
+      return [
+        { home: "Real Madrid", away: "Barcelona" },
+        { home: "Ath Madrid", away: "Real Madrid" },
+        { home: "Barcelona", away: "Ath Madrid" },
+        { home: "Sevilla", away: "Betis" },
+        { home: "Ath Bilbao", away: "Sociedad" },
+        { home: "Valencia", away: "Villarreal" },
+      ].filter((p) => allTeams.includes(p.home) && allTeams.includes(p.away));
+    }
+    return [
+      { home: "Liverpool", away: "Arsenal" },
+      { home: "Man City", away: "Liverpool" },
+      { home: "Arsenal", away: "Chelsea" },
+      { home: "Man United", away: "Man City" },
+      { home: "Tottenham", away: "Arsenal" },
+      { home: "Newcastle", away: "Aston Villa" },
+    ].filter((p) => allTeams.includes(p.home) && allTeams.includes(p.away));
+  }, [allTeams]);
 
   const handleSwap = () => {
     setHomeTeam(awayTeam);
@@ -107,7 +134,7 @@ export const SeasonMatchPredictor: React.FC<SeasonMatchPredictorProps> = ({
         {/* Quick Presets */}
         <div className="flex items-center gap-1.5 flex-wrap shrink-0">
           <span className="text-[11px] text-muted-foreground font-medium mr-1">Derby Presets:</span>
-          {PRESET_MATCHUPS.map((pair) => (
+          {presetMatchups.map((pair) => (
             <button
               key={`${pair.home}-${pair.away}`}
               type="button"
