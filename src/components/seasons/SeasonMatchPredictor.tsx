@@ -77,6 +77,46 @@ export const SeasonMatchPredictor: React.FC<SeasonMatchPredictorProps> = ({
         { home: "Napoli", away: "Roma" },
       ].filter((p) => allTeams.includes(p.home) && allTeams.includes(p.away));
     }
+    if (allTeams.includes("Paris SG") || allTeams.includes("Marseille")) {
+      return [
+        { home: "Paris SG", away: "Marseille" },
+        { home: "Lyon", away: "Marseille" },
+        { home: "Lens", away: "Lille" },
+        { home: "Monaco", away: "Paris SG" },
+        { home: "Lyon", away: "Paris SG" },
+        { home: "Monaco", away: "Nice" },
+      ].filter((p) => allTeams.includes(p.home) && allTeams.includes(p.away));
+    }
+    if (allTeams.includes("Ajax") || allTeams.includes("Feyenoord")) {
+      return [
+        { home: "Ajax", away: "Feyenoord" },
+        { home: "Ajax", away: "PSV Eindhoven" },
+        { home: "PSV Eindhoven", away: "Feyenoord" },
+        { home: "AZ Alkmaar", away: "Ajax" },
+        { home: "Twente", away: "Ajax" },
+        { home: "Utrecht", away: "Feyenoord" },
+      ].filter((p) => allTeams.includes(p.home) && allTeams.includes(p.away));
+    }
+    if (allTeams.includes("Benfica") || allTeams.includes("Porto")) {
+      return [
+        { home: "Benfica", away: "Porto" },
+        { home: "Benfica", away: "Sp Lisbon" },
+        { home: "Porto", away: "Sp Lisbon" },
+        { home: "Sp Braga", away: "Guimaraes" },
+        { home: "Sp Braga", away: "Benfica" },
+        { home: "Porto", away: "Sp Braga" },
+      ].filter((p) => allTeams.includes(p.home) && allTeams.includes(p.away));
+    }
+    if (allTeams.includes("Club Brugge") || allTeams.includes("Anderlecht")) {
+      return [
+        { home: "Club Brugge", away: "Anderlecht" },
+        { home: "Cercle Brugge", away: "Club Brugge" },
+        { home: "Standard", away: "Anderlecht" },
+        { home: "Genk", away: "Gent" },
+        { home: "Antwerp", away: "Club Brugge" },
+        { home: "St. Gilloise", away: "Anderlecht" },
+      ].filter((p) => allTeams.includes(p.home) && allTeams.includes(p.away));
+    }
     return [
       { home: "Liverpool", away: "Arsenal" },
       { home: "Man City", away: "Liverpool" },
