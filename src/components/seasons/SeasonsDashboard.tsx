@@ -10,7 +10,7 @@ import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select"
 
 import type { SeasonMatch } from "../../lib/seasonTypes";
 import { useSeasonMatches, useSeasonIndex } from "../../hooks/useSeasonMatches";
-import { AVAILABLE_COMPETITIONS } from "../../lib/seasonsData";
+import { AVAILABLE_COMPETITIONS, getCompetitionFlag } from "../../lib/seasonsData";
 import { SeasonOverview } from "./SeasonOverview";
 import { SeasonTeamAnalysis } from "./SeasonTeamAnalysis";
 import { SeasonMatchPredictor } from "./SeasonMatchPredictor";
@@ -91,6 +91,22 @@ export const SeasonsDashboard: React.FC<SeasonsDashboardProps> = ({
       setSelectedTeam("Inter");
       setPredHome("Inter");
       setPredAway("Milan");
+    } else if (compId === "le_championnat") {
+      setSelectedTeam("Paris SG");
+      setPredHome("Paris SG");
+      setPredAway("Marseille");
+    } else if (compId === "eredivisie") {
+      setSelectedTeam("Ajax");
+      setPredHome("Ajax");
+      setPredAway("Feyenoord");
+    } else if (compId === "liga_1") {
+      setSelectedTeam("Benfica");
+      setPredHome("Benfica");
+      setPredAway("Porto");
+    } else if (compId === "jupiter_league") {
+      setSelectedTeam("Club Brugge");
+      setPredHome("Club Brugge");
+      setPredAway("Anderlecht");
     } else {
       setSelectedTeam("Arsenal");
       setPredHome("Liverpool");
@@ -237,15 +253,7 @@ export const SeasonsDashboard: React.FC<SeasonsDashboardProps> = ({
           <div>
             <div className="flex items-center gap-2">
               <h1 className="text-xl font-bold tracking-tight text-foreground flex items-center gap-2">
-                <span>
-                  {currentCompConfig.countryCode === "ESP"
-                    ? "🇪🇸"
-                    : currentCompConfig.countryCode === "DEU"
-                    ? "🇩🇪"
-                    : currentCompConfig.countryCode === "ITA"
-                    ? "🇮🇹"
-                    : "🏴󠁧󠁢󠁥󠁮󠁧󠁿"}
-                </span>
+                <span>{getCompetitionFlag(currentCompConfig.countryCode)}</span>
                 <span>{currentCompConfig.name} Seasons</span>
               </h1>
               <Badge variant="outline" className="text-xs font-mono">
@@ -268,14 +276,7 @@ export const SeasonsDashboard: React.FC<SeasonsDashboardProps> = ({
               >
                 {AVAILABLE_COMPETITIONS.map((c) => (
                   <NativeSelectOption key={c.id} value={c.id}>
-                    {c.countryCode === "ESP"
-                      ? "🇪🇸"
-                      : c.countryCode === "DEU"
-                      ? "🇩🇪"
-                      : c.countryCode === "ITA"
-                      ? "🇮🇹"
-                      : "🏴󠁧󠁢󠁥󠁮󠁧󠁿"}{" "}
-                    {c.name}
+                    {getCompetitionFlag(c.countryCode)} {c.name}
                   </NativeSelectOption>
                 ))}
               </NativeSelect>
