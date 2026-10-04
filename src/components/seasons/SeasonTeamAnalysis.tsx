@@ -15,6 +15,14 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableHead,
+  TableRow,
+  TableCell,
+} from "@/components/ui/table";
 import type { SeasonMatch } from "../../lib/seasonTypes";
 import { getAllSeasonTeams, computeTeamProfile } from "../../lib/seasonsAnalytics";
 
@@ -289,21 +297,21 @@ export const SeasonTeamAnalysis: React.FC<SeasonTeamAnalysisProps> = ({
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs border-collapse">
-            <thead>
-              <tr className="border-b border-border bg-muted/50 text-muted-foreground font-semibold">
-                <th className="py-2.5 px-3">Date</th>
-                <th className="py-2.5 px-3">Venue</th>
-                <th className="py-2.5 px-3">Opponent</th>
-                <th className="py-2.5 px-3 text-center">Score</th>
-                <th className="py-2.5 px-3 text-center">Result</th>
-                <th className="py-2.5 px-3 text-center">Half-Time</th>
-                <th className="py-2.5 px-3 text-center">Shots (Target)</th>
-                <th className="py-2.5 px-3 text-center">Corners</th>
-                <th className="py-2.5 px-3 text-right">Odds</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-border font-mono">
+          <Table>
+            <TableHeader>
+              <TableRow className="bg-muted/50 text-muted-foreground font-semibold">
+                <TableHead className="py-2.5 px-3">Date</TableHead>
+                <TableHead className="py-2.5 px-3">Venue</TableHead>
+                <TableHead className="py-2.5 px-3">Opponent</TableHead>
+                <TableHead className="py-2.5 px-3 text-center">Score</TableHead>
+                <TableHead className="py-2.5 px-3 text-center">Result</TableHead>
+                <TableHead className="py-2.5 px-3 text-center">Half-Time</TableHead>
+                <TableHead className="py-2.5 px-3 text-center">Shots (Target)</TableHead>
+                <TableHead className="py-2.5 px-3 text-center">Corners</TableHead>
+                <TableHead className="py-2.5 px-3 text-right">Odds</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody className="font-mono">
               {displayedRecent.map((m, i) => {
                 const isHome = m.home_team === activeTeam;
                 const opp = isHome ? m.away_team : m.home_team;
@@ -328,41 +336,41 @@ export const SeasonTeamAnalysis: React.FC<SeasonTeamAnalysisProps> = ({
                 const winOdds = isHome ? m.odds.home : m.odds.away;
 
                 return (
-                  <tr key={i} className="hover:bg-muted/40 transition-colors">
-                    <td className="py-2 px-3 text-muted-foreground">{m.date}</td>
-                    <td className="py-2 px-3 font-sans">
+                  <TableRow key={i} className="hover:bg-muted/40 transition-colors">
+                    <TableCell className="py-2 px-3 text-muted-foreground">{m.date}</TableCell>
+                    <TableCell className="py-2 px-3 font-sans">
                       <span className="text-[11px] font-semibold text-muted-foreground">
                         {isHome ? "Home" : "Away"}
                       </span>
-                    </td>
-                    <td className="py-2 px-3 font-sans font-semibold text-foreground">
+                    </TableCell>
+                    <TableCell className="py-2 px-3 font-sans font-semibold text-foreground">
                       vs {opp}
-                    </td>
-                    <td className="py-2 px-3 text-center font-bold text-foreground">
+                    </TableCell>
+                    <TableCell className="py-2 px-3 text-center font-bold text-foreground">
                       {m.score}
-                    </td>
-                    <td className="py-2 px-3 text-center">
+                    </TableCell>
+                    <TableCell className="py-2 px-3 text-center">
                       <span className={`inline-block px-1.5 py-0.5 rounded text-[10px] font-bold border ${resBadge}`}>
                         {resLetter}
                       </span>
-                    </td>
-                    <td className="py-2 px-3 text-center text-muted-foreground">
+                    </TableCell>
+                    <TableCell className="py-2 px-3 text-center text-muted-foreground">
                       {m.half_time_score || "-"}
-                    </td>
-                    <td className="py-2 px-3 text-center text-muted-foreground">
+                    </TableCell>
+                    <TableCell className="py-2 px-3 text-center text-muted-foreground">
                       {shots ?? "-"} ({sot ?? "-"})
-                    </td>
-                    <td className="py-2 px-3 text-center text-muted-foreground">
+                    </TableCell>
+                    <TableCell className="py-2 px-3 text-center text-muted-foreground">
                       {corners ?? "-"}
-                    </td>
-                    <td className="py-2 px-3 text-right font-semibold text-foreground">
+                    </TableCell>
+                    <TableCell className="py-2 px-3 text-right font-semibold text-foreground">
                       {winOdds ? winOdds.toFixed(2) : "-"}
-                    </td>
-                  </tr>
+                    </TableCell>
+                  </TableRow>
                 );
               })}
-            </tbody>
-          </table>
+            </TableBody>
+          </Table>
         </div>
       </div>
     </div>
