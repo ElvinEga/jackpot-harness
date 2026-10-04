@@ -15,6 +15,7 @@ data/raw/betika/     4 CSVs   — grand, mega, midweek, must-be-won jackpots
 data/raw/mozzart/    6 CSVs   — super-jackpot (1 file + numbered variants), super-grand-jackpot
 data/raw/sportpesa/  2 files  — mega-jackpot-pro as CSV and as the original nested JSON
 data/seasons/premier_league/  6 CSVs (2021-2022 … 2026-2027) + notes.txt (source's own column key)
+data/seasons/laliga_primera/  6 CSVs (same seasons) — same column vocabulary, division code SP1
 data/processed/      JSON mirror of the raw CSVs, same bookmaker folders and filenames
 data/processed/seasons/<competition>/  one JSON per season + index.json
 src/build_json.py    regenerates data/processed from data/raw
@@ -92,9 +93,10 @@ CSVs; nothing is renamed or repaired there.
 `/data/seasons/premier_league/<season>.json` exactly like the jackpot mirror is at
 `/data/<bookmaker>/`.
 
-1950 matches in total (380 per completed season, 50 in the in-progress 2026-2027 file). One object
-per match, sorted by `(date, home_team)`; the ~100 source columns are reduced to 19 fields with the
-variable parts grouped:
+3919 matches in total across the two competitions (380 per completed season; the in-progress
+2026-2027 files hold 50 EPL and 69 La Liga matches). One object per match, sorted by
+`(date, home_team)`; the ~100 source columns are reduced to 19 fields with the variable parts
+grouped:
 
 ```json
 {
@@ -122,20 +124,21 @@ What the generator does:
   seasons, so they cannot be compared across files. `odds.home/draw/away` is `AvgH/AvgD/AvgA`
   (pre-closing market average), `*_max` is `Max*`, `*_close` is `AvgC*`; `over_2_5`/`under_2_5` and
   `handicap*` likewise come from the `Avg*`/`Max*`/`AvgC*` columns, with `handicap` the `AHh` line.
-- Keys are emitted per competition from the columns actually present (e.g. `home_xg`/`away_xg` only
-  exist from 2026-2027), and are the same for every season file within a competition. Missing cells
-  become `null`, never guessed.
-- The source data is complete for these files: all 1950 rows have a full-time result, both half-time
-  scores, referee and stats; only scattered odds cells are blank (0–7% per file).
+- Keys are emitted per competition from the columns actually present, and are then the same for
+  every season file within that competition (`home_xg`/`away_xg` exist only from 2026-2027, so the
+  earlier seasons carry them as `null`). `referee` is omitted entirely for competitions that have no
+  `Referee` column — La Liga has none. Missing cells become `null`, never guessed.
+- The source data is complete for these files: every row has a full-time result, both half-time
+  scores and stats; only scattered odds cells are blank (0–7% per file).
 
 ## Data quirks (verify before computing anything)
 
 - Line endings differ by file (mostly CRLF; `mozzart-super-grand-jackpot.csv` and both sportpesa
   files are LF) and `result` values can carry a trailing `\r`. Use `csv.DictReader` with
   `newline=''`, never naive `split(',')`.
-- The season CSVs are all CRLF and four of the six (2021-2022, 2024-2025, 2025-2026, 2026-2027)
-  carry a UTF-8 **BOM** before `Div`; open them with `encoding='utf-8-sig'` or the first column
-  becomes `'\ufeffDiv'`.
+- The season CSVs are all CRLF and most carry a UTF-8 **BOM** before `Div` (EPL: 2021-2022,
+  2024-2025, 2025-2026, 2026-2027; La Liga: the last three seasons); open them with
+  `encoding='utf-8-sig'` or the first column becomes `'\ufeffDiv'`.
 - Encodings are mixed UTF-8 / plain ASCII across files; always open with `encoding='utf-8'`.
 - `mozzart-super-jackpot4.csv` contains ~32 literal `No date found` values in `date`.
 - Coverage overlaps between files within a bookmaker (e.g. `mozzart-super-jackpot*.csv` are
