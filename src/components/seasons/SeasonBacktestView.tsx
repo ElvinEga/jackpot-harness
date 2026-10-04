@@ -15,6 +15,14 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableHead,
+  TableRow,
+  TableCell,
+} from "@/components/ui/table";
 import type { SeasonMatch, BacktestSummary } from "../../lib/seasonTypes";
 import { runSeasonBacktest } from "../../lib/seasonsBacktest";
 
@@ -239,31 +247,31 @@ export const SeasonBacktestView: React.FC<SeasonBacktestViewProps> = ({ allMatch
             </div>
 
             <div className="overflow-x-auto max-h-96 overflow-y-auto">
-              <table className="w-full text-left text-xs border-collapse">
-                <thead className="sticky top-0 bg-muted/90 backdrop-blur z-10">
-                  <tr className="border-b border-border text-muted-foreground font-semibold">
-                    <th className="py-2.5 px-3">Date</th>
-                    <th className="py-2.5 px-3">Fixture</th>
-                    <th className="py-2.5 px-2 text-center">Actual Score</th>
-                    <th className="py-2.5 px-2 text-center">Predicted</th>
-                    <th className="py-2.5 px-2 text-center">Exp Score</th>
-                    <th className="py-2.5 px-2 text-center">1X2 Hit</th>
-                    <th className="py-2.5 px-2 text-center">O/U Hit</th>
-                    <th className="py-2.5 px-2 text-center">BTTS Hit</th>
-                    <th className="py-2.5 px-3 text-right">Odds (H/D/A)</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-border font-mono">
+              <Table>
+                <TableHeader className="sticky top-0 bg-muted/90 backdrop-blur z-10">
+                  <TableRow className="border-b border-border text-muted-foreground font-semibold">
+                    <TableHead className="py-2.5 px-3">Date</TableHead>
+                    <TableHead className="py-2.5 px-3">Fixture</TableHead>
+                    <TableHead className="py-2.5 px-2 text-center">Actual Score</TableHead>
+                    <TableHead className="py-2.5 px-2 text-center">Predicted</TableHead>
+                    <TableHead className="py-2.5 px-2 text-center">Exp Score</TableHead>
+                    <TableHead className="py-2.5 px-2 text-center">1X2 Hit</TableHead>
+                    <TableHead className="py-2.5 px-2 text-center">O/U Hit</TableHead>
+                    <TableHead className="py-2.5 px-2 text-center">BTTS Hit</TableHead>
+                    <TableHead className="py-2.5 px-3 text-right">Odds (H/D/A)</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody className="font-mono">
                   {result.audits.map((a, i) => (
-                    <tr key={i} className="hover:bg-muted/40 transition-colors">
-                      <td className="py-2 px-3 text-muted-foreground font-sans">{a.date}</td>
-                      <td className="py-2 px-3 font-sans font-medium text-foreground">
+                    <TableRow key={i} className="hover:bg-muted/40 transition-colors">
+                      <TableCell className="py-2 px-3 text-muted-foreground font-sans">{a.date}</TableCell>
+                      <TableCell className="py-2 px-3 font-sans font-medium text-foreground">
                         {a.homeTeam} <span className="text-muted-foreground font-normal">vs</span> {a.awayTeam}
-                      </td>
-                      <td className="py-2 px-2 text-center font-bold text-foreground">
+                      </TableCell>
+                      <TableCell className="py-2 px-2 text-center font-bold text-foreground">
                         {a.actualScore}
-                      </td>
-                      <td className="py-2 px-2 text-center font-semibold uppercase">
+                      </TableCell>
+                      <TableCell className="py-2 px-2 text-center font-semibold uppercase">
                         <span
                           className={`px-1.5 py-0.5 rounded text-[10px] ${
                             a.predictedResult === "home"
@@ -275,38 +283,38 @@ export const SeasonBacktestView: React.FC<SeasonBacktestViewProps> = ({ allMatch
                         >
                           {a.predictedResult}
                         </span>
-                      </td>
-                      <td className="py-2 px-2 text-center text-muted-foreground">
+                      </TableCell>
+                      <TableCell className="py-2 px-2 text-center text-muted-foreground">
                         {a.predictedScore}
-                      </td>
-                      <td className="py-2 px-2 text-center">
+                      </TableCell>
+                      <TableCell className="py-2 px-2 text-center">
                         {a.isCorrect1X2 ? (
                           <CheckCircle2 className="h-4 w-4 text-emerald-500 mx-auto" />
                         ) : (
                           <XCircle className="h-4 w-4 text-destructive/70 mx-auto" />
                         )}
-                      </td>
-                      <td className="py-2 px-2 text-center">
+                      </TableCell>
+                      <TableCell className="py-2 px-2 text-center">
                         {a.isCorrectOver25 ? (
                           <CheckCircle2 className="h-4 w-4 text-emerald-500 mx-auto" />
                         ) : (
                           <XCircle className="h-4 w-4 text-destructive/70 mx-auto" />
                         )}
-                      </td>
-                      <td className="py-2 px-2 text-center">
+                      </TableCell>
+                      <TableCell className="py-2 px-2 text-center">
                         {a.isCorrectBTTS ? (
                           <CheckCircle2 className="h-4 w-4 text-emerald-500 mx-auto" />
                         ) : (
                           <XCircle className="h-4 w-4 text-destructive/70 mx-auto" />
                         )}
-                      </td>
-                      <td className="py-2 px-3 text-right text-muted-foreground">
+                      </TableCell>
+                      <TableCell className="py-2 px-3 text-right text-muted-foreground">
                         {a.marketHomeOdds?.toFixed(2) || "-"} / {a.marketDrawOdds?.toFixed(2) || "-"} / {a.marketAwayOdds?.toFixed(2) || "-"}
-                      </td>
-                    </tr>
+                      </TableCell>
+                    </TableRow>
                   ))}
-                </tbody>
-              </table>
+                </TableBody>
+              </Table>
             </div>
           </div>
         </div>
