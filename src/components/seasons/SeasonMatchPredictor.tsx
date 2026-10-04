@@ -57,6 +57,16 @@ export const SeasonMatchPredictor: React.FC<SeasonMatchPredictorProps> = ({
         { home: "Valencia", away: "Villarreal" },
       ].filter((p) => allTeams.includes(p.home) && allTeams.includes(p.away));
     }
+    if (allTeams.includes("Bayern Munich")) {
+      return [
+        { home: "Bayern Munich", away: "Dortmund" },
+        { home: "Dortmund", away: "Bayern Munich" },
+        { home: "Leverkusen", away: "Bayern Munich" },
+        { home: "RB Leipzig", away: "Dortmund" },
+        { home: "Ein Frankfurt", away: "Bayern Munich" },
+        { home: "Stuttgart", away: "Leverkusen" },
+      ].filter((p) => allTeams.includes(p.home) && allTeams.includes(p.away));
+    }
     return [
       { home: "Liverpool", away: "Arsenal" },
       { home: "Man City", away: "Liverpool" },
