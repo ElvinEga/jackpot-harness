@@ -27,15 +27,21 @@ import { computeStandings, computeSeasonOverview } from "../../lib/seasonsAnalyt
 interface SeasonOverviewProps {
   matches: SeasonMatch[];
   seasonName: string;
+  leagueName?: string;
   onSelectTeam?: (team: string) => void;
 }
 
 export const SeasonOverview: React.FC<SeasonOverviewProps> = ({
   matches,
   seasonName,
+  leagueName,
   onSelectTeam,
 }) => {
   const [standingsTab, setStandingsTab] = useState<"overall" | "home" | "away">("overall");
+
+  const resolvedLeagueName = useMemo(() => {
+    return leagueName || matches[0]?.league?.replace(/.*–\s*/, "") || "League";
+  }, [leagueName, matches]);
 
   const overview = useMemo(() => computeSeasonOverview(matches), [matches]);
   const standings: LeagueStandingRow[] = useMemo(() => computeStandings(matches), [matches]);
@@ -171,7 +177,7 @@ export const SeasonOverview: React.FC<SeasonOverviewProps> = ({
           <div className="flex items-center gap-2">
             <Trophy className="h-4 w-4 text-primary" />
             <h2 className="text-sm font-bold text-foreground">
-              Premier League Standings — {seasonName}
+              {resolvedLeagueName} Standings — {seasonName}
             </h2>
             <Badge variant="secondary" className="text-[10px] font-mono">
               {standings.length} Teams
