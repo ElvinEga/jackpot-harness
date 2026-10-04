@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from "react";
 import {
+  Compass,
   Trophy,
   Shield,
   Sparkles,
@@ -16,6 +17,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
 
+import type { SeasonMatch } from "../../lib/seasonTypes";
 import { useSeasonMatches, useSeasonIndex } from "../../hooks/useSeasonMatches";
 import { SeasonOverview } from "./SeasonOverview";
 import { SeasonTeamAnalysis } from "./SeasonTeamAnalysis";
@@ -23,8 +25,12 @@ import { SeasonMatchPredictor } from "./SeasonMatchPredictor";
 import { SeasonTrends } from "./SeasonTrends";
 import { SeasonBacktestView } from "./SeasonBacktestView";
 import { SeasonFixturesTable } from "./SeasonFixturesTable";
+import { SeasonDataTable } from "./SeasonDataTable";
+import { SeasonFilterBar, type SeasonFiltersState } from "./SeasonFilterBar";
+import { SeasonMatchDetailSheet } from "./SeasonMatchDetailSheet";
 
 export type SeasonsSubTab =
+  | "explorer"
   | "overview"
   | "teams"
   | "predictor"
@@ -37,10 +43,20 @@ export const SeasonsDashboard: React.FC = () => {
   const { data: seasonIndex } = useSeasonIndex("premier_league");
 
   const [activeSeason, setActiveSeason] = useState<string>("2025-2026");
-  const [activeSubTab, setActiveSubTab] = useState<SeasonsSubTab>("overview");
+  const [activeSubTab, setActiveSubTab] = useState<SeasonsSubTab>("explorer");
   const [selectedTeam, setSelectedTeam] = useState<string>("Arsenal");
   const [predHome, setPredHome] = useState<string>("Liverpool");
   const [predAway, setPredAway] = useState<string>("Arsenal");
+
+  // Explorer state
+  const [selectedDetailMatch, setSelectedDetailMatch] = useState<SeasonMatch | null>(null);
+  const [explorerFilters, setExplorerFilters] = useState<SeasonFiltersState>({
+    search: "",
+    season: "all",
+    team: "all",
+    result: "all",
+    goals: "all",
+  });
 
   // Extract distinct available seasons from index or matches
   const availableSeasons = useMemo(() => {
@@ -61,11 +77,67 @@ export const SeasonsDashboard: React.FC = () => {
     }
   }, [availableSeasons, activeSeason]);
 
-  // Filter matches based on selected season
+  // Filter matches based on selected season (for overview, teams, fixtures)
   const seasonFilteredMatches = useMemo(() => {
     if (activeSeason === "all") return allMatches;
     return allMatches.filter((m) => m.season === activeSeason);
   }, [allMatches, activeSeason]);
+
+  // Teams available across all seasons
+  const availableTeams = useMemo(() => {
+    const set = new Set<string>();
+    for (const m of allMatches) {
+      if (m.home_team) set.add(m.home_team);
+      if (m.away_team) set.add(m.away_team);
+    }
+    return Array.from(set).sort();
+  }, [allMatches]);
+
+  // Explorer filtered matches
+  const explorerFilteredMatches = useMemo(() => {
+    let res = allMatches;
+
+    if (explorerFilters.season !== "all") {
+      res = res.filter((m) => m.season === explorerFilters.season);
+    }
+
+    if (explorerFilters.team !== "all") {
+      res = res.filter(
+        (m) =>
+          m.home_team === explorerFilters.team ||
+          m.away_team === explorerFilters.team
+      );
+    }
+
+    if (explorerFilters.result !== "all") {
+      res = res.filter((m) => m.result === explorerFilters.result);
+    }
+
+    if (explorerFilters.goals !== "all") {
+      if (explorerFilters.goals === "over25") {
+        res = res.filter((m) => (m.total_goals ?? 0) > 2.5);
+      } else if (explorerFilters.goals === "under25") {
+        res = res.filter((m) => (m.total_goals ?? 0) < 2.5);
+      } else if (explorerFilters.goals === "btts") {
+        res = res.filter(
+          (m) => (m.home_goals ?? 0) > 0 && (m.away_goals ?? 0) > 0
+        );
+      }
+    }
+
+    if (explorerFilters.search.trim()) {
+      const q = explorerFilters.search.toLowerCase();
+      res = res.filter(
+        (m) =>
+          m.home_team.toLowerCase().includes(q) ||
+          m.away_team.toLowerCase().includes(q) ||
+          (m.referee && m.referee.toLowerCase().includes(q)) ||
+          (m.score && m.score.toLowerCase().includes(q))
+      );
+    }
+
+    return res;
+  }, [allMatches, explorerFilters]);
 
   const handleSelectTeamFromStandings = (team: string) => {
     setSelectedTeam(team);
@@ -126,28 +198,35 @@ export const SeasonsDashboard: React.FC = () => {
           </p>
         </div>
 
-        {/* Season Selector */}
-        <div className="flex items-center gap-2 shrink-0">
-          <label className="text-xs font-medium text-muted-foreground">Select Season:</label>
-          <NativeSelect
-            value={activeSeason}
-            onChange={(e) => setActiveSeason(e.target.value)}
-            className="text-xs font-semibold h-8 min-w-40"
-          >
-            <NativeSelectOption value="all">All Seasons Combined (2021–2027)</NativeSelectOption>
-            {availableSeasons.map((s) => (
-              <NativeSelectOption key={s} value={s}>
-                Season {s}
-              </NativeSelectOption>
-            ))}
-          </NativeSelect>
-        </div>
+        {/* Season Selector (used by Overview, Teams, Fixtures) */}
+        {activeSubTab !== "explorer" && (
+          <div className="flex items-center gap-2 shrink-0">
+            <label className="text-xs font-medium text-muted-foreground">Select Season:</label>
+            <NativeSelect
+              value={activeSeason}
+              onChange={(e) => setActiveSeason(e.target.value)}
+              className="text-xs font-semibold h-8 min-w-40"
+            >
+              <NativeSelectOption value="all">All Seasons Combined (2021–2027)</NativeSelectOption>
+              {availableSeasons.map((s) => (
+                <NativeSelectOption key={s} value={s}>
+                  Season {s}
+                </NativeSelectOption>
+              ))}
+            </NativeSelect>
+          </div>
+        )}
       </div>
 
       {/* Sub-Tabs Navigation */}
       <div className="flex items-center justify-start border-b border-border pb-px overflow-x-auto">
         <Tabs value={activeSubTab} onValueChange={(val) => setActiveSubTab(val as SeasonsSubTab)}>
           <TabsList className="h-9 bg-muted/40 p-1">
+            <TabsTrigger value="explorer" className="text-xs gap-1.5 h-7">
+              <Compass className="h-3.5 w-3.5" />
+              <span>Explorer</span>
+            </TabsTrigger>
+
             <TabsTrigger value="overview" className="text-xs gap-1.5 h-7">
               <Trophy className="h-3.5 w-3.5" />
               <span>Standings &amp; Overview</span>
@@ -182,6 +261,35 @@ export const SeasonsDashboard: React.FC = () => {
       </div>
 
       {/* Active Tab Content Area */}
+      {activeSubTab === "explorer" && (
+        <div className="space-y-4">
+          <SeasonFilterBar
+            filters={explorerFilters}
+            onFilterChange={setExplorerFilters}
+            onReset={() =>
+              setExplorerFilters({
+                search: "",
+                season: "all",
+                team: "all",
+                result: "all",
+                goals: "all",
+              })
+            }
+            availableSeasons={availableSeasons}
+            availableTeams={availableTeams}
+            filteredCount={explorerFilteredMatches.length}
+            totalCount={allMatches.length}
+          />
+          <SeasonDataTable
+            matches={explorerFilteredMatches}
+            allMatches={allMatches}
+            onSelectMatch={(m) => setSelectedDetailMatch(m)}
+            onNavigateToPredictor={handlePredictMatchup}
+            onNavigateToTeam={handleSelectTeamFromStandings}
+          />
+        </div>
+      )}
+
       {activeSubTab === "overview" && (
         <SeasonOverview
           matches={seasonFilteredMatches}
@@ -218,6 +326,14 @@ export const SeasonsDashboard: React.FC = () => {
           onSelectTeamForAnalysis={handleSelectTeamFromStandings}
         />
       )}
+
+      {/* Full 132-column stats and odds detail sheet */}
+      <SeasonMatchDetailSheet
+        match={selectedDetailMatch}
+        onClose={() => setSelectedDetailMatch(null)}
+        onSelectTeamForAnalysis={handleSelectTeamFromStandings}
+        onPredictMatchup={handlePredictMatchup}
+      />
     </div>
   );
 };
