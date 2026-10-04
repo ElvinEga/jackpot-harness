@@ -95,7 +95,7 @@ export const DataTable: React.FC<DataTableProps> = ({
       {
         id: "select",
         header: ({ table }) => (
-          <div className="flex items-center justify-center pl-1" onClick={(e) => e.stopPropagation()}>
+          <div className="flex items-center justify-center pl-1 pr-4" onClick={(e) => e.stopPropagation()}>
             <Checkbox
               checked={table.getIsAllPageRowsSelected()}
               onCheckedChange={(val) => table.toggleAllPageRowsSelected(!!val)}
@@ -104,7 +104,7 @@ export const DataTable: React.FC<DataTableProps> = ({
           </div>
         ),
         cell: ({ row }) => (
-          <div className="flex items-center justify-center pl-1" onClick={(e) => e.stopPropagation()}>
+          <div className="flex items-center justify-center pl-1 pr-4" onClick={(e) => e.stopPropagation()}>
             <Checkbox
               checked={row.getIsSelected()}
               onCheckedChange={(val) => row.toggleSelected(!!val)}
@@ -443,7 +443,7 @@ export const DataTable: React.FC<DataTableProps> = ({
                     <TableCell
                       key={cell.id}
                       style={stickyIdx >= 0 ? { left: `${stickyIdx * 44}px` } : undefined}
-                      className={`px-3 py-2.5 ${stickyIdx >= 0 ? "sticky z-10 group-hover:bg-muted" : ""}`}
+                      className={`px-3 py-2.5 ${stickyIdx >= 0 ? "sticky z-10 bg-background/10 backdrop-blur-sm group-hover:bg-muted" : ""}`}
                     >
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
