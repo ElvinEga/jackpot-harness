@@ -83,6 +83,10 @@ export const SeasonsDashboard: React.FC<SeasonsDashboardProps> = ({
       setSelectedTeam("Real Madrid");
       setPredHome("Real Madrid");
       setPredAway("Barcelona");
+    } else if (compId === "bundesliga_1") {
+      setSelectedTeam("Bayern Munich");
+      setPredHome("Bayern Munich");
+      setPredAway("Dortmund");
     } else {
       setSelectedTeam("Arsenal");
       setPredHome("Liverpool");
@@ -229,7 +233,13 @@ export const SeasonsDashboard: React.FC<SeasonsDashboardProps> = ({
           <div>
             <div className="flex items-center gap-2">
               <h1 className="text-xl font-bold tracking-tight text-foreground flex items-center gap-2">
-                <span>{currentCompConfig.countryCode === "ESP" ? "🇪🇸" : "🏴󠁧󠁢󠁥󠁮󠁧󠁿"}</span>
+                <span>
+                  {currentCompConfig.countryCode === "ESP"
+                    ? "🇪🇸"
+                    : currentCompConfig.countryCode === "DEU"
+                    ? "🇩🇪"
+                    : "🏴󠁧󠁢󠁥󠁮󠁧󠁿"}
+                </span>
                 <span>{currentCompConfig.name} Seasons</span>
               </h1>
               <Badge variant="outline" className="text-xs font-mono">
@@ -252,7 +262,12 @@ export const SeasonsDashboard: React.FC<SeasonsDashboardProps> = ({
               >
                 {AVAILABLE_COMPETITIONS.map((c) => (
                   <NativeSelectOption key={c.id} value={c.id}>
-                    {c.countryCode === "ESP" ? "🇪🇸" : "🏴󠁧󠁢󠁥󠁮󠁧󠁿"} {c.name}
+                    {c.countryCode === "ESP"
+                      ? "🇪🇸"
+                      : c.countryCode === "DEU"
+                      ? "🇩🇪"
+                      : "🏴󠁧󠁢󠁥󠁮󠁧󠁿"}{" "}
+                    {c.name}
                   </NativeSelectOption>
                 ))}
               </NativeSelect>
