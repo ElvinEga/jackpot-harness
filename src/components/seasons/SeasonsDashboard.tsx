@@ -7,7 +7,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
-
+import { SearchableSelect } from "@/components/ui/searchable-select";
 import type { SeasonMatch } from "../../lib/seasonTypes";
 import { useSeasonMatches, useSeasonIndex } from "../../hooks/useSeasonMatches";
 import { AVAILABLE_COMPETITIONS, getCompetitionFlag } from "../../lib/seasonsData";
@@ -269,17 +269,20 @@ export const SeasonsDashboard: React.FC<SeasonsDashboardProps> = ({
           <div className="flex items-center gap-3 shrink-0 flex-wrap">
             <div className="flex items-center gap-2">
               <label className="text-xs font-medium text-muted-foreground">League:</label>
-              <NativeSelect
+              <SearchableSelect
+                size="sm"
                 value={activeCompetition}
-                onChange={(e) => handleCompetitionChange(e.target.value)}
-                className="text-xs font-semibold h-8 min-w-36"
-              >
-                {AVAILABLE_COMPETITIONS.map((c) => (
-                  <NativeSelectOption key={c.id} value={c.id}>
-                    {getCompetitionFlag(c.countryCode)} {c.name}
-                  </NativeSelectOption>
-                ))}
-              </NativeSelect>
+                onValueChange={handleCompetitionChange}
+                options={AVAILABLE_COMPETITIONS.map((c) => ({
+                  value: c.id,
+                  label: c.name,
+                  icon: getCompetitionFlag(c.countryCode),
+                  sublabel: `${c.division} · ${c.country}`,
+                }))}
+                searchPlaceholder="Search leagues..."
+                className="min-w-44 font-semibold"
+                popoverWidth="w-56"
+              />
             </div>
 
             <div className="flex items-center gap-2">
