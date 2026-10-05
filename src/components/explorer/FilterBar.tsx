@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "../ui/input";
 import { Checkbox } from "../ui/checkbox";
 import { Popover, PopoverTrigger, PopoverContent } from "../ui/popover";
+import { SearchableSelect } from "@/components/ui/searchable-select";
 import { Calendar } from "@/components/ui/calendar";
 import type { DateRange } from "react-day-picker";
 import { format } from "date-fns";
@@ -31,7 +32,6 @@ export const FilterBar: React.FC<FilterBarProps> = ({
 }) => {
   const searchInputRef = useRef<HTMLInputElement>(null);
   const [showAdvanced, setShowAdvanced] = useState(false);
-  const [leagueOpen, setLeagueOpen] = useState(false);
 
   // Debounced search state
   const [searchValue, setSearchValue] = useState(filters.search);
@@ -203,12 +203,6 @@ export const FilterBar: React.FC<FilterBarProps> = ({
 
   // Distinct jackpots list
   const availableJackpots = Array.from(new Set(DATASETS.map((d) => d.jackpot)));
-
-  const [leagueQuery, setLeagueQuery] = useState("");
-  const visibleLeagues = useMemo(() => {
-    const q = leagueQuery.trim().toLowerCase();
-    return q ? uniqueLeagues.filter((l) => l.toLowerCase().includes(q)) : uniqueLeagues;
-  }, [leagueQuery, uniqueLeagues]);
 
   return (
     <div className="bg-card/70 border-b border-border p-3 lg:px-6 space-y-3">
@@ -382,14 +376,14 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                 );
               })}
             </div>
-
+            <div className="flex items-center w-full">
             <Calendar
               mode="range"
               selected={selectedDateRange}
               onSelect={handleDateRangeSelect}
               defaultMonth={selectedDateRange?.from || new Date(2023, 0, 1)}
               numberOfMonths={1}
-            />
+            /></div>
           </PopoverContent>
         </Popover>
 
@@ -474,70 +468,20 @@ export const FilterBar: React.FC<FilterBarProps> = ({
           {/* League Searchable Filter */}
           <div className="flex items-center gap-2">
             <span className="text-muted-foreground">League:</span>
-            <Popover open={leagueOpen} onOpenChange={setLeagueOpen}>
-              <PopoverTrigger
-                render={
-                  <button
-                    className={`flex items-center gap-1.5 max-w-[240px] text-xs px-3 py-2 rounded-md border font-medium transition-colors cursor-pointer ${
-                      filters.league
-                        ? "bg-primary/20 border-primary text-primary"
-                        : "bg-background border-border text-muted-foreground hover:text-foreground"
-                    }`}
-                  >
-                    <span className="truncate">
-                      {filters.league || `All leagues (${uniqueLeagues.length})`}
-                    </span>
-                    <ChevronDown className="h-3 w-3 shrink-0 opacity-70" />
-                  </button>
-                }
-              />
-              <PopoverContent align="start" className="w-72 p-2">
-                <div className="relative mb-1.5">
-                  <Search className="absolute left-2.5 top-2 h-3.5 w-3.5 text-muted-foreground" />
-                  <Input
-                    autoFocus
-                    type="text"
-                    placeholder="Search leagues..."
-                    value={leagueQuery}
-                    onChange={(e) => setLeagueQuery(e.target.value)}
-                    className="pl-8 h-8 text-xs"
-                  />
-                </div>
-                {filters.league && (
-                  <button
-                    onClick={() => {
-                      onFilterChange({ ...filters, league: null });
-                      setLeagueOpen(false);
-                    }}
-                    className="w-full text-left text-xs px-2 py-1.5 rounded mb-1 text-destructive hover:bg-destructive/10 cursor-pointer font-medium"
-                  >
-                    Clear league
-                  </button>
-                )}
-                <div className="max-h-56 overflow-y-auto">
-                  {visibleLeagues.length === 0 ? (
-                    <p className="px-2 py-3 text-center text-xs text-muted-foreground">
-                      No league matches “{leagueQuery.trim()}”
-                    </p>
-                  ) : (
-                    visibleLeagues.map((league) => (
-                      <button
-                        key={league}
-                        onClick={() => {
-                          onFilterChange({ ...filters, league });
-                          setLeagueOpen(false);
-                        }}
-                        className={`w-full truncate text-left text-xs px-2 py-1.5 rounded cursor-pointer transition-colors hover:bg-muted ${
-                          league === filters.league ? "bg-muted font-semibold text-foreground" : "text-popover-foreground"
-                        }`}
-                      >
-                        {league}
-                      </button>
-                    ))
-                  )}
-                </div>
-              </PopoverContent>
-            </Popover>
+            <SearchableSelect
+              size="sm"
+              value={filters.league || ""}
+              onValueChange={(val) => onFilterChange({ ...filters, league: val || null })}
+              options={[
+                { value: "", label: `All leagues (${uniqueLeagues.length})` },
+                ...uniqueLeagues.map((l) => ({ value: l, label: l })),
+              ]}
+              placeholder={`All leagues (${uniqueLeagues.length})`}
+              searchPlaceholder="Search leagues..."
+              clearable={!!filters.league}
+              className="max-w-[240px] text-xs font-medium"
+              popoverWidth="w-72"
+            />
           </div>
         </div>
       )}
