@@ -5,7 +5,7 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
+import { SearchableSelect } from "@/components/ui/searchable-select";
 import type { SeasonMatch } from "../../lib/seasonTypes";
 import { getAllSeasonTeams } from "../../lib/seasonsAnalytics";
 import { predictSeasonMatch } from "../../lib/seasonsPredictor";
@@ -146,17 +146,19 @@ export const SeasonMatchPredictor: React.FC<SeasonMatchPredictorProps> = ({
             <label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider block">
               Home Team
             </label>
-            <NativeSelect
+            <SearchableSelect
               value={homeTeam}
-              onChange={(e) => setHomeTeam(e.target.value)}
-              className="text-xs font-semibold h-9 w-full"
-            >
-              {allTeams.map((t) => (
-                <NativeSelectOption key={t} value={t} disabled={t === awayTeam}>
-                  {t}
-                </NativeSelectOption>
-              ))}
-            </NativeSelect>
+              onValueChange={setHomeTeam}
+              options={allTeams.map((t) => ({
+                value: t,
+                label: t,
+                disabled: t === awayTeam,
+              }))}
+              searchPlaceholder="Search home team..."
+              placeholder="Select home team..."
+              className="w-full h-9 font-semibold text-xs"
+              popoverWidth="w-64"
+            />
           </div>
 
           {/* Swap Button */}
@@ -177,17 +179,19 @@ export const SeasonMatchPredictor: React.FC<SeasonMatchPredictorProps> = ({
             <label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider block">
               Away Team
             </label>
-            <NativeSelect
+            <SearchableSelect
               value={awayTeam}
-              onChange={(e) => setAwayTeam(e.target.value)}
-              className="text-xs font-semibold h-9 w-full"
-            >
-              {allTeams.map((t) => (
-                <NativeSelectOption key={t} value={t} disabled={t === homeTeam}>
-                  {t}
-                </NativeSelectOption>
-              ))}
-            </NativeSelect>
+              onValueChange={setAwayTeam}
+              options={allTeams.map((t) => ({
+                value: t,
+                label: t,
+                disabled: t === homeTeam,
+              }))}
+              searchPlaceholder="Search away team..."
+              placeholder="Select away team..."
+              className="w-full h-9 font-semibold text-xs"
+              popoverWidth="w-64"
+            />
           </div>
         </div>
 
