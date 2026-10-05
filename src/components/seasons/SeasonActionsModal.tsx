@@ -15,8 +15,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
-
+import { SearchableSelect } from "@/components/ui/searchable-select";
 import type { SeasonMatch } from "../../lib/seasonTypes";
 import { getAllSeasonTeams, computeTeamProfile } from "../../lib/seasonsAnalytics";
 import { predictSeasonMatch } from "../../lib/seasonsPredictor";
@@ -153,17 +152,20 @@ export const SeasonActionsModal: React.FC<SeasonActionsModalProps> = ({
         <div className="p-3 bg-muted/30 border border-border rounded-xl flex items-center justify-between gap-3 mt-4 shrink-0">
           <div className="flex-1">
             <span className="text-[10px] text-muted-foreground font-semibold block mb-0.5">Team A (Home)</span>
-            <NativeSelect
+            <SearchableSelect
+              size="sm"
               value={teamA}
-              onChange={(e) => setTeamA(e.target.value)}
+              onValueChange={setTeamA}
+              options={allTeams.map((t) => ({
+                value: t,
+                label: t,
+                disabled: t === teamB,
+              }))}
+              searchPlaceholder="Search team..."
+              placeholder="Select Team A..."
               className="text-xs font-semibold h-8 w-full"
-            >
-              {allTeams.map((t) => (
-                <NativeSelectOption key={t} value={t} disabled={t === teamB}>
-                  {t}
-                </NativeSelectOption>
-              ))}
-            </NativeSelect>
+              popoverWidth="w-56"
+            />
           </div>
 
           <Button
@@ -178,17 +180,20 @@ export const SeasonActionsModal: React.FC<SeasonActionsModalProps> = ({
 
           <div className="flex-1">
             <span className="text-[10px] text-muted-foreground font-semibold block mb-0.5">Team B (Away)</span>
-            <NativeSelect
+            <SearchableSelect
+              size="sm"
               value={teamB}
-              onChange={(e) => setTeamB(e.target.value)}
+              onValueChange={setTeamB}
+              options={allTeams.map((t) => ({
+                value: t,
+                label: t,
+                disabled: t === teamA,
+              }))}
+              searchPlaceholder="Search team..."
+              placeholder="Select Team B..."
               className="text-xs font-semibold h-8 w-full"
-            >
-              {allTeams.map((t) => (
-                <NativeSelectOption key={t} value={t} disabled={t === teamA}>
-                  {t}
-                </NativeSelectOption>
-              ))}
-            </NativeSelect>
+              popoverWidth="w-56"
+            />
           </div>
         </div>
 
