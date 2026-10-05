@@ -14,7 +14,7 @@ import {
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
+import { SearchableSelect } from "@/components/ui/searchable-select";
 import {
   Table,
   TableHeader,
@@ -80,17 +80,18 @@ export const SeasonTeamAnalysis: React.FC<SeasonTeamAnalysisProps> = ({
 
         <div className="flex items-center gap-2">
           <label className="text-xs text-muted-foreground font-medium shrink-0">Switch Team:</label>
-          <NativeSelect
+          <SearchableSelect
+            size="sm"
             value={activeTeam}
-            onChange={(e) => onSelectTeam(e.target.value)}
+            onValueChange={onSelectTeam}
+            options={allTeams.map((team) => ({
+              value: team,
+              label: team,
+            }))}
+            searchPlaceholder="Search club..."
             className="text-xs font-semibold h-9 min-w-48"
-          >
-            {allTeams.map((team) => (
-              <NativeSelectOption key={team} value={team}>
-                {team}
-              </NativeSelectOption>
-            ))}
-          </NativeSelect>
+            popoverWidth="w-56"
+          />
         </div>
       </div>
 
