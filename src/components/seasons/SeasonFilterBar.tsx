@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
+import { SearchableSelect } from "@/components/ui/searchable-select";
 import { AVAILABLE_COMPETITIONS, getCompetitionFlag } from "../../lib/seasonsData";
 
 export interface SeasonFiltersState {
@@ -65,18 +66,20 @@ export const SeasonFilterBar: React.FC<SeasonFilterBarProps> = ({
         <div className="flex items-center gap-2 flex-wrap">
           {/* League / Competition Filter */}
           {activeCompetition && onCompetitionChange && (
-            <NativeSelect
+            <SearchableSelect
               size="sm"
               value={activeCompetition}
-              onChange={(e) => onCompetitionChange(e.target.value)}
-              className="w-36 text-xs h-8 font-semibold"
-            >
-              {AVAILABLE_COMPETITIONS.map((c) => (
-                <NativeSelectOption key={c.id} value={c.id}>
-                  {getCompetitionFlag(c.countryCode)} {c.name}
-                </NativeSelectOption>
-              ))}
-            </NativeSelect>
+              onValueChange={onCompetitionChange}
+              options={AVAILABLE_COMPETITIONS.map((c) => ({
+                value: c.id,
+                label: c.name,
+                icon: getCompetitionFlag(c.countryCode),
+                sublabel: c.country,
+              }))}
+              searchPlaceholder="Search league..."
+              className="w-44 font-semibold"
+              popoverWidth="w-56"
+            />
           )}
 
           {/* Season Filter */}
@@ -97,21 +100,21 @@ export const SeasonFilterBar: React.FC<SeasonFilterBarProps> = ({
           </NativeSelect>
 
           {/* Team Filter */}
-          <NativeSelect
+          <SearchableSelect
             size="sm"
             value={filters.team}
-            onChange={(e) =>
-              onFilterChange({ ...filters, team: e.target.value })
+            onValueChange={(val) =>
+              onFilterChange({ ...filters, team: val })
             }
-            className="w-36 text-xs h-8"
-          >
-            <NativeSelectOption value="all">All Teams</NativeSelectOption>
-            {availableTeams.map((t) => (
-              <NativeSelectOption key={t} value={t}>
-                {t}
-              </NativeSelectOption>
-            ))}
-          </NativeSelect>
+            options={[
+              { value: "all", label: "All Teams" },
+              ...availableTeams.map((t) => ({ value: t, label: t })),
+            ]}
+            placeholder="Select team..."
+            searchPlaceholder="Search teams..."
+            className="w-40"
+            popoverWidth="w-52"
+          />
 
           {/* Result Filter */}
           <NativeSelect
