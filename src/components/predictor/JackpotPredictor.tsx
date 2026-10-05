@@ -23,6 +23,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
+import { SearchableSelect } from "@/components/ui/searchable-select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import {
   AlertDialog,
@@ -750,18 +751,23 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
         {/* Load Historical Event Dropdown */}
         <div>
           <label className="text-xs font-medium text-muted-foreground mb-1 block">Load Past Jackpot Slip</label>
-          <NativeSelect
+          <SearchableSelect
+            size="sm"
             value={selectedHistoricalEvent}
-            onChange={(e) => handleLoadHistoricalEvent(e.target.value)}
-            className="w-full text-xs"
-          >
-            <NativeSelectOption value="">Select a past jackpot date...</NativeSelectOption>
-            {availableEvents.map((ev) => (
-              <NativeSelectOption key={ev.id} value={ev.id}>
-                {ev.date} — {ev.jackpot} ({ev.count} matches)
-              </NativeSelectOption>
-            ))}
-          </NativeSelect>
+            onValueChange={(val) => handleLoadHistoricalEvent(val)}
+            options={[
+              { value: "", label: "Select a past jackpot date..." },
+              ...availableEvents.map((ev) => ({
+                value: ev.id,
+                label: `${ev.date} — ${ev.jackpot} (${ev.count} matches)`,
+              })),
+            ]}
+            placeholder="Select a past jackpot date..."
+            searchPlaceholder="Search past dates..."
+            clearable={!!selectedHistoricalEvent}
+            className="w-full text-xs font-mono"
+            popoverWidth="w-80"
+          />
         </div>
       </div>
 
