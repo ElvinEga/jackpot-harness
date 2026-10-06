@@ -53,13 +53,16 @@ export const SeasonActionsModal: React.FC<SeasonActionsModalProps> = ({
   const [teamA, setTeamA] = useState<string>(focusMatch?.home_team || "Arsenal");
   const [teamB, setTeamB] = useState<string>(focusMatch?.away_team || "Chelsea");
 
-  // Sync teams when focusMatch changes
+  // Sync teams when focusMatch changes or allTeams changes
   useEffect(() => {
     if (focusMatch) {
       setTeamA(focusMatch.home_team);
       setTeamB(focusMatch.away_team);
+    } else if (allTeams.length >= 2) {
+      if (!allTeams.includes(teamA)) setTeamA(allTeams[0]);
+      if (!allTeams.includes(teamB)) setTeamB(allTeams[1]);
     }
-  }, [focusMatch]);
+  }, [focusMatch, allTeams]);
 
   const handleSwap = () => {
     setTeamA(teamB);
