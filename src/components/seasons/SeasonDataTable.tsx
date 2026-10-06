@@ -424,7 +424,7 @@ export const SeasonDataTable: React.FC<SeasonDataTableProps> = ({
                   onClick={() => onSelectMatch(row.original)}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="py-2.5 px-3">
+                    <TableCell key={cell.id} className="px-2 py-1">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
