@@ -16,6 +16,12 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { SearchableSelect } from "@/components/ui/searchable-select";
+import {
+  Table,
+  TableBody,
+  TableRow,
+  TableCell,
+} from "@/components/ui/table";
 import type { SeasonMatch } from "../../lib/seasonTypes";
 import { getAllSeasonTeams, computeTeamProfile } from "../../lib/seasonsAnalytics";
 import { predictSeasonMatch } from "../../lib/seasonsPredictor";
@@ -300,19 +306,19 @@ export const SeasonActionsModal: React.FC<SeasonActionsModalProps> = ({
                   Recent Meetings History ({h2hMatches.length} Matches)
                 </div>
                 <div className="max-h-48 overflow-y-auto">
-                  <table className="w-full text-xs font-mono">
-                    <tbody className="divide-y divide-border">
+                  <Table>
+                    <TableBody>
                       {h2hMatches.map((m, idx) => (
-                        <tr key={idx} className="hover:bg-muted/30">
-                          <td className="py-1.5 px-3 text-muted-foreground font-sans">{m.date}</td>
-                          <td className="py-1.5 px-3 font-sans">
+                        <TableRow key={idx} className="hover:bg-muted/30">
+                          <TableCell className="px-2 py-1 tabular-nums text-xs text-muted-foreground">{m.date}</TableCell>
+                          <TableCell className="px-2 py-1 text-xs font-medium text-foreground">
                             {m.home_team} vs {m.away_team}
-                          </td>
-                          <td className="py-1.5 px-3 font-bold text-right text-foreground">{m.score}</td>
-                        </tr>
+                          </TableCell>
+                          <TableCell className="px-2 py-1 text-right tabular-nums text-xs font-medium text-foreground">{m.score}</TableCell>
+                        </TableRow>
                       ))}
-                    </tbody>
-                  </table>
+                    </TableBody>
+                  </Table>
                 </div>
               </div>
             </div>
