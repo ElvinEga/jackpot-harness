@@ -300,19 +300,19 @@ export const SeasonTeamAnalysis: React.FC<SeasonTeamAnalysisProps> = ({
         <div className="overflow-x-auto">
           <Table>
             <TableHeader>
-              <TableRow className="bg-muted/50 text-muted-foreground font-semibold">
-                <TableHead className="py-2.5 px-3">Date</TableHead>
-                <TableHead className="py-2.5 px-3">Venue</TableHead>
-                <TableHead className="py-2.5 px-3">Opponent</TableHead>
-                <TableHead className="py-2.5 px-3 text-center">Score</TableHead>
-                <TableHead className="py-2.5 px-3 text-center">Result</TableHead>
-                <TableHead className="py-2.5 px-3 text-center">Half-Time</TableHead>
-                <TableHead className="py-2.5 px-3 text-center">Shots (Target)</TableHead>
-                <TableHead className="py-2.5 px-3 text-center">Corners</TableHead>
-                <TableHead className="py-2.5 px-3 text-right">Odds</TableHead>
+              <TableRow className="bg-muted/50 text-muted-foreground font-medium">
+                <TableHead className="px-2 py-1 text-xs">Date</TableHead>
+                <TableHead className="px-2 py-1 text-xs">Venue</TableHead>
+                <TableHead className="px-2 py-1 text-xs">Opponent</TableHead>
+                <TableHead className="px-2 py-1 text-center text-xs">Score</TableHead>
+                <TableHead className="px-2 py-1 text-center text-xs">Result</TableHead>
+                <TableHead className="px-2 py-1 text-center text-xs">Half-Time</TableHead>
+                <TableHead className="px-2 py-1 text-center text-xs">Shots (Target)</TableHead>
+                <TableHead className="px-2 py-1 text-center text-xs">Corners</TableHead>
+                <TableHead className="px-2 py-1 text-right text-xs">Odds</TableHead>
               </TableRow>
             </TableHeader>
-            <TableBody className="font-mono">
+            <TableBody>
               {displayedRecent.map((m, i) => {
                 const isHome = m.home_team === activeTeam;
                 const opp = isHome ? m.away_team : m.home_team;
@@ -321,12 +321,12 @@ export const SeasonTeamAnalysis: React.FC<SeasonTeamAnalysisProps> = ({
 
                 const resLetter =
                   teamGoals > oppGoals ? "W" : teamGoals === oppGoals ? "D" : "L";
-                const resBadge =
+                const resColor =
                   resLetter === "W"
-                    ? "bg-emerald-500/15 text-emerald-500 border-emerald-500/30"
+                    ? "text-emerald-500"
                     : resLetter === "D"
-                    ? "bg-amber-500/15 text-amber-500 border-amber-500/30"
-                    : "bg-destructive/15 text-destructive border-destructive/30";
+                    ? "text-amber-500"
+                    : "text-destructive";
 
                 const shots = isHome ? m.stats.home_shots : m.stats.away_shots;
                 const sot = isHome
@@ -338,33 +338,31 @@ export const SeasonTeamAnalysis: React.FC<SeasonTeamAnalysisProps> = ({
 
                 return (
                   <TableRow key={i} className="hover:bg-muted/40 transition-colors">
-                    <TableCell className="py-2 px-3 text-muted-foreground">{m.date}</TableCell>
-                    <TableCell className="py-2 px-3 font-sans">
-                      <span className="text-[11px] font-semibold text-muted-foreground">
-                        {isHome ? "Home" : "Away"}
-                      </span>
+                    <TableCell className="px-2 py-1 tabular-nums text-xs text-muted-foreground">{m.date}</TableCell>
+                    <TableCell className="px-2 py-1 text-xs text-muted-foreground font-medium">
+                      {isHome ? "Home" : "Away"}
                     </TableCell>
-                    <TableCell className="py-2 px-3 font-sans font-semibold text-foreground">
+                    <TableCell className="px-2 py-1 text-xs font-medium text-foreground">
                       vs {opp}
                     </TableCell>
-                    <TableCell className="py-2 px-3 text-center font-bold text-foreground">
+                    <TableCell className="px-2 py-1 text-center tabular-nums text-xs font-medium text-foreground">
                       {m.score}
                     </TableCell>
-                    <TableCell className="py-2 px-3 text-center">
-                      <span className={`inline-block px-1.5 py-0.5 rounded text-[10px] font-bold border ${resBadge}`}>
+                    <TableCell className="px-2 py-1 text-center text-xs font-medium">
+                      <span className={resColor}>
                         {resLetter}
                       </span>
                     </TableCell>
-                    <TableCell className="py-2 px-3 text-center text-muted-foreground">
+                    <TableCell className="px-2 py-1 text-center tabular-nums text-xs text-muted-foreground">
                       {m.half_time_score || "-"}
                     </TableCell>
-                    <TableCell className="py-2 px-3 text-center text-muted-foreground">
+                    <TableCell className="px-2 py-1 text-center tabular-nums text-xs text-muted-foreground">
                       {shots ?? "-"} ({sot ?? "-"})
                     </TableCell>
-                    <TableCell className="py-2 px-3 text-center text-muted-foreground">
+                    <TableCell className="px-2 py-1 text-center tabular-nums text-xs text-muted-foreground">
                       {corners ?? "-"}
                     </TableCell>
-                    <TableCell className="py-2 px-3 text-right font-semibold text-foreground">
+                    <TableCell className="px-2 py-1 text-right tabular-nums text-xs font-medium text-foreground">
                       {winOdds ? winOdds.toFixed(2) : "-"}
                     </TableCell>
                   </TableRow>
