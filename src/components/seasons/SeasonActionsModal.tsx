@@ -288,7 +288,7 @@ export const SeasonActionsModal: React.FC<SeasonActionsModalProps> = ({
                       h2hStats.topScores.map((sc) => (
                         <span
                           key={sc.score}
-                          className="px-2 py-1 rounded bg-muted border border-border font-mono font-bold text-foreground text-xs"
+                          className="rounded bg-muted border border-border font-mono font-bold text-foreground text-xs"
                         >
                           {sc.score} <span className="text-[10px] text-muted-foreground font-normal">({sc.count}x)</span>
                         </span>
@@ -310,11 +310,11 @@ export const SeasonActionsModal: React.FC<SeasonActionsModalProps> = ({
                     <TableBody>
                       {h2hMatches.map((m, idx) => (
                         <TableRow key={idx} className="hover:bg-muted/30">
-                          <TableCell className="px-2 py-1 tabular-nums text-xs text-muted-foreground">{m.date}</TableCell>
-                          <TableCell className="px-2 py-1 text-xs font-medium text-foreground">
+                          <TableCell className="tabular-nums text-xs text-muted-foreground">{m.date}</TableCell>
+                          <TableCell className="text-xs font-medium text-foreground">
                             {m.home_team} vs {m.away_team}
                           </TableCell>
-                          <TableCell className="px-2 py-1 text-right tabular-nums text-xs font-medium text-foreground">{m.score}</TableCell>
+                          <TableCell className="text-right tabular-nums text-xs font-medium text-foreground">{m.score}</TableCell>
                         </TableRow>
                       ))}
                     </TableBody>

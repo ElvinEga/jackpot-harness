@@ -860,14 +860,14 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
           <Table>
             <TableHeader>
               <TableRow className="border-b border-border bg-muted/50 text-muted-foreground font-medium">
-                <TableHead className="px-2 py-1 w-12 text-center text-xs">Pos</TableHead>
-                <TableHead className="px-2 py-1 min-w-[340px] text-xs">Match Fixture (Home vs Away)</TableHead>
-                <TableHead className="px-2 py-1 text-center min-w-[130px] text-xs">1X2 Distribution</TableHead>
-                <TableHead className="px-2 py-1 text-center min-w-[70px] text-xs">Avg Goals</TableHead>
-                <TableHead className="px-2 py-1 text-center min-w-[90px] text-xs">Likely Score</TableHead>
-                <TableHead className="px-2 py-1 text-center min-w-[90px] text-xs">Prediction</TableHead>
-                <TableHead className="px-2 py-1 text-center min-w-[80px] text-xs">Confidence</TableHead>
-                <TableHead className="px-2 py-1 text-right w-12 text-xs">Details</TableHead>
+                <TableHead className="w-12 text-center text-xs">Pos</TableHead>
+                <TableHead className="min-w-[340px] text-xs">Match Fixture (Home vs Away)</TableHead>
+                <TableHead className="text-center min-w-[130px] text-xs">1X2 Distribution</TableHead>
+                <TableHead className="text-center min-w-[70px] text-xs">Avg Goals</TableHead>
+                <TableHead className="text-center min-w-[90px] text-xs">Likely Score</TableHead>
+                <TableHead className="text-center min-w-[90px] text-xs">Prediction</TableHead>
+                <TableHead className="text-center min-w-[80px] text-xs">Confidence</TableHead>
+                <TableHead className="text-right w-12 text-xs">Details</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -890,7 +890,7 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
                     className="hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring transition-colors cursor-pointer group"
                   >
                     {/* Position Number */}
-                    <TableCell className="px-2 py-1 text-center text-xs font-medium text-foreground">
+                    <TableCell className="text-center text-xs font-medium text-foreground">
                       #{pred.position}
                     </TableCell>
 
@@ -958,12 +958,12 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
                     </TableCell>
 
                     {/* Average Goals */}
-                    <TableCell className="px-2 py-1 text-center tabular-nums text-xs font-medium text-foreground">
+                    <TableCell className="text-center tabular-nums text-xs font-medium text-foreground">
                       {pred.totalExpectedGoals || posStat?.avgGoals || "2.40"}
                     </TableCell>
 
                     {/* Most Likely Score */}
-                    <TableCell className="px-2 py-1 text-center tabular-nums text-xs">
+                    <TableCell className="text-center tabular-nums text-xs">
                       <span className="font-medium text-foreground">
                         {pred.mostLikelyScores[0]?.score || "1-1"}
                       </span>
@@ -973,7 +973,7 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
                     </TableCell>
 
                     {/* Predicted Result Badge */}
-                    <TableCell className="px-2 py-1 text-center text-xs font-medium">
+                    <TableCell className="text-center text-xs font-medium">
                       {pred.predictedResult === "home" && (
                         <span className="text-emerald-500">HOME (1)</span>
                       )}
@@ -986,7 +986,7 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
                     </TableCell>
 
                     {/* Confidence Rating */}
-                    <TableCell className="px-2 py-1 text-center text-xs font-medium">
+                    <TableCell className="text-center text-xs font-medium">
                       <span
                         className={
                           pred.confidence === "High"
@@ -1001,7 +1001,7 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
                     </TableCell>
 
                     {/* Arrow / Detail Icon */}
-                    <TableCell className="px-2 py-1 text-right">
+                    <TableCell className="text-right">
                       <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-foreground inline-block transition-colors" />
                     </TableCell>
                   </TableRow>

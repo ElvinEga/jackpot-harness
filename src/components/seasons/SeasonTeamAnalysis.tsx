@@ -301,15 +301,15 @@ export const SeasonTeamAnalysis: React.FC<SeasonTeamAnalysisProps> = ({
           <Table>
             <TableHeader>
               <TableRow className="bg-muted/50 text-muted-foreground font-medium">
-                <TableHead className="px-2 py-1 text-xs">Date</TableHead>
-                <TableHead className="px-2 py-1 text-xs">Venue</TableHead>
-                <TableHead className="px-2 py-1 text-xs">Opponent</TableHead>
-                <TableHead className="px-2 py-1 text-center text-xs">Score</TableHead>
-                <TableHead className="px-2 py-1 text-center text-xs">Result</TableHead>
-                <TableHead className="px-2 py-1 text-center text-xs">Half-Time</TableHead>
-                <TableHead className="px-2 py-1 text-center text-xs">Shots (Target)</TableHead>
-                <TableHead className="px-2 py-1 text-center text-xs">Corners</TableHead>
-                <TableHead className="px-2 py-1 text-right text-xs">Odds</TableHead>
+                <TableHead className="text-xs">Date</TableHead>
+                <TableHead className="text-xs">Venue</TableHead>
+                <TableHead className="text-xs">Opponent</TableHead>
+                <TableHead className="text-center text-xs">Score</TableHead>
+                <TableHead className="text-center text-xs">Result</TableHead>
+                <TableHead className="text-center text-xs">Half-Time</TableHead>
+                <TableHead className="text-center text-xs">Shots (Target)</TableHead>
+                <TableHead className="text-center text-xs">Corners</TableHead>
+                <TableHead className="text-right text-xs">Odds</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -338,31 +338,31 @@ export const SeasonTeamAnalysis: React.FC<SeasonTeamAnalysisProps> = ({
 
                 return (
                   <TableRow key={i} className="hover:bg-muted/40 transition-colors">
-                    <TableCell className="px-2 py-1 tabular-nums text-xs text-muted-foreground">{m.date}</TableCell>
-                    <TableCell className="px-2 py-1 text-xs text-muted-foreground font-medium">
+                    <TableCell className="tabular-nums text-xs text-muted-foreground">{m.date}</TableCell>
+                    <TableCell className="text-xs text-muted-foreground font-medium">
                       {isHome ? "Home" : "Away"}
                     </TableCell>
-                    <TableCell className="px-2 py-1 text-xs font-medium text-foreground">
+                    <TableCell className="text-xs font-medium text-foreground">
                       vs {opp}
                     </TableCell>
-                    <TableCell className="px-2 py-1 text-center tabular-nums text-xs font-medium text-foreground">
+                    <TableCell className="text-center tabular-nums text-xs font-medium text-foreground">
                       {m.score}
                     </TableCell>
-                    <TableCell className="px-2 py-1 text-center text-xs font-medium">
+                    <TableCell className="text-center text-xs font-medium">
                       <span className={resColor}>
                         {resLetter}
                       </span>
                     </TableCell>
-                    <TableCell className="px-2 py-1 text-center tabular-nums text-xs text-muted-foreground">
+                    <TableCell className="text-center tabular-nums text-xs text-muted-foreground">
                       {m.half_time_score || "-"}
                     </TableCell>
-                    <TableCell className="px-2 py-1 text-center tabular-nums text-xs text-muted-foreground">
+                    <TableCell className="text-center tabular-nums text-xs text-muted-foreground">
                       {shots ?? "-"} ({sot ?? "-"})
                     </TableCell>
-                    <TableCell className="px-2 py-1 text-center tabular-nums text-xs text-muted-foreground">
+                    <TableCell className="text-center tabular-nums text-xs text-muted-foreground">
                       {corners ?? "-"}
                     </TableCell>
-                    <TableCell className="px-2 py-1 text-right tabular-nums text-xs font-medium text-foreground">
+                    <TableCell className="text-right tabular-nums text-xs font-medium text-foreground">
                       {winOdds ? winOdds.toFixed(2) : "-"}
                     </TableCell>
                   </TableRow>

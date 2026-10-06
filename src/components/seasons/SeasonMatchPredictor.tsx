@@ -236,7 +236,7 @@ export const SeasonMatchPredictor: React.FC<SeasonMatchPredictorProps> = ({
                 setHomeTeam(pair.home);
                 setAwayTeam(pair.away);
               }}
-              className="px-2 py-1 rounded-md text-[11px] font-medium bg-muted/60 hover:bg-muted text-muted-foreground hover:text-foreground border border-border transition-colors"
+              className="rounded-md text-[11px] font-medium bg-muted/60 hover:bg-muted text-muted-foreground hover:text-foreground border border-border transition-colors"
             >
               {pair.home} vs {pair.away}
             </button>
@@ -364,9 +364,9 @@ export const SeasonMatchPredictor: React.FC<SeasonMatchPredictorProps> = ({
             <table className="w-full text-center text-xs border-collapse">
               <thead>
                 <tr>
-                  <th className="px-2 py-1 text-xs text-muted-foreground font-normal">Home \ Away</th>
+                  <th className="text-xs text-muted-foreground font-normal">Home \ Away</th>
                   {[0, 1, 2, 3, 4, 5].map((g) => (
-                    <th key={g} className="px-2 py-1 font-medium text-muted-foreground text-xs">
+                    <th key={g} className="font-medium text-muted-foreground text-xs">
                       {g}
                     </th>
                   ))}
@@ -375,7 +375,7 @@ export const SeasonMatchPredictor: React.FC<SeasonMatchPredictorProps> = ({
               <tbody>
                 {prediction.scoreMatrix.map((row, hGoals) => (
                   <tr key={hGoals}>
-                    <th className="px-2 py-1 font-medium text-muted-foreground text-xs text-left">
+                    <th className="font-medium text-muted-foreground text-xs text-left">
                       {hGoals}
                     </th>
                     {row.map((cell) => {
@@ -393,7 +393,7 @@ export const SeasonMatchPredictor: React.FC<SeasonMatchPredictorProps> = ({
                       return (
                         <td
                           key={cell.score}
-                          className={`px-2 py-1 border border-border/50 text-xs tabular-nums font-medium transition-colors ${bgStyle}`}
+                          className={`border border-border/50 text-xs tabular-nums font-medium transition-colors ${bgStyle}`}
                           title={`Score ${cell.score}: ${cell.prob}%`}
                         >
                           {cell.prob > 0.5 ? `${cell.prob}%` : "—"}

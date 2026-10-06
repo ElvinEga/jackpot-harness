@@ -250,28 +250,28 @@ export const SeasonBacktestView: React.FC<SeasonBacktestViewProps> = ({ allMatch
               <Table>
                 <TableHeader className="sticky top-0 bg-muted/90 backdrop-blur z-10">
                   <TableRow className="border-b border-border text-muted-foreground font-medium">
-                    <TableHead className="px-2 py-1 text-xs">Date</TableHead>
-                    <TableHead className="px-2 py-1 text-xs">Fixture</TableHead>
-                    <TableHead className="px-2 py-1 text-center text-xs">Actual Score</TableHead>
-                    <TableHead className="px-2 py-1 text-center text-xs">Predicted</TableHead>
-                    <TableHead className="px-2 py-1 text-center text-xs">Exp Score</TableHead>
-                    <TableHead className="px-2 py-1 text-center text-xs">1X2 Hit</TableHead>
-                    <TableHead className="px-2 py-1 text-center text-xs">O/U Hit</TableHead>
-                    <TableHead className="px-2 py-1 text-center text-xs">BTTS Hit</TableHead>
-                    <TableHead className="px-2 py-1 text-right text-xs">Odds (H/D/A)</TableHead>
+                    <TableHead className="text-xs">Date</TableHead>
+                    <TableHead className="text-xs">Fixture</TableHead>
+                    <TableHead className="text-center text-xs">Actual Score</TableHead>
+                    <TableHead className="text-center text-xs">Predicted</TableHead>
+                    <TableHead className="text-center text-xs">Exp Score</TableHead>
+                    <TableHead className="text-center text-xs">1X2 Hit</TableHead>
+                    <TableHead className="text-center text-xs">O/U Hit</TableHead>
+                    <TableHead className="text-center text-xs">BTTS Hit</TableHead>
+                    <TableHead className="text-right text-xs">Odds (H/D/A)</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {result.audits.map((a, i) => (
                     <TableRow key={i} className="hover:bg-muted/40 transition-colors">
-                      <TableCell className="px-2 py-1 tabular-nums text-xs text-muted-foreground">{a.date}</TableCell>
-                      <TableCell className="px-2 py-1 text-xs font-medium text-foreground">
+                      <TableCell className="tabular-nums text-xs text-muted-foreground">{a.date}</TableCell>
+                      <TableCell className="text-xs font-medium text-foreground">
                         {a.homeTeam} <span className="text-muted-foreground font-normal">vs</span> {a.awayTeam}
                       </TableCell>
-                      <TableCell className="px-2 py-1 text-center tabular-nums text-xs font-medium text-foreground">
+                      <TableCell className="text-center tabular-nums text-xs font-medium text-foreground">
                         {a.actualScore}
                       </TableCell>
-                      <TableCell className="px-2 py-1 text-center text-xs font-medium capitalize">
+                      <TableCell className="text-center text-xs font-medium capitalize">
                         <span
                           className={
                             a.predictedResult === "home"
@@ -284,31 +284,31 @@ export const SeasonBacktestView: React.FC<SeasonBacktestViewProps> = ({ allMatch
                           {a.predictedResult}
                         </span>
                       </TableCell>
-                      <TableCell className="px-2 py-1 text-center tabular-nums text-xs text-muted-foreground">
+                      <TableCell className="text-center tabular-nums text-xs text-muted-foreground">
                         {a.predictedScore}
                       </TableCell>
-                      <TableCell className="px-2 py-1 text-center">
+                      <TableCell className="text-center">
                         {a.isCorrect1X2 ? (
                           <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500 mx-auto" />
                         ) : (
                           <XCircle className="h-3.5 w-3.5 text-destructive/70 mx-auto" />
                         )}
                       </TableCell>
-                      <TableCell className="px-2 py-1 text-center">
+                      <TableCell className="text-center">
                         {a.isCorrectOver25 ? (
                           <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500 mx-auto" />
                         ) : (
                           <XCircle className="h-3.5 w-3.5 text-destructive/70 mx-auto" />
                         )}
                       </TableCell>
-                      <TableCell className="px-2 py-1 text-center">
+                      <TableCell className="text-center">
                         {a.isCorrectBTTS ? (
                           <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500 mx-auto" />
                         ) : (
                           <XCircle className="h-3.5 w-3.5 text-destructive/70 mx-auto" />
                         )}
                       </TableCell>
-                      <TableCell className="px-2 py-1 text-right tabular-nums text-xs text-muted-foreground">
+                      <TableCell className="text-right tabular-nums text-xs text-muted-foreground">
                         {a.marketHomeOdds?.toFixed(2) || "-"} / {a.marketDrawOdds?.toFixed(2) || "-"} / {a.marketAwayOdds?.toFixed(2) || "-"}
                       </TableCell>
                     </TableRow>

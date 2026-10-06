@@ -226,20 +226,20 @@ export const SeasonOverview: React.FC<SeasonOverviewProps> = ({
           <Table>
             <TableHeader>
               <TableRow className="bg-muted/50 text-muted-foreground font-medium">
-                <TableHead className="px-2 py-1 text-center w-10 text-xs">#</TableHead>
-                <TableHead className="px-2 py-1 text-xs">Team</TableHead>
-                <TableHead className="px-2 py-1 text-center w-10 text-xs">Pld</TableHead>
-                <TableHead className="px-2 py-1 text-center w-10 text-xs">W</TableHead>
-                <TableHead className="px-2 py-1 text-center w-10 text-xs">D</TableHead>
-                <TableHead className="px-2 py-1 text-center w-10 text-xs">L</TableHead>
-                <TableHead className="px-2 py-1 text-center w-12 text-xs">GF</TableHead>
-                <TableHead className="px-2 py-1 text-center w-12 text-xs">GA</TableHead>
-                <TableHead className="px-2 py-1 text-center w-12 text-xs">GD</TableHead>
-                <TableHead className="px-2 py-1 text-center w-12 text-xs font-medium text-foreground">Pts</TableHead>
+                <TableHead className="text-center w-10 text-xs">#</TableHead>
+                <TableHead className="text-xs">Team</TableHead>
+                <TableHead className="text-center w-10 text-xs">Pld</TableHead>
+                <TableHead className="text-center w-10 text-xs">W</TableHead>
+                <TableHead className="text-center w-10 text-xs">D</TableHead>
+                <TableHead className="text-center w-10 text-xs">L</TableHead>
+                <TableHead className="text-center w-12 text-xs">GF</TableHead>
+                <TableHead className="text-center w-12 text-xs">GA</TableHead>
+                <TableHead className="text-center w-12 text-xs">GD</TableHead>
+                <TableHead className="text-center w-12 text-xs font-medium text-foreground">Pts</TableHead>
                 {standingsTab === "overall" && (
-                  <TableHead className="px-2 py-1 text-center w-28 text-xs">Recent Form</TableHead>
+                  <TableHead className="text-center w-28 text-xs">Recent Form</TableHead>
                 )}
-                <TableHead className="px-2 py-1 text-right text-xs">Action</TableHead>
+                <TableHead className="text-right text-xs">Action</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -271,36 +271,36 @@ export const SeasonOverview: React.FC<SeasonOverviewProps> = ({
                     className="hover:bg-muted/40 transition-colors group cursor-pointer"
                     onClick={() => onSelectTeam && onSelectTeam(row.team)}
                   >
-                    <TableCell className="px-2 py-1 text-center">
+                    <TableCell className="text-center">
                       <span className={`tabular-nums text-xs font-medium ${rankColor}`}>
                         {row.rank}
                       </span>
                     </TableCell>
-                    <TableCell className="px-2 py-1 font-medium text-xs text-foreground group-hover:text-primary transition-colors">
+                    <TableCell className="font-medium text-xs text-foreground group-hover:text-primary transition-colors">
                       {row.team}
                     </TableCell>
-                    <TableCell className="px-2 py-1 text-center tabular-nums text-xs text-muted-foreground">{pld}</TableCell>
-                    <TableCell className="px-2 py-1 text-center tabular-nums text-xs font-medium text-emerald-500">
+                    <TableCell className="text-center tabular-nums text-xs text-muted-foreground">{pld}</TableCell>
+                    <TableCell className="text-center tabular-nums text-xs font-medium text-emerald-500">
                       {won}
                     </TableCell>
-                    <TableCell className="px-2 py-1 text-center tabular-nums text-xs font-medium text-amber-500">
+                    <TableCell className="text-center tabular-nums text-xs font-medium text-amber-500">
                       {drawn}
                     </TableCell>
-                    <TableCell className="px-2 py-1 text-center tabular-nums text-xs font-medium text-destructive">
+                    <TableCell className="text-center tabular-nums text-xs font-medium text-destructive">
                       {lost}
                     </TableCell>
-                    <TableCell className="px-2 py-1 text-center tabular-nums text-xs text-muted-foreground">{gf}</TableCell>
-                    <TableCell className="px-2 py-1 text-center tabular-nums text-xs text-muted-foreground">{ga}</TableCell>
-                    <TableCell className="px-2 py-1 text-center tabular-nums text-xs font-medium">
+                    <TableCell className="text-center tabular-nums text-xs text-muted-foreground">{gf}</TableCell>
+                    <TableCell className="text-center tabular-nums text-xs text-muted-foreground">{ga}</TableCell>
+                    <TableCell className="text-center tabular-nums text-xs font-medium">
                       <span className={gd > 0 ? "text-emerald-500" : gd < 0 ? "text-destructive" : "text-muted-foreground"}>
                         {gd > 0 ? `+${gd}` : gd}
                       </span>
                     </TableCell>
-                    <TableCell className="px-2 py-1 text-center tabular-nums text-xs font-medium text-foreground">
+                    <TableCell className="text-center tabular-nums text-xs font-medium text-foreground">
                       {pts}
                     </TableCell>
                     {standingsTab === "overall" && (
-                      <TableCell className="px-2 py-1 text-center">
+                      <TableCell className="text-center">
                         <div className="flex items-center justify-center gap-1.5">
                           {row.form.map((res, i) => (
                             <span
@@ -319,7 +319,7 @@ export const SeasonOverview: React.FC<SeasonOverviewProps> = ({
                         </div>
                       </TableCell>
                     )}
-                    <TableCell className="px-2 py-1 text-right">
+                    <TableCell className="text-right">
                       <Button
                         variant="ghost"
                         size="xs"

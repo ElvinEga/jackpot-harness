@@ -53,47 +53,47 @@ export const SeasonTrends: React.FC<SeasonTrendsProps> = ({ allMatches }) => {
           <Table>
             <TableHeader>
               <TableRow className="bg-muted/50 text-muted-foreground font-medium">
-                <TableHead className="px-2 py-1 text-xs">Season</TableHead>
-                <TableHead className="px-2 py-1 text-center text-xs">Matches</TableHead>
-                <TableHead className="px-2 py-1 text-center text-xs">Goals / Match</TableHead>
-                <TableHead className="px-2 py-1 text-center text-xs text-emerald-500">Home Win %</TableHead>
-                <TableHead className="px-2 py-1 text-center text-xs text-amber-500">Draw %</TableHead>
-                <TableHead className="px-2 py-1 text-center text-xs text-blue-500">Away Win %</TableHead>
-                <TableHead className="px-2 py-1 text-center text-xs text-orange-500">Over 2.5 %</TableHead>
-                <TableHead className="px-2 py-1 text-center text-xs">BTTS %</TableHead>
-                <TableHead className="px-2 py-1 text-center text-xs">Clean Sheet %</TableHead>
-                <TableHead className="px-2 py-1 text-center text-xs">Avg Shots</TableHead>
-                <TableHead className="px-2 py-1 text-center text-xs">Avg Corners</TableHead>
-                <TableHead className="px-2 py-1 text-center text-xs">Yellows / 90</TableHead>
+                <TableHead className="text-xs">Season</TableHead>
+                <TableHead className="text-center text-xs">Matches</TableHead>
+                <TableHead className="text-center text-xs">Goals / Match</TableHead>
+                <TableHead className="text-center text-xs text-emerald-500">Home Win %</TableHead>
+                <TableHead className="text-center text-xs text-amber-500">Draw %</TableHead>
+                <TableHead className="text-center text-xs text-blue-500">Away Win %</TableHead>
+                <TableHead className="text-center text-xs text-orange-500">Over 2.5 %</TableHead>
+                <TableHead className="text-center text-xs">BTTS %</TableHead>
+                <TableHead className="text-center text-xs">Clean Sheet %</TableHead>
+                <TableHead className="text-center text-xs">Avg Shots</TableHead>
+                <TableHead className="text-center text-xs">Avg Corners</TableHead>
+                <TableHead className="text-center text-xs">Yellows / 90</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {comparisons.map((row) => (
                 <TableRow key={row.season} className="hover:bg-muted/40 transition-colors">
-                  <TableCell className="px-2 py-1 text-xs font-medium text-foreground">
+                  <TableCell className="text-xs font-medium text-foreground">
                     {row.season}
                   </TableCell>
-                  <TableCell className="px-2 py-1 text-center tabular-nums text-xs text-muted-foreground">{row.matches}</TableCell>
-                  <TableCell className="px-2 py-1 text-center tabular-nums text-xs font-medium text-primary">
+                  <TableCell className="text-center tabular-nums text-xs text-muted-foreground">{row.matches}</TableCell>
+                  <TableCell className="text-center tabular-nums text-xs font-medium text-primary">
                     {row.goalsPerMatch}
                   </TableCell>
-                  <TableCell className="px-2 py-1 text-center tabular-nums text-xs font-medium text-emerald-500">
+                  <TableCell className="text-center tabular-nums text-xs font-medium text-emerald-500">
                     {row.homeWinPct}%
                   </TableCell>
-                  <TableCell className="px-2 py-1 text-center tabular-nums text-xs font-medium text-amber-500">
+                  <TableCell className="text-center tabular-nums text-xs font-medium text-amber-500">
                     {row.drawPct}%
                   </TableCell>
-                  <TableCell className="px-2 py-1 text-center tabular-nums text-xs font-medium text-blue-500">
+                  <TableCell className="text-center tabular-nums text-xs font-medium text-blue-500">
                     {row.awayWinPct}%
                   </TableCell>
-                  <TableCell className="px-2 py-1 text-center tabular-nums text-xs text-orange-500 font-medium">
+                  <TableCell className="text-center tabular-nums text-xs text-orange-500 font-medium">
                     {row.over25Pct}%
                   </TableCell>
-                  <TableCell className="px-2 py-1 text-center tabular-nums text-xs text-foreground">{row.bttsPct}%</TableCell>
-                  <TableCell className="px-2 py-1 text-center tabular-nums text-xs text-muted-foreground">{row.cleanSheetPct}%</TableCell>
-                  <TableCell className="px-2 py-1 text-center tabular-nums text-xs text-muted-foreground">{row.avgShotsPerMatch}</TableCell>
-                  <TableCell className="px-2 py-1 text-center tabular-nums text-xs text-muted-foreground">{row.avgCornersPerMatch}</TableCell>
-                  <TableCell className="px-2 py-1 text-center tabular-nums text-xs text-muted-foreground">{row.avgYellowsPerMatch}</TableCell>
+                  <TableCell className="text-center tabular-nums text-xs text-foreground">{row.bttsPct}%</TableCell>
+                  <TableCell className="text-center tabular-nums text-xs text-muted-foreground">{row.cleanSheetPct}%</TableCell>
+                  <TableCell className="text-center tabular-nums text-xs text-muted-foreground">{row.avgShotsPerMatch}</TableCell>
+                  <TableCell className="text-center tabular-nums text-xs text-muted-foreground">{row.avgCornersPerMatch}</TableCell>
+                  <TableCell className="text-center tabular-nums text-xs text-muted-foreground">{row.avgYellowsPerMatch}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -119,37 +119,37 @@ export const SeasonTrends: React.FC<SeasonTrendsProps> = ({ allMatches }) => {
             <Table>
               <TableHeader>
                 <TableRow className="bg-muted/50 text-muted-foreground font-medium">
-                  <TableHead className="px-2 py-1 text-xs">Month</TableHead>
-                  <TableHead className="px-2 py-1 text-center text-xs">Matches</TableHead>
-                  <TableHead className="px-2 py-1 text-center text-xs">Avg Goals</TableHead>
-                  <TableHead className="px-2 py-1 text-center text-xs text-emerald-500">Home %</TableHead>
-                  <TableHead className="px-2 py-1 text-center text-xs text-amber-500">Draw %</TableHead>
-                  <TableHead className="px-2 py-1 text-center text-xs text-blue-500">Away %</TableHead>
-                  <TableHead className="px-2 py-1 text-center text-xs text-orange-500">Over 2.5 %</TableHead>
-                  <TableHead className="px-2 py-1 text-center text-xs">BTTS %</TableHead>
+                  <TableHead className="text-xs">Month</TableHead>
+                  <TableHead className="text-center text-xs">Matches</TableHead>
+                  <TableHead className="text-center text-xs">Avg Goals</TableHead>
+                  <TableHead className="text-center text-xs text-emerald-500">Home %</TableHead>
+                  <TableHead className="text-center text-xs text-amber-500">Draw %</TableHead>
+                  <TableHead className="text-center text-xs text-blue-500">Away %</TableHead>
+                  <TableHead className="text-center text-xs text-orange-500">Over 2.5 %</TableHead>
+                  <TableHead className="text-center text-xs">BTTS %</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {calendar.monthly.map((m) => (
                   <TableRow key={m.monthNumber} className="hover:bg-muted/40 transition-colors">
-                    <TableCell className="px-2 py-1 text-xs font-medium text-foreground">
+                    <TableCell className="text-xs font-medium text-foreground">
                       {m.monthName}
                     </TableCell>
-                    <TableCell className="px-2 py-1 text-center tabular-nums text-xs text-muted-foreground">{m.matches}</TableCell>
-                    <TableCell className="px-2 py-1 text-center tabular-nums text-xs font-medium text-primary">{m.avgGoals}</TableCell>
-                    <TableCell className="px-2 py-1 text-center tabular-nums text-xs font-medium text-emerald-500">
+                    <TableCell className="text-center tabular-nums text-xs text-muted-foreground">{m.matches}</TableCell>
+                    <TableCell className="text-center tabular-nums text-xs font-medium text-primary">{m.avgGoals}</TableCell>
+                    <TableCell className="text-center tabular-nums text-xs font-medium text-emerald-500">
                       {m.homeWinPct}%
                     </TableCell>
-                    <TableCell className="px-2 py-1 text-center tabular-nums text-xs font-medium text-amber-500">
+                    <TableCell className="text-center tabular-nums text-xs font-medium text-amber-500">
                       {m.drawPct}%
                     </TableCell>
-                    <TableCell className="px-2 py-1 text-center tabular-nums text-xs font-medium text-blue-500">
+                    <TableCell className="text-center tabular-nums text-xs font-medium text-blue-500">
                       {m.awayWinPct}%
                     </TableCell>
-                    <TableCell className="px-2 py-1 text-center tabular-nums text-xs font-medium text-orange-500">
+                    <TableCell className="text-center tabular-nums text-xs font-medium text-orange-500">
                       {m.over25Pct}%
                     </TableCell>
-                    <TableCell className="px-2 py-1 text-center tabular-nums text-xs text-foreground">{m.bttsPct}%</TableCell>
+                    <TableCell className="text-center tabular-nums text-xs text-foreground">{m.bttsPct}%</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -173,33 +173,33 @@ export const SeasonTrends: React.FC<SeasonTrendsProps> = ({ allMatches }) => {
             <Table>
               <TableHeader>
                 <TableRow className="bg-muted/50 text-muted-foreground font-medium">
-                  <TableHead className="px-2 py-1 text-xs">Day</TableHead>
-                  <TableHead className="px-2 py-1 text-center text-xs">Matches</TableHead>
-                  <TableHead className="px-2 py-1 text-center text-xs">Avg Goals</TableHead>
-                  <TableHead className="px-2 py-1 text-center text-xs text-emerald-500">Home %</TableHead>
-                  <TableHead className="px-2 py-1 text-center text-xs text-amber-500">Draw %</TableHead>
-                  <TableHead className="px-2 py-1 text-center text-xs text-blue-500">Away %</TableHead>
-                  <TableHead className="px-2 py-1 text-center text-xs text-orange-500">Over 2.5 %</TableHead>
+                  <TableHead className="text-xs">Day</TableHead>
+                  <TableHead className="text-center text-xs">Matches</TableHead>
+                  <TableHead className="text-center text-xs">Avg Goals</TableHead>
+                  <TableHead className="text-center text-xs text-emerald-500">Home %</TableHead>
+                  <TableHead className="text-center text-xs text-amber-500">Draw %</TableHead>
+                  <TableHead className="text-center text-xs text-blue-500">Away %</TableHead>
+                  <TableHead className="text-center text-xs text-orange-500">Over 2.5 %</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {calendar.days.map((d) => (
                   <TableRow key={d.dayName} className="hover:bg-muted/40 transition-colors">
-                    <TableCell className="px-2 py-1 text-xs font-medium text-foreground">
+                    <TableCell className="text-xs font-medium text-foreground">
                       {d.dayName}
                     </TableCell>
-                    <TableCell className="px-2 py-1 text-center tabular-nums text-xs text-muted-foreground">{d.matches}</TableCell>
-                    <TableCell className="px-2 py-1 text-center tabular-nums text-xs font-medium text-primary">{d.avgGoals}</TableCell>
-                    <TableCell className="px-2 py-1 text-center tabular-nums text-xs font-medium text-emerald-500">
+                    <TableCell className="text-center tabular-nums text-xs text-muted-foreground">{d.matches}</TableCell>
+                    <TableCell className="text-center tabular-nums text-xs font-medium text-primary">{d.avgGoals}</TableCell>
+                    <TableCell className="text-center tabular-nums text-xs font-medium text-emerald-500">
                       {d.homeWinPct}%
                     </TableCell>
-                    <TableCell className="px-2 py-1 text-center tabular-nums text-xs font-medium text-amber-500">
+                    <TableCell className="text-center tabular-nums text-xs font-medium text-amber-500">
                       {d.drawPct}%
                     </TableCell>
-                    <TableCell className="px-2 py-1 text-center tabular-nums text-xs font-medium text-blue-500">
+                    <TableCell className="text-center tabular-nums text-xs font-medium text-blue-500">
                       {d.awayWinPct}%
                     </TableCell>
-                    <TableCell className="px-2 py-1 text-center tabular-nums text-xs font-medium text-orange-500">
+                    <TableCell className="text-center tabular-nums text-xs font-medium text-orange-500">
                       {d.over25Pct}%
                     </TableCell>
                   </TableRow>

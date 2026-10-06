@@ -287,53 +287,53 @@ export const PositionMatrix: React.FC<PositionMatrixProps> = ({ matches }) => {
           <Table>
             <TableHeader>
               <TableRow className="border-b border-border bg-muted/50 text-muted-foreground font-medium">
-                <TableHead className="px-2 py-1 text-center w-12 text-xs">Row</TableHead>
-                <TableHead className="px-2 py-1 text-center text-xs">Matches</TableHead>
-                <TableHead className="px-2 py-1 text-center text-xs">Home Win %</TableHead>
-                <TableHead className="px-2 py-1 text-center text-xs">Draw %</TableHead>
-                <TableHead className="px-2 py-1 text-center text-xs">Away Win %</TableHead>
-                <TableHead className="px-2 py-1 text-center text-xs">Avg Goals (H - A)</TableHead>
-                <TableHead className="px-2 py-1 text-center text-xs">Over 2.5 %</TableHead>
-                <TableHead className="px-2 py-1 text-center text-xs">BTTS %</TableHead>
-                <TableHead className="px-2 py-1 text-center text-xs">Top Score (All)</TableHead>
-                <TableHead className="px-2 py-1 text-center text-xs">Top Win (H / A)</TableHead>
-                <TableHead className="px-2 py-1 text-xs">Frequent Scores</TableHead>
+                <TableHead className="text-center w-12 text-xs">Row</TableHead>
+                <TableHead className="text-center text-xs">Matches</TableHead>
+                <TableHead className="text-center text-xs">Home Win %</TableHead>
+                <TableHead className="text-center text-xs">Draw %</TableHead>
+                <TableHead className="text-center text-xs">Away Win %</TableHead>
+                <TableHead className="text-center text-xs">Avg Goals (H - A)</TableHead>
+                <TableHead className="text-center text-xs">Over 2.5 %</TableHead>
+                <TableHead className="text-center text-xs">BTTS %</TableHead>
+                <TableHead className="text-center text-xs">Top Score (All)</TableHead>
+                <TableHead className="text-center text-xs">Top Win (H / A)</TableHead>
+                <TableHead className="text-xs">Frequent Scores</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {stats.map((s) => (
                 <TableRow key={s.position} className="hover:bg-muted/40 transition-colors">
-                  <TableCell className="px-2 py-1 text-center text-xs font-medium text-foreground">
+                  <TableCell className="text-center text-xs font-medium text-foreground">
                     #{s.position}
                   </TableCell>
-                  <TableCell className="px-2 py-1 text-center tabular-nums text-xs text-muted-foreground">
+                  <TableCell className="text-center tabular-nums text-xs text-muted-foreground">
                     {s.totalMatches.toLocaleString()}
                   </TableCell>
-                  <TableCell className="px-2 py-1 text-center tabular-nums text-xs font-medium text-emerald-500">
+                  <TableCell className="text-center tabular-nums text-xs font-medium text-emerald-500">
                     {s.homeWinPct}%
                   </TableCell>
-                  <TableCell className="px-2 py-1 text-center tabular-nums text-xs font-medium text-amber-500">
+                  <TableCell className="text-center tabular-nums text-xs font-medium text-amber-500">
                     {s.drawPct}%
                   </TableCell>
-                  <TableCell className="px-2 py-1 text-center tabular-nums text-xs font-medium text-blue-500">
+                  <TableCell className="text-center tabular-nums text-xs font-medium text-blue-500">
                     {s.awayWinPct}%
                   </TableCell>
-                  <TableCell className="px-2 py-1 text-center tabular-nums text-xs">
+                  <TableCell className="text-center tabular-nums text-xs">
                     <span className="font-medium text-foreground">{s.avgGoals}</span>
                     <span className="text-muted-foreground ml-1">
                       ({s.avgHomeGoals} - {s.avgAwayGoals})
                     </span>
                   </TableCell>
-                  <TableCell className="px-2 py-1 text-center tabular-nums text-xs text-muted-foreground">
+                  <TableCell className="text-center tabular-nums text-xs text-muted-foreground">
                     {s.over25Pct}%
                   </TableCell>
-                  <TableCell className="px-2 py-1 text-center tabular-nums text-xs text-muted-foreground">
+                  <TableCell className="text-center tabular-nums text-xs text-muted-foreground">
                     {s.bttsPct}%
                   </TableCell>
-                  <TableCell className="px-2 py-1 text-center tabular-nums text-xs font-medium text-amber-500" title={`Overall modal score: ${s.mostLikelyScore}`}>
+                  <TableCell className="text-center tabular-nums text-xs font-medium text-amber-500" title={`Overall modal score: ${s.mostLikelyScore}`}>
                     {s.mostLikelyScore}
                   </TableCell>
-                  <TableCell className="px-2 py-1 text-center tabular-nums text-xs">
+                  <TableCell className="text-center tabular-nums text-xs">
                     <div className="flex items-center justify-center gap-1.5 font-medium">
                       {s.topHomeScore ? (
                         <span
@@ -357,7 +357,7 @@ export const PositionMatrix: React.FC<PositionMatrixProps> = ({ matches }) => {
                       )}
                     </div>
                   </TableCell>
-                  <TableCell className="px-2 py-1 text-xs">
+                  <TableCell className="text-xs">
                     <div className="flex items-center gap-1.5 flex-wrap">
                       {s.topScores.slice(0, 4).map((ts) => {
                         const parts = ts.score.split("-").map(Number);

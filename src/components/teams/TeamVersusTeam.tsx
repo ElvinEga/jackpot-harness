@@ -373,28 +373,28 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
             <Table>
               <TableHeader>
                 <TableRow className="border-b border-border bg-muted/50 text-muted-foreground font-medium">
-                  <TableHead className="px-2 py-1 text-xs">Date</TableHead>
-                  <TableHead className="px-2 py-1 text-xs">Home Team</TableHead>
-                  <TableHead className="px-2 py-1 text-center text-xs">Score</TableHead>
-                  <TableHead className="px-2 py-1 text-xs">Away Team</TableHead>
-                  <TableHead className="px-2 py-1 text-center text-xs">Result</TableHead>
-                  <TableHead className="px-2 py-1 text-xs">Jackpot & Bookmaker</TableHead>
+                  <TableHead className="text-xs">Date</TableHead>
+                  <TableHead className="text-xs">Home Team</TableHead>
+                  <TableHead className="text-center text-xs">Score</TableHead>
+                  <TableHead className="text-xs">Away Team</TableHead>
+                  <TableHead className="text-center text-xs">Result</TableHead>
+                  <TableHead className="text-xs">Jackpot & Bookmaker</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {h2h.recentEncounters.map((m) => (
                   <TableRow key={m.id} className="hover:bg-muted/40 transition-colors">
-                    <TableCell className="px-2 py-1 tabular-nums text-xs text-muted-foreground">{m.date || "N/A"}</TableCell>
-                    <TableCell className={`px-2 py-1 text-xs font-medium ${m.home_team === teamA ? "text-foreground" : "text-muted-foreground"}`}>
+                    <TableCell className="tabular-nums text-xs text-muted-foreground">{m.date || "N/A"}</TableCell>
+                    <TableCell className={`text-xs font-medium ${m.home_team === teamA ? "text-foreground" : "text-muted-foreground"}`}>
                       {m.home_team}
                     </TableCell>
-                    <TableCell className="px-2 py-1 text-center tabular-nums text-xs font-medium text-foreground">
+                    <TableCell className="text-center tabular-nums text-xs font-medium text-foreground">
                       {m.score || "N/A"}
                     </TableCell>
-                    <TableCell className={`px-2 py-1 text-xs font-medium ${m.away_team === teamA ? "text-foreground" : "text-muted-foreground"}`}>
+                    <TableCell className={`text-xs font-medium ${m.away_team === teamA ? "text-foreground" : "text-muted-foreground"}`}>
                       {m.away_team}
                     </TableCell>
-                    <TableCell className="px-2 py-1 text-center text-xs font-medium uppercase">
+                    <TableCell className="text-center text-xs font-medium uppercase">
                       <span
                         className={
                           m.result === "home"
@@ -409,7 +409,7 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
                         {m.result || "N/A"}
                       </span>
                     </TableCell>
-                    <TableCell className="px-2 py-1 text-xs text-muted-foreground">
+                    <TableCell className="text-xs text-muted-foreground">
                       {m.bookmaker.toUpperCase()}: {m.jackpot}
                     </TableCell>
                   </TableRow>
