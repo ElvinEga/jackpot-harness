@@ -443,7 +443,7 @@ export const DataTable: React.FC<DataTableProps> = ({
                     <TableCell
                       key={cell.id}
                       style={stickyIdx >= 0 ? { left: `${stickyIdx * 44}px` } : undefined}
-                      className={`px-3 py-2.5 ${stickyIdx >= 0 ? "sticky z-10 bg-background/10 backdrop-blur-sm group-hover:bg-muted" : ""}`}
+                      className={`px-2 py-1 ${stickyIdx >= 0 ? "sticky z-10 bg-background/10 backdrop-blur-sm group-hover:bg-muted" : ""}`}
                     >
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
