@@ -15,6 +15,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableHead,
+  TableRow,
+  TableCell,
+} from "@/components/ui/table";
 
 import type { Match, TeamH2H, TeamForm } from "../../lib/types";
 import { getAllTeams, computeTeamH2H, computeTeamForm, getTeamAppearances } from "../../lib/teams";
@@ -362,47 +370,52 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs border-collapse">
-              <thead>
-                <tr className="border-b border-border bg-muted/50 text-muted-foreground font-semibold">
-                  <th className="py-2.5 px-3">Date</th>
-                  <th className="py-2.5 px-3">Home Team</th>
-                  <th className="py-2.5 px-3 text-center">Score</th>
-                  <th className="py-2.5 px-3">Away Team</th>
-                  <th className="py-2.5 px-3 text-center">Result</th>
-                  <th className="py-2.5 px-3">Jackpot & Bookmaker</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border">
+            <Table>
+              <TableHeader>
+                <TableRow className="border-b border-border bg-muted/50 text-muted-foreground font-medium">
+                  <TableHead className="px-2 py-1 text-xs">Date</TableHead>
+                  <TableHead className="px-2 py-1 text-xs">Home Team</TableHead>
+                  <TableHead className="px-2 py-1 text-center text-xs">Score</TableHead>
+                  <TableHead className="px-2 py-1 text-xs">Away Team</TableHead>
+                  <TableHead className="px-2 py-1 text-center text-xs">Result</TableHead>
+                  <TableHead className="px-2 py-1 text-xs">Jackpot & Bookmaker</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
                 {h2h.recentEncounters.map((m) => (
-                  <tr key={m.id} className="hover:bg-muted/40 transition-colors">
-                    <td className="py-2.5 px-3 font-mono text-muted-foreground">{m.date || "N/A"}</td>
-                    <td className={`py-2.5 px-3 font-medium ${m.home_team === teamA ? "text-foreground font-bold" : "text-muted-foreground"}`}>
+                  <TableRow key={m.id} className="hover:bg-muted/40 transition-colors">
+                    <TableCell className="px-2 py-1 tabular-nums text-xs text-muted-foreground">{m.date || "N/A"}</TableCell>
+                    <TableCell className={`px-2 py-1 text-xs font-medium ${m.home_team === teamA ? "text-foreground" : "text-muted-foreground"}`}>
                       {m.home_team}
-                    </td>
-                    <td className="py-2.5 px-3 text-center">
-                      <span className="font-mono font-bold px-2 py-0.5 rounded bg-muted border border-border text-foreground">
-                        {m.score || "N/A"}
-                      </span>
-                    </td>
-                    <td className={`py-2.5 px-3 font-medium ${m.away_team === teamA ? "text-foreground font-bold" : "text-muted-foreground"}`}>
+                    </TableCell>
+                    <TableCell className="px-2 py-1 text-center tabular-nums text-xs font-medium text-foreground">
+                      {m.score || "N/A"}
+                    </TableCell>
+                    <TableCell className={`px-2 py-1 text-xs font-medium ${m.away_team === teamA ? "text-foreground" : "text-muted-foreground"}`}>
                       {m.away_team}
-                    </td>
-                    <td className="py-2.5 px-3 text-center">
-                      <Badge
-                        variant={m.result === "home" ? "home" : m.result === "draw" ? "draw" : m.result === "away" ? "away" : "outline"}
-                        className="text-xs uppercase font-mono"
+                    </TableCell>
+                    <TableCell className="px-2 py-1 text-center text-xs font-medium uppercase">
+                      <span
+                        className={
+                          m.result === "home"
+                            ? "text-emerald-500"
+                            : m.result === "draw"
+                            ? "text-amber-500"
+                            : m.result === "away"
+                            ? "text-primary"
+                            : "text-muted-foreground"
+                        }
                       >
                         {m.result || "N/A"}
-                      </Badge>
-                    </td>
-                    <td className="py-2.5 px-3 text-muted-foreground">
+                      </span>
+                    </TableCell>
+                    <TableCell className="px-2 py-1 text-xs text-muted-foreground">
                       {m.bookmaker.toUpperCase()}: {m.jackpot}
-                    </td>
-                  </tr>
+                    </TableCell>
+                  </TableRow>
                 ))}
-              </tbody>
-            </table>
+              </TableBody>
+            </Table>
           </div>
         </div>
       )}
