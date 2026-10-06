@@ -22,6 +22,9 @@ data/seasons/le_championnat/  6 CSVs (same seasons) — division code F1, 380 th
 data/seasons/eredivisie/      6 CSVs (same seasons) — division code N1, 306 matches per season
 data/seasons/liga_1/          6 CSVs (same seasons) — division code P1, 306 matches per season
 data/seasons/jupiter_league/  6 CSVs (same seasons) — division code B1, 306/312 per season
+data/seasons/sco_premier_league/ 6 CSVs (same seasons) — division code SC0, 228 per season
+data/seasons/ligi_1/          6 CSVs (same seasons) — division code T1 (Turkey), 380/342/306
+data/seasons/ethniki_katigoria/ 6 CSVs (same seasons) — division code G1 (Greece), 240/233/236
 data/processed/      JSON mirror of the raw CSVs, same bookmaker folders and filenames
 data/processed/seasons/<competition>/  one JSON per season + index.json
 src/build_json.py    regenerates data/processed from data/raw
@@ -88,7 +91,7 @@ Conversions the generator applies, all lossless apart from the last:
 
 ## Season data (Football-Data.co.uk)
 
-`data/seasons/<competition>/<season>.csv` holds per-match league fixtures with 105–131 wide,
+`data/seasons/<competition>/<season>.csv` holds per-match league fixtures with 105–132 wide,
 PascalCase/abbreviated columns. The source's own column key is `data/seasons/notes.txt` — read it
 rather than guessing an abbreviation. Every raw column header and cell is preserved verbatim in the
 CSVs; nothing is renamed or repaired there.
@@ -99,14 +102,17 @@ CSVs; nothing is renamed or repaired there.
 `/data/seasons/premier_league/<season>.json` exactly like the jackpot mirror is at
 `/data/<bookmaker>/`.
 
-13953 matches in total across the eight competitions (380 per completed season for EPL, La Liga and
+18163 matches in total across the eleven competitions (380 per completed season for EPL, La Liga and
 Serie A, 306 for Bundesliga, Eredivisie and `liga_1`; Ligue 1 has 380 for 2021-2022 and 2022-2023
 then 306 from 2023-2024, when it dropped to 18 clubs; `jupiter_league` has 306 for 2021-2022 and
 2022-2023, 312, 312 and 311 for the three seasons it ran 16 clubs plus playoffs, then 18 clubs
-again). The in-progress 2026-2027 files hold 50 EPL, 69 La Liga, 36 Bundesliga, 50 Serie A, 45 Ligue
-1, 63 Eredivisie, 62 Portugal and 63 Belgium matches. One object per match, sorted by
-`(date, home_team)`; the ~100 source columns are reduced to 19 fields with the variable parts
-grouped:
+again; `sco_premier_league` has 228 every season — 12 clubs, 198 regular fixtures plus 30 in the
+split playoff rounds; Turkey's `ligi_1` runs 380, 342, 380, 342, 306 as it went from 20 to 19 to
+20, 19 and 18 clubs, a clean double round-robin each time; Greece's `ethniki_katigoria` has 240 for
+its 14-club seasons, then 233 and 236 as the playoff block shrank). The in-progress 2026-2027 files
+hold 50 EPL, 69 La Liga, 36 Bundesliga, 50 Serie A, 45 Ligue 1, 63 Eredivisie, 62 Portugal, 63
+Belgium, 42 Scotland, 54 Turkey and 35 Greece matches. One object per match, sorted by
+`(date, home_team)`; the ~100 source columns are reduced to 19 fields, variable parts grouped:
 
 ```json
 {
@@ -129,8 +135,11 @@ What the generator does:
   jackpot CSVs use (en dash included): `E0` → `England – Premier League`, `SP1` → `Spain – La Liga`,
   `D1` → `Germany – Bundesliga`, `I1` → `Italy – Serie A`, `F1` → `France – Ligue 1`, `N1` →
   `Netherlands – Eredivisie`, `P1` → `Portugal – Primeira Liga`, `B1` → `Belgium – Jupiler Pro
-  League`. Folder names are not those strings and are easy to cross-match: `liga_1` is **Portugal**,
-  `le_championnat` is France, and `jupiter_league` misspells Jupiler.
+  League`, `SC0` → `Scotland – Premiership`, `T1` → `Turkey – Süper Lig` (its `ü` is the only
+  non-ASCII letter in the set, the en dashes aside), `G1` → `Greece – Super League 1`. Folder names
+  are not those strings and are easy to cross-match: `liga_1` is **Portugal** and `ligi_1` — one
+  letter apart — is **Turkey**, `le_championnat` is France, `ethniki_katigoria` is Greece, and
+  `jupiter_league` misspells Jupiler.
 - Dates `dd/mm/yyyy` → ISO. `season` is derived from the kickoff month (July onwards belongs to the
   season starting that year), and `index.json` labels each file with the season its rows actually
   carry — so a file whose name disagrees with its contents shows up there rather than being hidden.
@@ -142,13 +151,20 @@ What the generator does:
 - Keys are emitted per competition from the columns actually present, and are then the same for
   every season file within that competition (`home_xg`/`away_xg` exist only from 2026-2027, so the
   earlier seasons carry them as `null`). `referee` is omitted entirely for competitions that have no
-  `Referee` column — only the Premier League has one, so the other seven competitions' rows have 18
-  fields instead of 19. Missing cells become `null`, never guessed.
-- The source data is near-complete: every row has a full-time result, and half-time is missing on
-  six rows only — one Bundesliga fixture (Union Berlin v Bochum, 2024-12-14) and five in
-  `jupiter_league`, every one of them a 5-0 or 0-5 scoreline, the shape an awarded fixture takes
-  here. On all six, every stat is `null` too. Scattered odds cells are blank (0–7% per file, and not
-  one in `le_championnat`, `liga_1`, La Liga or the Eredivisie bar the one blanked row below).
+  `Referee` column — only the Premier League and `sco_premier_league` have one, and both are filled
+  on every row, so the other nine competitions' rows have 18 fields instead of 19. Missing cells
+  become `null`, never guessed.
+- The source data is near-complete: every row has a full-time result, but half-time is missing on 38
+  rows and their stats are `null` too: 31 in `ligi_1`, 5 in `jupiter_league`, one Bundesliga fixture
+  (Union Berlin v Bochum, 2024-12-14) and one in `ethniki_katigoria` (Olympiakos v Panathinaikos,
+  2023-10-22). The scorelines say why — Belgium's five are 5-0 or 0-5 and Turkey's 31 are 3-0 or
+  0-3, the shape of an awarded fixture. Gaziantep and Hatayspor withdrew after the February 2023
+  earthquake and every remaining 2022-2023 fixture of theirs was credited, so those 29 rows carry an
+  empty odds block as well; the other nine keep their prices. Beyond that the odds are complete: only
+  9 of the 66 season files hold a blank cell, 41 rows in all — those 29, the deliberately blanked
+  Eredivisie row below, one Serie A fixture (Torino v Fiorentina, 2022-01-10) missing 13 of its 21
+  prices, and ten rows missing a single `handicap` or `handicap_close`. `bundesliga_1`,
+  `le_championnat`, `liga_1` and `sco_premier_league` have no blank odds cell at all.
 
 ## Data quirks (verify before computing anything)
 
