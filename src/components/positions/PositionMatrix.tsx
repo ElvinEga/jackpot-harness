@@ -23,6 +23,14 @@ import {
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableHead,
+  TableRow,
+  TableCell,
+} from "@/components/ui/table";
 
 import type { Match, PositionStat } from "../../lib/types";
 import { computePositionStats, getPositionAnomalies } from "../../lib/positions";
@@ -276,64 +284,60 @@ export const PositionMatrix: React.FC<PositionMatrixProps> = ({ matches }) => {
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs border-collapse">
-            <thead>
-              <tr className="border-b border-border bg-muted/50 text-muted-foreground font-semibold">
-                <th className="py-2.5 px-3 text-center w-14">Row</th>
-                <th className="py-2.5 px-3 text-center">Matches</th>
-                <th className="py-2.5 px-3 text-center">Home Win %</th>
-                <th className="py-2.5 px-3 text-center">Draw %</th>
-                <th className="py-2.5 px-3 text-center">Away Win %</th>
-                <th className="py-2.5 px-3 text-center">Avg Goals (H - A)</th>
-                <th className="py-2.5 px-3 text-center">Over 2.5 %</th>
-                <th className="py-2.5 px-3 text-center">BTTS %</th>
-                <th className="py-2.5 px-3 text-center">Top Score (All)</th>
-                <th className="py-2.5 px-3 text-center">Top Win (H / A)</th>
-                <th className="py-2.5 px-3">Frequent Scores</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-border">
+          <Table>
+            <TableHeader>
+              <TableRow className="border-b border-border bg-muted/50 text-muted-foreground font-medium">
+                <TableHead className="px-2 py-1 text-center w-12 text-xs">Row</TableHead>
+                <TableHead className="px-2 py-1 text-center text-xs">Matches</TableHead>
+                <TableHead className="px-2 py-1 text-center text-xs">Home Win %</TableHead>
+                <TableHead className="px-2 py-1 text-center text-xs">Draw %</TableHead>
+                <TableHead className="px-2 py-1 text-center text-xs">Away Win %</TableHead>
+                <TableHead className="px-2 py-1 text-center text-xs">Avg Goals (H - A)</TableHead>
+                <TableHead className="px-2 py-1 text-center text-xs">Over 2.5 %</TableHead>
+                <TableHead className="px-2 py-1 text-center text-xs">BTTS %</TableHead>
+                <TableHead className="px-2 py-1 text-center text-xs">Top Score (All)</TableHead>
+                <TableHead className="px-2 py-1 text-center text-xs">Top Win (H / A)</TableHead>
+                <TableHead className="px-2 py-1 text-xs">Frequent Scores</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {stats.map((s) => (
-                <tr key={s.position} className="hover:bg-muted/40 transition-colors">
-                  <td className="py-2.5 px-3 text-center">
-                    <span className="inline-flex items-center justify-center h-6 w-6 rounded-md bg-muted text-foreground font-bold font-mono text-xs border border-border">
-                      #{s.position}
-                    </span>
-                  </td>
-                  <td className="py-2.5 px-3 text-center font-mono text-muted-foreground">
+                <TableRow key={s.position} className="hover:bg-muted/40 transition-colors">
+                  <TableCell className="px-2 py-1 text-center text-xs font-medium text-foreground">
+                    #{s.position}
+                  </TableCell>
+                  <TableCell className="px-2 py-1 text-center tabular-nums text-xs text-muted-foreground">
                     {s.totalMatches.toLocaleString()}
-                  </td>
-                  <td className="py-2.5 px-3 text-center font-mono font-medium text-emerald-500">
+                  </TableCell>
+                  <TableCell className="px-2 py-1 text-center tabular-nums text-xs font-medium text-emerald-500">
                     {s.homeWinPct}%
-                  </td>
-                  <td className="py-2.5 px-3 text-center font-mono font-medium text-amber-500">
+                  </TableCell>
+                  <TableCell className="px-2 py-1 text-center tabular-nums text-xs font-medium text-amber-500">
                     {s.drawPct}%
-                  </td>
-                  <td className="py-2.5 px-3 text-center font-mono font-medium text-blue-500">
+                  </TableCell>
+                  <TableCell className="px-2 py-1 text-center tabular-nums text-xs font-medium text-blue-500">
                     {s.awayWinPct}%
-                  </td>
-                  <td className="py-2.5 px-3 text-center font-mono">
-                    <span className="font-semibold text-foreground">{s.avgGoals}</span>
-                    <span className="text-xs text-muted-foreground ml-1">
+                  </TableCell>
+                  <TableCell className="px-2 py-1 text-center tabular-nums text-xs">
+                    <span className="font-medium text-foreground">{s.avgGoals}</span>
+                    <span className="text-muted-foreground ml-1">
                       ({s.avgHomeGoals} - {s.avgAwayGoals})
                     </span>
-                  </td>
-                  <td className="py-2.5 px-3 text-center font-mono text-muted-foreground">
+                  </TableCell>
+                  <TableCell className="px-2 py-1 text-center tabular-nums text-xs text-muted-foreground">
                     {s.over25Pct}%
-                  </td>
-                  <td className="py-2.5 px-3 text-center font-mono text-muted-foreground">
+                  </TableCell>
+                  <TableCell className="px-2 py-1 text-center tabular-nums text-xs text-muted-foreground">
                     {s.bttsPct}%
-                  </td>
-                  <td className="py-2.5 px-3 text-center">
-                    <span className="font-mono font-bold px-1.5 py-0.5 rounded bg-amber-500/10 border border-amber-500/20 text-amber-500" title={`Overall modal score: ${s.mostLikelyScore}`}>
-                      {s.mostLikelyScore}
-                    </span>
-                  </td>
-                  <td className="py-2.5 px-3 text-center">
-                    <div className="flex items-center justify-center gap-1.5 font-mono">
+                  </TableCell>
+                  <TableCell className="px-2 py-1 text-center tabular-nums text-xs font-medium text-amber-500" title={`Overall modal score: ${s.mostLikelyScore}`}>
+                    {s.mostLikelyScore}
+                  </TableCell>
+                  <TableCell className="px-2 py-1 text-center tabular-nums text-xs">
+                    <div className="flex items-center justify-center gap-1.5 font-medium">
                       {s.topHomeScore ? (
                         <span
-                          className="px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 font-semibold text-[11px]"
+                          className="text-emerald-500"
                           title={`Top Home Win Score: ${s.topHomeScore.score} (${s.topHomeScore.pct}%)`}
                         >
                           H: {s.topHomeScore.score}
@@ -343,7 +347,7 @@ export const PositionMatrix: React.FC<PositionMatrixProps> = ({ matches }) => {
                       )}
                       {s.topAwayScore ? (
                         <span
-                          className="px-1.5 py-0.5 rounded bg-blue-500/10 text-blue-500 border border-blue-500/20 font-semibold text-[11px]"
+                          className="text-blue-500"
                           title={`Top Away Win Score: ${s.topAwayScore.score} (${s.topAwayScore.pct}%)`}
                         >
                           A: {s.topAwayScore.score}
@@ -352,22 +356,22 @@ export const PositionMatrix: React.FC<PositionMatrixProps> = ({ matches }) => {
                         <span className="text-muted-foreground">-</span>
                       )}
                     </div>
-                  </td>
-                  <td className="py-2.5 px-3">
+                  </TableCell>
+                  <TableCell className="px-2 py-1 text-xs">
                     <div className="flex items-center gap-1.5 flex-wrap">
                       {s.topScores.slice(0, 4).map((ts) => {
                         const parts = ts.score.split("-").map(Number);
                         const isHome = parts[0] > parts[1];
                         const isDraw = parts[0] === parts[1];
-                        const badgeColor = isHome
-                          ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20"
+                        const textColor = isHome
+                          ? "text-emerald-500"
                           : isDraw
-                          ? "bg-amber-500/10 text-amber-500 border-amber-500/20"
-                          : "bg-blue-500/10 text-blue-500 border-blue-500/20";
+                          ? "text-amber-500"
+                          : "text-blue-500";
                         return (
                           <span
                             key={ts.score}
-                            className={`text-xs font-mono px-1.5 py-0.5 rounded border ${badgeColor}`}
+                            className={`tabular-nums text-xs font-medium ${textColor}`}
                             title={`${ts.score}: ${ts.count} times (${ts.pct}%)`}
                           >
                             {ts.score} <span className="opacity-75 text-[10px]">({ts.pct}%)</span>
@@ -375,11 +379,11 @@ export const PositionMatrix: React.FC<PositionMatrixProps> = ({ matches }) => {
                         );
                       })}
                     </div>
-                  </td>
-                </tr>
+                  </TableCell>
+                </TableRow>
               ))}
-            </tbody>
-          </table>
+            </TableBody>
+          </Table>
         </div>
       </div>
     </div>
