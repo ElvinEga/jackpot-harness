@@ -107,6 +107,18 @@ export const SeasonsDashboard: React.FC<SeasonsDashboardProps> = ({
       setSelectedTeam("Club Brugge");
       setPredHome("Club Brugge");
       setPredAway("Anderlecht");
+    } else if (compId === "sco_premier_league") {
+      setSelectedTeam("Celtic");
+      setPredHome("Celtic");
+      setPredAway("Rangers");
+    } else if (compId === "ligi_1") {
+      setSelectedTeam("Galatasaray");
+      setPredHome("Galatasaray");
+      setPredAway("Fenerbahce");
+    } else if (compId === "ethniki_katigoria") {
+      setSelectedTeam("Olympiakos");
+      setPredHome("Olympiakos");
+      setPredAway("Panathinaikos");
     } else {
       setSelectedTeam("Arsenal");
       setPredHome("Liverpool");
