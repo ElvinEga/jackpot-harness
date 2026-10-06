@@ -1,13 +1,8 @@
 import * as React from "react"
-import { cn } from "@/lib/utils"
+import { cn } from "cn"
+
 import { Button } from "@/components/ui/button"
-import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  ChevronsLeftIcon,
-  ChevronsRightIcon,
-  MoreHorizontalIcon,
-} from "lucide-react"
+import { ChevronLeftIcon, ChevronRightIcon, ChevronsLeftIcon, ChevronsRightIcon, MoreHorizontalIcon } from "lucide-react"
 
 function Pagination({ className, ...props }: React.ComponentProps<"nav">) {
   return (
@@ -28,7 +23,7 @@ function PaginationContent({
   return (
     <ul
       data-slot="pagination-content"
-      className={cn("flex items-center gap-1", className)}
+      className={cn("flex items-center gap-0.5", className)}
       {...props}
     />
   )
@@ -41,8 +36,8 @@ function PaginationItem({ ...props }: React.ComponentProps<"li">) {
 type PaginationLinkProps = {
   isActive?: boolean
   disabled?: boolean
-  size?: React.ComponentProps<typeof Button>["size"]
-} & Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "size">
+  render?: React.ReactElement
+} & Omit<React.ComponentProps<typeof Button>, "render">
 
 function PaginationLink({
   className,
@@ -50,6 +45,7 @@ function PaginationLink({
   size = "icon",
   disabled,
   children,
+  render,
   ...props
 }: PaginationLinkProps) {
   return (
@@ -58,6 +54,7 @@ function PaginationLink({
       size={size}
       disabled={disabled}
       className={cn(className, isActive && "border-primary text-primary font-bold")}
+      render={render}
       {...props}
     >
       {children}
@@ -68,18 +65,17 @@ function PaginationLink({
 function PaginationFirst({
   className,
   text = "First",
-  size = "default",
   ...props
 }: React.ComponentProps<typeof PaginationLink> & { text?: string }) {
   return (
     <PaginationLink
       aria-label="Go to first page"
-      size={size}
-      className={cn("pl-2.5 gap-1", className)}
+      size="default"
+      className={cn("pl-2!", className)}
       {...props}
     >
-      <ChevronsLeftIcon className="h-4 w-4" />
-      <span className="hidden sm:inline">{text}</span>
+      <ChevronsLeftIcon data-icon="inline-start" />
+      <span className="hidden sm:block">{text}</span>
     </PaginationLink>
   )
 }
@@ -87,18 +83,17 @@ function PaginationFirst({
 function PaginationPrevious({
   className,
   text = "Previous",
-  size = "default",
   ...props
 }: React.ComponentProps<typeof PaginationLink> & { text?: string }) {
   return (
     <PaginationLink
       aria-label="Go to previous page"
-      size={size}
-      className={cn("pl-2.5 gap-1", className)}
+      size="default"
+      className={cn("pl-2!", className)}
       {...props}
     >
-      <ChevronLeftIcon className="h-4 w-4" />
-      <span className="hidden sm:inline">{text}</span>
+      <ChevronLeftIcon data-icon="inline-start" />
+      <span className="hidden sm:block">{text}</span>
     </PaginationLink>
   )
 }
@@ -106,18 +101,17 @@ function PaginationPrevious({
 function PaginationNext({
   className,
   text = "Next",
-  size = "default",
   ...props
 }: React.ComponentProps<typeof PaginationLink> & { text?: string }) {
   return (
     <PaginationLink
       aria-label="Go to next page"
-      size={size}
-      className={cn("pr-2.5 gap-1", className)}
+      size="default"
+      className={cn("pr-2!", className)}
       {...props}
     >
-      <span className="hidden sm:inline">{text}</span>
-      <ChevronRightIcon className="h-4 w-4" />
+      <span className="hidden sm:block">{text}</span>
+      <ChevronRightIcon data-icon="inline-end" />
     </PaginationLink>
   )
 }
@@ -125,18 +119,17 @@ function PaginationNext({
 function PaginationLast({
   className,
   text = "Last",
-  size = "default",
   ...props
 }: React.ComponentProps<typeof PaginationLink> & { text?: string }) {
   return (
     <PaginationLink
       aria-label="Go to last page"
-      size={size}
-      className={cn("pr-2.5 gap-1", className)}
+      size="default"
+      className={cn("pr-2!", className)}
       {...props}
     >
-      <span className="hidden sm:inline">{text}</span>
-      <ChevronsRightIcon className="h-4 w-4" />
+      <span className="hidden sm:block">{text}</span>
+      <ChevronsRightIcon data-icon="inline-end" />
     </PaginationLink>
   )
 }
@@ -150,12 +143,13 @@ function PaginationEllipsis({
       aria-hidden
       data-slot="pagination-ellipsis"
       className={cn(
-        "flex size-9 items-center justify-center text-muted-foreground",
+        "flex size-7 items-center justify-center [&_svg:not([class*='size-'])]:size-3.5",
         className
       )}
       {...props}
     >
-      <MoreHorizontalIcon className="h-4 w-4" />
+      <MoreHorizontalIcon
+      />
       <span className="sr-only">More pages</span>
     </span>
   )
