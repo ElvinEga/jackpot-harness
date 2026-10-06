@@ -42,6 +42,14 @@ import {
   SheetTitle,
   SheetDescription,
 } from "@/components/ui/sheet";
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableHead,
+  TableRow,
+  TableCell,
+} from "@/components/ui/table";
 import { toast } from "@/components/ui/toast";
 
 import type { Match, PositionStat, MatchPrediction } from "../../lib/types";
@@ -849,26 +857,26 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs border-collapse">
-            <thead>
-              <tr className="border-b border-border bg-muted/50 text-muted-foreground font-semibold">
-                <th className="py-2.5 px-3 w-14 text-center">Pos</th>
-                <th className="py-2.5 px-3 min-w-[340px]">Match Fixture (Home vs Away)</th>
-                <th className="py-2.5 px-3 text-center min-w-[130px]">1X2 Distribution</th>
-                <th className="py-2.5 px-3 text-center min-w-[70px]">Avg Goals</th>
-                <th className="py-2.5 px-3 text-center min-w-[90px]">Likely Score</th>
-                <th className="py-2.5 px-3 text-center min-w-[90px]">Prediction</th>
-                <th className="py-2.5 px-3 text-center min-w-[80px]">Confidence</th>
-                <th className="py-2.5 px-3 text-right w-12">Details</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-border">
+          <Table>
+            <TableHeader>
+              <TableRow className="border-b border-border bg-muted/50 text-muted-foreground font-medium">
+                <TableHead className="px-2 py-1 w-12 text-center text-xs">Pos</TableHead>
+                <TableHead className="px-2 py-1 min-w-[340px] text-xs">Match Fixture (Home vs Away)</TableHead>
+                <TableHead className="px-2 py-1 text-center min-w-[130px] text-xs">1X2 Distribution</TableHead>
+                <TableHead className="px-2 py-1 text-center min-w-[70px] text-xs">Avg Goals</TableHead>
+                <TableHead className="px-2 py-1 text-center min-w-[90px] text-xs">Likely Score</TableHead>
+                <TableHead className="px-2 py-1 text-center min-w-[90px] text-xs">Prediction</TableHead>
+                <TableHead className="px-2 py-1 text-center min-w-[80px] text-xs">Confidence</TableHead>
+                <TableHead className="px-2 py-1 text-right w-12 text-xs">Details</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {predictions.map((pred) => {
                 const posStat = positionStats.find((s) => s.position === pred.position);
                 const isCustom = customFixtures[pred.position]?.home && customFixtures[pred.position]?.away;
 
                 return (
-                  <tr
+                  <TableRow
                     key={pred.position}
                     tabIndex={0}
                     onClick={() => setDetailMatch(pred)}
@@ -882,14 +890,12 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
                     className="hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring transition-colors cursor-pointer group"
                   >
                     {/* Position Number */}
-                    <td className="py-2.5 px-3 text-center">
-                      <span className="inline-flex items-center justify-center h-6 w-6 rounded-md bg-muted text-foreground font-bold font-mono text-xs border border-border">
-                        {pred.position}
-                      </span>
-                    </td>
+                    <TableCell className="px-2 py-1 text-center text-xs font-medium text-foreground">
+                      #{pred.position}
+                    </TableCell>
 
                     {/* Match Fixture Input / Display */}
-                    <td className="py-2 px-3" onClick={(e) => e.stopPropagation()}>
+                    <TableCell className="px-2 py-1" onClick={(e) => e.stopPropagation()}>
                       <div className="flex flex-col gap-1">
                         <div className="flex items-center gap-1.5">
                           <TeamSearchInput
@@ -901,7 +907,7 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
                             teamAppearances={teamAppearances}
                             className="w-36"
                           />
-                          <span className="text-muted-foreground text-xs font-semibold">vs</span>
+                          <span className="text-muted-foreground text-xs font-medium">vs</span>
                           <TeamSearchInput
                             size="xs"
                             placeholder={`Away Team ${pred.position}`}
@@ -912,32 +918,32 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
                             className="w-36"
                           />
                           {isCustom && (
-                            <Badge variant="outline" className="text-xs px-1 py-0 text-primary border-primary/30">
+                            <span className="text-[11px] font-medium text-primary">
                               Active
-                            </Badge>
+                            </span>
                           )}
                         </div>
 
                         {/* SportPesa Live Market Odds & Tournament info */}
                         {pred.bookmakerOdds && (
-                          <div className="flex items-center gap-2 text-xs font-mono text-muted-foreground pl-0.5">
-                            <span className="inline-flex items-center gap-1 text-xs px-1.5 py-0.5 rounded bg-primary/10 text-primary border border-primary/20 font-sans font-medium">
+                          <div className="flex items-center gap-2 text-xs tabular-nums text-muted-foreground pl-0.5">
+                            <span className="inline-flex items-center gap-1 text-[11px] px-1.5 py-0.5 rounded bg-primary/10 text-primary font-medium">
                               SP Odds: {pred.bookmakerOdds.home?.toFixed(2)} | {pred.bookmakerOdds.draw?.toFixed(2)} | {pred.bookmakerOdds.away?.toFixed(2)}
                             </span>
                             {pred.tournament && (
-                              <span className="text-muted-foreground truncate max-w-[170px] font-sans">
+                              <span className="text-muted-foreground truncate max-w-[170px] text-xs">
                                 {pred.tournament} {pred.country ? `(${pred.country})` : ""}
                               </span>
                             )}
                           </div>
                         )}
                       </div>
-                    </td>
+                    </TableCell>
 
                     {/* 1X2 Distribution Bar */}
-                    <td className="py-2.5 px-3">
+                    <TableCell className="px-2 py-1">
                       <div className="flex flex-col gap-1">
-                        <div className="flex items-center justify-between text-xs font-mono">
+                        <div className="flex items-center justify-between text-xs tabular-nums">
                           <span className="text-primary font-medium">{pred.homeProb}%</span>
                           <span className="text-foreground font-medium">{pred.drawProb}%</span>
                           <span className="text-muted-foreground font-medium">{pred.awayProb}%</span>
@@ -949,60 +955,60 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({ matches, onS
                           <div style={{ width: `${pred.awayProb}%` }} className="bg-slate-500 h-full" />
                         </div>
                       </div>
-                    </td>
+                    </TableCell>
 
                     {/* Average Goals */}
-                    <td className="py-2.5 px-3 text-center font-mono font-medium text-foreground">
+                    <TableCell className="px-2 py-1 text-center tabular-nums text-xs font-medium text-foreground">
                       {pred.totalExpectedGoals || posStat?.avgGoals || "2.40"}
-                    </td>
+                    </TableCell>
 
                     {/* Most Likely Score */}
-                    <td className="py-2.5 px-3 text-center">
-                      <span className="font-mono font-semibold px-2 py-0.5 rounded bg-muted border border-border text-foreground">
+                    <TableCell className="px-2 py-1 text-center tabular-nums text-xs">
+                      <span className="font-medium text-foreground">
                         {pred.mostLikelyScores[0]?.score || "1-1"}
                       </span>
-                      <span className="text-xs text-muted-foreground block mt-0.5 font-mono">
+                      <span className="text-muted-foreground ml-1">
                         ({pred.mostLikelyScores[0]?.probability || 14}%)
                       </span>
-                    </td>
+                    </TableCell>
 
                     {/* Predicted Result Badge */}
-                    <td className="py-2.5 px-3 text-center">
+                    <TableCell className="px-2 py-1 text-center text-xs font-medium">
                       {pred.predictedResult === "home" && (
-                        <Badge variant="home">HOME (1)</Badge>
+                        <span className="text-emerald-500">HOME (1)</span>
                       )}
                       {pred.predictedResult === "draw" && (
-                        <Badge variant="draw">DRAW (X)</Badge>
+                        <span className="text-amber-500">DRAW (X)</span>
                       )}
                       {pred.predictedResult === "away" && (
-                        <Badge variant="away">AWAY (2)</Badge>
+                        <span className="text-primary">AWAY (2)</span>
                       )}
-                    </td>
+                    </TableCell>
 
                     {/* Confidence Rating */}
-                    <td className="py-2.5 px-3 text-center">
+                    <TableCell className="px-2 py-1 text-center text-xs font-medium">
                       <span
-                        className={`text-xs font-semibold ${
+                        className={
                           pred.confidence === "High"
                             ? "text-primary"
                             : pred.confidence === "Medium"
                             ? "text-foreground"
                             : "text-muted-foreground"
-                        }`}
+                        }
                       >
                         {pred.confidence}
                       </span>
-                    </td>
+                    </TableCell>
 
                     {/* Arrow / Detail Icon */}
-                    <td className="py-2.5 px-3 text-right">
+                    <TableCell className="px-2 py-1 text-right">
                       <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-foreground inline-block transition-colors" />
-                    </td>
-                  </tr>
+                    </TableCell>
+                  </TableRow>
                 );
               })}
-            </tbody>
-          </table>
+            </TableBody>
+          </Table>
         </div>
       </div>
 
