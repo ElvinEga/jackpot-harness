@@ -354,9 +354,9 @@ export const SeasonMatchPredictor: React.FC<SeasonMatchPredictorProps> = ({
                 Exact probability for each scoreline (Home 0..5 vs Away 0..5)
               </p>
             </div>
-            <Badge variant="outline" className="text-[10px] font-mono text-primary border-primary/30">
+            <span className="text-xs font-medium text-primary">
               Top: {prediction.mostLikelyScores[0]?.score} ({prediction.mostLikelyScores[0]?.prob}%)
-            </Badge>
+            </span>
           </div>
 
           {/* Heatmap Grid */}
@@ -364,9 +364,9 @@ export const SeasonMatchPredictor: React.FC<SeasonMatchPredictorProps> = ({
             <table className="w-full text-center text-xs border-collapse">
               <thead>
                 <tr>
-                  <th className="p-1 text-[10px] text-muted-foreground font-normal">Home \ Away</th>
+                  <th className="px-2 py-1 text-xs text-muted-foreground font-normal">Home \ Away</th>
                   {[0, 1, 2, 3, 4, 5].map((g) => (
-                    <th key={g} className="p-1 font-mono font-bold text-muted-foreground text-xs">
+                    <th key={g} className="px-2 py-1 font-medium text-muted-foreground text-xs">
                       {g}
                     </th>
                   ))}
@@ -375,7 +375,7 @@ export const SeasonMatchPredictor: React.FC<SeasonMatchPredictorProps> = ({
               <tbody>
                 {prediction.scoreMatrix.map((row, hGoals) => (
                   <tr key={hGoals}>
-                    <th className="p-1 font-mono font-bold text-muted-foreground text-xs text-left">
+                    <th className="px-2 py-1 font-medium text-muted-foreground text-xs text-left">
                       {hGoals}
                     </th>
                     {row.map((cell) => {
@@ -383,7 +383,7 @@ export const SeasonMatchPredictor: React.FC<SeasonMatchPredictorProps> = ({
                       // Color intensity based on prob (0% - 15%)
                       const intensity = Math.min(1, cell.prob / 14);
                       const bgStyle = isTop
-                        ? "bg-primary text-primary-foreground font-bold shadow-xs"
+                        ? "bg-primary text-primary-foreground font-medium shadow-xs"
                         : cell.homeGoals > cell.awayGoals
                         ? `bg-emerald-500/[${(intensity * 0.35).toFixed(2)}] text-foreground`
                         : cell.homeGoals === cell.awayGoals
@@ -393,7 +393,7 @@ export const SeasonMatchPredictor: React.FC<SeasonMatchPredictorProps> = ({
                       return (
                         <td
                           key={cell.score}
-                          className={`p-1.5 border border-border/50 text-[11px] font-mono transition-colors ${bgStyle}`}
+                          className={`px-2 py-1 border border-border/50 text-xs tabular-nums font-medium transition-colors ${bgStyle}`}
                           title={`Score ${cell.score}: ${cell.prob}%`}
                         >
                           {cell.prob > 0.5 ? `${cell.prob}%` : "—"}
