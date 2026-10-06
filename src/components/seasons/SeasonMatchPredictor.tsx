@@ -117,6 +117,36 @@ export const SeasonMatchPredictor: React.FC<SeasonMatchPredictorProps> = ({
         { home: "St. Gilloise", away: "Anderlecht" },
       ].filter((p) => allTeams.includes(p.home) && allTeams.includes(p.away));
     }
+    if (allTeams.includes("Celtic") || allTeams.includes("Rangers")) {
+      return [
+        { home: "Celtic", away: "Rangers" },
+        { home: "Rangers", away: "Celtic" },
+        { home: "Hearts", away: "Hibernian" },
+        { home: "Hibernian", away: "Hearts" },
+        { home: "Dundee United", away: "Dundee" },
+        { home: "Aberdeen", away: "Dundee" },
+      ].filter((p) => allTeams.includes(p.home) && allTeams.includes(p.away));
+    }
+    if (allTeams.includes("Galatasaray") || allTeams.includes("Fenerbahce")) {
+      return [
+        { home: "Galatasaray", away: "Fenerbahce" },
+        { home: "Fenerbahce", away: "Galatasaray" },
+        { home: "Besiktas", away: "Galatasaray" },
+        { home: "Galatasaray", away: "Besiktas" },
+        { home: "Trabzonspor", away: "Fenerbahce" },
+        { home: "Buyuksehyr", away: "Besiktas" },
+      ].filter((p) => allTeams.includes(p.home) && allTeams.includes(p.away));
+    }
+    if (allTeams.includes("Olympiakos") || allTeams.includes("Panathinaikos")) {
+      return [
+        { home: "Olympiakos", away: "Panathinaikos" },
+        { home: "Panathinaikos", away: "Olympiakos" },
+        { home: "AEK", away: "PAOK" },
+        { home: "PAOK", away: "AEK" },
+        { home: "PAOK", away: "Aris" },
+        { home: "Olympiakos", away: "AEK" },
+      ].filter((p) => allTeams.includes(p.home) && allTeams.includes(p.away));
+    }
     return [
       { home: "Liverpool", away: "Arsenal" },
       { home: "Man City", away: "Liverpool" },
