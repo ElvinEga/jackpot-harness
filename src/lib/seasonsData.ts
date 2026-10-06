@@ -62,6 +62,27 @@ export const AVAILABLE_COMPETITIONS = [
     countryCode: "BEL",
     division: "B1",
   },
+  {
+    id: "sco_premier_league",
+    name: "Premiership",
+    country: "Scotland",
+    countryCode: "SCO",
+    division: "SC0",
+  },
+  {
+    id: "ligi_1",
+    name: "Süper Lig",
+    country: "Turkey",
+    countryCode: "TUR",
+    division: "T1",
+  },
+  {
+    id: "ethniki_katigoria",
+    name: "Super League 1",
+    country: "Greece",
+    countryCode: "GRC",
+    division: "G1",
+  },
 ];
 
 export function getCompetitionFlag(countryCode: string): string {
@@ -80,6 +101,12 @@ export function getCompetitionFlag(countryCode: string): string {
       return "🇵🇹";
     case "BEL":
       return "🇧🇪";
+    case "SCO":
+      return "🏴󠁧󠁢󠁳󠁣󠁴󠁿";
+    case "TUR":
+      return "🇹🇷";
+    case "GRC":
+      return "🇬🇷";
     default:
       return "🏴󠁧󠁢󠁥󠁮󠁧󠁿";
   }
