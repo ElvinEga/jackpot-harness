@@ -66,7 +66,7 @@ export const SeasonFixturesTable: React.FC<SeasonFixturesTableProps> = ({
             placeholder="Search teams, referee, score..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-9 text-xs h-8"
+            className="pl-9 text-xs"
           />
         </div>
 
@@ -75,7 +75,7 @@ export const SeasonFixturesTable: React.FC<SeasonFixturesTableProps> = ({
           <NativeSelect
             value={resultFilter}
             onChange={(e) => setResultFilter(e.target.value)}
-            className="text-xs h-8 w-32"
+            className="text-xs w-32"
           >
             <NativeSelectOption value="all">All Results</NativeSelectOption>
             <NativeSelectOption value="home">Home Wins</NativeSelectOption>
@@ -87,7 +87,7 @@ export const SeasonFixturesTable: React.FC<SeasonFixturesTableProps> = ({
           <NativeSelect
             value={goalsFilter}
             onChange={(e) => setGoalsFilter(e.target.value)}
-            className="text-xs h-8 w-36"
+            className="text-xs w-36"
           >
             <NativeSelectOption value="all">All Goal Lines</NativeSelectOption>
             <NativeSelectOption value="over25">Over 2.5 Goals</NativeSelectOption>

@@ -117,10 +117,10 @@ export const SearchableSelect: React.FC<SearchableSelectProps> = ({
             className={cn(
               "flex items-center justify-between border border-border bg-card text-foreground font-medium transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 select-none cursor-pointer",
               size === "sm"
-                ? "h-8 px-2.5 text-xs rounded-md"
+                ? "h-7 px-2.5 text-xs rounded-md"
                 : size === "xs"
                 ? "h-7 px-2 text-[11px] rounded-md"
-                : "h-9 px-3 text-xs sm:text-sm rounded-md",
+                : "h-7 px-3 text-xs sm:text-sm rounded-md",
               className
             )}
           >

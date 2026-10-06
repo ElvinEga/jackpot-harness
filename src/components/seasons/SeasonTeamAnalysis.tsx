@@ -65,11 +65,8 @@ export const SeasonTeamAnalysis: React.FC<SeasonTeamAnalysisProps> = ({
       {/* Team Selection Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-xl bg-card border border-border">
         <div>
-          <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">
-            Team Deep Dive Analysis
-          </span>
           <div className="flex items-center gap-3">
-            <h2 className="text-2xl font-bold tracking-tight text-foreground">
+            <h2 className="text-xl font-bold tracking-tight text-foreground">
               {profile.team}
             </h2>
             <Badge variant="outline" className="text-xs font-mono">

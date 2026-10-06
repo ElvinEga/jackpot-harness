@@ -101,7 +101,7 @@ export const PositionMatrix: React.FC<PositionMatrixProps> = ({ matches }) => {
           <NativeSelect
             value={selectedJackpot}
             onChange={(e) => setSelectedJackpot(e.target.value)}
-            className="text-xs h-8 w-44"
+            className="text-xs w-44"
           >
             <NativeSelectOption value="all">All Jackpots</NativeSelectOption>
             {DATASETS.map((d) => (
@@ -114,7 +114,7 @@ export const PositionMatrix: React.FC<PositionMatrixProps> = ({ matches }) => {
           <NativeSelect
             value={selectedYear}
             onChange={(e) => setSelectedYear(e.target.value)}
-            className="text-xs h-8 w-32"
+            className="text-xs w-32"
           >
             <NativeSelectOption value="all">All Years</NativeSelectOption>
             <NativeSelectOption value="2026">2026</NativeSelectOption>
@@ -127,7 +127,7 @@ export const PositionMatrix: React.FC<PositionMatrixProps> = ({ matches }) => {
           <NativeSelect
             value={String(maxPos)}
             onChange={(e) => setMaxPos(Number(e.target.value))}
-            className="text-xs h-8 w-28"
+            className="text-xs w-28"
           >
             <NativeSelectOption value="15">15 Rows</NativeSelectOption>
             <NativeSelectOption value="16">16 Rows</NativeSelectOption>

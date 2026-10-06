@@ -84,12 +84,11 @@ export const SeasonFilterBar: React.FC<SeasonFilterBarProps> = ({
 
           {/* Season Filter */}
           <NativeSelect
-            size="sm"
             value={filters.season}
             onChange={(e) =>
               onFilterChange({ ...filters, season: e.target.value })
             }
-            className="w-36 text-xs h-8"
+            className="w-36 text-xs"
           >
             <NativeSelectOption value="all">All Seasons</NativeSelectOption>
             {availableSeasons.map((s) => (
@@ -118,7 +117,6 @@ export const SeasonFilterBar: React.FC<SeasonFilterBarProps> = ({
 
           {/* Result Filter */}
           <NativeSelect
-            size="sm"
             value={filters.result}
             onChange={(e) =>
               onFilterChange({
@@ -126,7 +124,7 @@ export const SeasonFilterBar: React.FC<SeasonFilterBarProps> = ({
                 result: e.target.value as SeasonFiltersState["result"],
               })
             }
-            className="w-28 text-xs h-8"
+            className="w-28 text-xs"
           >
             <NativeSelectOption value="all">All Results</NativeSelectOption>
             <NativeSelectOption value="home">Home Win</NativeSelectOption>
@@ -136,7 +134,6 @@ export const SeasonFilterBar: React.FC<SeasonFilterBarProps> = ({
 
           {/* Goal Line Filter */}
           <NativeSelect
-            size="sm"
             value={filters.goals}
             onChange={(e) =>
               onFilterChange({
@@ -144,7 +141,7 @@ export const SeasonFilterBar: React.FC<SeasonFilterBarProps> = ({
                 goals: e.target.value as SeasonFiltersState["goals"],
               })
             }
-            className="w-32 text-xs h-8"
+            className="w-32 text-xs"
           >
             <NativeSelectOption value="all">All Goals</NativeSelectOption>
             <NativeSelectOption value="over25">Over 2.5</NativeSelectOption>
@@ -158,23 +155,14 @@ export const SeasonFilterBar: React.FC<SeasonFilterBarProps> = ({
               variant="ghost"
               size="xs"
               onClick={onReset}
-              className="text-xs h-8 text-muted-foreground hover:text-foreground gap-1 px-2"
+              className="text-xs text-muted-foreground hover:text-foreground gap-1 px-2"
             >
               <RotateCcw className="h-3 w-3" />
               <span>Reset</span>
             </Button>
           )}
 
-          {/* Match Count Badge */}
-          <div className="text-xs font-mono text-muted-foreground px-2 py-1 rounded bg-muted border border-border ml-auto">
-            {isFiltered ? (
-              <span>
-                <strong className="text-primary">{filteredCount.toLocaleString()}</strong> of {totalCount.toLocaleString()}
-              </span>
-            ) : (
-              <span><strong>{totalCount.toLocaleString()}</strong> matches</span>
-            )}
-          </div>
+
         </div>
       </div>
     </div>
