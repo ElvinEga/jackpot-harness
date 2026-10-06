@@ -151,7 +151,7 @@ export const SeasonDataTable: React.FC<SeasonDataTableProps> = ({
             variant="ghost"
             size="xs"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            className="-ml-2 h-7 text-xs font-semibold gap-1 text-muted-foreground hover:text-foreground"
+            className="-ml-2 h-7 text-xs font-medium gap-1 text-muted-foreground hover:text-foreground"
           >
             <span>Date</span>
             {column.getIsSorted() === "asc" ? (
@@ -164,10 +164,10 @@ export const SeasonDataTable: React.FC<SeasonDataTableProps> = ({
           </Button>
         ),
         cell: ({ row }) => (
-          <div className="text-muted-foreground font-mono text-xs whitespace-nowrap">
+          <div className="text-muted-foreground tabular-nums text-xs whitespace-nowrap">
             {row.original.date}
             {row.original.kickoff_time && (
-              <span className="text-[10px] ml-1 text-muted-foreground/75">
+              <span className="text-xs ml-1 text-muted-foreground/75">
                 {row.original.kickoff_time}
               </span>
             )}
@@ -177,16 +177,16 @@ export const SeasonDataTable: React.FC<SeasonDataTableProps> = ({
       // Fixture: Home Team vs Away Team
       {
         id: "fixture",
-        header: () => <span className="font-semibold text-xs">Match Fixture</span>,
+        header: () => <span className="font-medium text-xs">Match Fixture</span>,
         cell: ({ row }) => {
           const m = row.original;
           return (
             <div className="flex items-center gap-1.5 font-medium text-xs">
-              <span className="font-semibold text-foreground hover:text-primary transition-colors cursor-pointer" onClick={(e) => { e.stopPropagation(); onNavigateToTeam?.(m.home_team); }}>
+              <span className="font-medium text-foreground hover:text-primary transition-colors cursor-pointer" onClick={(e) => { e.stopPropagation(); onNavigateToTeam?.(m.home_team); }}>
                 {m.home_team}
               </span>
-              <span className="text-muted-foreground font-normal text-[10px]">vs</span>
-              <span className="font-semibold text-foreground hover:text-primary transition-colors cursor-pointer" onClick={(e) => { e.stopPropagation(); onNavigateToTeam?.(m.away_team); }}>
+              <span className="text-muted-foreground font-normal text-xs">vs</span>
+              <span className="font-medium text-foreground hover:text-primary transition-colors cursor-pointer" onClick={(e) => { e.stopPropagation(); onNavigateToTeam?.(m.away_team); }}>
                 {m.away_team}
               </span>
             </div>
@@ -196,31 +196,29 @@ export const SeasonDataTable: React.FC<SeasonDataTableProps> = ({
       // Full Time Score
       {
         accessorKey: "score",
-        header: () => <div className="text-center font-semibold text-xs">FT Score</div>,
+        header: () => <div className="text-center font-medium text-xs">FT Score</div>,
         cell: ({ row }) => (
-          <div className="text-center font-bold font-mono text-xs">
-            <span className="px-2 py-0.5 rounded-md bg-muted border border-border text-foreground">
-              {row.original.score}
-            </span>
+          <div className="text-center tabular-nums font-medium text-xs text-foreground">
+            {row.original.score}
           </div>
         ),
       },
       // Result Badge
       {
         accessorKey: "result",
-        header: () => <div className="text-center font-semibold text-xs">Result</div>,
+        header: () => <div className="text-center font-medium text-xs">Result</div>,
         cell: ({ row }) => {
           const res = row.original.result;
-          const badgeClass =
+          const colorClass =
             res === "home"
-              ? "bg-emerald-500/15 text-emerald-500 border-emerald-500/30"
+              ? "text-primary"
               : res === "draw"
-              ? "bg-amber-500/15 text-amber-500 border-amber-500/30"
-              : "bg-blue-500/15 text-blue-500 border-blue-500/30";
+              ? "text-muted-foreground"
+              : "text-foreground";
           return (
             <div className="text-center">
-              <span className={`inline-block px-1.5 py-0.5 rounded text-[10px] font-bold uppercase border ${badgeClass}`}>
-                {res}
+              <span className={`text-xs font-medium ${colorClass}`}>
+                {res === "home" ? "Home (1)" : res === "draw" ? "Draw (X)" : "Away (2)"}
               </span>
             </div>
           );
@@ -229,9 +227,9 @@ export const SeasonDataTable: React.FC<SeasonDataTableProps> = ({
       // Half-Time Score
       {
         accessorKey: "half_time_score",
-        header: () => <div className="text-center font-semibold text-xs">HT</div>,
+        header: () => <div className="text-center font-medium text-xs">HT</div>,
         cell: ({ row }) => (
-          <div className="text-center font-mono text-muted-foreground text-xs">
+          <div className="text-center tabular-nums text-muted-foreground text-xs">
             {row.original.half_time_score || "—"}
           </div>
         ),
@@ -239,7 +237,7 @@ export const SeasonDataTable: React.FC<SeasonDataTableProps> = ({
       // Shots (Target)
       {
         id: "shots",
-        header: () => <div className="text-center font-semibold text-xs">Shots (Target)</div>,
+        header: () => <div className="text-center font-medium text-xs">Shots (Target)</div>,
         cell: ({ row }) => {
           const m = row.original;
           const hs = m.stats.home_shots ?? "—";
@@ -247,8 +245,8 @@ export const SeasonDataTable: React.FC<SeasonDataTableProps> = ({
           const hst = m.stats.home_shots_on_target ?? "—";
           const ast = m.stats.away_shots_on_target ?? "—";
           return (
-            <div className="text-center font-mono text-xs text-muted-foreground">
-              {hs}:{as} <span className="text-[10px]">({hst}:{ast})</span>
+            <div className="text-center tabular-nums text-xs text-muted-foreground">
+              {hs}:{as} <span className="text-xs">({hst}:{ast})</span>
             </div>
           );
         },
@@ -256,13 +254,13 @@ export const SeasonDataTable: React.FC<SeasonDataTableProps> = ({
       // Corners
       {
         id: "corners",
-        header: () => <div className="text-center font-semibold text-xs">Corners</div>,
+        header: () => <div className="text-center font-medium text-xs">Corners</div>,
         cell: ({ row }) => {
           const m = row.original;
           const hc = m.stats.home_corners ?? "—";
           const ac = m.stats.away_corners ?? "—";
           return (
-            <div className="text-center font-mono text-xs text-muted-foreground">
+            <div className="text-center tabular-nums text-xs text-muted-foreground">
               {hc}:{ac}
             </div>
           );
@@ -271,7 +269,7 @@ export const SeasonDataTable: React.FC<SeasonDataTableProps> = ({
       // Referee
       {
         accessorKey: "referee",
-        header: () => <span className="font-semibold text-xs">Referee</span>,
+        header: () => <span className="font-medium text-xs">Referee</span>,
         cell: ({ row }) => (
           <span className="text-xs text-muted-foreground truncate max-w-28 block">
             {row.original.referee || "—"}
@@ -281,12 +279,12 @@ export const SeasonDataTable: React.FC<SeasonDataTableProps> = ({
       // Market Average Pre-Match Odds
       {
         id: "odds",
-        header: () => <div className="text-right font-semibold text-xs">Avg Odds (H / D / A)</div>,
+        header: () => <div className="text-right font-medium text-xs">Avg Odds (H / D / A)</div>,
         cell: ({ row }) => {
           const o = row.original.odds;
           return (
-            <div className="text-right font-mono text-xs text-muted-foreground">
-              <span className="text-foreground font-semibold">{o.home?.toFixed(2) || "—"}</span> /{" "}
+            <div className="text-right tabular-nums text-xs text-muted-foreground">
+              <span className="text-foreground font-medium">{o.home?.toFixed(2) || "—"}</span> /{" "}
               <span>{o.draw?.toFixed(2) || "—"}</span> /{" "}
               <span>{o.away?.toFixed(2) || "—"}</span>
             </div>
@@ -296,7 +294,7 @@ export const SeasonDataTable: React.FC<SeasonDataTableProps> = ({
       // Row Actions Menu
       {
         id: "actions",
-        header: () => <div className="text-right font-semibold text-xs">Actions</div>,
+        header: () => <div className="text-right font-medium text-xs">Actions</div>,
         cell: ({ row }) => {
           const m = row.original;
           return (
@@ -402,7 +400,7 @@ export const SeasonDataTable: React.FC<SeasonDataTableProps> = ({
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id} className="hover:bg-transparent">
                 {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id} className="py-2.5 px-3 h-9">
+                  <TableHead key={header.id} className="h-8 px-2 py-1 text-xs font-medium text-muted-foreground">
                     {header.isPlaceholder
                       ? null
                       : flexRender(
