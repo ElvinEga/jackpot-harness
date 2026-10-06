@@ -123,7 +123,7 @@ export const DataTable: React.FC<DataTableProps> = ({
         cell: (info) => {
           const val = info.getValue() as number | undefined;
           return (
-            <span className="font-mono text-xs font-bold text-muted-foreground">
+            <span className="tabular-nums text-xs font-medium text-muted-foreground">
               {val ? `#${val}` : "—"}
             </span>
           );
@@ -135,7 +135,7 @@ export const DataTable: React.FC<DataTableProps> = ({
         cell: (info) => {
           const val = info.getValue() as string | null;
           return (
-            <span className="font-mono text-xs text-muted-foreground whitespace-nowrap">
+            <span className="tabular-nums text-xs text-muted-foreground whitespace-nowrap">
               {val || "—"}
             </span>
           );
@@ -146,9 +146,9 @@ export const DataTable: React.FC<DataTableProps> = ({
         header: "Bookmaker",
         cell: (info) => {
           const val = info.getValue() as Match["bookmaker"];
-          if (val === "betika") return <Badge variant="betika">Betika</Badge>;
-          if (val === "mozzart") return <Badge variant="mozzart">Mozzart</Badge>;
-          return <Badge variant="sportpesa">SportPesa</Badge>;
+          if (val === "betika") return <span className="text-xs text-emerald-500 font-medium">Betika</span>;
+          if (val === "mozzart") return <span className="text-xs text-amber-500 font-medium">Mozzart</span>;
+          return <span className="text-xs text-primary font-medium">SportPesa</span>;
         },
       },
       {
@@ -164,7 +164,7 @@ export const DataTable: React.FC<DataTableProps> = ({
         accessorKey: "home_team",
         header: "Home Team",
         cell: (info) => (
-          <span className="font-semibold text-xs text-foreground truncate max-w-[170px] block" title={info.getValue() as string}>
+          <span className="font-medium text-xs text-foreground truncate max-w-[170px] block" title={info.getValue() as string}>
             {info.getValue() as string}
           </span>
         ),
@@ -175,7 +175,7 @@ export const DataTable: React.FC<DataTableProps> = ({
         cell: (info) => {
           const score = info.getValue() as string | null;
           return (
-            <span className="font-mono font-bold text-xs px-2 py-0.5 rounded bg-muted border border-border text-foreground">
+            <span className="tabular-nums text-xs font-medium text-foreground">
               {score || "—"}
             </span>
           );
@@ -185,7 +185,7 @@ export const DataTable: React.FC<DataTableProps> = ({
         accessorKey: "away_team",
         header: "Away Team",
         cell: (info) => (
-          <span className="font-semibold text-xs text-foreground truncate max-w-[170px] block" title={info.getValue() as string}>
+          <span className="font-medium text-xs text-foreground truncate max-w-[170px] block" title={info.getValue() as string}>
             {info.getValue() as string}
           </span>
         ),
@@ -195,12 +195,12 @@ export const DataTable: React.FC<DataTableProps> = ({
         header: "Result",
         cell: (info) => {
           const val = info.getValue() as Match["result"];
-          if (val === "home") return <Badge variant="home">HOME</Badge>;
-          if (val === "draw") return <Badge variant="draw">DRAW</Badge>;
-          if (val === "away") return <Badge variant="away">AWAY</Badge>;
-          if (val === "postponed") return <Badge variant="muted">POSTP</Badge>;
-          if (val === "abandoned") return <Badge variant="muted">ABN</Badge>;
-          return <Badge variant="secondary">{val ? val.toUpperCase() : "—"}</Badge>;
+          if (val === "home") return <span className="text-xs font-medium text-primary">Home (1)</span>;
+          if (val === "draw") return <span className="text-xs font-medium text-muted-foreground">Draw (X)</span>;
+          if (val === "away") return <span className="text-xs font-medium text-foreground">Away (2)</span>;
+          if (val === "postponed") return <span className="text-xs text-muted-foreground">Postponed</span>;
+          if (val === "abandoned") return <span className="text-xs text-destructive font-medium">Abandoned</span>;
+          return <span className="text-xs text-muted-foreground">{val || "—"}</span>;
         },
       },
       {
@@ -209,7 +209,7 @@ export const DataTable: React.FC<DataTableProps> = ({
         cell: (info) => {
           const val = info.getValue() as number | null;
           return (
-            <span className="font-mono text-xs font-semibold text-primary">
+            <span className="tabular-nums text-xs font-medium text-primary">
               {val !== null ? val.toFixed(2) : "—"}
             </span>
           );
@@ -392,7 +392,7 @@ export const DataTable: React.FC<DataTableProps> = ({
                       key={header.id}
                       onClick={canSort ? header.column.getToggleSortingHandler() : undefined}
                       style={stickyIdx >= 0 ? { left: `${stickyIdx * 44}px` } : undefined}
-                      className={`px-3 py-3 text-xs font-semibold text-muted-foreground uppercase select-none transition-colors ${
+                      className={`px-2 py-1.5 text-xs font-medium text-muted-foreground select-none transition-colors ${
                         canSort ? "cursor-pointer hover:text-foreground" : ""
                       } ${stickyIdx >= 0 ? "sticky z-10 bg-card" : ""}`}
                     >
