@@ -1,0 +1,54 @@
+{
+  "competition": "ethniki_katigoria",
+  "source": "data/seasons/ethniki_katigoria",
+  "seasons": [
+    {
+      "season": "2021-2022",
+      "file": "2021-2022.json",
+      "matches": 240,
+      "date_min": "2021-09-11",
+      "date_max": "2022-05-17",
+      "teams": 14
+    },
+    {
+      "season": "2022-2023",
+      "file": "2022-2023.json",
+      "matches": 240,
+      "date_min": "2022-08-19",
+      "date_max": "2023-05-14",
+      "teams": 14
+    },
+    {
+      "season": "2023-2024",
+      "file": "2023-2024.json",
+      "matches": 240,
+      "date_min": "2023-08-18",
+      "date_max": "2024-05-19",
+      "teams": 14
+    },
+    {
+      "season": "2024-2025",
+      "file": "2024-2025.json",
+      "matches": 233,
+      "date_min": "2024-08-17",
+      "date_max": "2025-05-18",
+      "teams": 14
+    },
+    {
+      "season": "2025-2026",
+      "file": "2025-2026.json",
+      "matches": 236,
+      "date_min": "2025-08-23",
+      "date_max": "2026-05-21",
+      "teams": 14
+    },
+    {
+      "season": "2026-2027",
+      "file": "2026-2027.json",
+      "matches": 35,
+      "date_min": "2026-08-22",
+      "date_max": "2026-09-20",
+      "teams": 14
+    }
+  ]
+}
