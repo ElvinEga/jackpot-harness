@@ -1,0 +1,16 @@
+# Live jackpot feeds for the deployed app. The bookmaker APIs are bot-protected and send no
+# CORS headers, so the browser can only read them through these server-side legs — the deployed
+# equivalent of the dev-time proxies in vite.config.ts.
+
+[functions]
+  directory = "netlify/functions"
+
+[[redirects]]
+  from = "/api/mozzart/super-jackpot"
+  to = "/.netlify/functions/mozzart-super-jackpot"
+  status = 200
+
+[[redirects]]
+  from = "/api/sportpesa/active"
+  to = "/.netlify/functions/sportpesa-active"
+  status = 200
