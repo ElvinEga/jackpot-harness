@@ -29,11 +29,13 @@ data/processed/      JSON mirror of the raw CSVs, same bookmaker folders and fil
 data/processed/seasons/<competition>/  one JSON per season + index.json
 src/build_json.py    regenerates data/processed from data/raw
 src/build_seasons.py regenerates data/processed/seasons from data/seasons
+src/fetch_seasons.py refreshes data/seasons from football-data.co.uk
 ```
 
 `data/raw/` holds the scrape output as collected and is **read-only**: never edit these files in
-place. `data/seasons/` is likewise collected input (untouched CSVs) — its JSON output lives under
-`data/processed/seasons/`. Derived tables go under `data/processed/`, code under `src/`.
+place. `data/seasons/` is likewise collected input, refreshed from the site by
+`src/fetch_seasons.py` — its JSON output lives under `data/processed/seasons/`. Derived tables go
+under `data/processed/`, code under `src/`.
 
 Within `data/raw/`, each subdirectory is one bookmaker and each file inside is one jackpot product.
 Filenames use lowercase bookmaker + hyphenated jackpot name (`betika-midweek-jackpot.csv`).
@@ -93,8 +95,17 @@ Conversions the generator applies, all lossless apart from the last:
 
 `data/seasons/<competition>/<season>.csv` holds per-match league fixtures with 105–132 wide,
 PascalCase/abbreviated columns. The source's own column key is `data/seasons/notes.txt` — read it
-rather than guessing an abbreviation. Every raw column header and cell is preserved verbatim in the
-CSVs; nothing is renamed or repaired there.
+rather than guessing an abbreviation. Every raw column header and cell is preserved verbatim from
+the site; nothing is renamed, and only the one row in `REPAIRS` below has its prices blanked.
+
+`uv run python src/fetch_seasons.py` (also `bun run fetch:seasons`) crawls
+`https://www.football-data.co.uk/data.php` → the country pages → their
+`mmz4281/<yy><yy>/<DIV>.csv` links and refreshes these CSVs for the 11 division codes already in
+the repo, 2021-2022 onwards. It is byte-exact: a file is rewritten only when the served bytes
+differ (so the in-progress season accumulates fixtures and a source correction still lands), a
+response is validated before it replaces a good CSV, and writes go through `.csv.part` + rename.
+`--dry-run` reports without writing; `--from`/`--to` widen the season window. `bun run
+sync:seasons` chains the fetch and the build below.
 
 `uv run python src/build_seasons.py` (also `bun run build:seasons`) regenerates
 `data/processed/seasons/<competition>/` from those CSVs: one JSON array per season file plus an
@@ -102,7 +113,7 @@ CSVs; nothing is renamed or repaired there.
 `/data/seasons/premier_league/<season>.json` exactly like the jackpot mirror is at
 `/data/<bookmaker>/`.
 
-18163 matches in total across the eleven competitions (380 per completed season for EPL, La Liga and
+18451 matches in total across the eleven competitions (380 per completed season for EPL, La Liga and
 Serie A, 306 for Bundesliga, Eredivisie and `liga_1`; Ligue 1 has 380 for 2021-2022 and 2022-2023
 then 306 from 2023-2024, when it dropped to 18 clubs; `jupiter_league` has 306 for 2021-2022 and
 2022-2023, 312, 312 and 311 for the three seasons it ran 16 clubs plus playoffs, then 18 clubs
@@ -110,9 +121,10 @@ again; `sco_premier_league` has 228 every season — 12 clubs, 198 regular fixtu
 split playoff rounds; Turkey's `ligi_1` runs 380, 342, 380, 342, 306 as it went from 20 to 19 to
 20, 19 and 18 clubs, a clean double round-robin each time; Greece's `ethniki_katigoria` has 240 for
 its 14-club seasons, then 233 and 236 as the playoff block shrank). The in-progress 2026-2027 files
-hold 50 EPL, 69 La Liga, 36 Bundesliga, 50 Serie A, 45 Ligue 1, 63 Eredivisie, 62 Portugal, 63
-Belgium, 42 Scotland, 54 Turkey and 35 Greece matches. One object per match, sorted by
-`(date, home_team)`; the ~100 source columns are reduced to 19 fields, variable parts grouped:
+hold 80 EPL, 99 La Liga, 63 Bundesliga, 90 Serie A, 72 Ligue 1, 90 Eredivisie, 81 Portugal, 80
+Belgium, 66 Scotland, 81 Turkey and 55 Greece matches as of the 2026-11-01 sync. One object per
+match, sorted by `(date, home_team)`; the ~100 source columns are reduced to 19 fields, variable
+parts grouped:
 
 ```json
 {
@@ -174,10 +186,11 @@ What the generator does:
 - The season CSVs are all CRLF and most carry a UTF-8 **BOM** before `Div` (EPL: 2021-2022,
   2024-2025, 2025-2026, 2026-2027; every other competition: its last three seasons). Open them with
   `encoding='utf-8-sig'` or the first column becomes `'\ufeffDiv'`.
-- One scrape defect was blanked at source: the Utrecht v Go Ahead Eagles row (08/09/2026) of
-  `data/seasons/eredivisie/2026-2027.csv` carried a corrupted odds block — a negative under-2.5
-  price, all five `Max*` below their `Avg*`, and `AHh` holding a price. Its 85 populated odds cells
-  are now empty, so that match has null odds in the JSON; its score, half-time and stats are intact.
+- One scrape defect is blanked at source: the Utrecht v Go Ahead Eagles row (08/09/2026) of
+  `data/seasons/eredivisie/2026-2027.csv` still arrives from the site with a corrupted odds block —
+  a negative under-2.5 price, all five `Max*` below their `Avg*`, and `AHh` holding a price.
+  `src/fetch_seasons.py` re-blanks its 85 populated odds cells on every download (the `REPAIRS`
+  list), so that match has null odds in the JSON while its score, half-time and stats stay intact.
   Every other odds row in the season set satisfies Max >= Avg with all prices above 1.
 - Encodings are mixed UTF-8 / plain ASCII across files; always open with `encoding='utf-8'`.
 - `mozzart-super-jackpot4.csv` contains ~32 literal `No date found` values in `date`.
