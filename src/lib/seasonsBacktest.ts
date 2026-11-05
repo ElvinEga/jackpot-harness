@@ -1,4 +1,9 @@
-import type { SeasonMatch, BacktestSummary, BacktestMatchAudit } from "./seasonTypes";
+import { isDecidedSeasonMatch } from "./seasonTypes";
+import type {
+  SeasonMatch,
+  BacktestSummary,
+  BacktestMatchAudit,
+} from "./seasonTypes";
 import { predictSeasonMatch } from "./seasonsPredictor";
 
 /**
@@ -10,8 +15,9 @@ export function runSeasonBacktest(
   trainSeasons: string[],
   testSeason: string
 ): BacktestSummary {
-  const trainPool = allMatches.filter((m) => trainSeasons.includes(m.season));
-  const testPool = allMatches
+  const decided = allMatches.filter(isDecidedSeasonMatch);
+  const trainPool = decided.filter((m) => trainSeasons.includes(m.season));
+  const testPool = decided
     .filter((m) => m.season === testSeason)
     .sort((a, b) => a.date.localeCompare(b.date));
 
