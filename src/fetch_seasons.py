@@ -28,11 +28,17 @@ SITE = "https://www.football-data.co.uk/"
 # division code on the site -> folder name already used under data/seasons
 DIVISIONS = {
     "E0": "premier_league",
+    "E1": "efl_championship",
     "SC0": "sco_premier_league",
+    "SC1": "sco_championship",
     "D1": "bundesliga_1",
+    "D2": "bundesliga_2",
     "I1": "serie_a",
+    "I2": "serie_b",
     "SP1": "laliga_primera",
+    "SP2": "laliga_segunda",
     "F1": "le_championnat",
+    "F2": "ligue_2",
     "N1": "eredivisie",
     "B1": "jupiter_league",
     "P1": "liga_1",
@@ -53,7 +59,8 @@ CORE_COLUMNS = {
 
 # Rows the site still publishes with a corrupt odds block. The repo's convention
 # is to blank their prices, so the blanking is re-applied to every download
-# rather than guarding the whole file away from the sync.
+# rather than guarding the whole file away from the sync. A repair with a
+# `columns` list blanks only those price columns, so the sound ones survive.
 REPAIRS = [
     {
         # negative Avg<2.5, all five Max* below their Avg*, AHh holding a price
@@ -61,6 +68,17 @@ REPAIRS = [
         "season": "2026-2027",
         "row": {"Date": "08/09/2026", "HomeTeam": "Utrecht", "AwayTeam": "Go Ahead Eagles"},
         "why": "corrupt odds block blanked",
+    },
+    {
+        # AHCh holds -0.390625 rather than a quarter-ball line, AvgCAHH/AvgCAHA are
+        # 0.6/0.56 (not decimal prices) and every closing average sits below the
+        # firms that quoted it. The pre-match block is sound, so only the close goes.
+        "competition": "laliga_segunda",
+        "season": "2025-2026",
+        "row": {"Date": "23/03/2026", "HomeTeam": "Castellon", "AwayTeam": "Cultural Leonesa"},
+        "columns": ["AvgCH", "AvgCD", "AvgCA", "AvgC>2.5", "AvgC<2.5",
+                    "AHCh", "AvgCAHH", "AvgCAHA"],
+        "why": "corrupt closing-odds block blanked",
     },
 ]
 
@@ -158,7 +176,8 @@ def apply_repairs(payload, competition, season):
         for repair in repairs:
             row = repair["row"]
             if all(cells[header.index(name)] == value for name, value in row.items()):
-                for index in prices:
+                targets = [header.index(c) for c in repair.get("columns", []) if c in header] or prices
+                for index in targets:
                     if index < len(cells):
                         cells[index] = ""
                 buffer = io.StringIO(newline="")
