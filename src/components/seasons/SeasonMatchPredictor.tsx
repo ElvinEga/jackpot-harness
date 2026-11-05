@@ -47,6 +47,16 @@ export const SeasonMatchPredictor: React.FC<SeasonMatchPredictorProps> = ({
 
   // Quick Preset Matches dynamically tailored to the active league
   const presetMatchups = useMemo(() => {
+    if (allTeams.includes("Millwall") || allTeams.includes("QPR")) {
+      return [
+        { home: "Millwall", away: "QPR" },
+        { home: "QPR", away: "Millwall" },
+        { home: "Preston", away: "Blackburn" },
+        { home: "Coventry", away: "Birmingham" },
+        { home: "Stoke", away: "Derby" },
+        { home: "Cardiff", away: "Swansea" },
+      ].filter((p) => allTeams.includes(p.home) && allTeams.includes(p.away));
+    }
     if (allTeams.includes("Real Madrid")) {
       return [
         { home: "Real Madrid", away: "Barcelona" },
@@ -55,6 +65,16 @@ export const SeasonMatchPredictor: React.FC<SeasonMatchPredictorProps> = ({
         { home: "Sevilla", away: "Betis" },
         { home: "Ath Bilbao", away: "Sociedad" },
         { home: "Valencia", away: "Villarreal" },
+      ].filter((p) => allTeams.includes(p.home) && allTeams.includes(p.away));
+    }
+    if (allTeams.includes("Sp Gijon") || allTeams.includes("Oviedo")) {
+      return [
+        { home: "Sp Gijon", away: "Oviedo" },
+        { home: "Huesca", away: "Zaragoza" },
+        { home: "Burgos", away: "Mirandes" },
+        { home: "Las Palmas", away: "Tenerife" },
+        { home: "Malaga", away: "Cadiz" },
+        { home: "La Coruna", away: "Ferrol" },
       ].filter((p) => allTeams.includes(p.home) && allTeams.includes(p.away));
     }
     if (allTeams.includes("Bayern Munich")) {
@@ -67,6 +87,16 @@ export const SeasonMatchPredictor: React.FC<SeasonMatchPredictorProps> = ({
         { home: "Stuttgart", away: "Leverkusen" },
       ].filter((p) => allTeams.includes(p.home) && allTeams.includes(p.away));
     }
+    if (allTeams.includes("Nurnberg") || allTeams.includes("Hamburg")) {
+      return [
+        { home: "Hamburg", away: "St Pauli" },
+        { home: "Nurnberg", away: "Greuther Furth" },
+        { home: "Braunschweig", away: "Hannover" },
+        { home: "Kaiserslautern", away: "Karlsruhe" },
+        { home: "Holstein Kiel", away: "Hamburg" },
+        { home: "FC Koln", away: "Fortuna Dusseldorf" },
+      ].filter((p) => allTeams.includes(p.home) && allTeams.includes(p.away));
+    }
     if (allTeams.includes("Inter") || allTeams.includes("Juventus")) {
       return [
         { home: "Inter", away: "Milan" },
@@ -77,6 +107,16 @@ export const SeasonMatchPredictor: React.FC<SeasonMatchPredictorProps> = ({
         { home: "Napoli", away: "Roma" },
       ].filter((p) => allTeams.includes(p.home) && allTeams.includes(p.away));
     }
+    if (allTeams.includes("Palermo") || allTeams.includes("Sampdoria")) {
+      return [
+        { home: "Palermo", away: "Bari" },
+        { home: "Palermo", away: "Catanzaro" },
+        { home: "Reggiana", away: "Modena" },
+        { home: "Modena", away: "Parma" },
+        { home: "Cittadella", away: "Venezia" },
+        { home: "Palermo", away: "Sudtirol" },
+      ].filter((p) => allTeams.includes(p.home) && allTeams.includes(p.away));
+    }
     if (allTeams.includes("Paris SG") || allTeams.includes("Marseille")) {
       return [
         { home: "Paris SG", away: "Marseille" },
@@ -85,6 +125,16 @@ export const SeasonMatchPredictor: React.FC<SeasonMatchPredictorProps> = ({
         { home: "Monaco", away: "Paris SG" },
         { home: "Lyon", away: "Paris SG" },
         { home: "Monaco", away: "Nice" },
+      ].filter((p) => allTeams.includes(p.home) && allTeams.includes(p.away));
+    }
+    if (allTeams.includes("Clermont") || allTeams.includes("Bastia")) {
+      return [
+        { home: "Ajaccio", away: "Bastia" },
+        { home: "Pau FC", away: "Rodez" },
+        { home: "Guingamp", away: "Bastia" },
+        { home: "Amiens", away: "Dunkerque" },
+        { home: "Laval", away: "Le Mans" },
+        { home: "Clermont", away: "Grenoble" },
       ].filter((p) => allTeams.includes(p.home) && allTeams.includes(p.away));
     }
     if (allTeams.includes("Ajax") || allTeams.includes("Feyenoord")) {
@@ -125,6 +175,16 @@ export const SeasonMatchPredictor: React.FC<SeasonMatchPredictorProps> = ({
         { home: "Hibernian", away: "Hearts" },
         { home: "Dundee United", away: "Dundee" },
         { home: "Aberdeen", away: "Dundee" },
+      ].filter((p) => allTeams.includes(p.home) && allTeams.includes(p.away));
+    }
+    if (allTeams.includes("Dunfermline") || allTeams.includes("Raith Rvs")) {
+      return [
+        { home: "Ayr", away: "Morton" },
+        { home: "Dunfermline", away: "Raith Rvs" },
+        { home: "Partick", away: "Queens Park" },
+        { home: "Arbroath", away: "Raith Rvs" },
+        { home: "Ayr", away: "Queens Park" },
+        { home: "Inverness C", away: "Hamilton" },
       ].filter((p) => allTeams.includes(p.home) && allTeams.includes(p.away));
     }
     if (allTeams.includes("Galatasaray") || allTeams.includes("Fenerbahce")) {
