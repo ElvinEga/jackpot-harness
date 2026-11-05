@@ -224,7 +224,7 @@ export const TeamSearchInput: React.FC<TeamSearchInputProps> = ({
 
                     {count !== undefined && (
                       <span className="text-xs font-mono text-muted-foreground shrink-0">
-                        {count} games
+                        {count} matches
                       </span>
                     )}
                   </div>
@@ -233,9 +233,9 @@ export const TeamSearchInput: React.FC<TeamSearchInputProps> = ({
             </>
           ) : (
             <div className="p-3 text-center text-xs text-muted-foreground">
-              <span>No team matching "{value}" found</span>
+              <span>No team matches "{value}"</span>
               <div className="text-xs text-muted-foreground/70 mt-0.5">
-                (Press Enter to use this custom team name)
+                (Press Enter to keep it as a custom team name)
               </div>
             </div>
           )}
