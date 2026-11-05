@@ -127,7 +127,7 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
             Head to Head & Teams
           </h2>
           <p className="text-xs text-muted-foreground mt-1">
-            Compare Head-to-Head records & analyze recent goal threats.
+            Compare head-to-head records, recent form, and score probabilities.
           </p>
         </div>
       </div>
@@ -189,8 +189,8 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
             </CardTitle>
             <CardDescription className="text-xs">
               {h2h.totalMatches > 0
-                ? `${h2h.totalMatches} historical encounters found in jackpot archives`
-                : "No direct head-to-head match recorded in this archive"}
+                ? `${h2h.totalMatches} meetings recorded in the jackpot archive`
+                : "No meetings recorded in the jackpot archive"}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -247,8 +247,9 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
               </>
             ) : (
               <div className="p-6 text-center text-muted-foreground text-xs italic bg-muted/20 rounded-lg border border-dashed border-border">
-                Teams have not met in the jackpot dataset. The model will rely
-                primarily on individual team forms and baseline distributions.
+                These teams have no recorded meeting in the jackpot archive.
+                The model below uses their recent form and baseline scoring
+                rates instead.
               </div>
             )}
           </CardContent>
@@ -259,7 +260,7 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-semibold flex items-center gap-2">
               <Target className="h-4 w-4 text-primary" />
-              Recent Form & Performance Comparison
+              Recent Form Comparison
             </CardTitle>
             <CardDescription className="text-xs">
               Last {formA.matchesCount} matches for {teamA} vs{" "}
@@ -421,7 +422,7 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
             </div>
             <div className="p-2.5 rounded-lg bg-muted/40 border border-border">
               <span className="text-xs text-muted-foreground block">
-                Both To Score (BTTS)
+                Both Teams to Score (BTTS)
               </span>
               <span className="text-lg font-bold font-mono text-foreground">
                 {poisson.btts}%
@@ -432,7 +433,7 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
           {/* Top 8 Ranked Exact Scores */}
           <div className="space-y-2">
             <span className="text-xs font-semibold text-foreground block">
-              Top Ranked Likely Scores:
+              Most Likely Scores:
             </span>
             <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2">
               {poisson.sim.scores.slice(0, 8).map((sc, i) => (
@@ -465,7 +466,7 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
         <div className="bg-card border border-border rounded-xl shadow-xs overflow-hidden">
           <div className="px-4 py-3 border-b border-border bg-muted/30 flex items-center justify-between">
             <h2 className="text-sm font-bold text-foreground">
-              Past Head-to-Head Encounters in Dataset
+              Past Meetings in the Jackpot Archive
             </h2>
             <span className="text-xs text-muted-foreground font-mono">
               {h2h.recentEncounters.length} recorded matches
@@ -478,8 +479,8 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
                 <TableRow className="border-b border-border bg-muted/50 text-muted-foreground font-medium">
                   <TableHead className="text-xs">Date</TableHead>
                   <TableHead className="text-xs">Home Team</TableHead>
-                  <TableHead className="text-center text-xs">Score</TableHead>
                   <TableHead className="text-xs">Away Team</TableHead>
+                  <TableHead className="text-center text-xs">Score</TableHead>
                   <TableHead className="text-center text-xs">Result</TableHead>
                   <TableHead className="text-xs">Jackpot & Bookmaker</TableHead>
                 </TableRow>
@@ -501,9 +502,6 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
                         <span className="truncate">{m.home_team}</span>
                       </span>
                     </TableCell>
-                    <TableCell className="text-center tabular-nums text-xs font-medium text-foreground">
-                      {m.score || "N/A"}
-                    </TableCell>
                     <TableCell
                       className={`text-xs font-medium ${canonicalTeam(m.away_team) === canonicalTeam(teamA) ? "text-foreground" : "text-muted-foreground"}`}
                     >
@@ -511,6 +509,9 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
                         <TeamLogo team={m.away_team} size={24} />
                         <span className="truncate">{m.away_team}</span>
                       </span>
+                    </TableCell>
+                    <TableCell className="text-center tabular-nums text-xs font-medium text-foreground">
+                      {m.score || "N/A"}
                     </TableCell>
                     <TableCell className="text-center text-xs font-medium uppercase">
                       <span
@@ -520,7 +521,7 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
                             : m.result === "draw"
                               ? "text-amber-500"
                               : m.result === "away"
-                                ? "text-primary"
+                                ? "text-blue-500"
                                 : "text-muted-foreground"
                         }
                       >
