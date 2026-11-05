@@ -131,7 +131,8 @@ export const SeasonFixturesTable: React.FC<SeasonFixturesTableProps> = ({
               <TableRow className="border-b border-border text-muted-foreground font-medium">
                 <TableHead className="text-xs">Date</TableHead>
                 <TableHead className="text-xs">Time</TableHead>
-                <TableHead className="text-xs">Match</TableHead>
+                <TableHead className="text-xs">Home Team</TableHead>
+                <TableHead className="text-xs">Away Team</TableHead>
                 <TableHead className="text-center text-xs">Score</TableHead>
                 <TableHead className="text-center text-xs">HT</TableHead>
                 <TableHead className="text-center text-xs">
@@ -152,7 +153,7 @@ export const SeasonFixturesTable: React.FC<SeasonFixturesTableProps> = ({
                     ? "text-emerald-500"
                     : m.result === "draw"
                       ? "text-amber-500"
-                      : "text-primary";
+                      : "text-blue-500";
 
                 const hs = m.stats.home_shots ?? "-";
                 const as = m.stats.away_shots ?? "-";
@@ -185,16 +186,17 @@ export const SeasonFixturesTable: React.FC<SeasonFixturesTableProps> = ({
                       {m.kickoff_time || "-"}
                     </TableCell>
                     <TableCell className="text-xs font-medium text-foreground">
-                      <span className="flex items-center gap-1.5">
+                      <span className="flex items-center gap-1.5" title={m.home_team}>
                         <TeamLogo team={m.home_team} size={24} />
-                        <span className="hover:text-primary transition-colors">
+                        <span className="hover:text-primary transition-colors truncate max-w-[152px]">
                           {m.home_team}
                         </span>
-                        <span className="text-muted-foreground font-normal mx-0.5">
-                          vs
-                        </span>
+                      </span>
+                    </TableCell>
+                    <TableCell className="text-xs font-medium text-foreground">
+                      <span className="flex items-center gap-1.5" title={m.away_team}>
                         <TeamLogo team={m.away_team} size={24} />
-                        <span className="hover:text-primary transition-colors">
+                        <span className="hover:text-primary transition-colors truncate max-w-[152px]">
                           {m.away_team}
                         </span>
                       </span>
@@ -254,7 +256,7 @@ export const SeasonFixturesTable: React.FC<SeasonFixturesTableProps> = ({
           open={!!selectedMatch}
           onOpenChange={(open) => !open && setSelectedMatch(null)}
         >
-          <DialogContent className="max-w-xl bg-card border-border p-6">
+          <DialogContent className="sm:max-w-xl bg-card border-border p-6">
             <DialogHeader>
               <div className="flex items-center justify-between">
                 <Badge variant="outline" className="text-xs font-mono">
