@@ -14,11 +14,25 @@ export const AVAILABLE_COMPETITIONS = [
     division: "E0",
   },
   {
+    id: "efl_championship",
+    name: "Championship",
+    country: "England",
+    countryCode: "ENG",
+    division: "E1",
+  },
+  {
     id: "laliga_primera",
     name: "La Liga",
     country: "Spain",
     countryCode: "ESP",
     division: "SP1",
+  },
+  {
+    id: "laliga_segunda",
+    name: "Segunda División",
+    country: "Spain",
+    countryCode: "ESP",
+    division: "SP2",
   },
   {
     id: "bundesliga_1",
@@ -28,6 +42,13 @@ export const AVAILABLE_COMPETITIONS = [
     division: "D1",
   },
   {
+    id: "bundesliga_2",
+    name: "2. Bundesliga",
+    country: "Germany",
+    countryCode: "DEU",
+    division: "D2",
+  },
+  {
     id: "serie_a",
     name: "Serie A",
     country: "Italy",
@@ -35,11 +56,25 @@ export const AVAILABLE_COMPETITIONS = [
     division: "I1",
   },
   {
+    id: "serie_b",
+    name: "Serie B",
+    country: "Italy",
+    countryCode: "ITA",
+    division: "I2",
+  },
+  {
     id: "le_championnat",
     name: "Ligue 1",
     country: "France",
     countryCode: "FRA",
     division: "F1",
+  },
+  {
+    id: "ligue_2",
+    name: "Ligue 2",
+    country: "France",
+    countryCode: "FRA",
+    division: "F2",
   },
   {
     id: "eredivisie",
@@ -68,6 +103,13 @@ export const AVAILABLE_COMPETITIONS = [
     country: "Scotland",
     countryCode: "SCO",
     division: "SC0",
+  },
+  {
+    id: "sco_championship",
+    name: "Championship",
+    country: "Scotland",
+    countryCode: "SCO",
+    division: "SC1",
   },
   {
     id: "ligi_1",
