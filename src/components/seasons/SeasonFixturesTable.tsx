@@ -1,32 +1,31 @@
-import React, { useState, useMemo } from "react";
-import {
-  Search,
-  Filter,
-  Eye,
-  Calendar,
-  Clock,
-  Shield,
-  Goal,
-  Activity,
-  Layers,
-  Sparkles,
-} from "lucide-react";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { TeamLogo } from "@/components/TeamLogo";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import {
+  NativeSelect,
+  NativeSelectOption,
+} from "@/components/ui/native-select";
 import {
   Table,
-  TableHeader,
   TableBody,
-  TableHead,
-  TableRow,
   TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
 } from "@/components/ui/table";
-import { isDecidedSeasonMatch } from "../../lib/seasonTypes";
+import { Eye, Search } from "lucide-react";
+import React, { useMemo, useState } from "react";
 import type { SeasonMatch } from "../../lib/seasonTypes";
+import { isDecidedSeasonMatch } from "../../lib/seasonTypes";
+import { canonicalTeam } from "../../lib/teamRegistry";
 
 interface SeasonFixturesTableProps {
   matches: SeasonMatch[];
@@ -46,15 +45,28 @@ export const SeasonFixturesTable: React.FC<SeasonFixturesTableProps> = ({
     const q = searchTerm.trim().toLowerCase();
     return matches.filter((m) => {
       if (q) {
-        const text = `${m.home_team} ${m.away_team} ${m.referee || ""} ${m.score || ""} ${m.season}`.toLowerCase();
-        if (!text.includes(q)) return false;
+        const text =
+          `${m.home_team} ${m.away_team} ${m.referee || ""} ${m.score || ""} ${m.season}`.toLowerCase();
+        // Searching a club by a spelling this row does not use ("Sheffield Utd")
+        // must still find it, so match the club id as well as the letters.
+        const qId = canonicalTeam(q);
+        if (
+          !text.includes(q) &&
+          qId !== canonicalTeam(m.home_team) &&
+          qId !== canonicalTeam(m.away_team)
+        )
+          return false;
       }
       if (resultFilter !== "all" && m.result !== resultFilter) return false;
       if (goalsFilter !== "all") {
         if (!isDecidedSeasonMatch(m)) return false;
         if (goalsFilter === "over25" && m.total_goals <= 2.5) return false;
         if (goalsFilter === "under25" && m.total_goals > 2.5) return false;
-        if (goalsFilter === "btts" && (m.home_goals === 0 || m.away_goals === 0)) return false;
+        if (
+          goalsFilter === "btts" &&
+          (m.home_goals === 0 || m.away_goals === 0)
+        )
+          return false;
       }
       return true;
     });
@@ -94,9 +106,15 @@ export const SeasonFixturesTable: React.FC<SeasonFixturesTableProps> = ({
             className="text-xs w-36"
           >
             <NativeSelectOption value="all">All Goal Lines</NativeSelectOption>
-            <NativeSelectOption value="over25">Over 2.5 Goals</NativeSelectOption>
-            <NativeSelectOption value="under25">Under 2.5 Goals</NativeSelectOption>
-            <NativeSelectOption value="btts">Both Teams To Score</NativeSelectOption>
+            <NativeSelectOption value="over25">
+              Over 2.5 Goals
+            </NativeSelectOption>
+            <NativeSelectOption value="under25">
+              Under 2.5 Goals
+            </NativeSelectOption>
+            <NativeSelectOption value="btts">
+              Both Teams To Score
+            </NativeSelectOption>
           </NativeSelect>
 
           <span className="text-xs text-muted-foreground font-mono ml-1">
@@ -116,10 +134,14 @@ export const SeasonFixturesTable: React.FC<SeasonFixturesTableProps> = ({
                 <TableHead className="text-xs">Match</TableHead>
                 <TableHead className="text-center text-xs">Score</TableHead>
                 <TableHead className="text-center text-xs">HT</TableHead>
-                <TableHead className="text-center text-xs">Shots (SoT)</TableHead>
+                <TableHead className="text-center text-xs">
+                  Shots (SoT)
+                </TableHead>
                 <TableHead className="text-center text-xs">Corners</TableHead>
                 <TableHead className="text-center text-xs">Cards</TableHead>
-                <TableHead className="text-right text-xs">Avg Odds (H/D/A)</TableHead>
+                <TableHead className="text-right text-xs">
+                  Avg Odds (H/D/A)
+                </TableHead>
                 <TableHead className="text-right text-xs">Actions</TableHead>
               </TableRow>
             </TableHeader>
@@ -129,8 +151,8 @@ export const SeasonFixturesTable: React.FC<SeasonFixturesTableProps> = ({
                   m.result === "home"
                     ? "text-emerald-500"
                     : m.result === "draw"
-                    ? "text-amber-500"
-                    : "text-primary";
+                      ? "text-amber-500"
+                      : "text-primary";
 
                 const hs = m.stats.home_shots ?? "-";
                 const as = m.stats.away_shots ?? "-";
@@ -140,10 +162,15 @@ export const SeasonFixturesTable: React.FC<SeasonFixturesTableProps> = ({
                 const hc = m.stats.home_corners ?? "-";
                 const ac = m.stats.away_corners ?? "-";
 
-                const hy = m.stats.home_yellow ?? 0;
-                const ay = m.stats.away_yellow ?? 0;
-                const hr = m.stats.home_red ?? 0;
-                const ar = m.stats.away_red ?? 0;
+                const hy = m.stats.home_yellow;
+                const ay = m.stats.away_yellow;
+                const hr = m.stats.home_red;
+                const ar = m.stats.away_red;
+                // 41 rows carry no card data at all; a summed 0 there reads as
+                // "nobody was booked", so the cell shows the same dash as shots.
+                const cardsKnown = hy !== null || ay !== null || hr !== null || ar !== null;
+                const yellows = (hy ?? 0) + (ay ?? 0);
+                const reds = (hr ?? 0) + (ar ?? 0);
 
                 return (
                   <TableRow
@@ -151,17 +178,29 @@ export const SeasonFixturesTable: React.FC<SeasonFixturesTableProps> = ({
                     className="hover:bg-muted/40 transition-colors cursor-pointer"
                     onClick={() => setSelectedMatch(m)}
                   >
-                    <TableCell className="tabular-nums text-xs text-muted-foreground">{m.date}</TableCell>
-                    <TableCell className="tabular-nums text-xs text-muted-foreground">{m.kickoff_time || "-"}</TableCell>
+                    <TableCell className="tabular-nums text-xs text-muted-foreground">
+                      {m.date}
+                    </TableCell>
+                    <TableCell className="tabular-nums text-xs text-muted-foreground">
+                      {m.kickoff_time || "-"}
+                    </TableCell>
                     <TableCell className="text-xs font-medium text-foreground">
-                      <span className="hover:text-primary transition-colors">{m.home_team}</span>
-                      <span className="text-muted-foreground font-normal mx-1">vs</span>
-                      <span className="hover:text-primary transition-colors">{m.away_team}</span>
+                      <span className="flex items-center gap-1.5">
+                        <TeamLogo team={m.home_team} size={24} />
+                        <span className="hover:text-primary transition-colors">
+                          {m.home_team}
+                        </span>
+                        <span className="text-muted-foreground font-normal mx-0.5">
+                          vs
+                        </span>
+                        <TeamLogo team={m.away_team} size={24} />
+                        <span className="hover:text-primary transition-colors">
+                          {m.away_team}
+                        </span>
+                      </span>
                     </TableCell>
                     <TableCell className="text-center tabular-nums text-xs font-medium">
-                      <span className={scoreColor}>
-                        {m.score}
-                      </span>
+                      <span className={scoreColor}>{m.score}</span>
                     </TableCell>
                     <TableCell className="text-center tabular-nums text-xs text-muted-foreground">
                       {m.half_time_score || "-"}
@@ -173,12 +212,19 @@ export const SeasonFixturesTable: React.FC<SeasonFixturesTableProps> = ({
                       {hc}:{ac}
                     </TableCell>
                     <TableCell className="text-center tabular-nums text-xs text-muted-foreground">
-                      {hy + ay > 0 && <span>{hy + ay}Y</span>}
-                      {hr + ar > 0 && <span className="text-destructive font-medium ml-1">{hr + ar}R</span>}
-                      {hy + ay === 0 && hr + ar === 0 && <span>0</span>}
+                      {yellows > 0 && <span>{yellows}Y</span>}
+                      {reds > 0 && (
+                        <span className="text-destructive font-medium ml-1">
+                          {reds}R
+                        </span>
+                      )}
+                      {cardsKnown && yellows === 0 && reds === 0 && <span>0</span>}
+                      {!cardsKnown && <span>-</span>}
                     </TableCell>
                     <TableCell className="text-right tabular-nums text-xs text-muted-foreground">
-                      {m.odds.home?.toFixed(2) || "-"} / {m.odds.draw?.toFixed(2) || "-"} / {m.odds.away?.toFixed(2) || "-"}
+                      {m.odds.home?.toFixed(2) || "-"} /{" "}
+                      {m.odds.draw?.toFixed(2) || "-"} /{" "}
+                      {m.odds.away?.toFixed(2) || "-"}
                     </TableCell>
                     <TableCell className="text-right">
                       <Button
@@ -204,7 +250,10 @@ export const SeasonFixturesTable: React.FC<SeasonFixturesTableProps> = ({
 
       {/* Match Detail Modal */}
       {selectedMatch && (
-        <Dialog open={!!selectedMatch} onOpenChange={(open) => !open && setSelectedMatch(null)}>
+        <Dialog
+          open={!!selectedMatch}
+          onOpenChange={(open) => !open && setSelectedMatch(null)}
+        >
           <DialogContent className="max-w-xl bg-card border-border p-6">
             <DialogHeader>
               <div className="flex items-center justify-between">
@@ -212,78 +261,148 @@ export const SeasonFixturesTable: React.FC<SeasonFixturesTableProps> = ({
                   {selectedMatch.season} • {selectedMatch.league}
                 </Badge>
                 <span className="text-xs text-muted-foreground font-mono">
-                  {selectedMatch.date} {selectedMatch.kickoff_time && `at ${selectedMatch.kickoff_time}`}
+                  {selectedMatch.date}{" "}
+                  {selectedMatch.kickoff_time &&
+                    `at ${selectedMatch.kickoff_time}`}
                 </span>
               </div>
-              <DialogTitle className="text-xl font-bold text-foreground mt-2">
-                {selectedMatch.home_team} {selectedMatch.score} {selectedMatch.away_team}
+              <DialogTitle className="text-xl font-bold text-foreground mt-2 flex items-center gap-2">
+                <TeamLogo team={selectedMatch.home_team} size={24} />
+                <span>{selectedMatch.home_team}</span>
+                <span className="font-mono text-base px-2 py-0.5 rounded bg-muted border border-border">
+                  {selectedMatch.score || "—"}
+                </span>
+                <span>{selectedMatch.away_team}</span>
+                <TeamLogo team={selectedMatch.away_team} size={24} />
               </DialogTitle>
               <DialogDescription className="text-xs text-muted-foreground">
-                Referee: {selectedMatch.referee || "N/A"} • Half-Time: {selectedMatch.half_time_score || "N/A"}
+                Referee: {selectedMatch.referee || "N/A"} • Half-Time:{" "}
+                {selectedMatch.half_time_score || "N/A"}
               </DialogDescription>
             </DialogHeader>
 
             <div className="space-y-4 text-xs mt-2">
               {/* Head to Head Shots & Corners Table */}
               <div className="p-3 rounded-xl bg-muted/30 border border-border space-y-2">
-                <span className="font-semibold text-foreground text-xs block">Match Statistics:</span>
+                <span className="font-semibold text-foreground text-xs block">
+                  Match Statistics:
+                </span>
                 <div className="grid grid-cols-3 gap-2 text-center font-mono">
-                  <span className="font-bold text-sm text-foreground">{selectedMatch.home_team}</span>
-                  <span className="text-muted-foreground text-xs font-sans">Metric</span>
-                  <span className="font-bold text-sm text-foreground">{selectedMatch.away_team}</span>
+                  <span className="flex items-center justify-center gap-1.5 font-bold text-sm text-foreground">
+                    <TeamLogo team={selectedMatch.home_team} size={24} />
+                    <span className="truncate">{selectedMatch.home_team}</span>
+                  </span>
+                  <span className="text-muted-foreground text-xs font-sans">
+                    Metric
+                  </span>
+                  <span className="flex items-center justify-center gap-1.5 font-bold text-sm text-foreground">
+                    <TeamLogo team={selectedMatch.away_team} size={24} />
+                    <span className="truncate">{selectedMatch.away_team}</span>
+                  </span>
 
-                  <span className="text-foreground">{selectedMatch.stats.home_shots ?? "-"}</span>
-                  <span className="text-muted-foreground font-sans">Total Shots</span>
-                  <span className="text-foreground">{selectedMatch.stats.away_shots ?? "-"}</span>
+                  <span className="text-foreground">
+                    {selectedMatch.stats.home_shots ?? "-"}
+                  </span>
+                  <span className="text-muted-foreground font-sans">
+                    Total Shots
+                  </span>
+                  <span className="text-foreground">
+                    {selectedMatch.stats.away_shots ?? "-"}
+                  </span>
 
-                  <span className="text-foreground">{selectedMatch.stats.home_shots_on_target ?? "-"}</span>
-                  <span className="text-muted-foreground font-sans">Shots on Target</span>
-                  <span className="text-foreground">{selectedMatch.stats.away_shots_on_target ?? "-"}</span>
+                  <span className="text-foreground">
+                    {selectedMatch.stats.home_shots_on_target ?? "-"}
+                  </span>
+                  <span className="text-muted-foreground font-sans">
+                    Shots on Target
+                  </span>
+                  <span className="text-foreground">
+                    {selectedMatch.stats.away_shots_on_target ?? "-"}
+                  </span>
 
-                  <span className="text-foreground">{selectedMatch.stats.home_corners ?? "-"}</span>
-                  <span className="text-muted-foreground font-sans">Corners</span>
-                  <span className="text-foreground">{selectedMatch.stats.away_corners ?? "-"}</span>
+                  <span className="text-foreground">
+                    {selectedMatch.stats.home_corners ?? "-"}
+                  </span>
+                  <span className="text-muted-foreground font-sans">
+                    Corners
+                  </span>
+                  <span className="text-foreground">
+                    {selectedMatch.stats.away_corners ?? "-"}
+                  </span>
 
-                  <span className="text-foreground">{selectedMatch.stats.home_fouls ?? "-"}</span>
+                  <span className="text-foreground">
+                    {selectedMatch.stats.home_fouls ?? "-"}
+                  </span>
                   <span className="text-muted-foreground font-sans">Fouls</span>
-                  <span className="text-foreground">{selectedMatch.stats.away_fouls ?? "-"}</span>
+                  <span className="text-foreground">
+                    {selectedMatch.stats.away_fouls ?? "-"}
+                  </span>
 
-                  <span className="text-foreground">{selectedMatch.stats.home_yellow ?? 0}</span>
-                  <span className="text-muted-foreground font-sans">Yellow Cards</span>
-                  <span className="text-foreground">{selectedMatch.stats.away_yellow ?? 0}</span>
+                  <span className="text-foreground">
+                    {selectedMatch.stats.home_yellow ?? "-"}
+                  </span>
+                  <span className="text-muted-foreground font-sans">
+                    Yellow Cards
+                  </span>
+                  <span className="text-foreground">
+                    {selectedMatch.stats.away_yellow ?? "-"}
+                  </span>
 
-                  <span className="text-destructive font-bold">{selectedMatch.stats.home_red ?? 0}</span>
-                  <span className="text-muted-foreground font-sans">Red Cards</span>
-                  <span className="text-destructive font-bold">{selectedMatch.stats.away_red ?? 0}</span>
+                  <span className="text-destructive font-bold">
+                    {selectedMatch.stats.home_red ?? "-"}
+                  </span>
+                  <span className="text-muted-foreground font-sans">
+                    Red Cards
+                  </span>
+                  <span className="text-destructive font-bold">
+                    {selectedMatch.stats.away_red ?? "-"}
+                  </span>
                 </div>
               </div>
 
               {/* Bookmaker Odds Matrix */}
               <div className="p-3 rounded-xl bg-muted/30 border border-border space-y-2">
-                <span className="font-semibold text-foreground text-xs block">Market Odds &amp; Lines:</span>
+                <span className="font-semibold text-foreground text-xs block">
+                  Market Odds &amp; Lines:
+                </span>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center font-mono">
                   <div className="p-2 rounded bg-card border border-border">
-                    <span className="text-[10px] text-muted-foreground block font-sans">Pre-Match (H/D/A)</span>
+                    <span className="text-[10px] text-muted-foreground block font-sans">
+                      Pre-Match (H/D/A)
+                    </span>
                     <span className="font-bold text-foreground">
-                      {selectedMatch.odds.home ?? "-"} / {selectedMatch.odds.draw ?? "-"} / {selectedMatch.odds.away ?? "-"}
+                      {selectedMatch.odds.home ?? "-"} /{" "}
+                      {selectedMatch.odds.draw ?? "-"} /{" "}
+                      {selectedMatch.odds.away ?? "-"}
                     </span>
                   </div>
                   <div className="p-2 rounded bg-card border border-border">
-                    <span className="text-[10px] text-muted-foreground block font-sans">Closing (H/D/A)</span>
+                    <span className="text-[10px] text-muted-foreground block font-sans">
+                      Closing (H/D/A)
+                    </span>
                     <span className="font-bold text-foreground">
-                      {selectedMatch.odds.home_close ?? "-"} / {selectedMatch.odds.draw_close ?? "-"} / {selectedMatch.odds.away_close ?? "-"}
+                      {selectedMatch.odds.home_close ?? "-"} /{" "}
+                      {selectedMatch.odds.draw_close ?? "-"} /{" "}
+                      {selectedMatch.odds.away_close ?? "-"}
                     </span>
                   </div>
                   <div className="p-2 rounded bg-card border border-border">
-                    <span className="text-[10px] text-muted-foreground block font-sans">Over / Under 2.5</span>
+                    <span className="text-[10px] text-muted-foreground block font-sans">
+                      Over / Under 2.5
+                    </span>
                     <span className="font-bold text-orange-500">
-                      {selectedMatch.odds.over_2_5 ?? "-"} / {selectedMatch.odds.under_2_5 ?? "-"}
+                      {selectedMatch.odds.over_2_5 ?? "-"} /{" "}
+                      {selectedMatch.odds.under_2_5 ?? "-"}
                     </span>
                   </div>
                   <div className="p-2 rounded bg-card border border-border">
-                    <span className="text-[10px] text-muted-foreground block font-sans">Asian Handicap Line</span>
+                    <span className="text-[10px] text-muted-foreground block font-sans">
+                      Asian Handicap Line
+                    </span>
                     <span className="font-bold text-foreground">
-                      {selectedMatch.odds.handicap ?? "-"} ({selectedMatch.odds.handicap_home ?? "-"} / {selectedMatch.odds.handicap_away ?? "-"})
+                      {selectedMatch.odds.handicap ?? "-"} (
+                      {selectedMatch.odds.handicap_home ?? "-"} /{" "}
+                      {selectedMatch.odds.handicap_away ?? "-"})
                     </span>
                   </div>
                 </div>
@@ -295,7 +414,8 @@ export const SeasonFixturesTable: React.FC<SeasonFixturesTableProps> = ({
                   variant="outline"
                   size="sm"
                   onClick={() => {
-                    if (onSelectTeamForAnalysis) onSelectTeamForAnalysis(selectedMatch.home_team);
+                    if (onSelectTeamForAnalysis)
+                      onSelectTeamForAnalysis(selectedMatch.home_team);
                     setSelectedMatch(null);
                   }}
                   className="text-xs"
@@ -306,7 +426,8 @@ export const SeasonFixturesTable: React.FC<SeasonFixturesTableProps> = ({
                   variant="outline"
                   size="sm"
                   onClick={() => {
-                    if (onSelectTeamForAnalysis) onSelectTeamForAnalysis(selectedMatch.away_team);
+                    if (onSelectTeamForAnalysis)
+                      onSelectTeamForAnalysis(selectedMatch.away_team);
                     setSelectedMatch(null);
                   }}
                   className="text-xs"

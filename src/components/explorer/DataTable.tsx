@@ -1,63 +1,69 @@
-import React, { useMemo, useState } from "react";
-import {
-  useReactTable,
-  getCoreRowModel,
-  getSortedRowModel,
-  getPaginationRowModel,
-  type SortingState,
-  type ColumnDef,
-  type RowSelectionState,
-  flexRender,
-} from "@tanstack/react-table";
-import {
-  ArrowUpDown,
-  ArrowUp,
-  ArrowDown,
-  Inbox,
-  MoreHorizontal,
-  Swords,
-  Layers,
-  Sparkles,
-  Goal,
-  FileSpreadsheet,
-  X,
-  Check,
-} from "lucide-react";
-import {
-  Table,
-  TableHeader,
-  TableBody,
-  TableHead,
-  TableRow,
-  TableCell,
-} from "@/components/ui/table";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationFirst,
-  PaginationPrevious,
-  PaginationNext,
-  PaginationLast,
-  PaginationEllipsis,
-} from "@/components/ui/pagination";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
 import {
   DropdownMenu,
-  DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  NativeSelect,
+  NativeSelectOption,
+} from "@/components/ui/native-select";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationFirst,
+  PaginationItem,
+  PaginationLast,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  flexRender,
+  getCoreRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+  type ColumnDef,
+  type RowSelectionState,
+  type SortingState,
+} from "@tanstack/react-table";
+import {
+  ArrowDown,
+  ArrowUp,
+  ArrowUpDown,
+  FileSpreadsheet,
+  Goal,
+  Inbox,
+  Layers,
+  MoreHorizontal,
+  Sparkles,
+  Swords,
+  X,
+} from "lucide-react";
+import React, { useMemo, useState } from "react";
 
+import { TeamLogo } from "@/components/TeamLogo";
+import { exportToCsv } from "@/lib/export";
 import type { Match } from "@/lib/types";
-import { exportToCsv, exportToJson } from "@/lib/export";
-import { ExplorerActionsModal, type ExplorerActionType } from "./ExplorerActionsModal";
+import {
+  ExplorerActionsModal,
+  type ExplorerActionType,
+} from "./ExplorerActionsModal";
 
 interface DataTableProps {
   matches: Match[];
@@ -83,7 +89,10 @@ export const DataTable: React.FC<DataTableProps> = ({
   const [actionType, setActionType] = useState<ExplorerActionType>("h2h");
   const [actionTargetMatches, setActionTargetMatches] = useState<Match[]>([]);
 
-  const handleOpenAction = (type: ExplorerActionType, targetMatches: Match[]) => {
+  const handleOpenAction = (
+    type: ExplorerActionType,
+    targetMatches: Match[],
+  ) => {
     setActionType(type);
     setActionTargetMatches(targetMatches);
     setActionModalOpen(true);
@@ -95,7 +104,10 @@ export const DataTable: React.FC<DataTableProps> = ({
       {
         id: "select",
         header: ({ table }) => (
-          <div className="flex items-center justify-center pl-1 pr-4" onClick={(e) => e.stopPropagation()}>
+          <div
+            className="flex items-center justify-center pl-1 pr-4"
+            onClick={(e) => e.stopPropagation()}
+          >
             <Checkbox
               checked={table.getIsAllPageRowsSelected()}
               onCheckedChange={(val) => table.toggleAllPageRowsSelected(!!val)}
@@ -104,7 +116,10 @@ export const DataTable: React.FC<DataTableProps> = ({
           </div>
         ),
         cell: ({ row }) => (
-          <div className="flex items-center justify-center pl-1 pr-4" onClick={(e) => e.stopPropagation()}>
+          <div
+            className="flex items-center justify-center pl-1 pr-4"
+            onClick={(e) => e.stopPropagation()}
+          >
             <Checkbox
               checked={row.getIsSelected()}
               onCheckedChange={(val) => row.toggleSelected(!!val)}
@@ -146,16 +161,31 @@ export const DataTable: React.FC<DataTableProps> = ({
         header: "Bookmaker",
         cell: (info) => {
           const val = info.getValue() as Match["bookmaker"];
-          if (val === "betika") return <span className="text-xs text-emerald-500 font-medium">Betika</span>;
-          if (val === "mozzart") return <span className="text-xs text-amber-500 font-medium">Mozzart</span>;
-          return <span className="text-xs text-primary font-medium">SportPesa</span>;
+          if (val === "betika")
+            return (
+              <span className="text-xs text-emerald-500 font-medium">
+                Betika
+              </span>
+            );
+          if (val === "mozzart")
+            return (
+              <span className="text-xs text-amber-500 font-medium">
+                Mozzart
+              </span>
+            );
+          return (
+            <span className="text-xs text-primary font-medium">SportPesa</span>
+          );
         },
       },
       {
         accessorKey: "jackpot",
         header: "Jackpot",
         cell: (info) => (
-          <span className="text-xs text-foreground truncate max-w-[140px] block" title={info.getValue() as string}>
+          <span
+            className="text-xs text-foreground truncate max-w-[140px] block"
+            title={info.getValue() as string}
+          >
             {info.getValue() as string}
           </span>
         ),
@@ -163,11 +193,17 @@ export const DataTable: React.FC<DataTableProps> = ({
       {
         accessorKey: "home_team",
         header: "Home Team",
-        cell: (info) => (
-          <span className="font-medium text-xs text-foreground truncate max-w-[170px] block" title={info.getValue() as string}>
-            {info.getValue() as string}
-          </span>
-        ),
+        cell: (info) => {
+          const name = info.getValue() as string;
+          return (
+            <span className="flex items-center gap-1.5" title={name}>
+              <TeamLogo team={name} size={24} />
+              <span className="font-medium text-xs text-foreground truncate max-w-[152px]">
+                {name}
+              </span>
+            </span>
+          );
+        },
       },
       {
         accessorKey: "score",
@@ -184,23 +220,52 @@ export const DataTable: React.FC<DataTableProps> = ({
       {
         accessorKey: "away_team",
         header: "Away Team",
-        cell: (info) => (
-          <span className="font-medium text-xs text-foreground truncate max-w-[170px] block" title={info.getValue() as string}>
-            {info.getValue() as string}
-          </span>
-        ),
+        cell: (info) => {
+          const name = info.getValue() as string;
+          return (
+            <span className="flex items-center gap-1.5" title={name}>
+              <TeamLogo team={name} size={24} />
+              <span className="font-medium text-xs text-foreground truncate max-w-[152px]">
+                {name}
+              </span>
+            </span>
+          );
+        },
       },
       {
         accessorKey: "result",
         header: "Result",
         cell: (info) => {
           const val = info.getValue() as Match["result"];
-          if (val === "home") return <span className="text-xs font-medium text-primary">Home (1)</span>;
-          if (val === "draw") return <span className="text-xs font-medium text-muted-foreground">Draw (X)</span>;
-          if (val === "away") return <span className="text-xs font-medium text-foreground">Away (2)</span>;
-          if (val === "postponed") return <span className="text-xs text-muted-foreground">Postponed</span>;
-          if (val === "abandoned") return <span className="text-xs text-destructive font-medium">Abandoned</span>;
-          return <span className="text-xs text-muted-foreground">{val || "—"}</span>;
+          if (val === "home")
+            return (
+              <span className="text-xs font-medium text-primary">Home (1)</span>
+            );
+          if (val === "draw")
+            return (
+              <span className="text-xs font-medium text-muted-foreground">
+                Draw (X)
+              </span>
+            );
+          if (val === "away")
+            return (
+              <span className="text-xs font-medium text-foreground">
+                Away (2)
+              </span>
+            );
+          if (val === "postponed")
+            return (
+              <span className="text-xs text-muted-foreground">Postponed</span>
+            );
+          if (val === "abandoned")
+            return (
+              <span className="text-xs text-destructive font-medium">
+                Abandoned
+              </span>
+            );
+          return (
+            <span className="text-xs text-muted-foreground">{val || "—"}</span>
+          );
         },
       },
       {
@@ -221,7 +286,10 @@ export const DataTable: React.FC<DataTableProps> = ({
         cell: (info) => {
           const val = info.getValue() as string | null;
           return (
-            <span className="text-xs text-muted-foreground truncate max-w-[160px] block" title={val || ""}>
+            <span
+              className="text-xs text-muted-foreground truncate max-w-[160px] block"
+              title={val || ""}
+            >
               {val || "—"}
             </span>
           );
@@ -234,18 +302,26 @@ export const DataTable: React.FC<DataTableProps> = ({
         cell: ({ row }) => {
           const match = row.original;
           return (
-            <div className="flex justify-end pr-1" onClick={(e) => e.stopPropagation()}>
+            <div
+              className="flex justify-end pr-1"
+              onClick={(e) => e.stopPropagation()}
+            >
               <DropdownMenu>
                 <DropdownMenuTrigger
                   render={
-                    <Button variant="ghost" size="icon-xs" className="h-7 w-7 text-muted-foreground hover:text-foreground">
+                    <Button
+                      variant="ghost"
+                      size="icon-xs"
+                      className="h-7 w-7 text-muted-foreground hover:text-foreground"
+                    >
                       <MoreHorizontal className="h-3.5 w-3.5" />
                     </Button>
                   }
                 />
                 <DropdownMenuContent align="end" className="w-56">
                   <DropdownMenuLabel className="text-xs font-mono text-muted-foreground">
-                    Row #{match.position} · {match.home_team} vs {match.away_team}
+                    Row #{match.position} · {match.home_team} vs{" "}
+                    {match.away_team}
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
 
@@ -297,7 +373,7 @@ export const DataTable: React.FC<DataTableProps> = ({
         enableSorting: false,
       },
     ],
-    [onSelectMatch]
+    [onSelectMatch],
   );
 
   const table = useReactTable({
@@ -326,7 +402,9 @@ export const DataTable: React.FC<DataTableProps> = ({
   // Columns pinned to the left edge while scrolling horizontally
   const stickyColumnIds = table
     .getVisibleLeafColumns()
-    .filter((c) => (c.columnDef.meta as { sticky?: boolean } | undefined)?.sticky)
+    .filter(
+      (c) => (c.columnDef.meta as { sticky?: boolean } | undefined)?.sticky,
+    )
     .map((c) => c.id);
   const totalRows = matches.length;
   const startRow = totalRows === 0 ? 0 : pageIndex * pageSize + 1;
@@ -365,9 +443,12 @@ export const DataTable: React.FC<DataTableProps> = ({
     return (
       <div className="flex-1 flex flex-col items-center justify-center p-12 text-center bg-background">
         <Inbox className="h-12 w-12 text-muted-foreground/60 mb-3" />
-        <h3 className="text-base font-semibold text-foreground">No matches found</h3>
+        <h3 className="text-base font-semibold text-foreground">
+          No matches found
+        </h3>
         <p className="text-xs text-muted-foreground mt-1 max-w-sm">
-          Try loosening your search keywords, clearing bookmaker selection, or resetting the odds and date filters.
+          Try loosening your search keywords, clearing bookmaker selection, or
+          resetting the odds and date filters.
         </p>
       </div>
     );
@@ -384,20 +465,34 @@ export const DataTable: React.FC<DataTableProps> = ({
                 {headerGroup.headers.map((header) => {
                   const isSorted = header.column.getIsSorted();
                   const canSort = header.column.getCanSort();
-                  const stickyIdx = (header.column.columnDef.meta as { sticky?: boolean } | undefined)?.sticky
+                  const stickyIdx = (
+                    header.column.columnDef.meta as
+                      { sticky?: boolean } | undefined
+                  )?.sticky
                     ? stickyColumnIds.indexOf(header.column.id)
                     : -1;
                   return (
                     <TableHead
                       key={header.id}
-                      onClick={canSort ? header.column.getToggleSortingHandler() : undefined}
-                      style={stickyIdx >= 0 ? { left: `${stickyIdx * 44}px` } : undefined}
+                      onClick={
+                        canSort
+                          ? header.column.getToggleSortingHandler()
+                          : undefined
+                      }
+                      style={
+                        stickyIdx >= 0
+                          ? { left: `${stickyIdx * 44}px` }
+                          : undefined
+                      }
                       className={`px-2 py-1.5 text-xs font-medium text-muted-foreground select-none transition-colors ${
                         canSort ? "cursor-pointer hover:text-foreground" : ""
                       } ${stickyIdx >= 0 ? "sticky z-10 bg-card" : ""}`}
                     >
                       <div className="flex items-center gap-1.5">
-                        {flexRender(header.column.columnDef.header, header.getContext())}
+                        {flexRender(
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )}
                         {canSort && (
                           <>
                             {isSorted === "asc" ? (
@@ -436,16 +531,26 @@ export const DataTable: React.FC<DataTableProps> = ({
                 }`}
               >
                 {row.getVisibleCells().map((cell) => {
-                  const stickyIdx = (cell.column.columnDef.meta as { sticky?: boolean } | undefined)?.sticky
+                  const stickyIdx = (
+                    cell.column.columnDef.meta as
+                      { sticky?: boolean } | undefined
+                  )?.sticky
                     ? stickyColumnIds.indexOf(cell.column.id)
                     : -1;
                   return (
                     <TableCell
                       key={cell.id}
-                      style={stickyIdx >= 0 ? { left: `${stickyIdx * 44}px` } : undefined}
+                      style={
+                        stickyIdx >= 0
+                          ? { left: `${stickyIdx * 44}px` }
+                          : undefined
+                      }
                       className={`px-2 py-1 ${stickyIdx >= 0 ? "sticky z-10 bg-background/10 backdrop-blur-sm group-hover:bg-muted" : ""}`}
                     >
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
                     </TableCell>
                   );
                 })}
@@ -457,7 +562,11 @@ export const DataTable: React.FC<DataTableProps> = ({
 
       {/* Floating Checkbox Action Toolbar (fixed in viewport so it stays visible while scrolling) */}
       {selectedCount > 0 && (
-        <div role="status" aria-live="polite" className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-card/95 border-2 border-primary/50 shadow-2xl rounded-2xl px-3 py-2 sm:px-4 sm:py-2.5 flex items-center gap-2 backdrop-blur-md ring-2 ring-primary/20 animate-in fade-in slide-in-from-bottom-4 flex-wrap max-w-[95vw] justify-center">
+        <div
+          role="status"
+          aria-live="polite"
+          className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-card/95 border-2 border-primary/50 shadow-2xl rounded-2xl px-3 py-2 sm:px-4 sm:py-2.5 flex items-center gap-2 backdrop-blur-md ring-2 ring-primary/20 animate-in fade-in slide-in-from-bottom-4 flex-wrap max-w-[95vw] justify-center"
+        >
           <div className="flex items-center gap-2 border-r border-border pr-2.5">
             <Badge variant="default" className="font-mono text-xs">
               {selectedCount} selected
@@ -508,7 +617,12 @@ export const DataTable: React.FC<DataTableProps> = ({
             <Button
               size="xs"
               variant="outline"
-              onClick={() => exportToCsv(selectedMatches, `selected_matches_${selectedMatches.length}.csv`)}
+              onClick={() =>
+                exportToCsv(
+                  selectedMatches,
+                  `selected_matches_${selectedMatches.length}.csv`,
+                )
+              }
               className="text-xs h-7 gap-1"
             >
               <FileSpreadsheet className="h-3.5 w-3.5" />
@@ -533,8 +647,15 @@ export const DataTable: React.FC<DataTableProps> = ({
         {/* Left: Row range & Page size */}
         <div className="flex items-center gap-3">
           <span>
-            Showing <strong className="text-foreground">{startRow.toLocaleString()}–{endRow.toLocaleString()}</strong> of{" "}
-            <strong className="text-foreground">{totalRows.toLocaleString()}</strong> records
+            Showing{" "}
+            <strong className="text-foreground">
+              {startRow.toLocaleString()}–{endRow.toLocaleString()}
+            </strong>{" "}
+            of{" "}
+            <strong className="text-foreground">
+              {totalRows.toLocaleString()}
+            </strong>{" "}
+            records
           </span>
 
           <div className="flex items-center gap-1.5 ml-2">

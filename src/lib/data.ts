@@ -1,3 +1,4 @@
+import { canonicalTeam } from "./teamRegistry";
 import type { DatasetMeta, Match, AppStats } from "./types";
 
 export const DATASETS: DatasetMeta[] = [
@@ -113,7 +114,10 @@ function rowToMatch(
   }
 
   const jackpot_event_id = `${ds.bookmaker}-${ds.jackpot.toLowerCase().replace(/\s+/g, "-")}-${eventIdentifier}-${eventIdx.v}`;
-  const searchText = `${home_team} ${away_team} ${league || ""} ${ds.bookmaker} ${ds.jackpot} ${score || ""}`.toLowerCase();
+  // The canonical ids let a search for "wolves" match a "Wolverhampton
+  // Wanderers" row; underscores become spaces so word searches still hit.
+  const ids = `${canonicalTeam(home_team)} ${canonicalTeam(away_team)}`.replace(/_/g, " ");
+  const searchText = `${home_team} ${away_team} ${league || ""} ${ds.bookmaker} ${ds.jackpot} ${score || ""} ${ids}`.toLowerCase();
 
   return {
     id: `${fileKey}:${idx}`,
@@ -189,8 +193,8 @@ async function loadMozzartSuperJackpot(ds: DatasetMeta): Promise<Match[]> {
   const dedupedRows: Record<string, unknown>[] = [];
   for (const row of allRawRows) {
     const date = typeof row.date === "string" ? row.date : "";
-    const home = String(row.home_team || "").trim().toLowerCase();
-    const away = String(row.away_team || "").trim().toLowerCase();
+    const home = canonicalTeam(String(row.home_team || ""));
+    const away = canonicalTeam(String(row.away_team || ""));
     const key = `${date}|${home}|${away}`;
     if (!seen.has(key)) {
       seen.add(key);

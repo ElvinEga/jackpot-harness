@@ -1,32 +1,32 @@
-import React, { useState, useMemo } from "react";
-import {
-  Users,
-  Swords,
-  ArrowRightLeft,
-  Calendar,
-  Trophy,
-  History,
-  Target,
-  Sparkles,
-  BarChart3,
-  Search,
-} from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   Table,
-  TableHeader,
   TableBody,
-  TableHead,
-  TableRow,
   TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
 } from "@/components/ui/table";
+import { ArrowRightLeft, History, Sparkles, Target } from "lucide-react";
+import React, { useMemo, useState } from "react";
 
-import type { Match, TeamH2H, TeamForm } from "../../lib/types";
-import { getAllTeams, computeTeamH2H, computeTeamForm, getTeamAppearances } from "../../lib/teams";
+import { TeamLogo } from "@/components/TeamLogo";
 import { calculateScoreProbabilities } from "../../lib/predictions";
+import { canonicalTeam } from "../../lib/teamRegistry";
+import {
+  computeTeamForm,
+  computeTeamH2H,
+  getAllTeams,
+  getTeamAppearances,
+} from "../../lib/teams";
+import type { Match, TeamForm, TeamH2H } from "../../lib/types";
 import { TeamSearchInput } from "../common/TeamSearchInput";
 
 interface TeamVersusTeamProps {
@@ -66,13 +66,29 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
     const baseHome = 1.35;
     const baseAway = 1.05;
 
-    const attackA = formA.matchesCount >= 3 ? Math.max(0.6, Math.min(2.2, formA.avgGF / baseHome)) : 1.0;
-    const defenseB = formB.matchesCount >= 3 ? Math.max(0.6, Math.min(2.2, formB.avgGA / baseHome)) : 1.0;
-    const attackB = formB.matchesCount >= 3 ? Math.max(0.6, Math.min(2.2, formB.avgGF / baseAway)) : 1.0;
-    const defenseA = formA.matchesCount >= 3 ? Math.max(0.6, Math.min(2.2, formA.avgGA / baseAway)) : 1.0;
+    const attackA =
+      formA.matchesCount >= 3
+        ? Math.max(0.6, Math.min(2.2, formA.avgGF / baseHome))
+        : 1.0;
+    const defenseB =
+      formB.matchesCount >= 3
+        ? Math.max(0.6, Math.min(2.2, formB.avgGA / baseHome))
+        : 1.0;
+    const attackB =
+      formB.matchesCount >= 3
+        ? Math.max(0.6, Math.min(2.2, formB.avgGF / baseAway))
+        : 1.0;
+    const defenseA =
+      formA.matchesCount >= 3
+        ? Math.max(0.6, Math.min(2.2, formA.avgGA / baseAway))
+        : 1.0;
 
-    const lambdaH = Number(Math.max(0.3, Math.min(4.0, baseHome * attackA * defenseB)).toFixed(2));
-    const lambdaA = Number(Math.max(0.3, Math.min(4.0, baseAway * attackB * defenseA)).toFixed(2));
+    const lambdaH = Number(
+      Math.max(0.3, Math.min(4.0, baseHome * attackA * defenseB)).toFixed(2),
+    );
+    const lambdaA = Number(
+      Math.max(0.3, Math.min(4.0, baseAway * attackB * defenseA)).toFixed(2),
+    );
 
     const sim = calculateScoreProbabilities(lambdaH, lambdaA, 5);
 
@@ -182,22 +198,34 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
               <>
                 <div className="grid grid-cols-3 gap-2 text-center">
                   <div className="p-3 rounded-lg bg-muted/40 border border-border">
-                    <span className="text-xs text-muted-foreground block truncate">{teamA} Wins</span>
-                    <span className="text-xl font-bold font-mono text-primary">{h2h.teamAWins}</span>
+                    <span className="text-xs text-muted-foreground block truncate">
+                      {teamA} Wins
+                    </span>
+                    <span className="text-xl font-bold font-mono text-primary">
+                      {h2h.teamAWins}
+                    </span>
                     <span className="text-xs text-muted-foreground block">
                       ({((h2h.teamAWins / h2h.totalMatches) * 100).toFixed(0)}%)
                     </span>
                   </div>
                   <div className="p-3 rounded-lg bg-muted/40 border border-border">
-                    <span className="text-xs text-muted-foreground block">Draws</span>
-                    <span className="text-xl font-bold font-mono text-foreground">{h2h.draws}</span>
+                    <span className="text-xs text-muted-foreground block">
+                      Draws
+                    </span>
+                    <span className="text-xl font-bold font-mono text-foreground">
+                      {h2h.draws}
+                    </span>
                     <span className="text-xs text-muted-foreground block">
                       ({((h2h.draws / h2h.totalMatches) * 100).toFixed(0)}%)
                     </span>
                   </div>
                   <div className="p-3 rounded-lg bg-muted/40 border border-border">
-                    <span className="text-xs text-muted-foreground block truncate">{teamB} Wins</span>
-                    <span className="text-xl font-bold font-mono text-foreground">{h2h.teamBWins}</span>
+                    <span className="text-xs text-muted-foreground block truncate">
+                      {teamB} Wins
+                    </span>
+                    <span className="text-xl font-bold font-mono text-foreground">
+                      {h2h.teamBWins}
+                    </span>
                     <span className="text-xs text-muted-foreground block">
                       ({((h2h.teamBWins / h2h.totalMatches) * 100).toFixed(0)}%)
                     </span>
@@ -205,13 +233,22 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
                 </div>
 
                 <div className="text-xs text-muted-foreground flex items-center justify-between pt-1">
-                  <span>Average Goals in H2H: <strong className="text-foreground">{h2h.avgGoals}</strong></span>
-                  <span>Total Encounters: <strong className="text-foreground">{h2h.totalMatches}</strong></span>
+                  <span>
+                    Average Goals in H2H:{" "}
+                    <strong className="text-foreground">{h2h.avgGoals}</strong>
+                  </span>
+                  <span>
+                    Total Encounters:{" "}
+                    <strong className="text-foreground">
+                      {h2h.totalMatches}
+                    </strong>
+                  </span>
                 </div>
               </>
             ) : (
               <div className="p-6 text-center text-muted-foreground text-xs italic bg-muted/20 rounded-lg border border-dashed border-border">
-                Teams have not met in the jackpot dataset. The model will rely primarily on individual team forms and baseline distributions.
+                Teams have not met in the jackpot dataset. The model will rely
+                primarily on individual team forms and baseline distributions.
               </div>
             )}
           </CardContent>
@@ -225,14 +262,18 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
               Recent Form & Performance Comparison
             </CardTitle>
             <CardDescription className="text-xs">
-              Last {formA.matchesCount} matches for {teamA} vs {formB.matchesCount} matches for {teamB}
+              Last {formA.matchesCount} matches for {teamA} vs{" "}
+              {formB.matchesCount} matches for {teamB}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-2 gap-3 text-xs">
               {/* Team A Form */}
               <div className="p-3 rounded-lg border border-border bg-muted/30 space-y-2">
-                <div className="font-semibold text-foreground truncate">{teamA} (Home)</div>
+                <div className="flex items-center gap-1.5 font-semibold text-foreground">
+                  <TeamLogo team={teamA} size={24} />
+                  <span className="truncate">{teamA} (Home)</span>
+                </div>
                 <div className="flex items-center gap-1">
                   {formA.recentResults.slice(0, 5).map((r, i) => (
                     <span
@@ -241,8 +282,8 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
                         r === "W"
                           ? "bg-primary/15 text-primary border border-primary/30"
                           : r === "D"
-                          ? "bg-muted-foreground/20 text-foreground border border-border"
-                          : "bg-muted text-muted-foreground border border-border"
+                            ? "bg-muted-foreground/20 text-foreground border border-border"
+                            : "bg-muted text-muted-foreground border border-border"
                       }`}
                     >
                       {r}
@@ -250,16 +291,35 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
                   ))}
                 </div>
                 <div className="space-y-1 text-xs text-muted-foreground font-mono">
-                  <div>Win Rate: <strong className="text-foreground">{formA.winRate}%</strong></div>
-                  <div>Home Win Rate: <strong className="text-foreground">{formA.homeWinRate}%</strong></div>
-                  <div>Avg Goals Scored: <strong className="text-foreground">{formA.avgGF}</strong></div>
-                  <div>Avg Goals Conceded: <strong className="text-foreground">{formA.avgGA}</strong></div>
+                  <div>
+                    Win Rate:{" "}
+                    <strong className="text-foreground">
+                      {formA.winRate}%
+                    </strong>
+                  </div>
+                  <div>
+                    Home Win Rate:{" "}
+                    <strong className="text-foreground">
+                      {formA.homeWinRate}%
+                    </strong>
+                  </div>
+                  <div>
+                    Avg Goals Scored:{" "}
+                    <strong className="text-foreground">{formA.avgGF}</strong>
+                  </div>
+                  <div>
+                    Avg Goals Conceded:{" "}
+                    <strong className="text-foreground">{formA.avgGA}</strong>
+                  </div>
                 </div>
               </div>
 
               {/* Team B Form */}
               <div className="p-3 rounded-lg border border-border bg-muted/30 space-y-2">
-                <div className="font-semibold text-foreground truncate">{teamB} (Away)</div>
+                <div className="flex items-center gap-1.5 font-semibold text-foreground">
+                  <TeamLogo team={teamB} size={24} />
+                  <span className="truncate">{teamB} (Away)</span>
+                </div>
                 <div className="flex items-center gap-1">
                   {formB.recentResults.slice(0, 5).map((r, i) => (
                     <span
@@ -268,8 +328,8 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
                         r === "W"
                           ? "bg-primary/15 text-primary border border-primary/30"
                           : r === "D"
-                          ? "bg-muted-foreground/20 text-foreground border border-border"
-                          : "bg-muted text-muted-foreground border border-border"
+                            ? "bg-muted-foreground/20 text-foreground border border-border"
+                            : "bg-muted text-muted-foreground border border-border"
                       }`}
                     >
                       {r}
@@ -277,10 +337,26 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
                   ))}
                 </div>
                 <div className="space-y-1 text-xs text-muted-foreground font-mono">
-                  <div>Win Rate: <strong className="text-foreground">{formB.winRate}%</strong></div>
-                  <div>Away Win Rate: <strong className="text-foreground">{formB.awayWinRate}%</strong></div>
-                  <div>Avg Goals Scored: <strong className="text-foreground">{formB.avgGF}</strong></div>
-                  <div>Avg Goals Conceded: <strong className="text-foreground">{formB.avgGA}</strong></div>
+                  <div>
+                    Win Rate:{" "}
+                    <strong className="text-foreground">
+                      {formB.winRate}%
+                    </strong>
+                  </div>
+                  <div>
+                    Away Win Rate:{" "}
+                    <strong className="text-foreground">
+                      {formB.awayWinRate}%
+                    </strong>
+                  </div>
+                  <div>
+                    Avg Goals Scored:{" "}
+                    <strong className="text-foreground">{formB.avgGF}</strong>
+                  </div>
+                  <div>
+                    Avg Goals Conceded:{" "}
+                    <strong className="text-foreground">{formB.avgGA}</strong>
+                  </div>
                 </div>
               </div>
             </div>
@@ -296,35 +372,60 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
             Poisson Score Probability Model
           </CardTitle>
           <CardDescription className="text-xs">
-            Expected goals: {teamA} ({poisson.lambdaH}) vs {teamB} ({poisson.lambdaA})
+            Expected goals: {teamA} ({poisson.lambdaH}) vs {teamB} (
+            {poisson.lambdaA})
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-5">
           {/* 1X2 Probabilities & Over/Under row */}
           <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-2 text-center text-xs">
             <div className="p-2.5 rounded-lg bg-muted/40 border border-border">
-              <span className="text-xs text-muted-foreground block">Home Win (1)</span>
-              <span className="text-lg font-bold font-mono text-primary">{poisson.sim.homeProb}%</span>
+              <span className="text-xs text-muted-foreground block">
+                Home Win (1)
+              </span>
+              <span className="text-lg font-bold font-mono text-primary">
+                {poisson.sim.homeProb}%
+              </span>
             </div>
             <div className="p-2.5 rounded-lg bg-muted/40 border border-border">
-              <span className="text-xs text-muted-foreground block">Draw (X)</span>
-              <span className="text-lg font-bold font-mono text-foreground">{poisson.sim.drawProb}%</span>
+              <span className="text-xs text-muted-foreground block">
+                Draw (X)
+              </span>
+              <span className="text-lg font-bold font-mono text-foreground">
+                {poisson.sim.drawProb}%
+              </span>
             </div>
             <div className="p-2.5 rounded-lg bg-muted/40 border border-border">
-              <span className="text-xs text-muted-foreground block">Away Win (2)</span>
-              <span className="text-lg font-bold font-mono text-foreground">{poisson.sim.awayProb}%</span>
+              <span className="text-xs text-muted-foreground block">
+                Away Win (2)
+              </span>
+              <span className="text-lg font-bold font-mono text-foreground">
+                {poisson.sim.awayProb}%
+              </span>
             </div>
             <div className="p-2.5 rounded-lg bg-muted/40 border border-border">
-              <span className="text-xs text-muted-foreground block">Over 1.5 Goals</span>
-              <span className="text-lg font-bold font-mono text-foreground">{poisson.over15}%</span>
+              <span className="text-xs text-muted-foreground block">
+                Over 1.5 Goals
+              </span>
+              <span className="text-lg font-bold font-mono text-foreground">
+                {poisson.over15}%
+              </span>
             </div>
             <div className="p-2.5 rounded-lg bg-muted/40 border border-border">
-              <span className="text-xs text-muted-foreground block">Over 2.5 Goals</span>
-              <span className="text-lg font-bold font-mono text-foreground">{poisson.over25}%</span>
+              <span className="text-xs text-muted-foreground block">
+                Over 2.5 Goals
+              </span>
+              <span className="text-lg font-bold font-mono text-foreground">
+                {poisson.over25}%
+              </span>
             </div>
             <div className="p-2.5 rounded-lg bg-muted/40 border border-border">
-              <span className="text-xs text-muted-foreground block">Both To Score (BTTS)</span>
-              <span className="text-lg font-bold font-mono text-foreground">{poisson.btts}%</span>
+              <span className="text-xs text-muted-foreground block">
+                Both To Score (BTTS)
+              </span>
+              <span className="text-lg font-bold font-mono text-foreground">
+                {poisson.btts}%
+              </span>
             </div>
           </div>
 
@@ -343,7 +444,9 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
                       : "bg-muted/30 border-border"
                   }`}
                 >
-                  <span className="text-sm font-bold font-mono text-foreground block">{sc.score}</span>
+                  <span className="text-sm font-bold font-mono text-foreground block">
+                    {sc.score}
+                  </span>
                   <span className="text-xs font-mono font-medium text-primary block mt-0.5">
                     {sc.probability}%
                   </span>
@@ -383,16 +486,31 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
               </TableHeader>
               <TableBody>
                 {h2h.recentEncounters.map((m) => (
-                  <TableRow key={m.id} className="hover:bg-muted/40 transition-colors">
-                    <TableCell className="tabular-nums text-xs text-muted-foreground">{m.date || "N/A"}</TableCell>
-                    <TableCell className={`text-xs font-medium ${m.home_team === teamA ? "text-foreground" : "text-muted-foreground"}`}>
-                      {m.home_team}
+                  <TableRow
+                    key={m.id}
+                    className="hover:bg-muted/40 transition-colors"
+                  >
+                    <TableCell className="tabular-nums text-xs text-muted-foreground">
+                      {m.date || "N/A"}
+                    </TableCell>
+                    <TableCell
+                      className={`text-xs font-medium ${canonicalTeam(m.home_team) === canonicalTeam(teamA) ? "text-foreground" : "text-muted-foreground"}`}
+                    >
+                      <span className="flex items-center gap-1.5">
+                        <TeamLogo team={m.home_team} size={24} />
+                        <span className="truncate">{m.home_team}</span>
+                      </span>
                     </TableCell>
                     <TableCell className="text-center tabular-nums text-xs font-medium text-foreground">
                       {m.score || "N/A"}
                     </TableCell>
-                    <TableCell className={`text-xs font-medium ${m.away_team === teamA ? "text-foreground" : "text-muted-foreground"}`}>
-                      {m.away_team}
+                    <TableCell
+                      className={`text-xs font-medium ${canonicalTeam(m.away_team) === canonicalTeam(teamA) ? "text-foreground" : "text-muted-foreground"}`}
+                    >
+                      <span className="flex items-center gap-1.5">
+                        <TeamLogo team={m.away_team} size={24} />
+                        <span className="truncate">{m.away_team}</span>
+                      </span>
                     </TableCell>
                     <TableCell className="text-center text-xs font-medium uppercase">
                       <span
@@ -400,10 +518,10 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
                           m.result === "home"
                             ? "text-emerald-500"
                             : m.result === "draw"
-                            ? "text-amber-500"
-                            : m.result === "away"
-                            ? "text-primary"
-                            : "text-muted-foreground"
+                              ? "text-amber-500"
+                              : m.result === "away"
+                                ? "text-primary"
+                                : "text-muted-foreground"
                         }
                       >
                         {m.result || "N/A"}

@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
 import { getLogo } from "@/lib/logoRegistry";
 import { cn } from "@/lib/utils";
+import React, { useEffect, useState } from "react";
 
 export interface TeamLogoProps {
   /** Team name as displayed in the data (e.g. "Nott'm Forest", "Man City"). */
@@ -41,7 +41,17 @@ export const TeamLogo: React.FC<TeamLogoProps> = ({
   useEffect(() => setFailed(false), [src]);
 
   const showFallback = src === undefined || failed;
-  const badgeStyle: React.CSSProperties = { width: size, height: size, fontSize: Math.max(8, Math.round(size * 0.42)) };
+  const badgeStyle: React.CSSProperties = {
+    width: size,
+    height: size,
+    fontSize: Math.max(8, Math.round(size * 0.42)),
+  };
+  // the crest keeps its own box; only the plate's inset shrinks the artwork
+  const chipStyle: React.CSSProperties = {
+    width: size,
+    height: size,
+    padding: Math.max(1, Math.round(size * 0.08)),
+  };
 
   if (showFallback && fallback === "none") return null;
   if (showFallback) {
@@ -52,7 +62,7 @@ export const TeamLogo: React.FC<TeamLogoProps> = ({
         aria-label={team}
         className={cn(
           "inline-flex shrink-0 select-none items-center justify-center rounded bg-muted font-semibold text-muted-foreground",
-          className
+          className,
         )}
       >
         {initials(team)}
@@ -61,15 +71,25 @@ export const TeamLogo: React.FC<TeamLogoProps> = ({
   }
 
   return (
-    <img
-      src={src}
-      alt={team}
+    <span
+      style={chipStyle}
+      role="img"
+      aria-label={team}
       title={team}
-      width={size}
-      height={size}
-      loading="lazy"
-      onError={() => setFailed(true)}
-      className={cn("inline-block shrink-0 rounded object-contain", className)}
-    />
+      className={cn(
+        "inline-flex shrink-0 items-center justify-center rounded bg-muted dark:bg-white/30",
+        className,
+      )}
+    >
+      <img
+        src={src}
+        alt=""
+        width={size}
+        height={size}
+        loading="lazy"
+        onError={() => setFailed(true)}
+        className="size-full object-contain"
+      />
+    </span>
   );
 };

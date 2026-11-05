@@ -6,6 +6,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { SearchableSelect } from "@/components/ui/searchable-select";
+import { TeamLogo } from "@/components/TeamLogo";
 import type { SeasonMatch } from "../../lib/seasonTypes";
 import { getAllSeasonTeams } from "../../lib/seasonsAnalytics";
 import { predictSeasonMatch } from "../../lib/seasonsPredictor";
@@ -312,7 +313,10 @@ export const SeasonMatchPredictor: React.FC<SeasonMatchPredictorProps> = ({
             <Badge variant="outline" className="text-[10px] font-mono mb-1 text-emerald-500 border-emerald-500/30">
               Home Advantage
             </Badge>
-            <h3 className="text-2xl font-bold tracking-tight text-foreground">{prediction.homeTeam}</h3>
+            <h3 className="text-2xl font-bold tracking-tight text-foreground flex items-center justify-center gap-2 md:justify-start">
+              <TeamLogo team={prediction.homeTeam} size={28} />
+              <span className="truncate">{prediction.homeTeam}</span>
+            </h3>
             <div className="mt-1 flex items-baseline justify-center md:justify-start gap-1.5">
               <span className="text-xs text-muted-foreground">Expected Goals:</span>
               <span className="text-xl font-bold font-mono text-emerald-500">
@@ -353,7 +357,10 @@ export const SeasonMatchPredictor: React.FC<SeasonMatchPredictorProps> = ({
             <Badge variant="outline" className="text-[10px] font-mono mb-1 text-blue-500 border-blue-500/30">
               Away Side
             </Badge>
-            <h3 className="text-2xl font-bold tracking-tight text-foreground">{prediction.awayTeam}</h3>
+            <h3 className="text-2xl font-bold tracking-tight text-foreground flex items-center justify-center gap-2 md:justify-end">
+              <span className="truncate">{prediction.awayTeam}</span>
+              <TeamLogo team={prediction.awayTeam} size={28} />
+            </h3>
             <div className="mt-1 flex items-baseline justify-center md:justify-end gap-1.5">
               <span className="text-xs text-muted-foreground">Expected Goals:</span>
               <span className="text-xl font-bold font-mono text-blue-500">

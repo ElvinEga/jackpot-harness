@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/table";
 import type { SeasonMatch, BacktestSummary } from "../../lib/seasonTypes";
 import { runSeasonBacktest } from "../../lib/seasonsBacktest";
+import { TeamLogo } from "@/components/TeamLogo";
 
 interface SeasonBacktestViewProps {
   allMatches: SeasonMatch[];
@@ -266,7 +267,13 @@ export const SeasonBacktestView: React.FC<SeasonBacktestViewProps> = ({ allMatch
                     <TableRow key={i} className="hover:bg-muted/40 transition-colors">
                       <TableCell className="tabular-nums text-xs text-muted-foreground">{a.date}</TableCell>
                       <TableCell className="text-xs font-medium text-foreground">
-                        {a.homeTeam} <span className="text-muted-foreground font-normal">vs</span> {a.awayTeam}
+                        <span className="flex items-center gap-1.5">
+                          <TeamLogo team={a.homeTeam} size={16} />
+                          <span>{a.homeTeam}</span>
+                          <span className="text-muted-foreground font-normal">vs</span>
+                          <TeamLogo team={a.awayTeam} size={16} />
+                          <span>{a.awayTeam}</span>
+                        </span>
                       </TableCell>
                       <TableCell className="text-center tabular-nums text-xs font-medium text-foreground">
                         {a.actualScore}

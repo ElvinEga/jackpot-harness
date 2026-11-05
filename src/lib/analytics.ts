@@ -1,3 +1,4 @@
+import { canonicalTeam } from "./teamRegistry";
 import type { Match, Bookmaker } from "./types";
 
 export interface ResultDistribution {
@@ -68,22 +69,23 @@ export interface CoverageStat {
 
 /**
  * Deduplicates overlapping Mozzart extract batches on (date, home_team, away_team).
- * Other bookmakers remain intact.
+ * Other bookmakers remain intact. Team names are canonicalised first, so a batch
+ * that says "Arsenal FC" and one that says "Arsenal" are the same fixture.
  */
 export function deduplicateMatches(matches: Match[], dedupMozzartOnly = true): Match[] {
   const seenMozzart = new Set<string>();
   const seenAll = new Set<string>();
 
   return matches.filter((m) => {
+    const fixture = `${m.date || "nodate"}|${canonicalTeam(m.home_team)}|${canonicalTeam(m.away_team)}`;
     if (dedupMozzartOnly) {
       if (m.bookmaker === "mozzart") {
-        const key = `${m.date || "nodate"}|${m.home_team.toLowerCase()}|${m.away_team.toLowerCase()}`;
-        if (seenMozzart.has(key)) return false;
-        seenMozzart.add(key);
+        if (seenMozzart.has(fixture)) return false;
+        seenMozzart.add(fixture);
       }
       return true;
     } else {
-      const key = `${m.bookmaker}|${m.date || "nodate"}|${m.home_team.toLowerCase()}|${m.away_team.toLowerCase()}`;
+      const key = `${m.bookmaker}|${fixture}`;
       if (seenAll.has(key)) return false;
       seenAll.add(key);
       return true;

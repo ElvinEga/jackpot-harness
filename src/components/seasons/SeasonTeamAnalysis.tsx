@@ -15,6 +15,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { SearchableSelect } from "@/components/ui/searchable-select";
+import { TeamLogo } from "@/components/TeamLogo";
 import {
   Table,
   TableHeader,
@@ -25,6 +26,7 @@ import {
 } from "@/components/ui/table";
 import type { SeasonMatch } from "../../lib/seasonTypes";
 import { getAllSeasonTeams, computeTeamProfile } from "../../lib/seasonsAnalytics";
+import { canonicalTeam } from "../../lib/teamRegistry";
 
 interface SeasonTeamAnalysisProps {
   matches: SeasonMatch[];
@@ -66,6 +68,7 @@ export const SeasonTeamAnalysis: React.FC<SeasonTeamAnalysisProps> = ({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-xl bg-card border border-border">
         <div>
           <div className="flex items-center gap-3">
+            <TeamLogo team={profile.team} size={28} />
             <h2 className="text-xl font-bold tracking-tight text-foreground">
               {profile.team}
             </h2>
@@ -311,7 +314,7 @@ export const SeasonTeamAnalysis: React.FC<SeasonTeamAnalysisProps> = ({
             </TableHeader>
             <TableBody>
               {displayedRecent.map((m, i) => {
-                const isHome = m.home_team === activeTeam;
+                const isHome = canonicalTeam(m.home_team) === canonicalTeam(activeTeam);
                 const opp = isHome ? m.away_team : m.home_team;
                 const teamGoals = isHome ? m.home_goals : m.away_goals;
                 const oppGoals = isHome ? m.away_goals : m.home_goals;
@@ -340,7 +343,10 @@ export const SeasonTeamAnalysis: React.FC<SeasonTeamAnalysisProps> = ({
                       {isHome ? "Home" : "Away"}
                     </TableCell>
                     <TableCell className="text-xs font-medium text-foreground">
-                      vs {opp}
+                      <span className="flex items-center gap-1.5">
+                        <TeamLogo team={opp} size={16} />
+                        <span>vs {opp}</span>
+                      </span>
                     </TableCell>
                     <TableCell className="text-center tabular-nums text-xs font-medium text-foreground">
                       {m.score}

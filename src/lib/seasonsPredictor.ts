@@ -1,3 +1,4 @@
+import { canonicalTeam } from "./teamRegistry";
 import { isDecidedSeasonMatch } from "./seasonTypes";
 import type {
   SeasonMatch,
@@ -53,8 +54,11 @@ export function predictSeasonMatch(
   awayTeam: string,
   fixtureOdds?: { home?: number | null; draw?: number | null; away?: number | null }
 ): SeasonMatchPrediction {
-  const normHome = homeTeam.trim();
-  const normAway = awayTeam.trim();
+  // Canonical ids, so a club spelled two ways in the source is one team here.
+  const homeTeamId = canonicalTeam(homeTeam);
+  const awayTeamId = canonicalTeam(awayTeam);
+  const isHomeTeam = (team: string) => canonicalTeam(team) === homeTeamId;
+  const isAwayTeam = (team: string) => canonicalTeam(team) === awayTeamId;
 
   // An undecided fixture has no goals to learn from, so it joins no average below.
   const matches = allMatches.filter(isDecidedSeasonMatch);
@@ -73,7 +77,7 @@ export function predictSeasonMatch(
   const leagueAvgAwayGoals = Math.max(0.9, leagueTotalAwayGoals / totalMatches);
 
   // 1. Home Team performance (home games only)
-  const homeTeamHomeMatches = matches.filter((m) => m.home_team === normHome);
+  const homeTeamHomeMatches = matches.filter((m) => isHomeTeam(m.home_team));
   const homeCount = homeTeamHomeMatches.length || 1;
   let homeGF = 0;
   let homeGA = 0;
@@ -99,7 +103,7 @@ export function predictSeasonMatch(
   const homeDefense = (homeGA / homeCount) / leagueAvgAwayGoals;
 
   // 2. Away Team performance (away games only)
-  const awayTeamAwayMatches = matches.filter((m) => m.away_team === normAway);
+  const awayTeamAwayMatches = matches.filter((m) => isAwayTeam(m.away_team));
   const awayCount = awayTeamAwayMatches.length || 1;
   let awayGF = 0;
   let awayGA = 0;
@@ -126,18 +130,18 @@ export function predictSeasonMatch(
 
   // 3. Recent Form (last 10 matches all venues)
   const recentHomeMatches = matches
-    .filter((m) => m.home_team === normHome || m.away_team === normHome)
+    .filter((m) => isHomeTeam(m.home_team) || isHomeTeam(m.away_team))
     .sort((a, b) => b.date.localeCompare(a.date))
     .slice(0, 10);
 
   const recentAwayMatches = matches
-    .filter((m) => m.home_team === normAway || m.away_team === normAway)
+    .filter((m) => isAwayTeam(m.home_team) || isAwayTeam(m.away_team))
     .sort((a, b) => b.date.localeCompare(a.date))
     .slice(0, 10);
 
   let homeFormPts = 0;
   for (const m of recentHomeMatches) {
-    const isH = m.home_team === normHome;
+    const isH = isHomeTeam(m.home_team);
     if (isH && m.result === "home") homeFormPts += 3;
     else if (!isH && m.result === "away") homeFormPts += 3;
     else if (m.result === "draw") homeFormPts += 1;
@@ -146,7 +150,7 @@ export function predictSeasonMatch(
 
   let awayFormPts = 0;
   for (const m of recentAwayMatches) {
-    const isH = m.home_team === normAway;
+    const isH = isAwayTeam(m.home_team);
     if (isH && m.result === "home") awayFormPts += 3;
     else if (!isH && m.result === "away") awayFormPts += 3;
     else if (m.result === "draw") awayFormPts += 1;
@@ -156,15 +160,15 @@ export function predictSeasonMatch(
   // 4. Head-to-Head
   const h2hMatches = matches.filter(
     (m) =>
-      (m.home_team === normHome && m.away_team === normAway) ||
-      (m.home_team === normAway && m.away_team === normHome)
+      (isHomeTeam(m.home_team) && isAwayTeam(m.away_team)) ||
+      (isAwayTeam(m.home_team) && isHomeTeam(m.away_team))
   );
 
   let h2hHomeWins = 0;
   let h2hDraws = 0;
   let h2hAwayWins = 0;
   for (const m of h2hMatches) {
-    const homeIsH = m.home_team === normHome;
+    const homeIsH = isHomeTeam(m.home_team);
     if (m.result === "draw") {
       h2hDraws++;
     } else if ((homeIsH && m.result === "home") || (!homeIsH && m.result === "away")) {
@@ -294,7 +298,7 @@ export function predictSeasonMatch(
       awayValue: `${awayFormPpg.toFixed(2)} PPG`,
       favor: homeFormPpg > awayFormPpg + 0.3 ? "home" : awayFormPpg > homeFormPpg + 0.3 ? "away" : "draw",
       weight: 0.18,
-      description: `Last 10 matches: ${normHome} earned ${homeFormPts} pts, ${normAway} earned ${awayFormPts} pts.`,
+      description: `Last 10 matches: ${homeTeam} earned ${homeFormPts} pts, ${awayTeam} earned ${awayFormPts} pts.`,
     },
     {
       name: "venue_power",
@@ -303,7 +307,7 @@ export function predictSeasonMatch(
       awayValue: `${((awayWins / awayCount) * 100).toFixed(0)}% away`,
       favor: homeWins / homeCount > (awayWins / awayCount) + 0.15 ? "home" : "away",
       weight: 0.16,
-      description: `${normHome} won ${homeWins}/${homeCount} home games. ${normAway} won ${awayWins}/${awayCount} away.`,
+      description: `${homeTeam} won ${homeWins}/${homeCount} home games. ${awayTeam} won ${awayWins}/${awayCount} away.`,
     },
     {
       name: "expected_goals",
@@ -348,7 +352,7 @@ export function predictSeasonMatch(
       awayValue: `${h2hAwayWins} Wins`,
       favor: h2hHomeWins > h2hAwayWins ? "home" : h2hAwayWins > h2hHomeWins ? "away" : "draw",
       weight: 0.14,
-      description: `Historical meetings: ${h2hHomeWins} ${normHome} wins, ${h2hDraws} draws, ${h2hAwayWins} ${normAway} wins.`,
+      description: `Historical meetings: ${h2hHomeWins} ${homeTeam} wins, ${h2hDraws} draws, ${h2hAwayWins} ${awayTeam} wins.`,
     },
   ];
 
@@ -375,8 +379,8 @@ export function predictSeasonMatch(
   }
 
   return {
-    homeTeam: normHome,
-    awayTeam: normAway,
+    homeTeam,
+    awayTeam,
     homeProb,
     drawProb,
     awayProb,

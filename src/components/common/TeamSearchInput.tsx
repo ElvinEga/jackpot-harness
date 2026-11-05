@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect, useMemo } from "react";
-import { Search, X, Shield } from "lucide-react";
+import { Search, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { TeamLogo } from "@/components/TeamLogo";
+import { canonicalTeam } from "@/lib/teamRegistry";
 
 export interface TeamSearchInputProps {
   value: string;
@@ -55,8 +57,13 @@ export const TeamSearchInput: React.FC<TeamSearchInputProps> = ({
       return teams.slice(0, 20);
     }
 
-    // Match teams containing the query
-    const matched = teams.filter((t) => t.toLowerCase().includes(q));
+    // Match teams containing the query, plus the club the query names once
+    // canonicalised: the data lists one spelling per club, so typing the
+    // bookmaker's long form ("Liverpool FC") must still find "Liverpool".
+    const qId = canonicalTeam(q);
+    const matched = teams.filter(
+      (t) => t.toLowerCase().includes(q) || (!!qId && canonicalTeam(t) === qId)
+    );
 
     // Sort: 1) startsWith first, 2) appearance count if available, 3) alphabetical
     return matched
@@ -194,7 +201,7 @@ export const TeamSearchInput: React.FC<TeamSearchInputProps> = ({
               </div>
               {suggestions.map((team, idx) => {
                 const count = teamAppearances?.get(team);
-                const isSelected = team.toLowerCase() === value.trim().toLowerCase();
+                const isSelected = canonicalTeam(team) === canonicalTeam(value);
                 const isHighlighted = idx === highlightIndex;
 
                 return (
@@ -211,7 +218,7 @@ export const TeamSearchInput: React.FC<TeamSearchInputProps> = ({
                     }`}
                   >
                     <div className="flex items-center gap-2 truncate">
-                      <Shield className="h-3 w-3 text-primary/60 shrink-0" />
+                      <TeamLogo team={team} size={16} className="shrink-0" />
                       <span className="truncate">{renderHighlightedTeam(team)}</span>
                     </div>
 

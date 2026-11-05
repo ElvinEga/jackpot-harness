@@ -1,28 +1,27 @@
-import React, { useState, useMemo } from "react";
-import {
-  Trophy,
-  Target,
-  Goal,
-  Flame,
-  Shield,
-  Activity,
-  ChevronRight,
-  TrendingUp,
-  Percent,
-} from "lucide-react";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { TeamLogo } from "@/components/TeamLogo";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
   Table,
-  TableHeader,
   TableBody,
-  TableHead,
-  TableRow,
   TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
 } from "@/components/ui/table";
-import type { SeasonMatch, LeagueStandingRow } from "../../lib/seasonTypes";
-import { computeStandings, computeSeasonOverview } from "../../lib/seasonsAnalytics";
+import { ChevronRight, Flame, Goal, Trophy } from "lucide-react";
+import React, { useMemo, useState } from "react";
+import type { LeagueStandingRow, SeasonMatch } from "../../lib/seasonTypes";
+import {
+  computeSeasonOverview,
+  computeStandings,
+} from "../../lib/seasonsAnalytics";
 
 interface SeasonOverviewProps {
   matches: SeasonMatch[];
@@ -37,14 +36,19 @@ export const SeasonOverview: React.FC<SeasonOverviewProps> = ({
   leagueName,
   onSelectTeam,
 }) => {
-  const [standingsTab, setStandingsTab] = useState<"overall" | "home" | "away">("overall");
+  const [standingsTab, setStandingsTab] = useState<"overall" | "home" | "away">(
+    "overall",
+  );
 
   const resolvedLeagueName = useMemo(() => {
     return leagueName || matches[0]?.league?.replace(/.*–\s*/, "") || "League";
   }, [leagueName, matches]);
 
   const overview = useMemo(() => computeSeasonOverview(matches), [matches]);
-  const standings: LeagueStandingRow[] = useMemo(() => computeStandings(matches), [matches]);
+  const standings: LeagueStandingRow[] = useMemo(
+    () => computeStandings(matches),
+    [matches],
+  );
 
   // Sorted standings based on selected split (overall, home, away)
   const displayStandings = useMemo(() => {
@@ -154,20 +158,30 @@ export const SeasonOverview: React.FC<SeasonOverviewProps> = ({
       {/* Secondary Metrics Bar */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-muted/30 border border-border rounded-xl p-3 text-xs">
         <div className="flex items-center justify-between p-2 rounded-lg bg-card border border-border">
-          <span className="text-muted-foreground">Both Teams To Score (BTTS):</span>
-          <span className="font-mono font-bold text-foreground">{overview.bttsPct}%</span>
+          <span className="text-muted-foreground">
+            Both Teams To Score (BTTS):
+          </span>
+          <span className="font-mono font-bold text-foreground">
+            {overview.bttsPct}%
+          </span>
         </div>
         <div className="flex items-center justify-between p-2 rounded-lg bg-card border border-border">
           <span className="text-muted-foreground">Clean Sheets Rate:</span>
-          <span className="font-mono font-bold text-foreground">{overview.cleanSheetPct}%</span>
+          <span className="font-mono font-bold text-foreground">
+            {overview.cleanSheetPct}%
+          </span>
         </div>
         <div className="flex items-center justify-between p-2 rounded-lg bg-card border border-border">
           <span className="text-muted-foreground">Avg Shots / Match:</span>
-          <span className="font-mono font-bold text-foreground">{overview.avgShots}</span>
+          <span className="font-mono font-bold text-foreground">
+            {overview.avgShots}
+          </span>
         </div>
         <div className="flex items-center justify-between p-2 rounded-lg bg-card border border-border">
           <span className="text-muted-foreground">Avg Corners / Match:</span>
-          <span className="font-mono font-bold text-foreground">{overview.avgCorners}</span>
+          <span className="font-mono font-bold text-foreground">
+            {overview.avgCorners}
+          </span>
         </div>
       </div>
 
@@ -235,9 +249,13 @@ export const SeasonOverview: React.FC<SeasonOverviewProps> = ({
                 <TableHead className="text-center w-12 text-xs">GF</TableHead>
                 <TableHead className="text-center w-12 text-xs">GA</TableHead>
                 <TableHead className="text-center w-12 text-xs">GD</TableHead>
-                <TableHead className="text-center w-12 text-xs font-medium text-foreground">Pts</TableHead>
+                <TableHead className="text-center w-12 text-xs font-medium text-foreground">
+                  Pts
+                </TableHead>
                 {standingsTab === "overall" && (
-                  <TableHead className="text-center w-28 text-xs">Recent Form</TableHead>
+                  <TableHead className="text-center w-28 text-xs">
+                    Recent Form
+                  </TableHead>
                 )}
                 <TableHead className="text-right text-xs">Action</TableHead>
               </TableRow>
@@ -246,24 +264,52 @@ export const SeasonOverview: React.FC<SeasonOverviewProps> = ({
               {displayStandings.map((row) => {
                 const isHome = standingsTab === "home";
                 const isAway = standingsTab === "away";
-                const pld = isHome ? row.homePlayed : isAway ? row.awayPlayed : row.played;
-                const won = isHome ? row.homeWon : isAway ? row.awayWon : row.won;
-                const drawn = isHome ? row.homeDrawn : isAway ? row.awayDrawn : row.drawn;
-                const lost = isHome ? row.homeLost : isAway ? row.awayLost : row.lost;
-                const gf = isHome ? row.homeGF : isAway ? row.awayGF : row.goalsFor;
-                const ga = isHome ? row.homeGA : isAway ? row.awayGA : row.goalsAgainst;
+                const pld = isHome
+                  ? row.homePlayed
+                  : isAway
+                    ? row.awayPlayed
+                    : row.played;
+                const won = isHome
+                  ? row.homeWon
+                  : isAway
+                    ? row.awayWon
+                    : row.won;
+                const drawn = isHome
+                  ? row.homeDrawn
+                  : isAway
+                    ? row.awayDrawn
+                    : row.drawn;
+                const lost = isHome
+                  ? row.homeLost
+                  : isAway
+                    ? row.awayLost
+                    : row.lost;
+                const gf = isHome
+                  ? row.homeGF
+                  : isAway
+                    ? row.awayGF
+                    : row.goalsFor;
+                const ga = isHome
+                  ? row.homeGA
+                  : isAway
+                    ? row.awayGA
+                    : row.goalsAgainst;
                 const gd = gf - ga;
-                const pts = isHome ? row.homePoints : isAway ? row.awayPoints : row.points;
+                const pts = isHome
+                  ? row.homePoints
+                  : isAway
+                    ? row.awayPoints
+                    : row.points;
 
                 // Qualification styling
                 const rankColor =
                   row.rank <= 4
                     ? "text-primary"
                     : row.rank === 5
-                    ? "text-amber-500"
-                    : row.rank >= 18
-                    ? "text-destructive"
-                    : "text-muted-foreground";
+                      ? "text-amber-500"
+                      : row.rank >= 18
+                        ? "text-destructive"
+                        : "text-muted-foreground";
 
                 return (
                   <TableRow
@@ -272,14 +318,21 @@ export const SeasonOverview: React.FC<SeasonOverviewProps> = ({
                     onClick={() => onSelectTeam && onSelectTeam(row.team)}
                   >
                     <TableCell className="text-center">
-                      <span className={`tabular-nums text-xs font-medium ${rankColor}`}>
+                      <span
+                        className={`tabular-nums text-xs font-medium ${rankColor}`}
+                      >
                         {row.rank}
                       </span>
                     </TableCell>
                     <TableCell className="font-medium text-xs text-foreground group-hover:text-primary transition-colors">
-                      {row.team}
+                      <span className="flex items-center gap-2">
+                        <TeamLogo team={row.team} size={24} />
+                        {row.team}
+                      </span>
                     </TableCell>
-                    <TableCell className="text-center tabular-nums text-xs text-muted-foreground">{pld}</TableCell>
+                    <TableCell className="text-center tabular-nums text-xs text-muted-foreground">
+                      {pld}
+                    </TableCell>
                     <TableCell className="text-center tabular-nums text-xs font-medium text-emerald-500">
                       {won}
                     </TableCell>
@@ -289,10 +342,22 @@ export const SeasonOverview: React.FC<SeasonOverviewProps> = ({
                     <TableCell className="text-center tabular-nums text-xs font-medium text-destructive">
                       {lost}
                     </TableCell>
-                    <TableCell className="text-center tabular-nums text-xs text-muted-foreground">{gf}</TableCell>
-                    <TableCell className="text-center tabular-nums text-xs text-muted-foreground">{ga}</TableCell>
+                    <TableCell className="text-center tabular-nums text-xs text-muted-foreground">
+                      {gf}
+                    </TableCell>
+                    <TableCell className="text-center tabular-nums text-xs text-muted-foreground">
+                      {ga}
+                    </TableCell>
                     <TableCell className="text-center tabular-nums text-xs font-medium">
-                      <span className={gd > 0 ? "text-emerald-500" : gd < 0 ? "text-destructive" : "text-muted-foreground"}>
+                      <span
+                        className={
+                          gd > 0
+                            ? "text-emerald-500"
+                            : gd < 0
+                              ? "text-destructive"
+                              : "text-muted-foreground"
+                        }
+                      >
                         {gd > 0 ? `+${gd}` : gd}
                       </span>
                     </TableCell>
@@ -309,8 +374,8 @@ export const SeasonOverview: React.FC<SeasonOverviewProps> = ({
                                 res === "W"
                                   ? "text-emerald-500"
                                   : res === "D"
-                                  ? "text-amber-500"
-                                  : "text-destructive"
+                                    ? "text-amber-500"
+                                    : "text-destructive"
                               }`}
                             >
                               {res}

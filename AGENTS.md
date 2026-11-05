@@ -3,7 +3,7 @@
 Betting jackpot dataset: historical football (soccer) jackpot events scraped from three
 Kenyan/European bookmakers — Betika, Mozzart and SportPesa, plus per-season league fixtures from
 Football-Data.co.uk under `data/seasons/`. The repo is data first: raw CSVs, a normalised JSON
-mirror under `data/processed/`, and two generator scripts in `src/`. A React + Vite dashboard SPA
+mirror under `data/processed/`, and five generator scripts in `src/`. A React + Vite dashboard SPA
 in `src/` consumes the processed JSON.
 
 ## Repository layout
@@ -33,9 +33,13 @@ data/seasons/ligi_1/          6 CSVs (same seasons) — division code T1 (Turkey
 data/seasons/ethniki_katigoria/ 6 CSVs (same seasons) — division code G1 (Greece), 240/233/236
 data/processed/      JSON mirror of the raw CSVs, same bookmaker folders and filenames
 data/processed/seasons/<competition>/  one JSON per season + index.json
+data/processed/teams/  canonical.json (name -> club id) + review.csv (ambiguous ids)
+public/logos/<folder>/  320 club crest SVGs in 18 folders; the folder says where the crest came from, not the league
 src/build_json.py    regenerates data/processed from data/raw
 src/build_seasons.py regenerates data/processed/seasons from data/seasons
 src/fetch_seasons.py refreshes data/seasons from football-data.co.uk
+src/build_logos.py   renames public/logos/*.svg to club keys and emits src/lib/logoRegistry.ts
+src/build_teams.py   collapses every team spelling onto one club id: src/lib/teamRegistry.ts + data/processed/teams/
 ```
 
 `data/raw/` holds the scrape output as collected and is **read-only**: never edit these files in
@@ -204,6 +208,122 @@ What the generator does:
   2022-01-10 and Lecco v Catanzaro, 2023-09-03), and thirteen rows missing a single `handicap` or
   `handicap_close`. `bundesliga_1`, `bundesliga_2`, `le_championnat`, `liga_1`, `ligue_2`,
   `efl_championship`, `sco_premier_league` and `sco_championship` have no blank odds cell at all.
+
+## Team identity (canonical ids and crests)
+
+The four sources name one club differently: SportPesa writes `Arsenal FC`, `Liverpool FC`,
+`Elche CF`; betika and mozzart mostly write the short form and sometimes prefix a ticket number
+(`#10 – Ferencvaros`); the season files always write it short. Comparing raw strings therefore splits
+a club in two: of the 37 jackpot rows for Arsenal v Liverpool, 31 spell both sides short and 6 spell
+both `… FC`, and 2023-04-09, 2024-02-04 and 2024-10-27 appear in both schemes — 27 fixtures read as
+strings, 24 read as clubs, and the two most recent meetings (2025-05-11, 2026-11-02) exist only in
+the long form, so an all-string H2H page for `Arsenal` never sees them. Form, H2H and predictions
+analyse half a club, and `getLogo` returns nothing for the long form. One generated id per real-world
+club sits under every comparison.
+
+`uv run python src/build_teams.py` (also `--dry-run`, report only) reads the processed data — the
+three jackpot mirrors and all 102 season JSONs, `index.json` and `data/processed/teams/` skipped —
+and writes three artifacts:
+
+```
+src/lib/teamRegistry.ts              -- canonicalTeam(), for the browser bundle
+data/processed/teams/canonical.json  -- the same variant -> id map, for offline analysis
+data/processed/teams/review.csv      -- ids the data cannot name one club for
+```
+
+Measured on the current data: 146,864 name occurrences and 5,022 distinct normalised spellings
+collapse to 3,820 ids; 1,394 spellings are remapped and those carry 31,460 occurrences. Jackpot and
+season vocabulary are 5,227 and 418 raw names (86,166 and 60,698 occurrences) and the season side is
+already one-name-per-club, so the map mostly serves the bookmakers. The artifacts are generated,
+never hand-edited — change a rule in the script and re-run.
+
+How an id is derived, in order:
+- `slug()` — the ticket-prefix strip and `snake()` from `src/build_logos.py` (lowercase, accents
+  folded, non-ASCII dropped, non-alphanumerics to `_`). Every name-to-id lookup in the script and in
+  `canonicalTeam` goes through this one function, never `snake()` alone: `#15 – Malmo FF` otherwise
+  minted `15_malmo_ff` as a club of its own, and a phantom single-row id looks exactly like a short
+  name worth folding into a fuller spelling.
+- A merge edge: `MANUAL_ALIASES` (the logo rename table, imported so crest keys and club ids speak one
+  vocabulary), then `EXTRA_MERGES` in `src/build_teams.py` for the irregular pairs — abbreviations,
+  nicknames, legal names (`paris_saint_germain` → `psg`, `manchester_utd` → `man_united`,
+  `olympiacos_piraeus` → `olympiacos`).
+- Otherwise `strip_tokens()` removes generic club words at the **outer ends only, never the last
+  token**: `cd_lugo` → `lugo`, `as_roma` → `roma`. `LEAD_TOKENS` is broad; `TAIL_TOKENS` is
+  deliberately narrow because a trailing word often names a *different* club. So `everton_cd` keeps
+  its own id (Chile's Everton, not England's `everton`) and Scotland's two Dundees stay apart because
+  the edge says `dundee_united` → `dundee_utd` rather than stripping to `dundee`. `atl` is in neither
+  list — "Atl." is the identity word — so `atl_nacional` merges to `atletico_nacional` (Medellín) and
+  never to Portugal's `nacional`.
+- Chains resolve to a fixed point (`1_fc_cologne` → `cologne` → `koln`).
+- **`unique_superset_merges()`** then folds the short spellings the tables above cannot express —
+  `aachen` into `alemannia_aachen`, `hammarby` into the Allsvenskan club's fuller name — using the
+  fixtures themselves instead of letters. A short name moves only into a fuller one that (a) plays in
+  at least one of its leagues, (b) never appears as its opponent, (c) shares at least one opponent
+  with it, and (d) differs by tokens that are not in `OTHER_TEAM_TOKENS` (women's, reserve, U21 and
+  B-team words, which mark a *different* squad). Exactly one candidate can satisfy all four; two or
+  more, or candidates that share no fixture with anything, go to `review.csv` with the owners named,
+  because a guess here invents a meeting between two real clubs. 495 names fold on the current data.
+  The fold direction is fixed by `CREST_KEYS` (the 304 logo keys): a fold never moves a club off the
+  spelling that owns its file, so `fsv_mainz` → `mainz` and `bayer_leverkusen` → `leverkusen`, never
+  the reverse. That reversal rewrites edges after the chain has already been walked, so the targets
+  collapse a second time and the group landing on each target is then checked against itself: two
+  names that played each other (`genoa` and `sampdoria`, both arriving on `sampdoria_genoa`) make the
+  whole target unsafe and drop every edge into it. `KEEP_DISTINCT` is the hand-adjudicated veto for
+  pairs the evidence wrongly unites — `guinea` / `equatorial_guinea` (both national teams), `minsk` /
+  `dinamo_minsk`, the two Hapoel K.S. squads, and `gaziantep` / `gazisehir_gaziantep` — and each of
+  those four is now unreachable from the fold rules anyway, so the list costs nothing but keeps the
+  answer written down.
+
+Three guards keep a merge from inventing fixtures between real clubs:
+
+- **`guard_season_injectivity()`** refuses any id that ends up holding two different season-file
+  spellings; the season vocabulary is the one place where two spellings are two clubs unless proven
+  otherwise, so it is the cheapest hard stop. Refusing restores each spelling to its own id, which
+  under-merges — the safe direction. `ALLOWED_SEASON_MERGES = {"mechelen", "sheffield_united"}` are
+  the two exceptions the source itself creates: `jupiter_league` 2026-2027 has one row as
+  `KV Mechelen`, `efl_championship` 2026-2027 one as `Sheffield Utd`. The script prints refusals;
+  there are currently none.
+- **The self-match invariant** is the acceptance gate: `id_evidence()` records, per id, the fixtures it
+  appears in, and any id that ends up on both sides of one row is a merge that invented a meeting. The
+  report must print `0 ids appear against themselves` — every rule above is re-run until it does, and a
+  non-zero count means undo the newest edge rather than widening a strip list.
+- **`review.csv`** (515 rows) lists what the data cannot name one club for, in four kinds:
+  `rows in 2+ countries` (5), `short name, 2+ confirmed owners` (45), `short name, nothing faces the
+  owner` (461) and `kept apart by hand` (4). `fixable` is `no` for a spelling shared across countries
+  or a pair decided by hand (9 rows) and `by hand` for the fold candidates the evidence can rank but
+  not prove — those name their suggested owners in `variants`, so promoting one is a one-line
+  `EXTRA_MERGES` edge; there is no `yes` row, because every droppable edge is now caught by the
+  guards above. The five country rows are `arsenal` (England 214 / Belarus 3),
+  `athletic` (`Athletic Club`: Spain 37 / Brazil 9), `river_plate` (Argentina 2 / Uruguay 2 /
+  Paraguay 1), `defensor_sporting` (Uruguay 4 / Colombia 1), `liverpool_montevideo` (Uruguay 3 /
+  Colombia 1). They stay merged and carry the cost: no crest for `athletic` (Bilbao's file is
+  `athletic_bilbao`, and claiming it would claim Mineiro's rows too), and no cross-country aggregate
+  keyed on them.
+
+What reads the id: `src/lib/teams.ts` (appearances, H2H, form, the team lists), the mozzart extract
+dedupe in `src/lib/data.ts` and the analysis dedupe in `src/lib/analytics.ts` (30,537 distinct mozzart
+fixtures become 30,523 once "Arsenal" and "Arsenal FC" are one club), `src/lib/seasonsAnalytics.ts`
+and `src/lib/seasonsPredictor.ts`, the team filters in the seasons dashboard and the versus/actions
+modals, and `getLogo`. Display strings stay raw: lists and standings show each id's most frequent
+spelling in the current selection. **Never compare raw team strings — canonicalise both sides.**
+
+Crests live in `public/logos/<folder>/<key>.svg`, 320 files in 18 folders; the folder records where a
+crest was sourced, not who plays there (`celta_vigo` and `real_sociedad` each appear in both
+`laliga_primera/` and `laliga_segunda/`, so the registry holds 304 keys).
+`uv run python src/build_logos.py` renames the files from its `MAPPING` and emits
+`src/lib/logoRegistry.ts` from the same table, so files and registry cannot drift; `MAPPING` also
+exports `snake` and `MANUAL_ALIASES`, which `build_teams.py` imports. `getLogo()` order: `normalizeTeam`
+→ `TEAM_ALIASES` → `TEAM_LOGOS`, then `canonicalTeam` and that again — coverage 45.4% of jackpot name
+occurrences, up from 36.9% on name alone: 315 spellings (6,188 rows — `Manchester Utd` 212,
+`Atl. Madrid` 186, `AS Roma` 158) resolve only through the canonical step. Season coverage is 82.7%
+before and after it, because that vocabulary was always the short form; 304 of the 416 season clubs
+have a file and all 304 keys are used, while the jackpot data reaches 280 of them across 3,820 ids.
+`src/components/TeamLogo.tsx` sits each crest on a light chip (`bg-muted dark:bg-white/30`) so dark
+crests stay readable on the dark card, and falls back to broadcast initials (`Nott'm Forest` → NFO)
+when there is no file *or the file fails to decode*. A crest that is valid XML but uses an undeclared
+namespace prefix fails silently in `<img>`: `laliga_primera/elche.svg` carried `<sodipodi:namedview>`
+without its `xmlns:sodipodi` declaration — if `getLogo()` returns a path but the row shows initials,
+load the SVG as an image and read the parser error.
 
 ## Data quirks (verify before computing anything)
 

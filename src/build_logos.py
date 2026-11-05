@@ -34,10 +34,10 @@ MAPPING: dict[str, str] = {
     "bundesliga_1/05-SV-Elversberg-v2021": "elversberg",
     "bundesliga_1/06-Eintracht-Frankfurt-v1998": "eintracht_frankfurt",
     "bundesliga_1/07-SC-Freiburg-v2008": "freiburg",
-    "bundesliga_1/08-Hamburger-SV-v1978": "hamburg",
+    "bundesliga_1/08-Hamburger-SV-v1978": "hamburger_sv",
     "bundesliga_1/09-TSG-Hoffenheim-v2014": "hoffenheim",
     "bundesliga_1/10-FC-Koln-v1993": "koln",
-    "bundesliga_1/11-RB-Leipzig-v2020": "rb_leipzig",
+    "bundesliga_1/11-RB-Leipzig-v2020": "leipzig",
     "bundesliga_1/12-Bayer-04-Leverkusen-v2006": "leverkusen",
     "bundesliga_1/13-FSV-Mainz-v2018": "mainz",
     "bundesliga_1/14-Borussia-Monchengladbach-v1999": "gladbach",
@@ -65,25 +65,25 @@ MAPPING: dict[str, str] = {
     "bundesliga_2/17-FC-Heidenheim-v2007": "heidenheim",
     "bundesliga_2/18-1-FC-Nurnberg-v2011": "nurnberg",
     # --- championship -------------------------------------------------------
-    "championship/01-birmingham-city-football-club-v1976": "birmingham_city",
-    "championship/02-blackburn-rovers-football-club-v1989": "blackburn_rovers",
-    "championship/03-bolton-wanderers-football-club-v2013": "bolton_wanderers",
+    "championship/01-birmingham-city-football-club-v1976": "birmingham",
+    "championship/02-blackburn-rovers-football-club-v1989": "blackburn",
+    "championship/03-bolton-wanderers-football-club-v2013": "bolton",
     "championship/04-bristol-city-football-club-v2019": "bristol_city",
     "championship/05-Burnley-FC-v2023": "burnley",
-    "championship/06-cardiff-city-football-club-v2015": "cardiff_city",
+    "championship/06-cardiff-city-football-club-v2015": "cardiff",
     "championship/07-charlton-athletic-football-club-v1980": "charlton",
-    "championship/08-derby-county-football-club-v2012": "derby_county",
-    "championship/09-lincoln-city-football-club-v2024": "lincoln_city",
+    "championship/08-derby-county-football-club-v2012": "derby",
+    "championship/09-lincoln-city-football-club-v2024": "lincoln",
     "championship/10-middlesbrough-football-club-v2026": "middlesbrough",
     "championship/11-millwall-football-club-v2014": "millwall",
-    "championship/12-norwich-city-football-club-v2022": "norwich_city",
+    "championship/12-norwich-city-football-club-v2022": "norwich",
     "championship/13-portsmouth-football-club-v2018": "portsmouth",
     "championship/14-preston-north-end-football-club-v2014": "preston",
     "championship/15-queens-park-rangers-football-club-v2016": "qpr",
     "championship/16-sheffield-united-football-club-v1999": "sheffield_united",
     "championship/17-Southampton-Football-Club-v1995": "southampton",
-    "championship/18-stoke-city-football-club-v2026": "stoke_city",
-    "championship/19-swansea-city-association-football-club-v2023": "swansea_city",
+    "championship/18-stoke-city-football-club-v2026": "stoke",
+    "championship/19-swansea-city-association-football-club-v2023": "swansea",
     "championship/20-watford-football-club-v2001": "watford",
     "championship/21-west-bromwich-albion-football-club-v2008": "west_brom",
     "championship/22-West-Ham-United-Football-Club-v2016": "west_ham",
@@ -92,7 +92,7 @@ MAPPING: dict[str, str] = {
     # --- eredivisie ---------------------------------------------------------
     "eredivisie/01-alles-door-oefening-den-haag-v2004": "den_haag",
     "eredivisie/02-amsterdamsche-football-club-ajax-v2025": "ajax",
-    "eredivisie/03-alkmaar-zaanstreek-v1986": "az_alkmaar",
+    "eredivisie/03-alkmaar-zaanstreek-v1986": "alkmaar",
     "eredivisie/04-sportclub-cambuur-v0000": "cambuur",
     "eredivisie/05-stichting-betaald-voetbal-excelsior-v2021": "excelsior",
     "eredivisie/06-feyenoord-rotterdam-v2024": "feyenoord",
@@ -113,7 +113,7 @@ MAPPING: dict[str, str] = {
     "laliga_primera/02-Athletic-Club-Bilbao-v2008": "athletic_bilbao",
     "laliga_primera/03-Atletico-Madrid-v2024": "atletico_madrid",
     "laliga_primera/04-FC-Barcelona-v2002": "barcelona",
-    "laliga_primera/05-RC-Celta-de-Vigo-v2010": "celta",
+    "laliga_primera/05-RC-Celta-de-Vigo-v2010": "celta_vigo",
     "laliga_primera/06-real-club-deportivo-de-la-corua-v2026": "la_coruna",
     "laliga_primera/07-Elche-CF-v2012": "elche",
     "laliga_primera/08-RCD-Espanyol-v2005": "espanyol",
@@ -136,7 +136,7 @@ MAPPING: dict[str, str] = {
     "laliga_segunda/04-Burgos-CF-v1994": "burgos",
     "laliga_segunda/05-Cadiz-CF-v2009": "cadiz",
     "laliga_segunda/06-CD-Castellon-v2015": "castellon",
-    "laliga_segunda/07-RC-Celta-de-Vigo-v2010": "celta",
+    "laliga_segunda/07-RC-Celta-de-Vigo-v2010": "celta_vigo",
     "laliga_segunda/08-AD-Ceuta-FC-v2013": "ceuta",
     "laliga_segunda/09-Cordoba-CF-v2012": "cordoba",
     "laliga_segunda/10-SD-Eibar-v2015": "eibar",
@@ -197,13 +197,13 @@ MAPPING: dict[str, str] = {
     "premier_league/04-Brentford-Football-Club-v2017": "brentford",
     "premier_league/05-Brighton-Hove-Albion-v2011": "brighton",
     "premier_league/06-chelsea-football-club-v2026": "chelsea",
-    "premier_league/07-coventry-city-football-club-v2012": "coventry_city",
+    "premier_league/07-coventry-city-football-club-v2012": "coventry",
     "premier_league/08-Crystal-Palace-Football-Club-v2022": "crystal_palace",
     "premier_league/09-Everton-Football-Club-v2014": "everton",
     "premier_league/10-Fulham-Football-Club-v2001": "fulham",
-    "premier_league/11-hull-city-association-football-club-v2014": "hull_city",
-    "premier_league/12-Ipswich-Town-Football-Club-v1995": "ipswich_town",
-    "premier_league/13-Leeds-United-v2002": "leeds_united",
+    "premier_league/11-hull-city-association-football-club-v2014": "hull",
+    "premier_league/12-Ipswich-Town-Football-Club-v1995": "ipswich",
+    "premier_league/13-Leeds-United-v2002": "leeds",
     "premier_league/14-Liverpool-Football-Club-v2024-minor": "liverpool",
     "premier_league/15-Manchester-City-v2016": "man_city",
     "premier_league/16-Manchester-United-Football-Club-v1998": "man_united",
@@ -212,7 +212,7 @@ MAPPING: dict[str, str] = {
     "premier_league/19-Sunderland-AFC-v1997": "sunderland",
     "premier_league/20-Tottenham-Hotspur-Football-Club-v2024": "tottenham",
     # --- primeira_liga ------------------------------------------------------
-    "primeira_liga/01-academico-de-viseu-futebol-clube-v0000": "viseu",
+    "primeira_liga/01-academico-de-viseu-futebol-clube-v0000": "academico_viseu",
     "primeira_liga/02-futebol-clube-de-alverca-v2005": "alverca",
     "primeira_liga/03-futebol-clube-de-arouca-v2006": "arouca",
     "primeira_liga/04-Sport-Lisboa-e-Benfica-v1999": "benfica",
@@ -229,7 +229,7 @@ MAPPING: dict[str, str] = {
     "primeira_liga/15-rio-ave-futebol-clube-v1989": "rio_ave",
     "primeira_liga/16-clube-desportivo-santa-clara-v2024": "santa_clara",
     "primeira_liga/17-sporting-clube-de-portugal-v2026": "sporting",
-    "primeira_liga/18-vitoria-sport-clube-v1999": "vitoria",
+    "primeira_liga/18-vitoria-sport-clube-v1999": "guimaraes",
     # --- pro_league ---------------------------------------------------------
     "pro_league/01-koninklijke-racing-club-genk-v2026": "genk",
     "pro_league/02-royal-sporting-club-anderlecht-v2024": "anderlecht",
@@ -244,10 +244,10 @@ MAPPING: dict[str, str] = {
     "pro_league/11-lommel-sportkring-v2022": "lommel",
     "pro_league/12-yellow-red-koninklijke-voetbalclub-mechelen-v2024": "mechelen",
     "pro_league/13-koninklijke-sint-truidense-voetbalvereniging-v0000": "st_truiden",
-    "pro_league/14-royal-standard-de-liege-v2024": "standard_liege",
+    "pro_league/14-royal-standard-de-liege-v2024": "standard",
     "pro_league/15-royale-union-saint-gilloise-v2015": "union_sg",
-    "pro_league/16-sportvereniging-zulte-waregem-v2021": "zulte_waregem",
-    "pro_league/17-oud-heverlee-leuven-v2023": "leuven",
+    "pro_league/16-sportvereniging-zulte-waregem-v2021": "waregem",
+    "pro_league/17-oud-heverlee-leuven-v2023": "ohl",
     "pro_league/18-koninklijke-voetbal-club-westerlo-v2019": "westerlo",
     # --- serie_a ------------------------------------------------------------
     "serie_a/01-atalanta-bergamasca-calcio-v2026": "atalanta",
@@ -295,7 +295,7 @@ MAPPING: dict[str, str] = {
     "super_league/01-aek-football-club-v2014": "aek",
     "super_league/02-aris-thessaloniki-football-club-v0000": "aris",
     "super_league/03-panathinaikos-football-club-v1995": "panathinaikos",
-    "super_league/04-olympiacos-football-club-v2003": "olympiakos",
+    "super_league/04-olympiacos-football-club-v2003": "olympiacos",
     "super_league/05-athlitiki-enosi-kifisia-football-club-v2024": "kifisia",
     "super_league/06-ofi-football-club-v2020": "ofi",
     "super_league/07-kalamata-football-club-v2022": "kalamata",
@@ -325,6 +325,49 @@ MAPPING: dict[str, str] = {
     "super_lig/16-caykur-rize-spor-kulubu-v1991": "rizespor",
     "super_lig/17-samsunspor-futbol-kulubu-v0000": "samsunspor",
     "super_lig/18-trabzonspor-kulubu-v2022": "trabzonspor",
+    # --- sco_championship (Scotland) ----------------------------------------
+    # Keys are the canonical ids in src/lib/teamRegistry.ts (see build_teams.py),
+    # not the literal file stem: getLogo resolves through canonicalTeam.
+    "sco_championship/scotland_arbroath.football-logos.cc": "arbroath",
+    "sco_championship/scotland_ayr.football-logos.cc": "ayr_utd",
+    "sco_championship/scotland_dunfermline.football-logos.cc": "dunfermline",
+    "sco_championship/scotland_inverness.football-logos.cc": "inverness_caledonian_thistle",
+    "sco_championship/scotland_livingston.football-logos.cc": "livingston",
+    "sco_championship/scotland_morton.football-logos.cc": "morton",
+    "sco_championship/scotland_partick.football-logos.cc": "partick",
+    "sco_championship/scotland_queen-s-park.football-logos.cc": "queens_park",
+    "sco_championship/scotland_raith.football-logos.cc": "raith",
+    "sco_championship/scotland_stenhousemuir.football-logos.cc": "stenhousemuir",
+    # --- sco_premier_league (Scotland) --------------------------------------
+    "sco_premier_league/scotland_aberdeen.football-logos.cc": "aberdeen",
+    "sco_premier_league/scotland_celtic.football-logos.cc": "celtic_glasgow",
+    "sco_premier_league/scotland_dundee-united.football-logos.cc": "dundee_utd",
+    "sco_premier_league/scotland_dundee.football-logos.cc": "dundee",
+    "sco_premier_league/scotland_falkirk.football-logos.cc": "falkirk",
+    "sco_premier_league/scotland_hearts.football-logos.cc": "hearts",
+    "sco_premier_league/scotland_hibernian.football-logos.cc": "hibernian",
+    "sco_premier_league/scotland_kilmarnock.football-logos.cc": "kilmarnock",
+    "sco_premier_league/scotland_motherwell.football-logos.cc": "motherwell",
+    "sco_premier_league/scotland_rangers.football-logos.cc": "glasgow_rangers",
+    "sco_premier_league/scotland_st-johnstone.football-logos.cc": "st_johnstone",
+    "sco_premier_league/scotland_st-mirren.football-logos.cc": "st_mirren",
+    # --- ethniki_katigoria (Greece) -----------------------------------------
+    # Same clubs as super_league/; the folder records provenance, and duplicate
+    # keys are allowed (celta_vigo, real_sociedad live in two folders too).
+    "ethniki_katigoria/greece_aek-athens.football-logos.cc": "aek",
+    "ethniki_katigoria/greece_aris-thessaloniki.football-logos.cc": "aris",
+    "ethniki_katigoria/greece_asteras.football-logos.cc": "asteras_tripolis",
+    "ethniki_katigoria/greece_atromitos.football-logos.cc": "atromitos",
+    "ethniki_katigoria/greece_iraklis-thessaloniki.football-logos.cc": "iraklis",
+    "ethniki_katigoria/greece_kalamata.football-logos.cc": "kalamata",
+    "ethniki_katigoria/greece_kifisia.football-logos.cc": "kifisia",
+    "ethniki_katigoria/greece_levadiakos.football-logos.cc": "levadiakos",
+    "ethniki_katigoria/greece_ofi.football-logos.cc": "ofi",
+    "ethniki_katigoria/greece_olympiacos.football-logos.cc": "olympiacos",
+    "ethniki_katigoria/greece_panathinaikos.football-logos.cc": "panathinaikos",
+    "ethniki_katigoria/greece_panetolikos.football-logos.cc": "panetolikos",
+    "ethniki_katigoria/greece_paok.football-logos.cc": "paok",
+    "ethniki_katigoria/greece_volos.football-logos.cc": "volos",
 }
 
 # snake_case(data team name) -> MAPPING value, for names the automatic rules
@@ -340,6 +383,7 @@ MANUAL_ALIASES: dict[str, str] = {
     "sociedad": "real_sociedad",
     "vallecano": "rayo_vallecano",
     "sp_gijon": "sporting_gijon",
+    "espanol": "espanyol",
     "for_sittard": "fortuna_sittard",
     "psv_eindhoven": "psv",
     "bayern_munich": "bayern",
@@ -349,18 +393,21 @@ MANUAL_ALIASES: dict[str, str] = {
     "schalke_04": "schalke",
     "sp_lisbon": "sporting",
     "sp_braga": "braga",
-    "academico_viseu": "viseu",
-    "guimaraes": "vitoria",
     "kv_mechelen": "mechelen",
     "lommel_sk": "lommel",
     "st_gilloise": "union_sg",
-    "oud_heverlee_leuven": "leuven",
+    "oud_heverlee_leuven": "ohl",
     "raal_la_louviere": "la_louviere",
     "ofi_crete": "ofi",
     "volos_nfc": "volos",
     "levadeiakos": "levadiakos",
+    "olympiakos": "olympiacos",
     "buyuksehyr": "basaksehir",
     "goztep": "goztepe",
+    # season/jackpot spellings whose snake form is the historical MAPPING key
+    "hamburg": "hamburger_sv",
+    "rb_leipzig": "leipzig",
+    "az_alkmaar": "alkmaar",
 }
 
 
@@ -385,7 +432,11 @@ def rename_files(dry_run: bool) -> list[str]:
         seen_targets.setdefault(key, rel)
         old_path = LOGOS_DIR / folder / f"{old_stem}.svg"
         new_path = LOGOS_DIR / folder / f"{key}.svg"
-        if old_path.exists():
+        if old_path == new_path:
+            if not old_path.exists():
+                raise SystemExit(f"missing: {old_path}")
+            report.append(f"kept     {folder}/{key}.svg (keys file name)")
+        elif old_path.exists():
             if new_path.exists():
                 raise SystemExit(f"collision: {old_path} and {new_path} both exist")
             if not dry_run:
@@ -488,6 +539,7 @@ def render_registry(logos: dict[str, str], aliases: dict[str, str]) -> str:
     alias_lines = "\n".join(f'  "{name}": "{target}",' for name, target in sorted(aliases.items()))
     return f"""// AUTO-GENERATED by src/build_logos.py -- do not edit by hand.
 // {len(logos)} team logos under public/logos/, {len(aliases)} data-name aliases.
+import {{ canonicalTeam }} from "./teamRegistry";
 
 /** Logo key -> static path under public/. */
 export const TEAM_LOGOS: Record<string, string> = {{
@@ -499,9 +551,11 @@ const TEAM_ALIASES: Record<string, string> = {{
 {alias_lines}
 }};
 
-/** Same normalisation as snake() in src/build_logos.py. */
+/** Same normalisation as snake() in src/build_logos.py.
+ * Ticket prefixes ("#10 – Ferencvaros") are stripped first. */
 function normalizeTeam(value: string): string {{
   return value
+    .replace(/^#\\d+\\s*[–—-]\\s*/, "")
     .replace(/ß/g, "ss")
     .normalize("NFKD")
     .replace(/[\\u0300-\\u036f]/g, "")
@@ -515,15 +569,24 @@ function normalizeTeam(value: string): string {{
 export function getLogo(team: string): string | undefined {{
   const key = normalizeTeam(team);
   if (!key) return undefined;
-  return TEAM_LOGOS[TEAM_ALIASES[key] ?? key];
+  const viaKey = TEAM_ALIASES[key] ?? key;
+  if (TEAM_LOGOS[viaKey]) return TEAM_LOGOS[viaKey];
+  // Bookmaker long forms: "Arsenal FC", "Elche CF" canonicalise to the bare
+  // club key that owns the file.
+  const canon = canonicalTeam(team);
+  if (canon && canon !== key) {{
+    const viaCanon = TEAM_ALIASES[canon] ?? canon;
+    if (TEAM_LOGOS[viaCanon]) return TEAM_LOGOS[viaCanon];
+  }}
+  return undefined;
 }}
 """
 
 
 def main() -> None:
     dry_run = "--dry-run" in sys.argv
-    if len(MAPPING) != 284:
-        raise SystemExit(f"MAPPING has {len(MAPPING)} entries, expected 284")
+    if len(MAPPING) != 320:
+        raise SystemExit(f"MAPPING has {len(MAPPING)} entries, expected 320")
 
     report = rename_files(dry_run)
     folders = verify_folders()

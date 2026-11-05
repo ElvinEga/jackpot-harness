@@ -22,6 +22,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { TeamLogo } from "@/components/TeamLogo";
 import { isDecidedSeasonMatch } from "../../lib/seasonTypes";
 import type { SeasonMatch } from "../../lib/seasonTypes";
 
@@ -92,12 +93,18 @@ export const SeasonMatchDetailSheet: React.FC<SeasonMatchDetailSheetProps> = ({
             {getResultBadge()}
           </div>
 
-          <SheetTitle className="text-xl font-bold tracking-tight text-foreground mt-3 flex items-center justify-between">
-            <span>{match.home_team}</span>
-            <span className="font-mono text-2xl px-3 py-1 rounded-lg bg-muted border border-border text-foreground">
+          <SheetTitle className="text-xl font-bold tracking-tight text-foreground mt-3 flex items-center justify-between gap-2">
+            <span className="flex items-center gap-2 min-w-0">
+              <TeamLogo team={match.home_team} size={26} />
+              <span className="truncate">{match.home_team}</span>
+            </span>
+            <span className="font-mono text-2xl px-3 py-1 rounded-lg bg-muted border border-border text-foreground shrink-0">
               {match.score || "N/A"}
             </span>
-            <span>{match.away_team}</span>
+            <span className="flex items-center gap-2 min-w-0 justify-end">
+              <span className="truncate">{match.away_team}</span>
+              <TeamLogo team={match.away_team} size={26} />
+            </span>
           </SheetTitle>
 
           <SheetDescription className="text-xs text-muted-foreground flex items-center justify-between mt-1">
@@ -145,9 +152,15 @@ export const SeasonMatchDetailSheet: React.FC<SeasonMatchDetailSheetProps> = ({
             </CardHeader>
             <CardContent className="p-4 space-y-2.5">
               <div className="grid grid-cols-3 gap-2 text-center font-mono font-semibold text-xs border-b border-border pb-1.5 text-muted-foreground">
-                <span className="text-foreground truncate">{match.home_team}</span>
+                <span className="flex items-center justify-center gap-1.5 text-foreground min-w-0">
+                  <TeamLogo team={match.home_team} size={16} />
+                  <span className="truncate">{match.home_team}</span>
+                </span>
                 <span className="font-sans text-[11px] font-normal">Metric</span>
-                <span className="text-foreground truncate">{match.away_team}</span>
+                <span className="flex items-center justify-center gap-1.5 text-foreground min-w-0">
+                  <TeamLogo team={match.away_team} size={16} />
+                  <span className="truncate">{match.away_team}</span>
+                </span>
               </div>
 
               {[

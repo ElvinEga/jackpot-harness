@@ -1,64 +1,70 @@
-import React, { useMemo, useState } from "react";
-import {
-  useReactTable,
-  getCoreRowModel,
-  getSortedRowModel,
-  getPaginationRowModel,
-  type SortingState,
-  type ColumnDef,
-  type RowSelectionState,
-  flexRender,
-} from "@tanstack/react-table";
-import {
-  ArrowUpDown,
-  ArrowUp,
-  ArrowDown,
-  Inbox,
-  MoreHorizontal,
-  Swords,
-  Sparkles,
-  Goal,
-  Shield,
-  FileSpreadsheet,
-  X,
-  Eye,
-  Calendar,
-} from "lucide-react";
-import {
-  Table,
-  TableHeader,
-  TableBody,
-  TableHead,
-  TableRow,
-  TableCell,
-} from "@/components/ui/table";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationFirst,
-  PaginationPrevious,
-  PaginationNext,
-  PaginationLast,
-  PaginationEllipsis,
-} from "@/components/ui/pagination";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
 import {
   DropdownMenu,
-  DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  NativeSelect,
+  NativeSelectOption,
+} from "@/components/ui/native-select";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationFirst,
+  PaginationItem,
+  PaginationLast,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  flexRender,
+  getCoreRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+  type ColumnDef,
+  type RowSelectionState,
+  type SortingState,
+} from "@tanstack/react-table";
+import {
+  ArrowDown,
+  ArrowUp,
+  ArrowUpDown,
+  Eye,
+  FileSpreadsheet,
+  Goal,
+  Inbox,
+  MoreHorizontal,
+  Shield,
+  Sparkles,
+  Swords,
+  X,
+} from "lucide-react";
+import React, { useMemo, useState } from "react";
 
-import type { SeasonMatch } from "../../lib/seasonTypes";
+import { TeamLogo } from "@/components/TeamLogo";
 import { exportSeasonMatchesToCsv } from "../../lib/export";
-import { SeasonActionsModal, type SeasonActionType } from "./SeasonActionsModal";
+import type { SeasonMatch } from "../../lib/seasonTypes";
+import {
+  SeasonActionsModal,
+  type SeasonActionType,
+} from "./SeasonActionsModal";
 
 interface SeasonDataTableProps {
   matches: SeasonMatch[];
@@ -84,7 +90,9 @@ export const SeasonDataTable: React.FC<SeasonDataTableProps> = ({
   // Modal action state
   const [actionModalOpen, setActionModalOpen] = useState(false);
   const [actionType, setActionType] = useState<SeasonActionType>("h2h");
-  const [actionTargetMatches, setActionTargetMatches] = useState<SeasonMatch[]>([]);
+  const [actionTargetMatches, setActionTargetMatches] = useState<SeasonMatch[]>(
+    [],
+  );
 
   const handleOpenAction = (type: SeasonActionType, targets: SeasonMatch[]) => {
     setActionType(type);
@@ -98,7 +106,10 @@ export const SeasonDataTable: React.FC<SeasonDataTableProps> = ({
       {
         id: "select",
         header: ({ table }) => (
-          <div className="flex items-center justify-center pl-1 pr-3" onClick={(e) => e.stopPropagation()}>
+          <div
+            className="flex items-center justify-center pl-1 pr-3"
+            onClick={(e) => e.stopPropagation()}
+          >
             <Checkbox
               checked={table.getIsAllPageRowsSelected()}
               onCheckedChange={(val) => table.toggleAllPageRowsSelected(!!val)}
@@ -107,7 +118,10 @@ export const SeasonDataTable: React.FC<SeasonDataTableProps> = ({
           </div>
         ),
         cell: ({ row }) => (
-          <div className="flex items-center justify-center pl-1 pr-3" onClick={(e) => e.stopPropagation()}>
+          <div
+            className="flex items-center justify-center pl-1 pr-3"
+            onClick={(e) => e.stopPropagation()}
+          >
             <Checkbox
               checked={row.getIsSelected()}
               onCheckedChange={(val) => row.toggleSelected(!!val)}
@@ -177,16 +191,34 @@ export const SeasonDataTable: React.FC<SeasonDataTableProps> = ({
       // Fixture: Home Team vs Away Team
       {
         id: "fixture",
-        header: () => <span className="font-medium text-xs">Match Fixture</span>,
+        header: () => (
+          <span className="font-medium text-xs">Match Fixture</span>
+        ),
         cell: ({ row }) => {
           const m = row.original;
           return (
             <div className="flex items-center gap-1.5 font-medium text-xs">
-              <span className="font-medium text-foreground hover:text-primary transition-colors cursor-pointer" onClick={(e) => { e.stopPropagation(); onNavigateToTeam?.(m.home_team); }}>
+              <TeamLogo team={m.home_team} size={24} />
+              <span
+                className="font-medium text-foreground hover:text-primary transition-colors cursor-pointer"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onNavigateToTeam?.(m.home_team);
+                }}
+              >
                 {m.home_team}
               </span>
-              <span className="text-muted-foreground font-normal text-xs">vs</span>
-              <span className="font-medium text-foreground hover:text-primary transition-colors cursor-pointer" onClick={(e) => { e.stopPropagation(); onNavigateToTeam?.(m.away_team); }}>
+              <span className="text-muted-foreground font-normal text-xs">
+                vs
+              </span>
+              <TeamLogo team={m.away_team} size={24} />
+              <span
+                className="font-medium text-foreground hover:text-primary transition-colors cursor-pointer"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onNavigateToTeam?.(m.away_team);
+                }}
+              >
                 {m.away_team}
               </span>
             </div>
@@ -196,7 +228,9 @@ export const SeasonDataTable: React.FC<SeasonDataTableProps> = ({
       // Full Time Score
       {
         accessorKey: "score",
-        header: () => <div className="text-center font-medium text-xs">FT Score</div>,
+        header: () => (
+          <div className="text-center font-medium text-xs">FT Score</div>
+        ),
         cell: ({ row }) => (
           <div className="text-center tabular-nums font-medium text-xs text-foreground">
             {row.original.score}
@@ -206,19 +240,27 @@ export const SeasonDataTable: React.FC<SeasonDataTableProps> = ({
       // Result Badge
       {
         accessorKey: "result",
-        header: () => <div className="text-center font-medium text-xs">Result</div>,
+        header: () => (
+          <div className="text-center font-medium text-xs">Result</div>
+        ),
         cell: ({ row }) => {
           const res = row.original.result;
           const colorClass =
             res === "home"
               ? "text-primary"
               : res === "draw"
-              ? "text-muted-foreground"
-              : "text-foreground";
+                ? "text-muted-foreground"
+                : "text-foreground";
           return (
             <div className="text-center">
               <span className={`text-xs font-medium ${colorClass}`}>
-                {res === "home" ? "Home (1)" : res === "draw" ? "Draw (X)" : res === "away" ? "Away (2)" : "—"}
+                {res === "home"
+                  ? "Home (1)"
+                  : res === "draw"
+                    ? "Draw (X)"
+                    : res === "away"
+                      ? "Away (2)"
+                      : "—"}
               </span>
             </div>
           );
@@ -237,7 +279,9 @@ export const SeasonDataTable: React.FC<SeasonDataTableProps> = ({
       // Shots (Target)
       {
         id: "shots",
-        header: () => <div className="text-center font-medium text-xs">Shots (Target)</div>,
+        header: () => (
+          <div className="text-center font-medium text-xs">Shots (Target)</div>
+        ),
         cell: ({ row }) => {
           const m = row.original;
           const hs = m.stats.home_shots ?? "—";
@@ -246,7 +290,10 @@ export const SeasonDataTable: React.FC<SeasonDataTableProps> = ({
           const ast = m.stats.away_shots_on_target ?? "—";
           return (
             <div className="text-center tabular-nums text-xs text-muted-foreground">
-              {hs}:{as} <span className="text-xs">({hst}:{ast})</span>
+              {hs}:{as}{" "}
+              <span className="text-xs">
+                ({hst}:{ast})
+              </span>
             </div>
           );
         },
@@ -254,7 +301,9 @@ export const SeasonDataTable: React.FC<SeasonDataTableProps> = ({
       // Corners
       {
         id: "corners",
-        header: () => <div className="text-center font-medium text-xs">Corners</div>,
+        header: () => (
+          <div className="text-center font-medium text-xs">Corners</div>
+        ),
         cell: ({ row }) => {
           const m = row.original;
           const hc = m.stats.home_corners ?? "—";
@@ -279,13 +328,19 @@ export const SeasonDataTable: React.FC<SeasonDataTableProps> = ({
       // Market Average Pre-Match Odds
       {
         id: "odds",
-        header: () => <div className="text-right font-medium text-xs">Avg Odds (H / D / A)</div>,
+        header: () => (
+          <div className="text-right font-medium text-xs">
+            Avg Odds (H / D / A)
+          </div>
+        ),
         cell: ({ row }) => {
           const o = row.original.odds;
           return (
             <div className="text-right tabular-nums text-xs text-muted-foreground">
-              <span className="text-foreground font-medium">{o.home?.toFixed(2) || "—"}</span> /{" "}
-              <span>{o.draw?.toFixed(2) || "—"}</span> /{" "}
+              <span className="text-foreground font-medium">
+                {o.home?.toFixed(2) || "—"}
+              </span>{" "}
+              / <span>{o.draw?.toFixed(2) || "—"}</span> /{" "}
               <span>{o.away?.toFixed(2) || "—"}</span>
             </div>
           );
@@ -294,7 +349,9 @@ export const SeasonDataTable: React.FC<SeasonDataTableProps> = ({
       // Row Actions Menu
       {
         id: "actions",
-        header: () => <div className="text-right font-medium text-xs">Actions</div>,
+        header: () => (
+          <div className="text-right font-medium text-xs">Actions</div>
+        ),
         cell: ({ row }) => {
           const m = row.original;
           return (
@@ -309,26 +366,36 @@ export const SeasonDataTable: React.FC<SeasonDataTableProps> = ({
                   }
                 />
                 <DropdownMenuContent align="end" className="w-48">
-                  <DropdownMenuLabel className="text-xs">Match Actions</DropdownMenuLabel>
+                  <DropdownMenuLabel className="text-xs">
+                    Match Actions
+                  </DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={() => onSelectMatch(m)}>
                     <Eye className="h-3.5 w-3.5 mr-2 text-primary" />
                     <span>View Match Details</span>
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => handleOpenAction("h2h", [m])}>
+                  <DropdownMenuItem
+                    onClick={() => handleOpenAction("h2h", [m])}
+                  >
                     <Swords className="h-3.5 w-3.5 mr-2 text-primary" />
                     <span>Head-to-Head History</span>
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => handleOpenAction("prediction", [m])}>
+                  <DropdownMenuItem
+                    onClick={() => handleOpenAction("prediction", [m])}
+                  >
                     <Sparkles className="h-3.5 w-3.5 mr-2 text-primary" />
                     <span>Match Intelligence &amp; xG</span>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={() => onNavigateToTeam?.(m.home_team)}>
+                  <DropdownMenuItem
+                    onClick={() => onNavigateToTeam?.(m.home_team)}
+                  >
                     <Shield className="h-3.5 w-3.5 mr-2" />
                     <span>Analyze {m.home_team}</span>
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => onNavigateToTeam?.(m.away_team)}>
+                  <DropdownMenuItem
+                    onClick={() => onNavigateToTeam?.(m.away_team)}
+                  >
                     <Shield className="h-3.5 w-3.5 mr-2" />
                     <span>Analyze {m.away_team}</span>
                   </DropdownMenuItem>
@@ -340,7 +407,7 @@ export const SeasonDataTable: React.FC<SeasonDataTableProps> = ({
         enableSorting: false,
       },
     ],
-    [onSelectMatch, onNavigateToTeam]
+    [onSelectMatch, onNavigateToTeam],
   );
 
   const table = useReactTable({
@@ -365,7 +432,7 @@ export const SeasonDataTable: React.FC<SeasonDataTableProps> = ({
   const selectedRows = table.getSelectedRowModel().rows;
   const selectedMatches = useMemo(
     () => selectedRows.map((r) => r.original),
-    [selectedRows]
+    [selectedRows],
   );
 
   // Pagination bounds
@@ -400,12 +467,15 @@ export const SeasonDataTable: React.FC<SeasonDataTableProps> = ({
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id} className="hover:bg-transparent">
                 {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id} className="h-8 px-2 py-1 text-xs font-medium text-muted-foreground">
+                  <TableHead
+                    key={header.id}
+                    className="h-8 px-2 py-1 text-xs font-medium text-muted-foreground"
+                  >
                     {header.isPlaceholder
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext()
+                          header.getContext(),
                         )}
                   </TableHead>
                 ))}
@@ -425,7 +495,7 @@ export const SeasonDataTable: React.FC<SeasonDataTableProps> = ({
                     <TableCell key={cell.id} className="px-2 py-1">
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}
@@ -439,7 +509,9 @@ export const SeasonDataTable: React.FC<SeasonDataTableProps> = ({
                 >
                   <div className="flex flex-col items-center justify-center space-y-2">
                     <Inbox className="h-8 w-8 text-muted-foreground/40" />
-                    <p className="text-sm font-medium">No matches found matching criteria.</p>
+                    <p className="text-sm font-medium">
+                      No matches found matching criteria.
+                    </p>
                   </div>
                 </TableCell>
               </TableRow>
@@ -451,7 +523,10 @@ export const SeasonDataTable: React.FC<SeasonDataTableProps> = ({
       {/* Floating Checkbox Action Toolbar (sticky bottom) */}
       {selectedMatches.length > 0 && (
         <div className="sticky bottom-14 z-20 mx-auto mb-2 flex items-center gap-2 p-2 rounded-xl bg-card border border-border shadow-2xl backdrop-blur max-w-2xl animate-in fade-in slide-in-from-bottom-2">
-          <Badge variant="default" className="text-xs font-mono font-bold px-2 py-1 bg-primary text-primary-foreground">
+          <Badge
+            variant="default"
+            className="text-xs font-mono font-bold px-2 py-1 bg-primary text-primary-foreground"
+          >
             {selectedMatches.length} Selected
           </Badge>
 
@@ -502,7 +577,7 @@ export const SeasonDataTable: React.FC<SeasonDataTableProps> = ({
               onClick={() =>
                 exportSeasonMatchesToCsv(
                   selectedMatches,
-                  `season_matches_${selectedMatches.length}.csv`
+                  `season_matches_${selectedMatches.length}.csv`,
                 )
               }
               className="text-xs h-7 gap-1"
@@ -528,8 +603,15 @@ export const SeasonDataTable: React.FC<SeasonDataTableProps> = ({
       <div className="border-t border-border bg-card/70 px-4 py-3 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-muted-foreground">
         <div className="flex items-center gap-3">
           <span>
-            Showing <strong className="text-foreground">{startRow.toLocaleString()}–{endRow.toLocaleString()}</strong> of{" "}
-            <strong className="text-foreground">{totalRows.toLocaleString()}</strong> fixtures
+            Showing{" "}
+            <strong className="text-foreground">
+              {startRow.toLocaleString()}–{endRow.toLocaleString()}
+            </strong>{" "}
+            of{" "}
+            <strong className="text-foreground">
+              {totalRows.toLocaleString()}
+            </strong>{" "}
+            fixtures
           </span>
 
           <div className="flex items-center gap-1.5 ml-2">

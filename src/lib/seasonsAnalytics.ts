@@ -1,3 +1,4 @@
+import { canonicalTeam } from "./teamRegistry";
 import { isDecidedSeasonMatch } from "./seasonTypes";
 import type {
   SeasonMatch,
@@ -34,15 +35,36 @@ const DAY_NAMES = [
 ];
 
 /**
+ * Canonical club id -> the spelling the data uses most often for it, so one
+ * club never appears twice in a list or a table because of a variant spelling.
+ */
+function teamDisplays(matches: SeasonMatch[]): Map<string, string> {
+  const counts = new Map<string, Map<string, number>>();
+  for (const m of matches) {
+    for (const raw of [m.home_team, m.away_team]) {
+      const key = canonicalTeam(raw);
+      if (!key) continue;
+      const spellings = counts.get(key) ?? new Map<string, number>();
+      spellings.set(raw, (spellings.get(raw) ?? 0) + 1);
+      counts.set(key, spellings);
+    }
+  }
+
+  const displays = new Map<string, string>();
+  for (const [key, spellings] of counts) {
+    const [winner] = [...spellings].sort(
+      (a, b) => b[1] - a[1] || a[0].length - b[0].length || a[0].localeCompare(b[0])
+    );
+    displays.set(key, winner[0]);
+  }
+  return displays;
+}
+
+/**
  * Extracts a unique, alphabetically sorted list of teams present in the given matches.
  */
 export function getAllSeasonTeams(matches: SeasonMatch[]): string[] {
-  const set = new Set<string>();
-  for (const m of matches) {
-    if (m.home_team) set.add(m.home_team);
-    if (m.away_team) set.add(m.away_team);
-  }
-  return Array.from(set).sort();
+  return [...teamDisplays(matches).values()].sort();
 }
 
 /**
@@ -78,10 +100,12 @@ export function computeStandings(matches: SeasonMatch[]): LeagueStandingRow[] {
     }
   >();
 
-  const getOrCreate = (team: string) => {
-    if (!teamsMap.has(team)) {
-      teamsMap.set(team, {
-        team,
+  const displays = teamDisplays(matches);
+
+  const getOrCreate = (id: string, fallbackName: string) => {
+    if (!teamsMap.has(id)) {
+      teamsMap.set(id, {
+        team: displays.get(id) ?? fallbackName,
         played: 0,
         won: 0,
         drawn: 0,
@@ -106,15 +130,15 @@ export function computeStandings(matches: SeasonMatch[]): LeagueStandingRow[] {
         recentMatches: [],
       });
     }
-    return teamsMap.get(team)!;
+    return teamsMap.get(id)!;
   };
 
   // Sort matches chronologically to track form correctly
   const sortedMatches = [...matches].sort((a, b) => a.date.localeCompare(b.date));
 
   for (const m of sortedMatches) {
-    const h = getOrCreate(m.home_team);
-    const a = getOrCreate(m.away_team);
+    const h = getOrCreate(canonicalTeam(m.home_team), m.home_team);
+    const a = getOrCreate(canonicalTeam(m.away_team), m.away_team);
     if (!isDecidedSeasonMatch(m)) continue;
 
     h.played++;
@@ -320,9 +344,10 @@ export function computeTeamProfile(
   teamName: string,
   season = "All"
 ): TeamSeasonProfile | null {
+  const teamId = canonicalTeam(teamName);
   const teamMatches = matches
     .filter(isDecidedSeasonMatch)
-    .filter((m) => m.home_team === teamName || m.away_team === teamName)
+    .filter((m) => canonicalTeam(m.home_team) === teamId || canonicalTeam(m.away_team) === teamId)
     .sort((a, b) => b.date.localeCompare(a.date)); // most recent first
 
   if (teamMatches.length === 0) return null;
@@ -346,7 +371,7 @@ export function computeTeamProfile(
   const away = { matches: 0, wins: 0, draws: 0, losses: 0, gf: 0, ga: 0 };
 
   for (const m of teamMatches) {
-    const isHome = m.home_team === teamName;
+    const isHome = canonicalTeam(m.home_team) === teamId;
     const teamGoals = isHome ? m.home_goals : m.away_goals;
     const oppGoals = isHome ? m.away_goals : m.home_goals;
 

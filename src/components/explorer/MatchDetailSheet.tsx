@@ -18,6 +18,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import type { Match, MatchFilters } from "../../lib/types";
+import { TeamLogo } from "@/components/TeamLogo";
 
 interface MatchDetailSheetProps {
   match: Match | null;
@@ -82,8 +83,9 @@ export const MatchDetailSheet: React.FC<MatchDetailSheetProps> = ({
               </div>
 
               <div className="grid grid-cols-5 items-center gap-2 text-center my-2">
-                <div className="col-span-2">
-                  <p className="font-bold text-foreground text-sm md:text-base leading-tight">
+                <div className="col-span-2 flex flex-col items-center gap-1">
+                  <TeamLogo team={match.home_team} size={28} />
+                  <p className="font-bold text-foreground text-sm md:text-base leading-tight text-center">
                     {match.home_team}
                   </p>
                   <span className="text-xs text-muted-foreground">Home</span>
@@ -96,8 +98,9 @@ export const MatchDetailSheet: React.FC<MatchDetailSheetProps> = ({
                   <div className="mt-1">{getResultBadge()}</div>
                 </div>
 
-                <div className="col-span-2">
-                  <p className="font-bold text-foreground text-sm md:text-base leading-tight">
+                <div className="col-span-2 flex flex-col items-center gap-1">
+                  <TeamLogo team={match.away_team} size={28} />
+                  <p className="font-bold text-foreground text-sm md:text-base leading-tight text-center">
                     {match.away_team}
                   </p>
                   <span className="text-xs text-muted-foreground">Away</span>

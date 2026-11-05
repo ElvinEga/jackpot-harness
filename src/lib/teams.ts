@@ -1,19 +1,51 @@
 import type { Match, TeamH2H, TeamForm } from "./types";
+import { canonicalTeam } from "./teamRegistry";
+
+// club-canonical key -> display spelling -> occurrences
+function teamVariants(matches: Match[]): Map<string, Map<string, number>> {
+  const groups = new Map<string, Map<string, number>>();
+  for (const m of matches) {
+    for (const raw of [m.home_team, m.away_team]) {
+      if (!raw) continue;
+      const key = canonicalTeam(raw);
+      if (!key) continue;
+      let variants = groups.get(key);
+      if (!variants) {
+        variants = new Map();
+        groups.set(key, variants);
+      }
+      variants.set(raw, (variants.get(raw) || 0) + 1);
+    }
+  }
+  return groups;
+}
+
+// Pick the cleanest spelling: never a betika ticket prefix ("#1 – Arsenal")
+// if a plain form exists, then the spelling most sources agree on, ties go to
+// the shorter name, then alphabetical, so representatives stay stable.
+const TICKET_PREFIX = /^#\d+\s*[–—-]\s*/;
+
+function representative(variants: Map<string, number>): string {
+  const chosen =
+    [...variants.entries()].sort(
+      (a, b) =>
+        Number(TICKET_PREFIX.test(a[0])) - Number(TICKET_PREFIX.test(b[0])) ||
+        b[1] - a[1] ||
+        a[0].length - b[0].length ||
+        a[0].localeCompare(b[0])
+    )[0][0];
+  return chosen.replace(TICKET_PREFIX, "").trim();
+}
 
 export function getAllTeams(matches: Match[]): string[] {
-  const teams = new Set<string>();
-  for (const m of matches) {
-    if (m.home_team) teams.add(m.home_team);
-    if (m.away_team) teams.add(m.away_team);
-  }
-  return Array.from(teams).sort();
+  return [...teamVariants(matches).values()].map(representative).sort();
 }
 
 export function getTeamAppearances(matches: Match[]): Map<string, number> {
   const counts = new Map<string, number>();
-  for (const m of matches) {
-    if (m.home_team) counts.set(m.home_team, (counts.get(m.home_team) || 0) + 1);
-    if (m.away_team) counts.set(m.away_team, (counts.get(m.away_team) || 0) + 1);
+  for (const variants of teamVariants(matches).values()) {
+    const display = representative(variants);
+    counts.set(display, [...variants.values()].reduce((a, b) => a + b, 0));
   }
   return counts;
 }
@@ -23,8 +55,8 @@ export function computeTeamH2H(
   teamA: string,
   teamB: string
 ): TeamH2H {
-  const normA = teamA.trim().toLowerCase();
-  const normB = teamB.trim().toLowerCase();
+  const normA = canonicalTeam(teamA);
+  const normB = canonicalTeam(teamB);
 
   const encounters: Match[] = [];
   let aWins = 0;
@@ -34,8 +66,8 @@ export function computeTeamH2H(
   let scoredMatches = 0;
 
   for (const m of matches) {
-    const h = m.home_team.trim().toLowerCase();
-    const a = m.away_team.trim().toLowerCase();
+    const h = m.home_team ? canonicalTeam(m.home_team) : "";
+    const a = m.away_team ? canonicalTeam(m.away_team) : "";
 
     const isMatch = (h === normA && a === normB) || (h === normB && a === normA);
     if (!isMatch) continue;
@@ -84,12 +116,13 @@ export function computeTeamForm(
   teamName: string,
   limit = 20
 ): TeamForm {
-  const norm = teamName.trim().toLowerCase();
+  const norm = canonicalTeam(teamName);
   const teamMatches: { match: Match; isHome: boolean }[] = [];
 
   for (const m of matches) {
-    const isHome = m.home_team.trim().toLowerCase() === norm;
-    const isAway = m.away_team.trim().toLowerCase() === norm;
+    if (!m.home_team || !m.away_team) continue;
+    const isHome = canonicalTeam(m.home_team) === norm;
+    const isAway = canonicalTeam(m.away_team) === norm;
     if (isHome || isAway) {
       teamMatches.push({ match: m, isHome });
     }

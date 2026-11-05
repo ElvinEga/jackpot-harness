@@ -24,8 +24,10 @@ import {
 } from "@/components/ui/table";
 import { isDecidedSeasonMatch } from "../../lib/seasonTypes";
 import type { SeasonMatch } from "../../lib/seasonTypes";
+import { TeamLogo } from "@/components/TeamLogo";
 import { getAllSeasonTeams, computeTeamProfile } from "../../lib/seasonsAnalytics";
 import { predictSeasonMatch } from "../../lib/seasonsPredictor";
+import { canonicalTeam } from "../../lib/teamRegistry";
 
 export type SeasonActionType = "h2h" | "prediction" | "goals" | "discipline";
 
@@ -78,13 +80,11 @@ export const SeasonActionsModal: React.FC<SeasonActionsModalProps> = ({
 
   // Head-to-Head matches between Team A and Team B in all seasons
   const h2hMatches = useMemo(() => {
+    const isA = (t: string) => canonicalTeam(t) === canonicalTeam(teamA);
+    const isB = (t: string) => canonicalTeam(t) === canonicalTeam(teamB);
     return allMatches
       .filter(isDecidedSeasonMatch)
-      .filter(
-        (m) =>
-          (m.home_team === teamA && m.away_team === teamB) ||
-          (m.home_team === teamB && m.away_team === teamA)
-      )
+      .filter((m) => (isA(m.home_team) && isB(m.away_team)) || (isB(m.home_team) && isA(m.away_team)))
       .sort((a, b) => b.date.localeCompare(a.date));
   }, [allMatches, teamA, teamB]);
 
@@ -98,7 +98,7 @@ export const SeasonActionsModal: React.FC<SeasonActionsModalProps> = ({
     const scoreCounts = new Map<string, number>();
 
     for (const m of h2hMatches) {
-      const isAHome = m.home_team === teamA;
+      const isAHome = canonicalTeam(m.home_team) === canonicalTeam(teamA);
       const gA = isAHome ? m.home_goals : m.away_goals;
       const gB = isAHome ? m.away_goals : m.home_goals;
       goalsA += gA;
@@ -314,7 +314,13 @@ export const SeasonActionsModal: React.FC<SeasonActionsModalProps> = ({
                         <TableRow key={idx} className="hover:bg-muted/30">
                           <TableCell className="tabular-nums text-xs text-muted-foreground">{m.date}</TableCell>
                           <TableCell className="text-xs font-medium text-foreground">
-                            {m.home_team} vs {m.away_team}
+                            <span className="flex items-center gap-1.5">
+                              <TeamLogo team={m.home_team} size={16} />
+                              <span>{m.home_team}</span>
+                              <span className="text-muted-foreground">vs</span>
+                              <TeamLogo team={m.away_team} size={16} />
+                              <span>{m.away_team}</span>
+                            </span>
                           </TableCell>
                           <TableCell className="text-right tabular-nums text-xs font-medium text-foreground">{m.score}</TableCell>
                         </TableRow>
@@ -334,15 +340,17 @@ export const SeasonActionsModal: React.FC<SeasonActionsModalProps> = ({
                   Bivariate Poisson Expected Goals
                 </span>
                 <div className="flex items-center justify-center gap-6">
-                  <div>
-                    <span className="font-bold text-base text-foreground block">{teamA}</span>
+                  <div className="flex flex-col items-center gap-1">
+                    <TeamLogo team={teamA} size={26} />
+                    <span className="font-bold text-base text-foreground">{teamA}</span>
                     <span className="text-2xl font-bold font-mono text-emerald-500">
                       {prediction.expectedHomeGoals}
                     </span>
                   </div>
                   <span className="text-muted-foreground text-xs font-mono">xG</span>
-                  <div>
-                    <span className="font-bold text-base text-foreground block">{teamB}</span>
+                  <div className="flex flex-col items-center gap-1">
+                    <TeamLogo team={teamB} size={26} />
+                    <span className="font-bold text-base text-foreground">{teamB}</span>
                     <span className="text-2xl font-bold font-mono text-blue-500">
                       {prediction.expectedAwayGoals}
                     </span>

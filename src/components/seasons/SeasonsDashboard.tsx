@@ -11,6 +11,8 @@ import { SearchableSelect } from "@/components/ui/searchable-select";
 import type { SeasonMatch } from "../../lib/seasonTypes";
 import { useSeasonMatches, useSeasonIndex } from "../../hooks/useSeasonMatches";
 import { AVAILABLE_COMPETITIONS, getCompetitionFlag } from "../../lib/seasonsData";
+import { canonicalTeam } from "../../lib/teamRegistry";
+import { getAllSeasonTeams } from "../../lib/seasonsAnalytics";
 import { SeasonOverview } from "./SeasonOverview";
 import { SeasonTeamAnalysis } from "./SeasonTeamAnalysis";
 import { SeasonMatchPredictor } from "./SeasonMatchPredictor";
@@ -187,15 +189,21 @@ export const SeasonsDashboard: React.FC<SeasonsDashboardProps> = ({
     return allMatches.filter((m) => m.season === activeSeason);
   }, [allMatches, activeSeason]);
 
-  // Teams available across all seasons
-  const availableTeams = useMemo(() => {
-    const set = new Set<string>();
-    for (const m of allMatches) {
-      if (m.home_team) set.add(m.home_team);
-      if (m.away_team) set.add(m.away_team);
-    }
-    return Array.from(set).sort();
-  }, [allMatches]);
+  // Teams available across all seasons: one entry per club, labelled with the
+  // spelling the season files use most.
+  const availableTeams = useMemo(() => getAllSeasonTeams(allMatches), [allMatches]);
+
+  // A club picked from a standings row or a competition preset can arrive spelled
+  // differently from that label ("Sheffield Utd"), so match on the id instead of
+  // letting a strict includes() drop the choice to the first team in the list.
+  const deepDiveTeam = useMemo(() => {
+    const id = canonicalTeam(selectedTeam);
+    return (
+      availableTeams.find((t) => canonicalTeam(t) === id) ??
+      availableTeams[0] ??
+      "Arsenal"
+    );
+  }, [availableTeams, selectedTeam]);
 
   // Explorer filtered matches
   const explorerFilteredMatches = useMemo(() => {
@@ -206,10 +214,11 @@ export const SeasonsDashboard: React.FC<SeasonsDashboardProps> = ({
     }
 
     if (explorerFilters.team !== "all") {
+      const teamId = canonicalTeam(explorerFilters.team);
       res = res.filter(
         (m) =>
-          m.home_team === explorerFilters.team ||
-          m.away_team === explorerFilters.team
+          canonicalTeam(m.home_team) === teamId ||
+          canonicalTeam(m.away_team) === teamId
       );
     }
 
@@ -218,23 +227,31 @@ export const SeasonsDashboard: React.FC<SeasonsDashboardProps> = ({
     }
 
     if (explorerFilters.goals !== "all") {
+      // A fixture with no full-time result has no total, so it belongs to no
+      // goals band; `?? 0` would file it as under 2.5.
       if (explorerFilters.goals === "over25") {
-        res = res.filter((m) => (m.total_goals ?? 0) > 2.5);
+        res = res.filter((m) => m.total_goals !== null && m.total_goals > 2.5);
       } else if (explorerFilters.goals === "under25") {
-        res = res.filter((m) => (m.total_goals ?? 0) < 2.5);
+        res = res.filter((m) => m.total_goals !== null && m.total_goals < 2.5);
       } else if (explorerFilters.goals === "btts") {
         res = res.filter(
-          (m) => (m.home_goals ?? 0) > 0 && (m.away_goals ?? 0) > 0
+          (m) => m.home_goals !== null && m.away_goals !== null &&
+            m.home_goals > 0 && m.away_goals > 0
         );
       }
     }
 
     if (explorerFilters.search.trim()) {
-      const q = explorerFilters.search.toLowerCase();
+      const q = explorerFilters.search.trim().toLowerCase();
+      // Search by club, not by spelling: the tables print the source's own
+      // string, and one club has more than one ("Sheffield Utd").
+      const id = canonicalTeam(q);
       res = res.filter(
         (m) =>
           m.home_team.toLowerCase().includes(q) ||
           m.away_team.toLowerCase().includes(q) ||
+          canonicalTeam(m.home_team) === id ||
+          canonicalTeam(m.away_team) === id ||
           (m.referee && m.referee.toLowerCase().includes(q)) ||
           (m.score && m.score.toLowerCase().includes(q))
       );
@@ -379,7 +396,7 @@ export const SeasonsDashboard: React.FC<SeasonsDashboardProps> = ({
         <SeasonTeamAnalysis
           matches={seasonFilteredMatches}
           seasonName={activeSeason === "all" ? "All Seasons" : `Season ${activeSeason}`}
-          selectedTeam={availableTeams.includes(selectedTeam) ? selectedTeam : (availableTeams[0] || "Arsenal")}
+          selectedTeam={deepDiveTeam}
           onSelectTeam={setSelectedTeam}
           onPredictWithTeam={handlePredictMatchup}
         />
