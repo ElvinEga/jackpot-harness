@@ -1,3 +1,4 @@
+import { isDecidedSeasonMatch } from "./seasonTypes";
 import type {
   SeasonMatch,
   LeagueStandingRow,
@@ -114,6 +115,7 @@ export function computeStandings(matches: SeasonMatch[]): LeagueStandingRow[] {
   for (const m of sortedMatches) {
     const h = getOrCreate(m.home_team);
     const a = getOrCreate(m.away_team);
+    if (!isDecidedSeasonMatch(m)) continue;
 
     h.played++;
     a.played++;
@@ -207,7 +209,8 @@ export function computeStandings(matches: SeasonMatch[]): LeagueStandingRow[] {
 /**
  * Computes high-level aggregated metrics across a collection of season matches.
  */
-export function computeSeasonOverview(matches: SeasonMatch[]) {
+export function computeSeasonOverview(allMatches: SeasonMatch[]) {
+  const matches = allMatches.filter(isDecidedSeasonMatch);
   const totalMatches = matches.length;
   if (totalMatches === 0) {
     return {
@@ -318,6 +321,7 @@ export function computeTeamProfile(
   season = "All"
 ): TeamSeasonProfile | null {
   const teamMatches = matches
+    .filter(isDecidedSeasonMatch)
     .filter((m) => m.home_team === teamName || m.away_team === teamName)
     .sort((a, b) => b.date.localeCompare(a.date)); // most recent first
 
@@ -382,7 +386,7 @@ export function computeTeamProfile(
       } else if (m.result === "draw") {
         draws++;
         home.draws++;
-      } else {
+      } else if (m.result === "away") {
         losses++;
         home.losses++;
       }
@@ -396,7 +400,7 @@ export function computeTeamProfile(
       } else if (m.result === "draw") {
         draws++;
         away.draws++;
-      } else {
+      } else if (m.result === "home") {
         losses++;
         away.losses++;
       }
