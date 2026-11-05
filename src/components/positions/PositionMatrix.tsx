@@ -92,7 +92,8 @@ export const PositionMatrix: React.FC<PositionMatrixProps> = ({ matches }) => {
             Position Analysis
           </h2>
           <p className="text-xs text-muted-foreground mt-1">
-            Discover historical outcome biases across jackpot events.
+            How home wins, draws, and away wins are distributed across jackpot
+            positions.
           </p>
         </div>
 
@@ -129,10 +130,10 @@ export const PositionMatrix: React.FC<PositionMatrixProps> = ({ matches }) => {
             onChange={(e) => setMaxPos(Number(e.target.value))}
             className="text-xs w-28"
           >
-            <NativeSelectOption value="15">15 Rows</NativeSelectOption>
-            <NativeSelectOption value="16">16 Rows</NativeSelectOption>
-            <NativeSelectOption value="17">17 Rows</NativeSelectOption>
-            <NativeSelectOption value="20">20 Rows</NativeSelectOption>
+            <NativeSelectOption value="15">15 Positions</NativeSelectOption>
+            <NativeSelectOption value="16">16 Positions</NativeSelectOption>
+            <NativeSelectOption value="17">17 Positions</NativeSelectOption>
+            <NativeSelectOption value="20">20 Positions</NativeSelectOption>
           </NativeSelect>
         </div>
       </div>
@@ -222,7 +223,7 @@ export const PositionMatrix: React.FC<PositionMatrixProps> = ({ matches }) => {
             1X2 Outcome Distribution by Jackpot Position (1 to {maxPos})
           </CardTitle>
           <CardDescription className="text-xs">
-            Comparison of Home Win, Draw, and Away Win percentages across each row number
+            Home win, draw, and away win percentages for each jackpot position
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -256,13 +257,14 @@ export const PositionMatrix: React.FC<PositionMatrixProps> = ({ matches }) => {
         <Info className="h-4 w-4 text-primary shrink-0 mt-0.5" />
         <div className="space-y-1">
           <div className="font-semibold text-foreground flex items-center gap-1.5">
-            <span>Statistical Note: Why is 1-1 the overall top score across every row position?</span>
+            <span>Why is 1-1 the most common score in every position?</span>
           </div>
           <p className="text-muted-foreground">
             In football jackpots, <strong className="text-foreground">Home Wins</strong> are the most frequent outcome (<span className="text-emerald-500 font-medium">~42%</span>), but they are dispersed across many different scorelines (1-0 at 10%, 2-1 at 8.5%, 2-0 at 5.9%, 3-1 at 3.4%). <strong className="text-foreground">Away Wins</strong> (<span className="text-blue-500 font-medium">~30%</span>) are similarly split (0-1 at 9%, 1-2 at 8%, 0-2 at 5.4%). In contrast, <strong className="text-foreground">Draws</strong> (<span className="text-amber-500 font-medium">~28%</span>) are heavily clustered into just two scores: <strong className="text-foreground">1-1 (~13.4%)</strong> and <strong className="text-foreground">0-0 (~9.1%)</strong>.
           </p>
           <p className="text-muted-foreground">
-            Because nearly half of all draws finish 1-1, it is mathematically the single highest individual exact scoreline for every position unconditionally. Use the <strong className="text-foreground">Top Win (H / A)</strong> and color-coded <strong className="text-foreground">Frequent Scores</strong> columns below to see the dominant decisive victory scorelines for each row.
+            Because nearly half of all draws finish 1-1, it is the most common
+            exact score in every position. Use the <strong className="text-foreground">Top Win (H / A)</strong> and color-coded <strong className="text-foreground">Frequent Scores</strong> columns below to see the most common winning scorelines for each position.
           </p>
         </div>
       </div>
@@ -272,14 +274,15 @@ export const PositionMatrix: React.FC<PositionMatrixProps> = ({ matches }) => {
         <div className="px-4 py-3 border-b border-border bg-muted/30 flex items-center justify-between">
           <div>
             <h2 className="text-sm font-bold text-foreground">
-              Complete Metrics Matrix by Row Position
+              Complete Metrics by Jackpot Position
             </h2>
             <p className="text-[11px] text-muted-foreground mt-0.5">
-              Historical outcome rates and score distributions partitioned by jackpot position
+              Historical outcome rates and score distributions for each
+              jackpot position
             </p>
           </div>
           <span className="text-xs text-muted-foreground font-mono">
-            Analyzed {filteredMatches.length.toLocaleString()} total match rows
+            {filteredMatches.length.toLocaleString()} matches analyzed
           </span>
         </div>
 
@@ -287,7 +290,7 @@ export const PositionMatrix: React.FC<PositionMatrixProps> = ({ matches }) => {
           <Table>
             <TableHeader>
               <TableRow className="border-b border-border bg-muted/50 text-muted-foreground font-medium">
-                <TableHead className="text-center w-12 text-xs">Row</TableHead>
+                <TableHead className="text-center w-12 text-xs">Position</TableHead>
                 <TableHead className="text-center text-xs">Matches</TableHead>
                 <TableHead className="text-center text-xs">Home Win %</TableHead>
                 <TableHead className="text-center text-xs">Draw %</TableHead>
