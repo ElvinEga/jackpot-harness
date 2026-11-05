@@ -19,6 +19,8 @@ import { SearchableSelect } from "@/components/ui/searchable-select";
 import {
   Table,
   TableBody,
+  TableHead,
+  TableHeader,
   TableRow,
   TableCell,
 } from "@/components/ui/table";
@@ -143,19 +145,20 @@ export const SeasonActionsModal: React.FC<SeasonActionsModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-w-2xl bg-card border-border p-6 max-h-[90vh] flex flex-col overflow-hidden">
+      <DialogContent className="sm:max-w-2xl bg-card border-border p-6 max-h-[90vh] flex flex-col overflow-hidden">
         <DialogHeader className="pb-3 border-b border-border">
           <div className="flex items-center justify-between">
             <DialogTitle className="text-base font-bold text-foreground flex items-center gap-2">
               <Trophy className="h-4 w-4 text-primary" />
-              Match &amp; Historical Intelligence
+              Match Analysis
             </DialogTitle>
             <Badge variant="outline" className="text-xs font-mono">
-              {selectedMatches.length} Row{selectedMatches.length !== 1 ? "s" : ""} Selected
+              {selectedMatches.length} fixture{selectedMatches.length !== 1 ? "s" : ""} selected
             </Badge>
           </div>
           <DialogDescription className="text-xs text-muted-foreground mt-1">
-            Historical head-to-head analysis, Poisson goal modeling, and discipline metrics
+            Head-to-head records, Poisson score modeling, and discipline
+            metrics for the selected fixtures
           </DialogDescription>
         </DialogHeader>
 
@@ -309,20 +312,31 @@ export const SeasonActionsModal: React.FC<SeasonActionsModalProps> = ({
                 </div>
                 <div className="max-h-48 overflow-y-auto">
                   <Table>
+                    <TableHeader className="sticky top-0 bg-muted/90 backdrop-blur z-10">
+                      <TableRow className="border-b border-border text-muted-foreground font-medium">
+                        <TableHead className="text-xs">Date</TableHead>
+                        <TableHead className="text-xs">Home Team</TableHead>
+                        <TableHead className="text-xs">Away Team</TableHead>
+                        <TableHead className="text-center text-xs">Score</TableHead>
+                      </TableRow>
+                    </TableHeader>
                     <TableBody>
                       {h2hMatches.map((m, idx) => (
                         <TableRow key={idx} className="hover:bg-muted/30">
                           <TableCell className="tabular-nums text-xs text-muted-foreground">{m.date}</TableCell>
                           <TableCell className="text-xs font-medium text-foreground">
-                            <span className="flex items-center gap-1.5">
-                              <TeamLogo team={m.home_team} size={16} />
-                              <span>{m.home_team}</span>
-                              <span className="text-muted-foreground">vs</span>
-                              <TeamLogo team={m.away_team} size={16} />
-                              <span>{m.away_team}</span>
+                            <span className="flex items-center gap-1.5" title={m.home_team}>
+                              <TeamLogo team={m.home_team} size={24} />
+                              <span className="truncate max-w-[140px]">{m.home_team}</span>
                             </span>
                           </TableCell>
-                          <TableCell className="text-right tabular-nums text-xs font-medium text-foreground">{m.score}</TableCell>
+                          <TableCell className="text-xs font-medium text-foreground">
+                            <span className="flex items-center gap-1.5" title={m.away_team}>
+                              <TeamLogo team={m.away_team} size={24} />
+                              <span className="truncate max-w-[140px]">{m.away_team}</span>
+                            </span>
+                          </TableCell>
+                          <TableCell className="text-center tabular-nums text-xs font-medium text-foreground">{m.score}</TableCell>
                         </TableRow>
                       ))}
                     </TableBody>
