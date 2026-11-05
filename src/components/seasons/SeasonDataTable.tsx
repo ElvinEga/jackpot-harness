@@ -188,19 +188,19 @@ export const SeasonDataTable: React.FC<SeasonDataTableProps> = ({
           </div>
         ),
       },
-      // Fixture: Home Team vs Away Team
+      // Home Team
       {
-        id: "fixture",
+        id: "home_team",
         header: () => (
-          <span className="font-medium text-xs">Match Fixture</span>
+          <span className="font-medium text-xs">Home Team</span>
         ),
         cell: ({ row }) => {
           const m = row.original;
           return (
-            <div className="flex items-center gap-1.5 font-medium text-xs">
+            <span className="flex items-center gap-1.5" title={m.home_team}>
               <TeamLogo team={m.home_team} size={24} />
               <span
-                className="font-medium text-foreground hover:text-primary transition-colors cursor-pointer"
+                className="font-medium text-xs text-foreground hover:text-primary transition-colors cursor-pointer truncate max-w-[152px]"
                 onClick={(e) => {
                   e.stopPropagation();
                   onNavigateToTeam?.(m.home_team);
@@ -208,12 +208,23 @@ export const SeasonDataTable: React.FC<SeasonDataTableProps> = ({
               >
                 {m.home_team}
               </span>
-              <span className="text-muted-foreground font-normal text-xs">
-                vs
-              </span>
+            </span>
+          );
+        },
+      },
+      // Away Team
+      {
+        id: "away_team",
+        header: () => (
+          <span className="font-medium text-xs">Away Team</span>
+        ),
+        cell: ({ row }) => {
+          const m = row.original;
+          return (
+            <span className="flex items-center gap-1.5" title={m.away_team}>
               <TeamLogo team={m.away_team} size={24} />
               <span
-                className="font-medium text-foreground hover:text-primary transition-colors cursor-pointer"
+                className="font-medium text-xs text-foreground hover:text-primary transition-colors cursor-pointer truncate max-w-[152px]"
                 onClick={(e) => {
                   e.stopPropagation();
                   onNavigateToTeam?.(m.away_team);
@@ -221,7 +232,7 @@ export const SeasonDataTable: React.FC<SeasonDataTableProps> = ({
               >
                 {m.away_team}
               </span>
-            </div>
+            </span>
           );
         },
       },
@@ -229,7 +240,7 @@ export const SeasonDataTable: React.FC<SeasonDataTableProps> = ({
       {
         accessorKey: "score",
         header: () => (
-          <div className="text-center font-medium text-xs">FT Score</div>
+          <div className="text-center font-medium text-xs">Score</div>
         ),
         cell: ({ row }) => (
           <div className="text-center tabular-nums font-medium text-xs text-foreground">
@@ -510,7 +521,11 @@ export const SeasonDataTable: React.FC<SeasonDataTableProps> = ({
                   <div className="flex flex-col items-center justify-center space-y-2">
                     <Inbox className="h-8 w-8 text-muted-foreground/40" />
                     <p className="text-sm font-medium">
-                      No matches found matching criteria.
+                      No matches found
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      The current search, season, team, result, and goals
+                      filters exclude every fixture.
                     </p>
                   </div>
                 </TableCell>
@@ -593,7 +608,7 @@ export const SeasonDataTable: React.FC<SeasonDataTableProps> = ({
               className="text-xs h-7 text-muted-foreground hover:text-foreground px-2"
             >
               <X className="h-3.5 w-3.5 mr-1" />
-              Clear
+              Clear selection
             </Button>
           </div>
         </div>
@@ -615,7 +630,7 @@ export const SeasonDataTable: React.FC<SeasonDataTableProps> = ({
           </span>
 
           <div className="flex items-center gap-1.5 ml-2">
-            <span>Rows:</span>
+            <span>Rows per page:</span>
             <NativeSelect
               size="sm"
               value={pageSize}
