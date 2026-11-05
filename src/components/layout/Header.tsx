@@ -16,6 +16,7 @@ import {
   Check,
   Menu,
   Compass,
+  Dices,
   Trophy,
   Shield,
   TrendingUp,
@@ -128,7 +129,7 @@ export const Header: React.FC<HeaderProps> = ({
             <div className="flex items-center gap-2.5 shrink-0">
               <img
                 src="/logo.png"
-                alt="Football Analyzer"
+                alt=""
                 className="h-8 w-8 rounded-lg"
               />
               <span className="text-base font-bold text-foreground tracking-tight hidden sm:inline">
@@ -144,11 +145,11 @@ export const Header: React.FC<HeaderProps> = ({
                 className={cn(
                   "flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold transition-all",
                   appMode === "jackpot"
-                    ? "bg-card text-foreground shadow-xs border border-border/80 font-bold"
+                    ? "bg-primary text-primary-foreground shadow-xs font-bold"
                     : "text-muted-foreground hover:text-foreground"
                 )}
               >
-                <span>🎰</span>
+                <Dices className="h-3.5 w-3.5" />
                 <span>Jackpot Mode</span>
               </button>
               <button
@@ -161,7 +162,7 @@ export const Header: React.FC<HeaderProps> = ({
                     : "text-muted-foreground hover:text-foreground"
                 )}
               >
-                <span>🏆</span>
+                <Trophy className="h-3.5 w-3.5" />
                 <span>Seasons Mode</span>
               </button>
             </div>
@@ -220,7 +221,7 @@ export const Header: React.FC<HeaderProps> = ({
             <DropdownMenu>
               <DropdownMenuTrigger
                 render={
-                  <Button variant="outline" size="sm" className="gap-1.5 h-8 text-xs" aria-label="Toggle theme">
+                  <Button variant="outline" size="sm" className="gap-1.5 h-8 text-xs" aria-label="Theme">
                     {resolvedTheme === "dark" ? (
                       <Moon className="h-3.5 w-3.5 text-muted-foreground" />
                     ) : (
@@ -264,7 +265,9 @@ export const Header: React.FC<HeaderProps> = ({
                 />
                 <DropdownMenuContent align="end" className="w-60">
                   <DropdownMenuLabel className="text-xs font-normal text-muted-foreground">
-                    Exports the Explorer tab&apos;s current filter ({filteredMatches.length.toLocaleString()} of {totalCount.toLocaleString()} matches)
+                    {isFiltered
+                      ? `Exports the Explorer tab's current filter (${filteredMatches.length.toLocaleString()} of ${totalCount.toLocaleString()} matches)`
+                      : `Exports all ${totalCount.toLocaleString()} matches`}
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
@@ -323,12 +326,12 @@ export const Header: React.FC<HeaderProps> = ({
                 className={cn(
                   "flex items-center justify-center gap-1.5 py-1.5 rounded-md text-xs font-semibold transition-all",
                   appMode === "jackpot"
-                    ? "bg-card text-foreground shadow-xs font-bold border border-border/80"
+                    ? "bg-primary text-primary-foreground shadow-xs font-bold"
                     : "text-muted-foreground hover:text-foreground"
                 )}
               >
-                <span>🎰</span>
-                <span>Jackpots</span>
+                <Dices className="h-3.5 w-3.5" />
+                <span>Jackpot Mode</span>
               </button>
               <button
                 type="button"
@@ -340,8 +343,8 @@ export const Header: React.FC<HeaderProps> = ({
                     : "text-muted-foreground hover:text-foreground"
                 )}
               >
-                <span>🏆</span>
-                <span>Seasons</span>
+                <Trophy className="h-3.5 w-3.5" />
+                <span>Seasons Mode</span>
               </button>
             </div>
           </div>
@@ -439,7 +442,7 @@ export const Header: React.FC<HeaderProps> = ({
                     )}
                   >
                     <FileSpreadsheet className="h-3.5 w-3.5 text-muted-foreground" />
-                    Export CSV ({filteredMatches.length.toLocaleString()})
+                    Export to CSV ({filteredMatches.length.toLocaleString()})
                   </Button>
                   <Button
                     variant="outline"
@@ -450,11 +453,13 @@ export const Header: React.FC<HeaderProps> = ({
                     )}
                   >
                     <FileCode className="h-3.5 w-3.5 text-muted-foreground" />
-                    Export JSON ({filteredMatches.length.toLocaleString()})
+                    Export to JSON ({filteredMatches.length.toLocaleString()})
                   </Button>
                 </div>
                 <p className="px-2 pt-2 text-xs text-muted-foreground">
-                  Exports the Explorer tab&apos;s current filter ({filteredMatches.length.toLocaleString()} of {totalCount.toLocaleString()}).
+                  {isFiltered
+                    ? `Exports the Explorer tab's current filter (${filteredMatches.length.toLocaleString()} of ${totalCount.toLocaleString()} matches).`
+                    : `Exports all ${totalCount.toLocaleString()} matches.`}
                 </p>
               </>
             )}
