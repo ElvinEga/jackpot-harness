@@ -87,10 +87,10 @@ export const SeasonBacktestView: React.FC<SeasonBacktestViewProps> = ({ allMatch
             <FlaskConical className="h-5 w-5 text-primary" />
             <div>
               <h3 className="text-sm font-bold text-foreground">
-                Walk-Forward Model Backtest Simulator
+                Backtest Simulator
               </h3>
               <p className="text-[11px] text-muted-foreground">
-                Train statistical parameters on past seasons and simulate predictions on an unseen season
+                Train the model on past seasons, then test its predictions on an unseen season
               </p>
             </div>
           </div>
@@ -239,11 +239,11 @@ export const SeasonBacktestView: React.FC<SeasonBacktestViewProps> = ({ allMatch
                   Prediction vs Actual Match Audit ({result.testSeason})
                 </h4>
                 <p className="text-[11px] text-muted-foreground">
-                  Fixture by fixture evaluation with walk-forward pre-kickoff model calibration
+                  Each fixture predicted using only data from the training seasons
                 </p>
               </div>
               <Badge variant="outline" className="text-xs font-mono font-semibold">
-                {result.audits.length} Fixtures Logged
+                {result.audits.length} Fixtures
               </Badge>
             </div>
 
@@ -252,8 +252,9 @@ export const SeasonBacktestView: React.FC<SeasonBacktestViewProps> = ({ allMatch
                 <TableHeader className="sticky top-0 bg-muted/90 backdrop-blur z-10">
                   <TableRow className="border-b border-border text-muted-foreground font-medium">
                     <TableHead className="text-xs">Date</TableHead>
-                    <TableHead className="text-xs">Fixture</TableHead>
-                    <TableHead className="text-center text-xs">Actual Score</TableHead>
+                    <TableHead className="text-xs">Home Team</TableHead>
+                    <TableHead className="text-xs">Away Team</TableHead>
+                    <TableHead className="text-center text-xs">Score</TableHead>
                     <TableHead className="text-center text-xs">Predicted</TableHead>
                     <TableHead className="text-center text-xs">Exp Score</TableHead>
                     <TableHead className="text-center text-xs">1X2 Hit</TableHead>
@@ -267,12 +268,15 @@ export const SeasonBacktestView: React.FC<SeasonBacktestViewProps> = ({ allMatch
                     <TableRow key={i} className="hover:bg-muted/40 transition-colors">
                       <TableCell className="tabular-nums text-xs text-muted-foreground">{a.date}</TableCell>
                       <TableCell className="text-xs font-medium text-foreground">
-                        <span className="flex items-center gap-1.5">
-                          <TeamLogo team={a.homeTeam} size={16} />
-                          <span>{a.homeTeam}</span>
-                          <span className="text-muted-foreground font-normal">vs</span>
-                          <TeamLogo team={a.awayTeam} size={16} />
-                          <span>{a.awayTeam}</span>
+                        <span className="flex items-center gap-1.5" title={a.homeTeam}>
+                          <TeamLogo team={a.homeTeam} size={24} />
+                          <span className="truncate max-w-[152px]">{a.homeTeam}</span>
+                        </span>
+                      </TableCell>
+                      <TableCell className="text-xs font-medium text-foreground">
+                        <span className="flex items-center gap-1.5" title={a.awayTeam}>
+                          <TeamLogo team={a.awayTeam} size={24} />
+                          <span className="truncate max-w-[152px]">{a.awayTeam}</span>
                         </span>
                       </TableCell>
                       <TableCell className="text-center tabular-nums text-xs font-medium text-foreground">
@@ -285,7 +289,7 @@ export const SeasonBacktestView: React.FC<SeasonBacktestViewProps> = ({ allMatch
                               ? "text-emerald-500"
                               : a.predictedResult === "draw"
                               ? "text-amber-500"
-                              : "text-primary"
+                              : "text-blue-500"
                           }
                         >
                           {a.predictedResult}
