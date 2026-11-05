@@ -218,7 +218,8 @@ export const FilterBar: React.FC<FilterBarProps> = ({
           <Input
             ref={searchInputRef}
             type="text"
-            placeholder="Search teams, jackpots, bookmakers... (⌘K or /)"
+            aria-label="Search matches"
+            placeholder="Search teams, leagues, bookmakers... (/)"
             value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)}
             onKeyDown={handleSearchKeyDown}
@@ -227,6 +228,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
           {searchValue && (
             <button
               onClick={handleClearSearch}
+              aria-label="Clear search"
               className="absolute right-3 top-2.5 text-muted-foreground hover:text-foreground cursor-pointer"
             >
               <X className="h-4 w-4" />
@@ -260,10 +262,10 @@ export const FilterBar: React.FC<FilterBarProps> = ({
         <div className="flex items-center gap-1.5 flex-wrap">
           <span className="text-xs text-muted-foreground mr-1 hidden sm:inline">Result:</span>
           {[
-            { id: "home", label: "Home", color: "hover:border-primary/50 text-primary" },
-            { id: "draw", label: "Draw", color: "hover:border-border text-foreground" },
-            { id: "away", label: "Away", color: "hover:border-border text-muted-foreground" },
-            { id: "postponed", label: "Postp", color: "hover:border-border text-muted-foreground" },
+            { id: "home", label: "Home" },
+            { id: "draw", label: "Draw" },
+            { id: "away", label: "Away" },
+            { id: "postponed", label: "Postp" },
           ].map((res) => {
             const isSelected = filters.results.includes(res.id);
             return (
@@ -273,8 +275,8 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                 aria-pressed={isSelected}
                 className={`text-xs px-2.5 py-1.5 rounded-md border font-medium transition-colors cursor-pointer ${
                   isSelected
-                    ? "bg-secondary border-border text-foreground shadow-sm ring-1 ring-ring/40"
-                    : `bg-background border-border text-muted-foreground ${res.color}`
+                    ? "bg-primary/20 border-primary text-primary shadow-sm"
+                    : "bg-background border-border text-muted-foreground hover:text-foreground hover:border-border/80"
                 }`}
               >
                 {res.label}
@@ -407,7 +409,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
             className="gap-1 text-xs text-destructive hover:text-destructive hover:bg-destructive/10"
           >
             <RotateCcw className="h-3 w-3" />
-            <span>Reset</span>
+            <span>Reset filters</span>
           </Button>
         )}
       </div>
@@ -417,19 +419,20 @@ export const FilterBar: React.FC<FilterBarProps> = ({
         <div className="flex flex-wrap items-center gap-3 pt-2 border-t border-border/60 text-xs">
           {/* Active Date Info */}
           <div className="flex items-center gap-2">
-            <span className="text-muted-foreground">Active Date:</span>
+            <span className="text-muted-foreground">Dates:</span>
             {filters.from || filters.to ? (
               <div className="flex items-center gap-1.5 bg-muted border border-border px-2 py-0.5 rounded text-foreground font-mono text-xs">
                 <span>{dateRangeLabel}</span>
                 <button
                   onClick={() => onFilterChange({ ...filters, from: null, to: null })}
+                  aria-label="Clear dates"
                   className="text-muted-foreground hover:text-foreground cursor-pointer"
                 >
                   <X className="h-3 w-3" />
                 </button>
               </div>
             ) : (
-              <span className="text-muted-foreground italic">All historical records</span>
+              <span className="text-muted-foreground italic">All dates</span>
             )}
           </div>
 
@@ -439,6 +442,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
             <Input
               type="number"
               step="0.05"
+              aria-label="Minimum odds"
               placeholder="Min"
               value={filters.minOdds ?? ""}
               onChange={(e) =>
@@ -453,6 +457,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
             <Input
               type="number"
               step="0.05"
+              aria-label="Maximum odds"
               placeholder="Max"
               value={filters.maxOdds ?? ""}
               onChange={(e) =>
