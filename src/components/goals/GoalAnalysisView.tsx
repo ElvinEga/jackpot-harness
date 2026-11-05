@@ -86,7 +86,7 @@ export const GoalAnalysisView: React.FC<GoalAnalysisViewProps> = ({ matches }) =
             Goal & Score Frequency Analytics
           </h2>
           <p className="text-xs text-muted-foreground mt-1">
-            Historical goal averages analyzed across distribution profiles.
+            Goal averages by month and day, plus the most common scorelines.
           </p>
         </div>
       </div>
@@ -149,7 +149,7 @@ export const GoalAnalysisView: React.FC<GoalAnalysisViewProps> = ({ matches }) =
 
         <Card size="sm" className="bg-card border-border shadow-xs">
           <CardHeader className="pb-1">
-            <CardDescription className="text-xs">BTTS (Both Score)</CardDescription>
+            <CardDescription className="text-xs">Both Teams to Score (BTTS)</CardDescription>
             <CardTitle className="text-xl font-bold font-mono text-foreground">
               {overall.bttsPct}%
             </CardTitle>
@@ -167,7 +167,7 @@ export const GoalAnalysisView: React.FC<GoalAnalysisViewProps> = ({ matches }) =
               Average Goals by Month (Jan – Dec)
             </CardTitle>
             <CardDescription className="text-xs">
-              Seasonal goal performance and scoring trends across the calendar year
+              Average goals and over-2.5 rates for each month
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -188,7 +188,7 @@ export const GoalAnalysisView: React.FC<GoalAnalysisViewProps> = ({ matches }) =
                   />
                   <Legend wrapperStyle={{ fontSize: "11px", paddingTop: "6px" }} />
                   <Bar yAxisId="left" dataKey="avgGoals" name="Avg Goals" fill="var(--primary)" radius={[3, 3, 0, 0]} />
-                  <Line yAxisId="right" type="monotone" dataKey="over25Pct" name="Over 2.5 %" stroke="var(--primary)" strokeWidth={2} dot={{ r: 3 }} />
+                  <Line yAxisId="right" type="monotone" dataKey="over25Pct" name="Over 2.5 %" stroke="var(--chart-2)" strokeWidth={2} dot={{ r: 3 }} />
                 </ComposedChart>
               </ResponsiveContainer>
             </div>
@@ -203,7 +203,7 @@ export const GoalAnalysisView: React.FC<GoalAnalysisViewProps> = ({ matches }) =
               Average Goals by Day of Week
             </CardTitle>
             <CardDescription className="text-xs">
-              Comparison between weekend jackpot action and midweek fixtures
+              Average goals per match for each day of the week
             </CardDescription>
           </CardHeader>
           <CardContent>
