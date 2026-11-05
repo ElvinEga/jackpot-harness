@@ -61,7 +61,9 @@ export const SportPesaImportModal: React.FC<SportPesaImportModalProps> = ({
       setPreviewJackpot(data);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
-      setError(`Failed to fetch active jackpot: ${msg}`);
+      setError(
+        `Couldn't fetch the active jackpot from SportPesa (${msg}). Paste the JSON response in the Paste JSON tab instead.`,
+      );
     } finally {
       setLoading(false);
     }
@@ -70,7 +72,7 @@ export const SportPesaImportModal: React.FC<SportPesaImportModalProps> = ({
   const handleParseCustomJson = () => {
     setError(null);
     if (!jsonInput.trim()) {
-      setError("Please paste the SportPesa JSON response first.");
+      setError("Paste a SportPesa JSON response first.");
       return;
     }
 
@@ -80,7 +82,7 @@ export const SportPesaImportModal: React.FC<SportPesaImportModalProps> = ({
       setPreviewJackpot(parsed);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
-      setError(`Invalid JSON payload: ${msg}`);
+      setError(`That isn't valid JSON: ${msg}`);
     }
   };
 
@@ -92,7 +94,7 @@ export const SportPesaImportModal: React.FC<SportPesaImportModalProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl bg-card border-border max-h-[90vh] flex flex-col p-6">
+      <DialogContent className="sm:max-w-2xl bg-card border-border max-h-[90vh] flex flex-col p-6">
         <DialogHeader>
           <div className="flex items-center gap-2">
             <div>
@@ -100,7 +102,7 @@ export const SportPesaImportModal: React.FC<SportPesaImportModalProps> = ({
                 SportPesa Mega Jackpot Pro — API Prefill
               </DialogTitle>
               <DialogDescription className="text-xs text-muted-foreground mt-0.5">
-                Import active 17-match jackpot fixtures directly into the Predictor.
+                Import the active 17-match jackpot into the Predictor.
               </DialogDescription>
             </div>
           </div>
@@ -128,7 +130,7 @@ export const SportPesaImportModal: React.FC<SportPesaImportModalProps> = ({
                   https://jackpot-offer-api.ke.sportpesa.com/api/jackpots/active
                 </span>
                 <p className="text-xs text-muted-foreground">
-                  Queries active jackpot fixtures using mobile client headers.
+                  Fetches the active jackpot fixtures from SportPesa's API.
                 </p>
               </div>
 
@@ -199,7 +201,7 @@ export const SportPesaImportModal: React.FC<SportPesaImportModalProps> = ({
                     : "text-foreground border-border"
                 }`}
               >
-                Status: {previewJackpot.bettingStatus}
+                Status: {previewJackpot.bettingStatus.charAt(0).toUpperCase() + previewJackpot.bettingStatus.slice(1)}
               </Badge>
             </div>
 
@@ -254,7 +256,7 @@ export const SportPesaImportModal: React.FC<SportPesaImportModalProps> = ({
             className="text-xs font-semibold gap-1.5"
           >
             <CheckCircle2 className="h-4 w-4 text-primary-foreground" />
-            Apply 17 Matches to Predictor
+            Apply 17 Fixtures to Predictor
           </Button>
         </div>
       </DialogContent>
