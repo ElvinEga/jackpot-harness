@@ -70,7 +70,7 @@ export function App() {
     return (
       <div className="min-h-screen bg-background flex flex-col items-center justify-center p-6 text-center">
         <div className="w-full max-w-sm p-6 rounded-2xl bg-card border border-border shadow-2xl flex flex-col items-center space-y-4 text-card-foreground">
-          <img src="/logo.png" alt="Football Jackpot Harness" className="h-14 w-14 rounded-xl" />
+          <img src="/logo.png" alt="Jackpot Harness" className="h-14 w-14 rounded-xl" />
           <div className="space-y-1">
             <h2 className="text-base font-bold text-foreground flex items-center gap-2">
               <Loader2 className="h-4 w-4 animate-spin text-primary" />
@@ -79,9 +79,6 @@ export function App() {
             <p className="text-xs text-muted-foreground">
               Retrieving historical match records across Betika, Mozzart, and SportPesa...
             </p>
-          </div>
-          <div className="w-full bg-muted rounded-full h-2 overflow-hidden">
-            <div className="bg-primary h-full w-2/3 animate-pulse rounded-full" />
           </div>
         </div>
       </div>
@@ -95,15 +92,16 @@ export function App() {
         <div className="w-full max-w-md p-6 rounded-xl bg-card border border-destructive/50 flex flex-col items-center space-y-4 text-card-foreground">
           <AlertCircle className="h-10 w-10 text-destructive" />
           <div className="space-y-1">
-            <h2 className="text-base font-bold text-foreground">Failed to load datasets</h2>
+            <h2 className="text-base font-bold text-foreground">Couldn't load the jackpot data</h2>
             <p className="text-xs text-muted-foreground">{error instanceof Error ? error.message : "Network error"}</p>
+            <p className="text-xs text-muted-foreground">Check your connection, then try again.</p>
           </div>
           <Button
             variant="default"
             size="sm"
             onClick={() => refetch()}
           >
-            Retry Loading
+            Try again
           </Button>
         </div>
       </div>
@@ -171,6 +169,7 @@ export function App() {
                 allMatches={matches}
                 onSelectMatch={setSelectedMatch}
                 onNavigateToH2H={handleOpenH2H}
+                onReset={resetFilters}
               />
             </div>
           )}
