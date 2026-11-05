@@ -275,9 +275,9 @@ export const SeasonsDashboard: React.FC<SeasonsDashboardProps> = ({
     return (
       <div className="flex-1 flex flex-col items-center justify-center p-12 text-center">
         <Loader2 className="h-8 w-8 text-primary animate-spin mb-3" />
-        <h3 className="text-sm font-bold text-foreground">Loading {currentCompConfig.name} Seasons Data</h3>
+        <h3 className="text-sm font-bold text-foreground">Loading {currentCompConfig.name} seasons</h3>
         <p className="text-xs text-muted-foreground mt-1 max-w-sm">
-          Ingesting multi-season fixture stats (2021–2027) with shots, corners, cards, and bookmaker odds...
+          Fetching six seasons of match stats and odds (2021–2022 to 2026–2027)...
         </p>
       </div>
     );
@@ -287,12 +287,15 @@ export const SeasonsDashboard: React.FC<SeasonsDashboardProps> = ({
     return (
       <div className="flex-1 flex flex-col items-center justify-center p-12 text-center">
         <AlertCircle className="h-8 w-8 text-destructive mb-3" />
-        <h3 className="text-sm font-bold text-foreground">Failed to load seasons data</h3>
-        <p className="text-xs text-muted-foreground mt-1 mb-4">
+        <h3 className="text-sm font-bold text-foreground">Couldn't load the seasons data</h3>
+        <p className="text-xs text-muted-foreground mt-1">
           {error instanceof Error ? error.message : "Network error"}
         </p>
+        <p className="text-xs text-muted-foreground mt-1 mb-4">
+          Check your connection, then try again.
+        </p>
         <Button variant="outline" size="sm" onClick={() => refetch()}>
-          Retry
+          Try again
         </Button>
       </div>
     );
