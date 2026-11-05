@@ -196,14 +196,14 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({
   };
 
   // Apply a fixture-replacing change; if rows already exist, offer Undo via toast
-  const runWithUndo = (label: string, mutate: () => void) => {
+  const runWithUndo = (title: string, mutate: () => void) => {
     const hadRows = Object.keys(customFixtures).length > 0;
     const snapshot = takeSnapshot();
     mutate();
     if (hadRows) {
       toast.add({
-        title: `${label} applied`,
-        description: "Your previous fixtures were replaced.",
+        title,
+        description: "Undo restores your previous fixtures.",
         actionProps: {
           children: "Undo",
           onClick: () => restoreSnapshot(snapshot),
@@ -214,11 +214,11 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({
   };
 
   // Destructive replace over hand-typed rows requires an explicit confirm first
-  const requestReplace = (label: string, mutate: () => void) => {
+  const requestReplace = (toastTitle: string, mutate: () => void) => {
     if (Object.keys(customFixtures).length > 0 && hasManualEdits) {
-      setReplacePrompt({ label, mutate });
+      setReplacePrompt({ label: toastTitle, mutate });
     } else {
-      runWithUndo(label, mutate);
+      runWithUndo(toastTitle, mutate);
     }
   };
 
@@ -364,13 +364,13 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({
     setIsFetchingSportPesa(true);
     try {
       const jp = await fetchActiveSportPesaJackpot();
-      requestReplace("SportPesa live jackpot", () => applySportPesaJackpot(jp));
+      requestReplace("SportPesa jackpot loaded", () => applySportPesaJackpot(jp));
     } catch (err) {
       console.error("Failed to quick-fetch SportPesa:", err);
       toast.add({
-        title: "SportPesa live fetch failed",
+        title: "SportPesa fetch failed",
         description:
-          "Network or API problem — you can paste the JSON payload manually.",
+          "The API couldn't be reached. Switch to the Paste JSON tab in the dialog to load fixtures manually.",
         type: "warning",
         timeout: 6000,
       });
@@ -423,13 +423,13 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({
     setIsFetchingMozzart(true);
     try {
       const jp = await fetchActiveMozzartJackpot();
-      requestReplace("Mozzart live jackpot", () => applyMozzartJackpot(jp));
+      requestReplace("Mozzart jackpot loaded", () => applyMozzartJackpot(jp));
     } catch (err) {
       console.error("Failed to quick-fetch Mozzart:", err);
       toast.add({
-        title: "Mozzart live fetch failed",
+        title: "Mozzart fetch failed",
         description:
-          "Network or API problem — you can paste the JSON payload manually.",
+          "The API couldn't be reached. Switch to the Paste JSON tab in the dialog to load fixtures manually.",
         type: "warning",
         timeout: 6000,
       });
@@ -453,7 +453,7 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({
     const found = availableEvents.find((e) => e.id === eventId);
     if (!found) return;
 
-    requestReplace("Past jackpot slip", () => {
+    requestReplace("Past jackpot slip loaded", () => {
       const newFix: Record<number, FixtureEntry> = {};
       for (const m of found.matches) {
         if (m.position >= 1 && m.position <= maxPositions) {
@@ -588,7 +588,8 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({
             Predictor
           </h2>
           <p className="text-xs text-muted-foreground mt-1">
-            Predict upcoming jackpot slips based on historical position biases.
+            Predict upcoming jackpot slips from historical position patterns
+            and team form.
           </p>
         </div>
 
@@ -650,7 +651,7 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({
           <SheetHeader className="border-b border-border px-4 py-4 text-left">
             <SheetTitle>API Prefill</SheetTitle>
             <SheetDescription>
-              Pull live jackpot fixtures and real-time odds straight from the
+              Pull the current jackpot fixtures and odds directly from the
               bookmaker APIs.
             </SheetDescription>
           </SheetHeader>
@@ -685,7 +686,7 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({
                   <p className="text-xs text-muted-foreground">
                     {activeSportPesaMeta
                       ? `Active jackpot #${activeSportPesaMeta.humanId} loaded with live 1X2 odds, kickoffs, and tournament data.`
-                      : `Instantly prefill all 17 match fixtures from SportPesa's active jackpot API with real-time odds.`}
+                      : `Prefill all 17 fixtures from SportPesa's active jackpot with live odds.`}
                   </p>
                 </div>
               </div>
@@ -756,7 +757,7 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({
                   <p className="text-xs text-muted-foreground">
                     {activeMozzartMeta
                       ? `Round #${activeMozzartMeta.roundId} loaded with live 1X2 odds and competition data.`
-                      : `Instantly prefill all 16 match fixtures from Mozzart's active super jackpot API with real-time odds.`}
+                      : `Prefill all 16 fixtures from Mozzart's active super jackpot with live odds.`}
                   </p>
                 </div>
               </div>
@@ -984,12 +985,11 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({
           <div className="flex items-center gap-2">
             <Trophy className="h-4 w-4 text-primary" />
             <h2 className="text-sm font-bold text-foreground">
-              Jackpot Positions 1 to {maxPositions} Prediction Table
+              Jackpot Position Predictions (1–{maxPositions})
             </h2>
           </div>
           <span className="text-xs text-muted-foreground">
-            Click any row to inspect historical signals & score probability
-            matrix
+            Select a row to see the signals and score probabilities behind it
           </span>
         </div>
 
@@ -998,9 +998,8 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({
             <TableHeader>
               <TableRow className="border-b border-border bg-muted/50 text-muted-foreground font-medium">
                 <TableHead className="w-12 text-center text-xs">Pos</TableHead>
-                <TableHead className="min-w-[340px] text-xs">
-                  Match Fixture (Home vs Away)
-                </TableHead>
+                <TableHead className="min-w-[170px] text-xs">Home Team</TableHead>
+                <TableHead className="min-w-[170px] text-xs">Away Team</TableHead>
                 <TableHead className="text-center min-w-[130px] text-xs">
                   1X2 Distribution
                 </TableHead>
@@ -1049,27 +1048,42 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({
                       #{pred.position}
                     </TableCell>
 
-                    {/* Match Fixture Input / Display */}
+                    {/* Home Team Input */}
+                    <TableCell
+                      className="px-2 py-1"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <div className="flex flex-col gap-1">
+                        <TeamSearchInput
+                          size="xs"
+                          placeholder={`Home Team ${pred.position}`}
+                          value={customFixtures[pred.position]?.home || ""}
+                          onChange={(val) =>
+                            handleUpdateFixture(pred.position, "home", val)
+                          }
+                          teams={allTeams}
+                          teamAppearances={teamAppearances}
+                          className="w-full min-w-[140px]"
+                        />
+                        {pred.bookmakerOdds && (
+                          <div className="flex items-center gap-1.5 text-xs tabular-nums text-muted-foreground pl-0.5">
+                            <span className="inline-flex items-center gap-1 text-[11px] px-1.5 py-0.5 rounded bg-primary/10 text-primary font-medium whitespace-nowrap">
+                              SportPesa 1X2: {pred.bookmakerOdds.home?.toFixed(2)} |{" "}
+                              {pred.bookmakerOdds.draw?.toFixed(2)} |{" "}
+                              {pred.bookmakerOdds.away?.toFixed(2)}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    </TableCell>
+
+                    {/* Away Team Input */}
                     <TableCell
                       className="px-2 py-1"
                       onClick={(e) => e.stopPropagation()}
                     >
                       <div className="flex flex-col gap-1">
                         <div className="flex items-center gap-1.5">
-                          <TeamSearchInput
-                            size="xs"
-                            placeholder={`Home Team ${pred.position}`}
-                            value={customFixtures[pred.position]?.home || ""}
-                            onChange={(val) =>
-                              handleUpdateFixture(pred.position, "home", val)
-                            }
-                            teams={allTeams}
-                            teamAppearances={teamAppearances}
-                            className="w-36"
-                          />
-                          <span className="text-muted-foreground text-xs font-medium">
-                            vs
-                          </span>
                           <TeamSearchInput
                             size="xs"
                             placeholder={`Away Team ${pred.position}`}
@@ -1079,7 +1093,7 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({
                             }
                             teams={allTeams}
                             teamAppearances={teamAppearances}
-                            className="w-36"
+                            className="w-full min-w-[140px]"
                           />
                           {isCustom && (
                             <span className="text-[11px] font-medium text-primary">
@@ -1087,22 +1101,14 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({
                             </span>
                           )}
                         </div>
-
-                        {/* SportPesa Live Market Odds & Tournament info */}
-                        {pred.bookmakerOdds && (
-                          <div className="flex items-center gap-2 text-xs tabular-nums text-muted-foreground pl-0.5">
-                            <span className="inline-flex items-center gap-1 text-[11px] px-1.5 py-0.5 rounded bg-primary/10 text-primary font-medium">
-                              SP Odds: {pred.bookmakerOdds.home?.toFixed(2)} |{" "}
-                              {pred.bookmakerOdds.draw?.toFixed(2)} |{" "}
-                              {pred.bookmakerOdds.away?.toFixed(2)}
-                            </span>
-                            {pred.tournament && (
-                              <span className="text-muted-foreground truncate max-w-[170px] text-xs">
-                                {pred.tournament}{" "}
-                                {pred.country ? `(${pred.country})` : ""}
-                              </span>
-                            )}
-                          </div>
+                        {pred.tournament && (
+                          <span
+                            className="text-muted-foreground truncate max-w-[170px] text-xs pl-0.5 block"
+                            title={`${pred.tournament} ${pred.country ? `(${pred.country})` : ""}`}
+                          >
+                            {pred.tournament}{" "}
+                            {pred.country ? `(${pred.country})` : ""}
+                          </span>
                         )}
                       </div>
                     </TableCell>
@@ -1163,7 +1169,7 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({
                         <span className="text-amber-500">DRAW (X)</span>
                       )}
                       {pred.predictedResult === "away" && (
-                        <span className="text-primary">AWAY (2)</span>
+                        <span className="text-blue-500">AWAY (2)</span>
                       )}
                     </TableCell>
 
@@ -1200,7 +1206,7 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({
           open={!!detailMatch}
           onOpenChange={(open) => !open && setDetailMatch(null)}
         >
-          <DialogContent className="max-w-2xl bg-card border-border">
+          <DialogContent className="sm:max-w-2xl bg-card border-border">
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2 text-base">
                 <span className="h-6 w-6 rounded bg-primary/10 text-primary border border-primary/20 flex items-center justify-center font-bold text-xs font-mono">
@@ -1219,9 +1225,8 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({
                 </span>
               </DialogTitle>
               <DialogDescription className="text-xs text-muted-foreground">
-                Statistical prediction breakdown combining position #
-                {detailMatch.position} tendencies, team form, and Poisson score
-                simulation.
+                This breakdown combines position #{detailMatch.position}{" "}
+                history, team form, and a Poisson score model.
               </DialogDescription>
             </DialogHeader>
 
@@ -1301,7 +1306,7 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({
               {/* Signals and Rationale */}
               <div className="space-y-2">
                 <span className="font-semibold text-foreground text-xs block">
-                  Key Contributing Signals:
+                  Key signals:
                 </span>
                 {detailMatch.signals.map((sig, idx) => (
                   <div
@@ -1360,7 +1365,7 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({
                       className="text-xs gap-1.5"
                     >
                       <BarChart2 className="h-3.5 w-3.5" />
-                      Open in H2H & Teams Tab
+                      Open in H2H & Teams
                     </Button>
                   </div>
                 )}
@@ -1374,7 +1379,7 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({
         open={isSportPesaModalOpen}
         onOpenChange={setIsSportPesaModalOpen}
         onApplyJackpot={(jp) =>
-          requestReplace("SportPesa jackpot", () => applySportPesaJackpot(jp))
+          requestReplace("SportPesa jackpot loaded", () => applySportPesaJackpot(jp))
         }
       />
 
@@ -1383,7 +1388,7 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({
         open={isMozzartModalOpen}
         onOpenChange={setIsMozzartModalOpen}
         onApplyJackpot={(jp) =>
-          requestReplace("Mozzart jackpot", () => applyMozzartJackpot(jp))
+          requestReplace("Mozzart jackpot loaded", () => applyMozzartJackpot(jp))
         }
       />
 
@@ -1398,9 +1403,8 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({
           <AlertDialogHeader>
             <AlertDialogTitle>Replace your edits?</AlertDialogTitle>
             <AlertDialogDescription>
-              You have manually edited fixtures. Loading the{" "}
-              {replacePrompt?.label ?? ""} will discard them and replace all{" "}
-              {maxPositions} rows.
+              You have manually edited fixtures. Loading new fixtures will
+              discard your edits and replace all {maxPositions} positions.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
