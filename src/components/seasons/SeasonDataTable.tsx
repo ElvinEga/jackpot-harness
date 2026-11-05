@@ -218,7 +218,7 @@ export const SeasonDataTable: React.FC<SeasonDataTableProps> = ({
           return (
             <div className="text-center">
               <span className={`text-xs font-medium ${colorClass}`}>
-                {res === "home" ? "Home (1)" : res === "draw" ? "Draw (X)" : "Away (2)"}
+                {res === "home" ? "Home (1)" : res === "draw" ? "Draw (X)" : res === "away" ? "Away (2)" : "—"}
               </span>
             </div>
           );
