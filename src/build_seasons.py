@@ -17,14 +17,20 @@ OUT = ROOT / "data" / "processed" / "seasons"
 
 LEAGUES = {
     "E0": "England – Premier League",
+    "E1": "England – Championship",
     "SP1": "Spain – La Liga",
+    "SP2": "Spain – Segunda División",
     "D1": "Germany – Bundesliga",
+    "D2": "Germany – 2. Bundesliga",
     "I1": "Italy – Serie A",
+    "I2": "Italy – Serie B",
     "F1": "France – Ligue 1",
+    "F2": "France – Ligue 2",
     "N1": "Netherlands – Eredivisie",
     "P1": "Portugal – Primeira Liga",
     "B1": "Belgium – Jupiler Pro League",
     "SC0": "Scotland – Premiership",
+    "SC1": "Scotland – Championship",
     "T1": "Turkey – Süper Lig",
     "G1": "Greece – Super League 1",
 }
