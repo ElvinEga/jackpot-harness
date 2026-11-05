@@ -1,3 +1,4 @@
+import { isDecidedSeasonMatch } from "./seasonTypes";
 import type {
   SeasonMatch,
   SeasonMatchPrediction,
@@ -47,13 +48,16 @@ function tauAdjustment(x: number, y: number, lambda: number, mu: number, rho = -
  * Predicts a matchup between Home Team and Away Team using historical season matches.
  */
 export function predictSeasonMatch(
-  matches: SeasonMatch[],
+  allMatches: SeasonMatch[],
   homeTeam: string,
   awayTeam: string,
   fixtureOdds?: { home?: number | null; draw?: number | null; away?: number | null }
 ): SeasonMatchPrediction {
   const normHome = homeTeam.trim();
   const normAway = awayTeam.trim();
+
+  // An undecided fixture has no goals to learn from, so it joins no average below.
+  const matches = allMatches.filter(isDecidedSeasonMatch);
 
   // Baseline league statistics
   const totalMatches = matches.length || 1;
