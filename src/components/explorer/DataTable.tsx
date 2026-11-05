@@ -70,6 +70,7 @@ interface DataTableProps {
   allMatches?: Match[];
   onSelectMatch: (match: Match) => void;
   onNavigateToH2H?: (teamA: string, teamB: string) => void;
+  onReset?: () => void;
 }
 
 export const DataTable: React.FC<DataTableProps> = ({
@@ -77,6 +78,7 @@ export const DataTable: React.FC<DataTableProps> = ({
   allMatches = matches,
   onSelectMatch,
   onNavigateToH2H,
+  onReset,
 }) => {
   const [sorting, setSorting] = useState<SortingState>([
     { id: "date", desc: true },
@@ -206,18 +208,6 @@ export const DataTable: React.FC<DataTableProps> = ({
         },
       },
       {
-        accessorKey: "score",
-        header: "Score",
-        cell: (info) => {
-          const score = info.getValue() as string | null;
-          return (
-            <span className="tabular-nums text-xs font-medium text-foreground">
-              {score || "—"}
-            </span>
-          );
-        },
-      },
-      {
         accessorKey: "away_team",
         header: "Away Team",
         cell: (info) => {
@@ -228,6 +218,18 @@ export const DataTable: React.FC<DataTableProps> = ({
               <span className="font-medium text-xs text-foreground truncate max-w-[152px]">
                 {name}
               </span>
+            </span>
+          );
+        },
+      },
+      {
+        accessorKey: "score",
+        header: "Score",
+        cell: (info) => {
+          const score = info.getValue() as string | null;
+          return (
+            <span className="tabular-nums text-xs font-medium text-foreground">
+              {score || "—"}
             </span>
           );
         },
@@ -312,6 +314,7 @@ export const DataTable: React.FC<DataTableProps> = ({
                     <Button
                       variant="ghost"
                       size="icon-xs"
+                      aria-label="Row actions"
                       className="h-7 w-7 text-muted-foreground hover:text-foreground"
                     >
                       <MoreHorizontal className="h-3.5 w-3.5" />
@@ -320,7 +323,7 @@ export const DataTable: React.FC<DataTableProps> = ({
                 />
                 <DropdownMenuContent align="end" className="w-56">
                   <DropdownMenuLabel className="text-xs font-mono text-muted-foreground">
-                    Row #{match.position} · {match.home_team} vs{" "}
+                    Position #{match.position} · {match.home_team} vs{" "}
                     {match.away_team}
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
@@ -363,7 +366,7 @@ export const DataTable: React.FC<DataTableProps> = ({
                     onClick={() => onSelectMatch(match)}
                     className="cursor-pointer text-xs"
                   >
-                    View Match Details Sheet
+                    View match details
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -447,9 +450,14 @@ export const DataTable: React.FC<DataTableProps> = ({
           No matches found
         </h3>
         <p className="text-xs text-muted-foreground mt-1 max-w-sm">
-          Try loosening your search keywords, clearing bookmaker selection, or
-          resetting the odds and date filters.
+          The current search, bookmaker, odds, and date filters exclude every
+          record in the archive.
         </p>
+        {onReset && (
+          <Button variant="outline" size="sm" onClick={onReset} className="mt-4 text-xs">
+            Clear all filters
+          </Button>
+        )}
       </div>
     );
   }
@@ -484,7 +492,7 @@ export const DataTable: React.FC<DataTableProps> = ({
                           ? { left: `${stickyIdx * 44}px` }
                           : undefined
                       }
-                      className={`px-2 py-1.5 text-xs font-medium text-muted-foreground select-none transition-colors ${
+                      className={`group px-2 py-1.5 text-xs font-medium text-muted-foreground select-none transition-colors ${
                         canSort ? "cursor-pointer hover:text-foreground" : ""
                       } ${stickyIdx >= 0 ? "sticky z-10 bg-card" : ""}`}
                     >
@@ -526,7 +534,7 @@ export const DataTable: React.FC<DataTableProps> = ({
                   }
                 }}
                 data-state={row.getIsSelected() && "selected"}
-                className={`cursor-pointer hover:bg-muted transition-colors outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring ${
+                className={`group cursor-pointer hover:bg-muted transition-colors outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring ${
                   row.getIsSelected() ? "bg-primary/5 hover:bg-primary/10" : ""
                 }`}
               >
@@ -545,7 +553,7 @@ export const DataTable: React.FC<DataTableProps> = ({
                           ? { left: `${stickyIdx * 44}px` }
                           : undefined
                       }
-                      className={`px-2 py-1 ${stickyIdx >= 0 ? "sticky z-10 bg-background/10 backdrop-blur-sm group-hover:bg-muted" : ""}`}
+                      className={`px-2 py-1 ${stickyIdx >= 0 ? "sticky z-10 bg-background/10 backdrop-blur-sm group-hover:bg-muted group-data-[state=selected]:bg-primary/5 group-data-[state=selected]:group-hover:bg-primary/10" : ""}`}
                     >
                       {flexRender(
                         cell.column.columnDef.cell,
@@ -636,7 +644,7 @@ export const DataTable: React.FC<DataTableProps> = ({
               className="text-xs h-7 text-muted-foreground hover:text-foreground px-2"
             >
               <X className="h-3.5 w-3.5 mr-1" />
-              Clear
+              Clear selection
             </Button>
           </div>
         </div>
@@ -655,11 +663,11 @@ export const DataTable: React.FC<DataTableProps> = ({
             <strong className="text-foreground">
               {totalRows.toLocaleString()}
             </strong>{" "}
-            records
+            matches
           </span>
 
           <div className="flex items-center gap-1.5 ml-2">
-            <span>Rows:</span>
+            <span>Rows per page:</span>
             <NativeSelect
               size="sm"
               value={pageSize}
