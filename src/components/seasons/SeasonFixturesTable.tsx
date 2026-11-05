@@ -25,6 +25,7 @@ import {
   TableRow,
   TableCell,
 } from "@/components/ui/table";
+import { isDecidedSeasonMatch } from "../../lib/seasonTypes";
 import type { SeasonMatch } from "../../lib/seasonTypes";
 
 interface SeasonFixturesTableProps {
@@ -45,13 +46,16 @@ export const SeasonFixturesTable: React.FC<SeasonFixturesTableProps> = ({
     const q = searchTerm.trim().toLowerCase();
     return matches.filter((m) => {
       if (q) {
-        const text = `${m.home_team} ${m.away_team} ${m.referee || ""} ${m.score} ${m.season}`.toLowerCase();
+        const text = `${m.home_team} ${m.away_team} ${m.referee || ""} ${m.score || ""} ${m.season}`.toLowerCase();
         if (!text.includes(q)) return false;
       }
       if (resultFilter !== "all" && m.result !== resultFilter) return false;
-      if (goalsFilter === "over25" && m.total_goals <= 2.5) return false;
-      if (goalsFilter === "under25" && m.total_goals > 2.5) return false;
-      if (goalsFilter === "btts" && (m.home_goals === 0 || m.away_goals === 0)) return false;
+      if (goalsFilter !== "all") {
+        if (!isDecidedSeasonMatch(m)) return false;
+        if (goalsFilter === "over25" && m.total_goals <= 2.5) return false;
+        if (goalsFilter === "under25" && m.total_goals > 2.5) return false;
+        if (goalsFilter === "btts" && (m.home_goals === 0 || m.away_goals === 0)) return false;
+      }
       return true;
     });
   }, [matches, searchTerm, resultFilter, goalsFilter]);
