@@ -67,7 +67,7 @@ analysis.
 ## Derived JSON
 
 `uv run python src/build_json.py` regenerates `data/processed/<bookmaker>/<same-stem>.json` from
-`data/raw/`. Each file is a flat JSON array of one object per match row, 42898 records in total:
+`data/raw/`. Each file is a flat JSON array of one object per match row, 43083 records in total:
 
 ```json
 {
@@ -113,7 +113,7 @@ sync:seasons` chains the fetch and the build below.
 `/data/seasons/premier_league/<season>.json` exactly like the jackpot mirror is at
 `/data/<bookmaker>/`.
 
-18451 matches in total across the eleven competitions (380 per completed season for EPL, La Liga and
+18546 matches in total across the eleven competitions (380 per completed season for EPL, La Liga and
 Serie A, 306 for Bundesliga, Eredivisie and `liga_1`; Ligue 1 has 380 for 2021-2022 and 2022-2023
 then 306 from 2023-2024, when it dropped to 18 clubs; `jupiter_league` has 306 for 2021-2022 and
 2022-2023, 312, 312 and 311 for the three seasons it ran 16 clubs plus playoffs, then 18 clubs
@@ -121,8 +121,8 @@ again; `sco_premier_league` has 228 every season — 12 clubs, 198 regular fixtu
 split playoff rounds; Turkey's `ligi_1` runs 380, 342, 380, 342, 306 as it went from 20 to 19 to
 20, 19 and 18 clubs, a clean double round-robin each time; Greece's `ethniki_katigoria` has 240 for
 its 14-club seasons, then 233 and 236 as the playoff block shrank). The in-progress 2026-2027 files
-hold 80 EPL, 99 La Liga, 63 Bundesliga, 90 Serie A, 72 Ligue 1, 90 Eredivisie, 81 Portugal, 80
-Belgium, 66 Scotland, 81 Turkey and 55 Greece matches as of the 2026-11-01 sync. One object per
+hold 90 EPL, 109 La Liga, 72 Bundesliga, 100 Serie A, 81 Ligue 1, 99 Eredivisie, 90 Portugal, 90
+Belgium, 69 Scotland, 90 Turkey and 62 Greece matches as of the 2026-11-05 sync. One object per
 match, sorted by `(date, home_team)`; the ~100 source columns are reduced to 19 fields, variable
 parts grouped:
 
@@ -180,9 +180,13 @@ What the generator does:
 
 ## Data quirks (verify before computing anything)
 
-- Line endings differ by file (mostly CRLF; `mozzart-super-grand-jackpot.csv` and both sportpesa
-  files are LF) and `result` values can carry a trailing `\r`. Use `csv.DictReader` with
+- Line endings differ by file (every betika and mozzart CSV is CRLF; the two sportpesa files are the
+  only LF ones) and `result` values can carry a trailing `\r`. Use `csv.DictReader` with
   `newline=''`, never naive `split(',')`.
+- 33 SportPesa rows (2023-01-23 → 2026-08-17) hold `PD:1` / `PD:X` / `PD:2` in `Score` instead of a
+  scoreline — `PD-1`/`PD-X`/`PD-2` after the separator flip — and `Result` always agrees with the
+  suffix (`home`/`draw`/`away`). They are not goal counts; exclude them from any aggregate over
+  `score`.
 - The season CSVs are all CRLF and most carry a UTF-8 **BOM** before `Div` (EPL: 2021-2022,
   2024-2025, 2025-2026, 2026-2027; every other competition: its last three seasons). Open them with
   `encoding='utf-8-sig'` or the first column becomes `'\ufeffDiv'`.
