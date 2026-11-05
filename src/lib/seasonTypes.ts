@@ -53,11 +53,11 @@ export interface SeasonMatch {
   away_team: string;
   division: string; // "E0"
   league: string; // "England – Premier League"
-  score: string; // "2-0"
-  home_goals: number;
-  away_goals: number;
-  total_goals: number;
-  result: "home" | "draw" | "away";
+  score: string | null; // "2-0"; null for an undecided fixture
+  home_goals: number | null;
+  away_goals: number | null;
+  total_goals: number | null;
+  result: "home" | "draw" | "away" | null;
   half_time_score: string | null;
   half_time_home_goals: number | null;
   half_time_away_goals: number | null;
@@ -66,6 +66,22 @@ export interface SeasonMatch {
   stats: SeasonMatchStats;
   odds: SeasonMatchOdds;
 }
+
+/**
+ * A fixture with a full-time result. The season set keeps a handful of rows whose result is
+ * still open (Ligue 2: Bastia v Red Star, 2025-12-05), and those carry a null score with them,
+ * so anything that reads goals or books a win/draw/loss works on this narrowed shape.
+ */
+export type DecidedSeasonMatch = SeasonMatch & {
+  score: string;
+  home_goals: number;
+  away_goals: number;
+  total_goals: number;
+  result: "home" | "draw" | "away";
+};
+
+export const isDecidedSeasonMatch = (m: SeasonMatch): m is DecidedSeasonMatch =>
+  m.result !== null;
 
 export interface SeasonIndexEntry {
   season: string;
@@ -154,7 +170,7 @@ export interface TeamSeasonProfile {
     ga: number;
     winRate: number;
   };
-  recentMatches: SeasonMatch[];
+  recentMatches: DecidedSeasonMatch[];
   attackRating: number; // 0-100 normalized
   defenseRating: number; // 0-100 normalized
   overallRating: number; // 0-100
