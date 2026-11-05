@@ -202,7 +202,7 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
           <div className="flex items-center gap-2.5">
             <div>
               <DialogTitle className="text-base sm:text-lg font-bold text-foreground">
-                Match & Historical Intelligence
+                Match Analysis
               </DialogTitle>
               <DialogDescription className="text-xs text-muted-foreground mt-0.5 flex items-center gap-1.5">
                 <TeamLogo team={teamA} size={24} />
@@ -228,7 +228,7 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
             </TabsTrigger>
             <TabsTrigger value="position">
               <Layers className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
-              <span>Row Analysis</span>
+              <span>Position Analysis</span>
             </TabsTrigger>
             <TabsTrigger value="likelihood">
               <Sparkles className="h-3.5 w-3.5 shrink-0" />
@@ -344,7 +344,7 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
                 <div className="border border-border rounded-xl overflow-hidden bg-card">
                   <div className="bg-muted/40 px-3 py-2 border-b border-border flex items-center justify-between">
                     <span className="font-semibold text-foreground text-xs">
-                      Past Encounters in Jackpot Dataset
+                      Past Meetings in the Jackpot Archive
                     </span>
                     <span className="text-xs text-muted-foreground font-mono">
                       {h2h.recentEncounters.length} recorded
@@ -418,7 +418,7 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
                   className="text-xs gap-1.5"
                 >
                   <ExternalLink className="h-3.5 w-3.5" />
-                  Open Full H2H & Poisson Page
+                  Open in H2H & Teams
                 </Button>
               </div>
             )}
@@ -429,7 +429,7 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3 rounded-xl bg-muted/30 border border-border">
               <div className="flex items-center gap-2">
                 <span className="font-semibold text-foreground">
-                  Select Row Position:
+                  Jackpot position:
                 </span>
                 <NativeSelect
                   value={String(selectedPosition)}
@@ -438,14 +438,14 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
                 >
                   {Array.from({ length: 20 }, (_, i) => i + 1).map((p) => (
                     <NativeSelectOption key={p} value={p}>
-                      Row #{p}
+                      Position #{p}
                     </NativeSelectOption>
                   ))}
                 </NativeSelect>
               </div>
               <span className="text-muted-foreground text-xs font-mono">
-                {currentPosStat?.totalMatches.toLocaleString()} historical
-                jackpot events analyzed
+                {currentPosStat?.totalMatches.toLocaleString()} matches in this
+                position
               </span>
             </div>
 
@@ -455,7 +455,7 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-center">
                   <div className="p-3 rounded-xl bg-card border border-border">
                     <span className="text-xs text-muted-foreground block">
-                      Row #{selectedPosition} Home Win
+                      Position #{selectedPosition} Home Win
                     </span>
                     <span className="text-xl font-bold font-mono text-primary block my-0.5">
                       {currentPosStat.homeWinPct}%
@@ -466,7 +466,7 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
                   </div>
                   <div className="p-3 rounded-xl bg-card border border-border">
                     <span className="text-xs text-muted-foreground block">
-                      Row #{selectedPosition} Draw
+                      Position #{selectedPosition} Draw
                     </span>
                     <span className="text-xl font-bold font-mono text-foreground block my-0.5">
                       {currentPosStat.drawPct}%
@@ -477,7 +477,7 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
                   </div>
                   <div className="p-3 rounded-xl bg-card border border-border">
                     <span className="text-xs text-muted-foreground block">
-                      Row #{selectedPosition} Away Win
+                      Position #{selectedPosition} Away Win
                     </span>
                     <span className="text-xl font-bold font-mono text-foreground block my-0.5">
                       {currentPosStat.awayWinPct}%
@@ -527,7 +527,7 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
                 {/* Top 5 Scores for this Row (Grid format) */}
                 <div className="p-3 rounded-xl bg-card border border-border">
                   <span className="font-semibold text-foreground block mb-2">
-                    Most Common Scores in Row #{selectedPosition}:
+                    Most Common Scores in Position #{selectedPosition}:
                   </span>
                   <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
                     {currentPosStat.topScores.map((ts) => (
