@@ -22,6 +22,7 @@ import {
   TableRow,
   TableCell,
 } from "@/components/ui/table";
+import { isDecidedSeasonMatch } from "../../lib/seasonTypes";
 import type { SeasonMatch } from "../../lib/seasonTypes";
 import { getAllSeasonTeams, computeTeamProfile } from "../../lib/seasonsAnalytics";
 import { predictSeasonMatch } from "../../lib/seasonsPredictor";
@@ -78,6 +79,7 @@ export const SeasonActionsModal: React.FC<SeasonActionsModalProps> = ({
   // Head-to-Head matches between Team A and Team B in all seasons
   const h2hMatches = useMemo(() => {
     return allMatches
+      .filter(isDecidedSeasonMatch)
       .filter(
         (m) =>
           (m.home_team === teamA && m.away_team === teamB) ||
