@@ -158,7 +158,9 @@ export const MatchDetailSheet: React.FC<MatchDetailSheetProps> = ({
                 <div className="p-2.5 rounded-lg bg-muted border border-border text-xs text-foreground flex items-start gap-2">
                   <AlertCircle className="h-4 w-4 text-foreground shrink-0 mt-0.5" />
                   <p>
-                    Odds may represent full-time 1X2 or double chance (DC). Tipster pick is omitted in raw records.
+                    The source data doesn't record whether this price is
+                    full-time 1X2 or double chance, so the two markets can't be
+                    told apart.
                   </p>
                 </div>
               )}
@@ -167,7 +169,7 @@ export const MatchDetailSheet: React.FC<MatchDetailSheetProps> = ({
             {/* Quick Filter Actions */}
             <div className="space-y-2">
               <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                Quick Explorations
+                Quick filters
               </h4>
               <div className="flex flex-col gap-1.5">
                 <Button
