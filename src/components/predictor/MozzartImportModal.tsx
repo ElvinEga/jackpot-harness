@@ -60,7 +60,9 @@ export const MozzartImportModal: React.FC<MozzartImportModalProps> = ({
       setPreviewJackpot(data);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
-      setError(`Failed to fetch active jackpot: ${msg}`);
+      setError(
+        `Couldn't fetch the active jackpot from Mozzart (${msg}). Paste the JSON response in the Paste JSON tab instead.`,
+      );
     } finally {
       setLoading(false);
     }
@@ -69,7 +71,7 @@ export const MozzartImportModal: React.FC<MozzartImportModalProps> = ({
   const handleParseCustomJson = () => {
     setError(null);
     if (!jsonInput.trim()) {
-      setError("Please paste the Mozzart JSON response first.");
+      setError("Paste a Mozzart JSON response first.");
       return;
     }
 
@@ -79,7 +81,7 @@ export const MozzartImportModal: React.FC<MozzartImportModalProps> = ({
       setPreviewJackpot(parsed);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
-      setError(`Invalid JSON payload: ${msg}`);
+      setError(`That isn't valid JSON: ${msg}`);
     }
   };
 
@@ -100,7 +102,7 @@ export const MozzartImportModal: React.FC<MozzartImportModalProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl bg-card border-border max-h-[90vh] flex flex-col p-6">
+      <DialogContent className="sm:max-w-2xl bg-card border-border max-h-[90vh] flex flex-col p-6">
         <DialogHeader>
           <div className="flex items-center gap-2">
             <div>
@@ -108,7 +110,7 @@ export const MozzartImportModal: React.FC<MozzartImportModalProps> = ({
                 Mozzart Super Jackpot — API Prefill
               </DialogTitle>
               <DialogDescription className="text-xs text-muted-foreground mt-0.5">
-                Import active 16-match jackpot fixtures directly into the Predictor.
+                Import the active 16-match jackpot into the Predictor.
               </DialogDescription>
             </div>
           </div>
@@ -136,7 +138,7 @@ export const MozzartImportModal: React.FC<MozzartImportModalProps> = ({
                   https://www.mozzartbet.co.ke/predefined-tickets
                 </span>
                 <p className="text-xs text-muted-foreground">
-                  Queries active jackpot fixtures using mobile client headers.
+                  Fetches the active jackpot fixtures from Mozzart's API.
                 </p>
               </div>
 
@@ -260,7 +262,7 @@ export const MozzartImportModal: React.FC<MozzartImportModalProps> = ({
             className="text-xs font-semibold gap-1.5 border-primary/40 bg-primary/10 text-primary hover:bg-primary/20"
           >
             <CheckCircle2 className="h-4 w-4" />
-            Apply {previewJackpot?.totalRows ?? 16} Matches to Predictor
+            Apply {previewJackpot?.totalRows ?? 16} Fixtures to Predictor
           </Button>
         </div>
       </DialogContent>
