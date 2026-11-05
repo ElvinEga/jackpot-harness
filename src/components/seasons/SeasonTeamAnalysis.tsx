@@ -55,7 +55,7 @@ export const SeasonTeamAnalysis: React.FC<SeasonTeamAnalysisProps> = ({
   if (!profile) {
     return (
       <div className="p-8 text-center text-muted-foreground border border-border rounded-xl bg-card">
-        No matches found for {activeTeam} in this season.
+        No {activeTeam} matches in {seasonName}.
       </div>
     );
   }
