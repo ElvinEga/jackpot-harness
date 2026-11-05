@@ -79,22 +79,42 @@ export const SeasonsDashboard: React.FC<SeasonsDashboardProps> = ({
       setInternalCompetition(compId);
     }
 
-    if (compId === "laliga_primera") {
+    if (compId === "efl_championship") {
+      setSelectedTeam("Millwall");
+      setPredHome("Millwall");
+      setPredAway("QPR");
+    } else if (compId === "laliga_primera") {
       setSelectedTeam("Real Madrid");
       setPredHome("Real Madrid");
       setPredAway("Barcelona");
+    } else if (compId === "laliga_segunda") {
+      setSelectedTeam("Las Palmas");
+      setPredHome("Las Palmas");
+      setPredAway("Eibar");
     } else if (compId === "bundesliga_1") {
       setSelectedTeam("Bayern Munich");
       setPredHome("Bayern Munich");
       setPredAway("Dortmund");
+    } else if (compId === "bundesliga_2") {
+      setSelectedTeam("Nurnberg");
+      setPredHome("Nurnberg");
+      setPredAway("Greuther Furth");
     } else if (compId === "serie_a") {
       setSelectedTeam("Inter");
       setPredHome("Inter");
       setPredAway("Milan");
+    } else if (compId === "serie_b") {
+      setSelectedTeam("Palermo");
+      setPredHome("Palermo");
+      setPredAway("Sampdoria");
     } else if (compId === "le_championnat") {
       setSelectedTeam("Paris SG");
       setPredHome("Paris SG");
       setPredAway("Marseille");
+    } else if (compId === "ligue_2") {
+      setSelectedTeam("Clermont");
+      setPredHome("Clermont");
+      setPredAway("Grenoble");
     } else if (compId === "eredivisie") {
       setSelectedTeam("Ajax");
       setPredHome("Ajax");
@@ -111,6 +131,10 @@ export const SeasonsDashboard: React.FC<SeasonsDashboardProps> = ({
       setSelectedTeam("Celtic");
       setPredHome("Celtic");
       setPredAway("Rangers");
+    } else if (compId === "sco_championship") {
+      setSelectedTeam("Dunfermline");
+      setPredHome("Dunfermline");
+      setPredAway("Raith Rvs");
     } else if (compId === "ligi_1") {
       setSelectedTeam("Galatasaray");
       setPredHome("Galatasaray");
