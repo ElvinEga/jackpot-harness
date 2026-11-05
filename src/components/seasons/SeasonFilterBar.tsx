@@ -146,7 +146,7 @@ export const SeasonFilterBar: React.FC<SeasonFilterBarProps> = ({
             <NativeSelectOption value="all">All Goals</NativeSelectOption>
             <NativeSelectOption value="over25">Over 2.5</NativeSelectOption>
             <NativeSelectOption value="under25">Under 2.5</NativeSelectOption>
-            <NativeSelectOption value="btts">BTTS (Both Scored)</NativeSelectOption>
+            <NativeSelectOption value="btts">Both Teams to Score</NativeSelectOption>
           </NativeSelect>
 
           {/* Reset Filters Button */}
@@ -158,7 +158,7 @@ export const SeasonFilterBar: React.FC<SeasonFilterBarProps> = ({
               className="text-xs text-muted-foreground hover:text-foreground gap-1 px-2"
             >
               <RotateCcw className="h-3 w-3" />
-              <span>Reset</span>
+              <span>Reset filters</span>
             </Button>
           )}
 
