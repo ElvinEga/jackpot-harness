@@ -22,6 +22,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { isDecidedSeasonMatch } from "../../lib/seasonTypes";
 import type { SeasonMatch } from "../../lib/seasonTypes";
 
 interface SeasonMatchDetailSheetProps {
@@ -48,7 +49,16 @@ export const SeasonMatchDetailSheet: React.FC<SeasonMatchDetailSheetProps> = ({
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const decided = isDecidedSeasonMatch(match);
+
   const getResultBadge = () => {
+    if (match.result === null) {
+      return (
+        <Badge variant="outline" className="text-muted-foreground border-border font-semibold">
+          Pending
+        </Badge>
+      );
+    }
     if (match.result === "home") {
       return (
         <Badge variant="outline" className="bg-emerald-500/10 text-emerald-500 border-emerald-500/30 font-semibold">
@@ -85,7 +95,7 @@ export const SeasonMatchDetailSheet: React.FC<SeasonMatchDetailSheetProps> = ({
           <SheetTitle className="text-xl font-bold tracking-tight text-foreground mt-3 flex items-center justify-between">
             <span>{match.home_team}</span>
             <span className="font-mono text-2xl px-3 py-1 rounded-lg bg-muted border border-border text-foreground">
-              {match.score}
+              {match.score || "N/A"}
             </span>
             <span>{match.away_team}</span>
           </SheetTitle>
@@ -113,14 +123,14 @@ export const SeasonMatchDetailSheet: React.FC<SeasonMatchDetailSheetProps> = ({
             <div className="p-3 rounded-xl bg-muted/30 border border-border">
               <span className="text-[11px] text-muted-foreground block">Total Match Goals</span>
               <span className="text-base font-bold font-mono text-primary mt-0.5 block">
-                {match.total_goals}
+                {decided ? match.total_goals : "N/A"}
               </span>
             </div>
 
             <div className="p-3 rounded-xl bg-muted/30 border border-border">
               <span className="text-[11px] text-muted-foreground block">Both Teams Scored</span>
               <span className="text-base font-bold font-mono text-foreground mt-0.5 block">
-                {match.home_goals > 0 && match.away_goals > 0 ? "Yes" : "No"}
+                {decided ? (match.home_goals > 0 && match.away_goals > 0 ? "Yes" : "No") : "N/A"}
               </span>
             </div>
           </div>
