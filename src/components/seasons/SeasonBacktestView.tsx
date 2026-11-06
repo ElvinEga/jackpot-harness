@@ -82,12 +82,12 @@ export const SeasonBacktestView: React.FC<SeasonBacktestViewProps> = ({ allMatch
             {/* Title / Icon */}
             <div className="flex items-center gap-2 shrink-0">
               <FlaskConical className="h-4 w-4 text-primary" />
-              <span className="text-sm font-bold text-foreground">Backtest</span>
+              <span className="text-sm font-bold text-foreground">Backtest Simulator</span>
             </div>
 
             {/* Training Seasons Selector */}
             <div className="flex items-center gap-1.5 flex-wrap">
-              <span className="text-[11px] text-muted-foreground font-medium shrink-0">Train on:</span>
+              <span className="text-[11px] text-muted-foreground font-medium shrink-0">Training Baseline:</span>
               {availableSeasons.map((s) => {
                 const isSelected = selectedTrain.includes(s);
                 const isCurrentTest = selectedTest === s;
@@ -111,7 +111,7 @@ export const SeasonBacktestView: React.FC<SeasonBacktestViewProps> = ({ allMatch
 
             {/* Test Target Season */}
             <div className="flex items-center gap-1.5 shrink-0">
-              <span className="text-[11px] text-muted-foreground font-medium shrink-0">Test Target:</span>
+              <span className="text-[11px] text-muted-foreground font-medium shrink-0">Target Season:</span>
               <NativeSelect
                 value={selectedTest}
                 onChange={(e) => {
@@ -138,7 +138,7 @@ export const SeasonBacktestView: React.FC<SeasonBacktestViewProps> = ({ allMatch
             className="h-8 text-xs font-semibold gap-1.5 shrink-0"
           >
             {isRunning ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Play className="h-3.5 w-3.5" />}
-            <span>{isRunning ? "Simulating..." : "Run Simulation"}</span>
+            <span>{isRunning ? "Evaluating Model..." : "Run Backtest Simulation"}</span>
           </Button>
         </div>
 
@@ -146,13 +146,13 @@ export const SeasonBacktestView: React.FC<SeasonBacktestViewProps> = ({ allMatch
         {result && (
           <div className="px-4 py-2.5 bg-muted/20 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 text-xs items-center">
             <div>
-              <span className="text-[10px] text-muted-foreground block">Evaluated</span>
+              <span className="text-[10px] text-muted-foreground block">Tested Matches</span>
               <span className="text-base font-bold text-foreground">{result.totalMatchesTested}</span>
-              <span className="text-[10px] text-muted-foreground ml-1">matches</span>
+              <span className="text-[10px] text-muted-foreground ml-1">fixtures</span>
             </div>
 
             <div>
-              <span className="text-[10px] text-muted-foreground block">1X2 Accuracy</span>
+              <span className="text-[10px] text-muted-foreground block">1X2 Pick Accuracy</span>
               <span className="text-base font-bold text-emerald-500">
                 {result.accuracy1X2Pct}%
                 <span className="text-[10px] text-muted-foreground font-normal ml-1">
@@ -162,7 +162,7 @@ export const SeasonBacktestView: React.FC<SeasonBacktestViewProps> = ({ allMatch
             </div>
 
             <div>
-              <span className="text-[10px] text-muted-foreground block">O / U 2.5 Goals</span>
+              <span className="text-[10px] text-muted-foreground block">Over / Under 2.5 Accuracy</span>
               <span className="text-base font-bold text-orange-500">{result.accuracyOver25Pct}%</span>
             </div>
 
@@ -172,7 +172,7 @@ export const SeasonBacktestView: React.FC<SeasonBacktestViewProps> = ({ allMatch
             </div>
 
             <div>
-              <span className="text-[10px] text-muted-foreground block">Exact Scores</span>
+              <span className="text-[10px] text-muted-foreground block">Exact Score Hits</span>
               <span className="text-base font-bold text-foreground">
                 {result.scoreAccuracyPct}%
                 <span className="text-[10px] text-muted-foreground font-normal ml-1">
@@ -182,8 +182,8 @@ export const SeasonBacktestView: React.FC<SeasonBacktestViewProps> = ({ allMatch
             </div>
 
             <div>
-              <span className="text-[10px] text-muted-foreground block" title="Multi-category Brier score. Closer to 0 indicates superior calibration.">
-                Brier Calibration
+              <span className="text-[10px] text-muted-foreground block" title="Multi-category Brier score. Closer to 0.0 indicates superior probabilistic calibration.">
+                Brier Calibration Score
               </span>
               <span className="text-base font-bold text-blue-500">{result.brierScore}</span>
             </div>
@@ -202,7 +202,7 @@ export const SeasonBacktestView: React.FC<SeasonBacktestViewProps> = ({ allMatch
                   Prediction vs Actual Match Audit ({result.testSeason})
                 </h4>
                 <p className="text-[11px] text-muted-foreground">
-                  Each fixture predicted using only data from the training seasons
+                  Each fixture predicted strictly using baseline model weights trained on prior seasons
                 </p>
               </div>
               <Badge variant="outline" className="text-xs font-semibold">
@@ -220,10 +220,10 @@ export const SeasonBacktestView: React.FC<SeasonBacktestViewProps> = ({ allMatch
                     <TableHead className="text-center text-xs">Score</TableHead>
                     <TableHead className="text-center text-xs">Predicted</TableHead>
                     <TableHead className="text-center text-xs">Exp Score</TableHead>
-                    <TableHead className="text-center text-xs">1X2 Hit</TableHead>
-                    <TableHead className="text-center text-xs">O/U Hit</TableHead>
-                    <TableHead className="text-center text-xs">BTTS Hit</TableHead>
-                    <TableHead className="text-right text-xs">Odds (H/D/A)</TableHead>
+                    <TableHead className="text-center text-xs">1X2 Result</TableHead>
+                    <TableHead className="text-center text-xs">O/U 2.5</TableHead>
+                    <TableHead className="text-center text-xs">BTTS</TableHead>
+                    <TableHead className="text-right text-xs">Market Odds (1 / X / 2)</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>

@@ -45,8 +45,30 @@ export const SeasonTeamAnalysis: React.FC<SeasonTeamAnalysisProps> = ({
 
   if (!profile) {
     return (
-      <div className="p-8 text-center text-muted-foreground border border-border rounded-xl bg-card">
-        No {activeTeam} matches in {seasonName}.
+      <div className="p-8 text-center text-muted-foreground border border-border rounded-xl bg-card space-y-3">
+        <p className="text-sm font-semibold text-foreground">
+          No matches found for {activeTeam} in {seasonName}
+        </p>
+        <p className="text-xs text-muted-foreground max-w-md mx-auto">
+          {activeTeam} may have competed in another division or was inactive during this season.
+          Select another club from this league below.
+        </p>
+        {allTeams.length > 0 && (
+          <div className="pt-2 flex justify-center">
+            <SearchableSelect
+              size="sm"
+              value={activeTeam}
+              onValueChange={onSelectTeam}
+              options={allTeams.map((team) => ({
+                value: team,
+                label: team,
+              }))}
+              searchPlaceholder="Select active club..."
+              className="text-xs font-semibold h-8 min-w-48"
+              popoverWidth="w-56"
+            />
+          </div>
+        )}
       </div>
     );
   }
@@ -76,7 +98,7 @@ export const SeasonTeamAnalysis: React.FC<SeasonTeamAnalysisProps> = ({
 
           <div className="flex items-center gap-2 shrink-0">
             <span className="text-xs text-muted-foreground font-medium">
-              Switch Team:
+              Select Club:
             </span>
             <SearchableSelect
               size="sm"
@@ -97,7 +119,7 @@ export const SeasonTeamAnalysis: React.FC<SeasonTeamAnalysisProps> = ({
         <div className="px-4 py-2.5 border-b border-border/70 bg-muted/20 grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3 text-xs">
           <div>
             <span className="text-[11px] text-muted-foreground block">
-              Matches
+              Matches Played
             </span>
             <span className="text-base font-bold text-foreground">
               {profile.totalMatches}
@@ -117,7 +139,7 @@ export const SeasonTeamAnalysis: React.FC<SeasonTeamAnalysisProps> = ({
 
           <div>
             <span className="text-[11px] text-muted-foreground block">
-              Win Rate
+              Overall Win Rate
             </span>
             <span className="text-base font-bold text-emerald-500">
               {profile.winRate}%
@@ -126,7 +148,7 @@ export const SeasonTeamAnalysis: React.FC<SeasonTeamAnalysisProps> = ({
 
           <div>
             <span className="text-[11px] text-muted-foreground block">
-              Goals (F : A)
+              Goals (For : Against)
             </span>
             <span className="text-base font-bold text-foreground">
               {profile.goalsFor} : {profile.goalsAgainst}{" "}
@@ -138,7 +160,7 @@ export const SeasonTeamAnalysis: React.FC<SeasonTeamAnalysisProps> = ({
 
           <div>
             <span className="text-[11px] text-muted-foreground block">
-              Power Ratings
+              Rating (Atk / Def)
             </span>
             <span className="text-base font-bold">
               <span className="text-emerald-500">{profile.attackRating}</span>
@@ -147,7 +169,7 @@ export const SeasonTeamAnalysis: React.FC<SeasonTeamAnalysisProps> = ({
                 {profile.defenseRating}
               </span>{" "}
               <span className="text-[10px] font-normal text-muted-foreground">
-                ATK/DEF
+                /99
               </span>
             </span>
           </div>
@@ -166,7 +188,7 @@ export const SeasonTeamAnalysis: React.FC<SeasonTeamAnalysisProps> = ({
 
           <div>
             <span className="text-[11px] text-muted-foreground block">
-              Both Teams Score
+              Both Teams Score (BTTS)
             </span>
             <span className="text-base font-bold text-foreground">
               {profile.bttsCount}{" "}
@@ -183,7 +205,7 @@ export const SeasonTeamAnalysis: React.FC<SeasonTeamAnalysisProps> = ({
             {/* Home split */}
             <div className="flex items-center gap-1.5">
               <span className="h-2 w-2 rounded-full bg-emerald-500 shrink-0" />
-              <span className="font-semibold text-foreground">Home:</span>
+              <span className="font-semibold text-foreground">Home Record:</span>
               <span className="text-muted-foreground">
                 {profile.homeRecord.matches} MP
               </span>
@@ -194,20 +216,20 @@ export const SeasonTeamAnalysis: React.FC<SeasonTeamAnalysisProps> = ({
               </span>
               <span className="text-muted-foreground/60">·</span>
               <span className="text-muted-foreground">
-                {profile.homeRecord.gf}-{profile.homeRecord.ga}
+                {profile.homeRecord.gf}:{profile.homeRecord.ga}
               </span>
               <Badge
                 variant="outline"
                 className="text-[10px] px-1.5 py-0 h-4 border-emerald-500/30 text-emerald-500"
               >
-                {profile.homeRecord.winRate}% W
+                {profile.homeRecord.winRate}% Win
               </Badge>
             </div>
 
             {/* Away split */}
             <div className="flex items-center gap-1.5">
               <span className="h-2 w-2 rounded-full bg-blue-500 shrink-0" />
-              <span className="font-semibold text-foreground">Away:</span>
+              <span className="font-semibold text-foreground">Away Record:</span>
               <span className="text-muted-foreground">
                 {profile.awayRecord.matches} MP
               </span>
@@ -218,20 +240,20 @@ export const SeasonTeamAnalysis: React.FC<SeasonTeamAnalysisProps> = ({
               </span>
               <span className="text-muted-foreground/60">·</span>
               <span className="text-muted-foreground">
-                {profile.awayRecord.gf}-{profile.awayRecord.ga}
+                {profile.awayRecord.gf}:{profile.awayRecord.ga}
               </span>
               <Badge
                 variant="outline"
                 className="text-[10px] px-1.5 py-0 h-4 border-blue-500/30 text-blue-500"
               >
-                {profile.awayRecord.winRate}% W
+                {profile.awayRecord.winRate}% Win
               </Badge>
             </div>
           </div>
 
           <div className="flex items-center gap-4 text-muted-foreground text-[11px] pt-1 md:pt-0 border-t md:border-t-0 border-border/50">
             <div>
-              <span>SoT/90:</span>{" "}
+              <span>Shots on Target / 90:</span>{" "}
               <strong className="text-foreground text-xs">
                 {profile.avgShotsOnTarget}
               </strong>{" "}
@@ -239,7 +261,7 @@ export const SeasonTeamAnalysis: React.FC<SeasonTeamAnalysisProps> = ({
             </div>
             <span className="text-border">|</span>
             <div>
-              <span>Cards:</span>{" "}
+              <span>Discipline:</span>{" "}
               <strong className="text-foreground text-xs">
                 {profile.avgYellows}
               </strong>{" "}
@@ -259,12 +281,12 @@ export const SeasonTeamAnalysis: React.FC<SeasonTeamAnalysisProps> = ({
           <div className="flex items-center gap-2">
             <Activity className="h-4 w-4 text-primary" />
             <h3 className="text-sm font-bold text-foreground">
-              Recent Fixtures &amp; Performance Trail
+              Recent Fixtures &amp; Match Performance Trail
             </h3>
           </div>
 
           <div className="flex items-center gap-1.5">
-            <span className="text-xs text-muted-foreground">Show:</span>
+            <span className="text-xs text-muted-foreground">Show fixtures:</span>
             {[5, 10, 20].map((lim) => (
               <button
                 key={lim}

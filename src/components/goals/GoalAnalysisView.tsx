@@ -84,7 +84,7 @@ export const GoalAnalysisView: React.FC<GoalAnalysisViewProps> = ({ matches }) =
                 Goal &amp; Score Frequency Analytics
               </h2>
               <p className="text-[11px] text-muted-foreground">
-                Monthly and day-of-week averages across {overall.scoredMatches.toLocaleString()} analyzed fixtures
+                Seasonal and day-of-week scoring patterns across {overall.scoredMatches.toLocaleString()} jackpot fixtures
               </p>
             </div>
           </div>
@@ -93,16 +93,16 @@ export const GoalAnalysisView: React.FC<GoalAnalysisViewProps> = ({ matches }) =
         {/* Quantitative Metrics Bar */}
         <div className="px-4 py-2.5 bg-muted/20 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 text-xs items-center">
           <div>
-            <span className="text-[10px] text-muted-foreground block">Overall Avg Goals</span>
+            <span className="text-[10px] text-muted-foreground block">Overall Average Goals</span>
             <span className="text-sm font-bold text-foreground">{overall.avgGoals}</span>
             <span className="text-[10px] text-muted-foreground ml-1">/ match</span>
           </div>
 
           <div>
-            <span className="text-[10px] text-muted-foreground block">Home vs Away Avg</span>
+            <span className="text-[10px] text-muted-foreground block">Home vs Away Goals</span>
             <span className="text-sm font-bold text-foreground">
               <span className="text-emerald-500">{overall.avgHomeGoals}</span>
-              <span className="text-muted-foreground font-normal"> / </span>
+              <span className="text-muted-foreground font-normal"> : </span>
               <span className="text-blue-500">{overall.avgAwayGoals}</span>
             </span>
           </div>
@@ -118,12 +118,12 @@ export const GoalAnalysisView: React.FC<GoalAnalysisViewProps> = ({ matches }) =
           </div>
 
           <div>
-            <span className="text-[10px] text-muted-foreground block">BTTS (Both Scored)</span>
+            <span className="text-[10px] text-muted-foreground block">Both Teams to Score (BTTS)</span>
             <span className="text-sm font-bold text-emerald-500">{overall.bttsPct}%</span>
           </div>
 
           <div>
-            <span className="text-[10px] text-muted-foreground block">Analyzed Fixtures</span>
+            <span className="text-[10px] text-muted-foreground block">Scored Matches Analyzed</span>
             <span className="text-sm font-bold text-foreground">{overall.scoredMatches.toLocaleString()}</span>
           </div>
         </div>
@@ -136,10 +136,10 @@ export const GoalAnalysisView: React.FC<GoalAnalysisViewProps> = ({ matches }) =
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-semibold flex items-center gap-2">
               <Calendar className="h-4 w-4 text-primary" />
-              Average Goals by Month (Jan – Dec)
+              Average Goals &amp; Over 2.5% by Month
             </CardTitle>
             <CardDescription className="text-xs">
-              Average goals and over-2.5 rates for each month
+              Monthly scoring averages and high-scoring match rates (Jan–Dec)
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -172,10 +172,10 @@ export const GoalAnalysisView: React.FC<GoalAnalysisViewProps> = ({ matches }) =
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-semibold flex items-center gap-2">
               <CalendarDays className="h-4 w-4 text-primary" />
-              Average Goals by Day of Week
+              Scoring Rate by Day of Week
             </CardTitle>
             <CardDescription className="text-xs">
-              Average goals per match for each day of the week
+              Average goals per match across days of the week
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -205,10 +205,10 @@ export const GoalAnalysisView: React.FC<GoalAnalysisViewProps> = ({ matches }) =
       <div className="bg-card border border-border rounded-xl shadow-xs overflow-hidden">
         <div className="px-4 py-3 border-b border-border bg-muted/30 flex items-center justify-between">
           <h2 className="text-sm font-bold text-foreground">
-            Most Frequent Exact Scores Across Jackpot Archives
+            Most Common Exact Scorelines in Jackpot History
           </h2>
           <span className="text-xs text-muted-foreground">
-            {overall.scoredMatches.toLocaleString()} scored matches analyzed
+            {overall.scoredMatches.toLocaleString()} matches with recorded scorelines
           </span>
         </div>
 
@@ -220,7 +220,7 @@ export const GoalAnalysisView: React.FC<GoalAnalysisViewProps> = ({ matches }) =
                 <span className="text-base font-bold text-foreground block mt-0.5">{sc.score}</span>
                 <span className="text-xs font-medium text-primary block">{sc.pct}%</span>
                 <span className="text-[10px] text-muted-foreground block">
-                  {sc.count.toLocaleString()} times
+                  {sc.count.toLocaleString()} matches ({sc.pct}%)
                 </span>
               </div>
             ))}

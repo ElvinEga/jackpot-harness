@@ -282,7 +282,7 @@ export const SeasonMatchPredictor: React.FC<SeasonMatchPredictorProps> = ({
 
           {/* Quick Derby Presets */}
           <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar shrink-0 py-0.5">
-            <span className="text-[11px] text-muted-foreground font-medium shrink-0">Derby Presets:</span>
+            <span className="text-[11px] text-muted-foreground font-medium shrink-0">Popular Matchups:</span>
             {presetMatchups.slice(0, 6).map((pair) => {
               const isActive = homeTeam === pair.home && awayTeam === pair.away;
               return (
@@ -317,7 +317,7 @@ export const SeasonMatchPredictor: React.FC<SeasonMatchPredictorProps> = ({
                   {prediction.homeTeam}
                 </span>
                 <span className="text-[10px] px-1.5 py-0.2 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-semibold border border-emerald-500/20">
-                  HOME
+                  Home Venue
                 </span>
               </div>
               <div className="text-xs text-muted-foreground flex items-center gap-1">
@@ -349,7 +349,7 @@ export const SeasonMatchPredictor: React.FC<SeasonMatchPredictorProps> = ({
               <span className="opacity-80 font-normal ml-1">({prediction.confidence} Confidence)</span>
             </Badge>
             <span className="text-[10px] text-muted-foreground mt-0.5">
-              Total Exp Goals: {prediction.totalExpectedGoals}
+              Expected Total: {prediction.totalExpectedGoals} goals
             </span>
           </div>
 
@@ -358,7 +358,7 @@ export const SeasonMatchPredictor: React.FC<SeasonMatchPredictorProps> = ({
             <div className="order-2 md:order-1">
               <div className="flex items-center justify-start md:justify-end gap-1.5">
                 <span className="text-[10px] px-1.5 py-0.2 rounded bg-blue-500/10 text-blue-600 dark:text-blue-400 font-semibold border border-blue-500/20">
-                  AWAY
+                  Away Venue
                 </span>
                 <span className="font-bold text-base text-foreground tracking-tight">
                   {prediction.awayTeam}
@@ -407,7 +407,7 @@ export const SeasonMatchPredictor: React.FC<SeasonMatchPredictorProps> = ({
               <div className="flex items-center justify-center gap-1.5">
                 <span className="font-bold text-foreground text-sm">{prediction.homeProb}%</span>
                 <span className="text-[10px] text-muted-foreground">
-                  (Fair: {(100 / (prediction.homeProb || 1)).toFixed(2)})
+                  (Fair Odds: {(100 / (prediction.homeProb || 1)).toFixed(2)})
                 </span>
               </div>
             </div>
@@ -419,7 +419,7 @@ export const SeasonMatchPredictor: React.FC<SeasonMatchPredictorProps> = ({
               <div className="flex items-center justify-center gap-1.5">
                 <span className="font-bold text-foreground text-sm">{prediction.drawProb}%</span>
                 <span className="text-[10px] text-muted-foreground">
-                  (Fair: {(100 / (prediction.drawProb || 1)).toFixed(2)})
+                  (Fair Odds: {(100 / (prediction.drawProb || 1)).toFixed(2)})
                 </span>
               </div>
             </div>
@@ -431,7 +431,7 @@ export const SeasonMatchPredictor: React.FC<SeasonMatchPredictorProps> = ({
               <div className="flex items-center justify-center gap-1.5">
                 <span className="font-bold text-foreground text-sm">{prediction.awayProb}%</span>
                 <span className="text-[10px] text-muted-foreground">
-                  (Fair: {(100 / (prediction.awayProb || 1)).toFixed(2)})
+                  (Fair Odds: {(100 / (prediction.awayProb || 1)).toFixed(2)})
                 </span>
               </div>
             </div>
@@ -449,11 +449,11 @@ export const SeasonMatchPredictor: React.FC<SeasonMatchPredictorProps> = ({
                 Bivariate Poisson Score Matrix
               </h4>
               <p className="text-[11px] text-muted-foreground">
-                Exact probability for each scoreline (Home 0..5 vs Away 0..5)
+                Estimated probability for each scoreline (Home 0–5 vs Away 0–5)
               </p>
             </div>
             <span className="text-xs font-medium text-primary">
-              Top: {prediction.mostLikelyScores[0]?.score} ({prediction.mostLikelyScores[0]?.prob}%)
+              Most Likely: {prediction.mostLikelyScores[0]?.score} ({prediction.mostLikelyScores[0]?.prob}%)
             </span>
           </div>
 
@@ -617,7 +617,11 @@ export const SeasonMatchPredictor: React.FC<SeasonMatchPredictorProps> = ({
                       : "text-amber-600 dark:text-amber-400 border-amber-500/30"
                   }`}
                 >
-                  Favors: {sig.favor}
+                  {sig.favor === "home"
+                    ? `Favors ${prediction.homeTeam}`
+                    : sig.favor === "away"
+                    ? `Favors ${prediction.awayTeam}`
+                    : "Neutral / Even"}
                 </Badge>
               </div>
               <div className="flex justify-between text-[11px] text-muted-foreground">

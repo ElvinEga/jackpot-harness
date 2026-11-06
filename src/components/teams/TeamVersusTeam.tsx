@@ -131,7 +131,7 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
                 onChange={setTeamA}
                 teams={allTeams}
                 teamAppearances={teamAppearances}
-                placeholder="Search home team..."
+                placeholder="Search home club..."
               />
             </div>
 
@@ -151,7 +151,7 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
                 onChange={setTeamB}
                 teams={allTeams}
                 teamAppearances={teamAppearances}
-                placeholder="Search away team..."
+                placeholder="Search away club..."
               />
             </div>
           </div>
@@ -160,11 +160,11 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
             <History className="h-3.5 w-3.5 text-primary" />
             {h2h.totalMatches > 0 ? (
               <span>
-                <strong className="text-foreground">{h2h.totalMatches}</strong> meetings · Avg{" "}
-                <strong className="text-foreground">{h2h.avgGoals}</strong> G/M
+                <strong className="text-foreground">{h2h.totalMatches}</strong> meetings in jackpot archives · Avg{" "}
+                <strong className="text-foreground">{h2h.avgGoals}</strong> goals/match
               </span>
             ) : (
-              <span className="italic">No prior jackpot meetings</span>
+              <span className="italic">No prior direct jackpot encounters</span>
             )}
           </div>
         </div>
@@ -174,7 +174,7 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
           {/* H2H Distribution (lg:col-span-5) */}
           <div className="lg:col-span-5 space-y-2 border-b lg:border-b-0 lg:border-r border-border/70 pb-3 lg:pb-0 lg:pr-4">
             <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider block">
-              H2H Outcome Split
+              Head-to-Head Record
             </span>
             {h2h.totalMatches > 0 ? (
               <>
@@ -221,7 +221,7 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
               </>
             ) : (
               <div className="py-3 px-3 text-center text-muted-foreground text-xs italic bg-card rounded-md border border-dashed border-border">
-                No past meetings recorded. Baseline and recent form models apply.
+                No recorded direct encounters between {teamA} and {teamB} in the jackpot archives. Predictions use individual form baselines.
               </div>
             )}
           </div>
@@ -235,8 +235,8 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
                   <TeamLogo team={teamA} size={18} />
                   <span className="truncate">{teamA}</span>
                 </div>
-                <span className="text-[10px] px-1 rounded bg-muted text-muted-foreground">
-                  Home
+                <span className="text-[10px] px-1.5 py-0.5 rounded bg-muted text-muted-foreground font-medium">
+                  Home Venue
                 </span>
               </div>
               <div className="flex items-center gap-1">
@@ -256,8 +256,8 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
                 ))}
               </div>
               <div className="grid grid-cols-2 gap-x-2 gap-y-0.5 text-[11px] text-muted-foreground pt-1 border-t border-border/50">
-                <div>Win: <strong className="text-foreground">{formA.winRate}%</strong> (H: {formA.homeWinRate}%)</div>
-                <div>GF/GA: <strong className="text-foreground">{formA.avgGF}</strong> / {formA.avgGA}</div>
+                <div>Win Rate: <strong className="text-foreground">{formA.winRate}%</strong> (Home: {formA.homeWinRate}%)</div>
+                <div>GF / GA: <strong className="text-foreground">{formA.avgGF}</strong> / {formA.avgGA}</div>
               </div>
             </div>
 
@@ -268,8 +268,8 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
                   <TeamLogo team={teamB} size={18} />
                   <span className="truncate">{teamB}</span>
                 </div>
-                <span className="text-[10px] px-1 rounded bg-muted text-muted-foreground">
-                  Away
+                <span className="text-[10px] px-1.5 py-0.5 rounded bg-muted text-muted-foreground font-medium">
+                  Away Venue
                 </span>
               </div>
               <div className="flex items-center gap-1">
@@ -289,8 +289,8 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
                 ))}
               </div>
               <div className="grid grid-cols-2 gap-x-2 gap-y-0.5 text-[11px] text-muted-foreground pt-1 border-t border-border/50">
-                <div>Win: <strong className="text-foreground">{formB.winRate}%</strong> (A: {formB.awayWinRate}%)</div>
-                <div>GF/GA: <strong className="text-foreground">{formB.avgGF}</strong> / {formB.avgGA}</div>
+                <div>Win Rate: <strong className="text-foreground">{formB.winRate}%</strong> (Away: {formB.awayWinRate}%)</div>
+                <div>GF / GA: <strong className="text-foreground">{formB.avgGF}</strong> / {formB.avgGA}</div>
               </div>
             </div>
           </div>
@@ -305,16 +305,15 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
             Poisson Score Probability Model
           </CardTitle>
           <CardDescription className="text-xs">
-            Expected goals: {teamA} ({poisson.lambdaH}) vs {teamB} (
-            {poisson.lambdaA})
+            Poisson distribution based on expected goals: {teamA} ({poisson.lambdaH} xG) vs {teamB} ({poisson.lambdaA} xG)
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-5">
           {/* 1X2 Probabilities & Over/Under row */}
           <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-2 text-center text-xs">
             <div className="p-2.5 rounded-lg bg-muted/40 border border-border">
-              <span className="text-xs text-muted-foreground block">
-                Home Win (1)
+              <span className="text-xs text-muted-foreground block truncate">
+                Home Win ({teamA})
               </span>
               <span className="text-lg font-bold text-primary">
                 {poisson.sim.homeProb}%
@@ -329,8 +328,8 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
               </span>
             </div>
             <div className="p-2.5 rounded-lg bg-muted/40 border border-border">
-              <span className="text-xs text-muted-foreground block">
-                Away Win (2)
+              <span className="text-xs text-muted-foreground block truncate">
+                Away Win ({teamB})
               </span>
               <span className="text-lg font-bold text-foreground">
                 {poisson.sim.awayProb}%
@@ -365,7 +364,7 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
           {/* Top 8 Ranked Exact Scores */}
           <div className="space-y-2">
             <span className="text-xs font-semibold text-foreground block">
-              Most Likely Scores:
+              Most Probable Exact Scores:
             </span>
             <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2">
               {poisson.sim.scores.slice(0, 8).map((sc, i) => (

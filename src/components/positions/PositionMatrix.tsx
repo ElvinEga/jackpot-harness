@@ -92,8 +92,7 @@ export const PositionMatrix: React.FC<PositionMatrixProps> = ({ matches }) => {
             Position Analysis
           </h2>
           <p className="text-xs text-muted-foreground mt-1">
-            How home wins, draws, and away wins are distributed across jackpot
-            positions.
+            Historical distribution of home wins, draws, and away wins across jackpot ticket positions.
           </p>
         </div>
 
@@ -142,14 +141,14 @@ export const PositionMatrix: React.FC<PositionMatrixProps> = ({ matches }) => {
       {anomalies && (
         <div className="rounded-xl bg-card border border-border shadow-xs overflow-hidden">
           <div className="grid grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-border/60 text-xs">
-            {/* Strongest Home */}
+            {/* Highest Home Win Rate */}
             <div className="p-3 flex items-center justify-between gap-3">
               <div className="flex items-center gap-2">
                 <span className="p-1.5 rounded-md bg-emerald-500/10 text-emerald-500 shrink-0">
                   <Flame className="h-4 w-4" />
                 </span>
                 <div>
-                  <span className="text-[11px] text-muted-foreground block font-medium">Strongest Home</span>
+                  <span className="text-[11px] text-muted-foreground block font-medium">Highest Home Win Rate</span>
                   <span className="font-bold text-foreground text-sm">
                     Position #{anomalies.highestHome.position}
                   </span>
@@ -160,19 +159,19 @@ export const PositionMatrix: React.FC<PositionMatrixProps> = ({ matches }) => {
                   {anomalies.highestHome.homeWinPct}% Home
                 </Badge>
                 <span className="text-[10px] text-muted-foreground block mt-0.5">
-                  {anomalies.highestHome.homeWins}/{anomalies.highestHome.totalMatches} W
+                  {anomalies.highestHome.homeWins} wins in {anomalies.highestHome.totalMatches} matches
                 </span>
               </div>
             </div>
 
-            {/* Highest Draw */}
+            {/* Most Frequent Draw Position */}
             <div className="p-3 flex items-center justify-between gap-3">
               <div className="flex items-center gap-2">
                 <span className="p-1.5 rounded-md bg-amber-500/10 text-amber-600 dark:text-amber-400 shrink-0">
                   <ShieldAlert className="h-4 w-4" />
                 </span>
                 <div>
-                  <span className="text-[11px] text-muted-foreground block font-medium">Highest Draw</span>
+                  <span className="text-[11px] text-muted-foreground block font-medium">Most Frequent Draw Position</span>
                   <span className="font-bold text-foreground text-sm">
                     Position #{anomalies.highestDraw.position}
                   </span>
@@ -183,19 +182,19 @@ export const PositionMatrix: React.FC<PositionMatrixProps> = ({ matches }) => {
                   {anomalies.highestDraw.drawPct}% Draw
                 </Badge>
                 <span className="text-[10px] text-muted-foreground block mt-0.5">
-                  {anomalies.highestDraw.draws}/{anomalies.highestDraw.totalMatches} D
+                  {anomalies.highestDraw.draws} draws in {anomalies.highestDraw.totalMatches} matches
                 </span>
               </div>
             </div>
 
-            {/* Highest Away */}
+            {/* Highest Away Win Rate */}
             <div className="p-3 flex items-center justify-between gap-3">
               <div className="flex items-center gap-2">
                 <span className="p-1.5 rounded-md bg-blue-500/10 text-blue-500 shrink-0">
                   <TrendingUp className="h-4 w-4" />
                 </span>
                 <div>
-                  <span className="text-[11px] text-muted-foreground block font-medium">Highest Away</span>
+                  <span className="text-[11px] text-muted-foreground block font-medium">Highest Away Win Rate</span>
                   <span className="font-bold text-foreground text-sm">
                     Position #{anomalies.highestAway.position}
                   </span>
@@ -206,19 +205,19 @@ export const PositionMatrix: React.FC<PositionMatrixProps> = ({ matches }) => {
                   {anomalies.highestAway.awayWinPct}% Away
                 </Badge>
                 <span className="text-[10px] text-muted-foreground block mt-0.5">
-                  {anomalies.highestAway.awayWins}/{anomalies.highestAway.totalMatches} W
+                  {anomalies.highestAway.awayWins} wins in {anomalies.highestAway.totalMatches} matches
                 </span>
               </div>
             </div>
 
-            {/* Highest Scoring */}
+            {/* Highest Goal Average */}
             <div className="p-3 flex items-center justify-between gap-3">
               <div className="flex items-center gap-2">
                 <span className="p-1.5 rounded-md bg-primary/10 text-primary shrink-0">
                   <Goal className="h-4 w-4" />
                 </span>
                 <div>
-                  <span className="text-[11px] text-muted-foreground block font-medium">Highest Scoring</span>
+                  <span className="text-[11px] text-muted-foreground block font-medium">Highest Goal Average</span>
                   <span className="font-bold text-foreground text-sm">
                     Position #{anomalies.highestGoals.position}
                   </span>
@@ -226,10 +225,10 @@ export const PositionMatrix: React.FC<PositionMatrixProps> = ({ matches }) => {
               </div>
               <div className="text-right">
                 <Badge variant="outline" className="text-primary border-primary/30 text-[11px] py-0 h-5">
-                  {anomalies.highestGoals.avgGoals} G/M
+                  {anomalies.highestGoals.avgGoals} goals/match
                 </Badge>
                 <span className="text-[10px] text-muted-foreground block mt-0.5">
-                  Top: {anomalies.highestGoals.mostLikelyScore}
+                  Top Score: {anomalies.highestGoals.mostLikelyScore}
                 </span>
               </div>
             </div>
@@ -242,10 +241,10 @@ export const PositionMatrix: React.FC<PositionMatrixProps> = ({ matches }) => {
         <CardHeader className="pb-2">
           <CardTitle className="text-sm font-semibold flex items-center gap-2">
             <Percent className="h-4 w-4 text-primary" />
-            1X2 Outcome Distribution by Jackpot Position (1 to {maxPos})
+            Outcome Distribution by Jackpot Position (Positions 1 to {maxPos})
           </CardTitle>
           <CardDescription className="text-xs">
-            Home win, draw, and away win percentages for each jackpot position
+            Percentage of home wins, draws, and away wins for each match position in the jackpot slate
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -317,12 +316,12 @@ export const PositionMatrix: React.FC<PositionMatrixProps> = ({ matches }) => {
                 <TableHead className="text-center text-xs">Home Win %</TableHead>
                 <TableHead className="text-center text-xs">Draw %</TableHead>
                 <TableHead className="text-center text-xs">Away Win %</TableHead>
-                <TableHead className="text-center text-xs">Avg Goals (H - A)</TableHead>
+                <TableHead className="text-center text-xs">Avg Goals (H : A)</TableHead>
                 <TableHead className="text-center text-xs">Over 2.5 %</TableHead>
                 <TableHead className="text-center text-xs">BTTS %</TableHead>
-                <TableHead className="text-center text-xs">Top Score (All)</TableHead>
-                <TableHead className="text-center text-xs">Top Win (H / A)</TableHead>
-                <TableHead className="text-xs">Frequent Scores</TableHead>
+                <TableHead className="text-center text-xs">Most Frequent Score</TableHead>
+                <TableHead className="text-center text-xs">Top Winning Scores</TableHead>
+                <TableHead className="text-xs">Top 5 Scorelines</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
