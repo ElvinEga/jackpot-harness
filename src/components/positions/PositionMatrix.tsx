@@ -138,80 +138,102 @@ export const PositionMatrix: React.FC<PositionMatrixProps> = ({ matches }) => {
         </div>
       </div>
 
-      {/* Anomalies / Key Insights Cards */}
+      {/* Distilled Key Position Outliers & Anomalies Strip */}
       {anomalies && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-          <Card size="sm" className="bg-card border-border shadow-xs">
-            <CardHeader className="pb-1">
-              <CardDescription className="text-xs flex items-center gap-1.5 text-primary">
-                <Flame className="h-3.5 w-3.5" />
-                Strongest Home Position
-              </CardDescription>
-              <CardTitle className="text-lg font-bold font-mono text-foreground flex items-center gap-2">
-                <span>Position #{anomalies.highestHome.position}</span>
-                <Badge variant="outline" className="text-primary border-primary/30 font-mono">
+        <div className="rounded-xl bg-card border border-border shadow-xs overflow-hidden">
+          <div className="grid grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-border/60 text-xs">
+            {/* Strongest Home */}
+            <div className="p-3 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2">
+                <span className="p-1.5 rounded-md bg-emerald-500/10 text-emerald-500 shrink-0">
+                  <Flame className="h-4 w-4" />
+                </span>
+                <div>
+                  <span className="text-[11px] text-muted-foreground block font-medium">Strongest Home</span>
+                  <span className="font-bold text-foreground text-sm">
+                    Position #{anomalies.highestHome.position}
+                  </span>
+                </div>
+              </div>
+              <div className="text-right">
+                <Badge variant="outline" className="text-emerald-500 border-emerald-500/30 text-[11px] py-0 h-5">
                   {anomalies.highestHome.homeWinPct}% Home
                 </Badge>
-              </CardTitle>
-              <span className="text-xs text-muted-foreground">
-                {anomalies.highestHome.homeWins} wins in {anomalies.highestHome.totalMatches} matches
-              </span>
-            </CardHeader>
-          </Card>
+                <span className="text-[10px] text-muted-foreground block mt-0.5">
+                  {anomalies.highestHome.homeWins}/{anomalies.highestHome.totalMatches} W
+                </span>
+              </div>
+            </div>
 
-          <Card size="sm" className="bg-card border-border shadow-xs">
-            <CardHeader className="pb-1">
-              <CardDescription className="text-xs flex items-center gap-1.5 text-foreground">
-                <ShieldAlert className="h-3.5 w-3.5" />
-                Highest Draw Tendency
-              </CardDescription>
-              <CardTitle className="text-lg font-bold font-mono text-foreground flex items-center gap-2">
-                <span>Position #{anomalies.highestDraw.position}</span>
-                <Badge variant="outline" className="text-foreground border-border font-mono">
+            {/* Highest Draw */}
+            <div className="p-3 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2">
+                <span className="p-1.5 rounded-md bg-amber-500/10 text-amber-500 shrink-0">
+                  <ShieldAlert className="h-4 w-4" />
+                </span>
+                <div>
+                  <span className="text-[11px] text-muted-foreground block font-medium">Highest Draw</span>
+                  <span className="font-bold text-foreground text-sm">
+                    Position #{anomalies.highestDraw.position}
+                  </span>
+                </div>
+              </div>
+              <div className="text-right">
+                <Badge variant="outline" className="text-amber-500 border-amber-500/30 text-[11px] py-0 h-5">
                   {anomalies.highestDraw.drawPct}% Draw
                 </Badge>
-              </CardTitle>
-              <span className="text-xs text-muted-foreground">
-                {anomalies.highestDraw.draws} draws in {anomalies.highestDraw.totalMatches} matches
-              </span>
-            </CardHeader>
-          </Card>
+                <span className="text-[10px] text-muted-foreground block mt-0.5">
+                  {anomalies.highestDraw.draws}/{anomalies.highestDraw.totalMatches} D
+                </span>
+              </div>
+            </div>
 
-          <Card size="sm" className="bg-card border-border shadow-xs">
-            <CardHeader className="pb-1">
-              <CardDescription className="text-xs flex items-center gap-1.5 text-muted-foreground">
-                <TrendingUp className="h-3.5 w-3.5" />
-                Highest Away Win Rate
-              </CardDescription>
-              <CardTitle className="text-lg font-bold font-mono text-foreground flex items-center gap-2">
-                <span>Position #{anomalies.highestAway.position}</span>
-                <Badge variant="outline" className="text-muted-foreground border-primary/30 font-mono">
+            {/* Highest Away */}
+            <div className="p-3 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2">
+                <span className="p-1.5 rounded-md bg-blue-500/10 text-blue-500 shrink-0">
+                  <TrendingUp className="h-4 w-4" />
+                </span>
+                <div>
+                  <span className="text-[11px] text-muted-foreground block font-medium">Highest Away</span>
+                  <span className="font-bold text-foreground text-sm">
+                    Position #{anomalies.highestAway.position}
+                  </span>
+                </div>
+              </div>
+              <div className="text-right">
+                <Badge variant="outline" className="text-blue-500 border-blue-500/30 text-[11px] py-0 h-5">
                   {anomalies.highestAway.awayWinPct}% Away
                 </Badge>
-              </CardTitle>
-              <span className="text-xs text-muted-foreground">
-                {anomalies.highestAway.awayWins} wins in {anomalies.highestAway.totalMatches} matches
-              </span>
-            </CardHeader>
-          </Card>
+                <span className="text-[10px] text-muted-foreground block mt-0.5">
+                  {anomalies.highestAway.awayWins}/{anomalies.highestAway.totalMatches} W
+                </span>
+              </div>
+            </div>
 
-          <Card size="sm" className="bg-card border-border shadow-xs">
-            <CardHeader className="pb-1">
-              <CardDescription className="text-xs flex items-center gap-1.5 text-primary">
-                <Goal className="h-3.5 w-3.5" />
-                Highest Scoring Position
-              </CardDescription>
-              <CardTitle className="text-lg font-bold font-mono text-foreground flex items-center gap-2">
-                <span>Position #{anomalies.highestGoals.position}</span>
-                <Badge variant="outline" className="text-primary border-primary/30 font-mono">
+            {/* Highest Scoring */}
+            <div className="p-3 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2">
+                <span className="p-1.5 rounded-md bg-primary/10 text-primary shrink-0">
+                  <Goal className="h-4 w-4" />
+                </span>
+                <div>
+                  <span className="text-[11px] text-muted-foreground block font-medium">Highest Scoring</span>
+                  <span className="font-bold text-foreground text-sm">
+                    Position #{anomalies.highestGoals.position}
+                  </span>
+                </div>
+              </div>
+              <div className="text-right">
+                <Badge variant="outline" className="text-primary border-primary/30 text-[11px] py-0 h-5">
                   {anomalies.highestGoals.avgGoals} G/M
                 </Badge>
-              </CardTitle>
-              <span className="text-xs text-muted-foreground">
-                Most frequent score: {anomalies.highestGoals.mostLikelyScore}
-              </span>
-            </CardHeader>
-          </Card>
+                <span className="text-[10px] text-muted-foreground block mt-0.5">
+                  Top: {anomalies.highestGoals.mostLikelyScore}
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
       )}
 
@@ -281,7 +303,7 @@ export const PositionMatrix: React.FC<PositionMatrixProps> = ({ matches }) => {
               jackpot position
             </p>
           </div>
-          <span className="text-xs text-muted-foreground font-mono">
+          <span className="text-xs text-muted-foreground">
             {filteredMatches.length.toLocaleString()} matches analyzed
           </span>
         </div>

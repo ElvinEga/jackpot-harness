@@ -74,49 +74,57 @@ export const GoalAnalysisView: React.FC<GoalAnalysisViewProps> = ({ matches }) =
 
   return (
     <div className="flex-1 flex flex-col p-2 space-y-6  mx-auto w-full">
-      {/* Title */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-2 border-b border-border">
-        <div>
-          <h2 className="text-xl font-bold tracking-tight text-foreground">
-            Goal & Score Frequency Analytics
-          </h2>
-          <p className="text-xs text-muted-foreground mt-1">
-            Goal averages by month and day, plus the most common scorelines.
-          </p>
+      {/* Distilled Goal Analytics Command Header */}
+      <div className="rounded-xl bg-card border border-border shadow-xs overflow-hidden">
+        <div className="px-4 py-3 border-b border-border bg-card flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="flex items-center gap-2.5">
+            <Goal className="h-5 w-5 text-primary" />
+            <div>
+              <h2 className="text-base font-bold tracking-tight text-foreground">
+                Goal &amp; Score Frequency Analytics
+              </h2>
+              <p className="text-[11px] text-muted-foreground">
+                Monthly and day-of-week averages across {overall.scoredMatches.toLocaleString()} analyzed fixtures
+              </p>
+            </div>
+          </div>
         </div>
-      </div>
 
-      {/* Summary Metrics Bar — High density quantitative summary */}
-      <div className="flex flex-wrap items-center justify-between gap-3 px-3.5 py-2.5 bg-card border border-border rounded-md text-xs shadow-xs">
-        <div className="flex items-center gap-2">
-          <Goal className="h-4 w-4 text-foreground" />
-          <span className="font-semibold text-foreground">Goal Frequency Distribution</span>
-          <span className="text-muted-foreground font-mono text-xs">· Full dataset</span>
-        </div>
-        <div className="flex flex-wrap items-center gap-4 font-mono text-xs">
+        {/* Quantitative Metrics Bar */}
+        <div className="px-4 py-2.5 bg-muted/20 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 text-xs items-center">
           <div>
-            <span className="text-muted-foreground font-sans mr-1">Overall Avg:</span>
-            <span className="font-bold text-foreground">{overall.avgGoals}</span>
+            <span className="text-[10px] text-muted-foreground block">Overall Avg Goals</span>
+            <span className="text-sm font-bold text-foreground">{overall.avgGoals}</span>
+            <span className="text-[10px] text-muted-foreground ml-1">/ match</span>
           </div>
-          <div className="border-l border-border pl-3">
-            <span className="text-muted-foreground font-sans mr-1">Home:</span>
-            <span className="font-bold text-foreground">{overall.avgHomeGoals}</span>
-          </div>
+
           <div>
-            <span className="text-muted-foreground font-sans mr-1">Away:</span>
-            <span className="font-bold text-foreground">{overall.avgAwayGoals}</span>
+            <span className="text-[10px] text-muted-foreground block">Home vs Away Avg</span>
+            <span className="text-sm font-bold text-foreground">
+              <span className="text-emerald-500">{overall.avgHomeGoals}</span>
+              <span className="text-muted-foreground font-normal"> / </span>
+              <span className="text-blue-500">{overall.avgAwayGoals}</span>
+            </span>
           </div>
-          <div className="border-l border-border pl-3">
-            <span className="text-muted-foreground font-sans mr-1">Over 1.5:</span>
-            <span className="font-bold text-foreground">{overall.over15Pct}%</span>
-          </div>
+
           <div>
-            <span className="text-muted-foreground font-sans mr-1">Over 2.5:</span>
-            <span className="font-bold text-foreground">{overall.over25Pct}%</span>
+            <span className="text-[10px] text-muted-foreground block">Over 1.5 Goals</span>
+            <span className="text-sm font-bold text-foreground">{overall.over15Pct}%</span>
           </div>
-          <div className="border-l border-border pl-3">
-            <span className="text-muted-foreground font-sans mr-1">BTTS:</span>
-            <span className="font-bold text-foreground">{overall.bttsPct}%</span>
+
+          <div>
+            <span className="text-[10px] text-muted-foreground block">Over 2.5 Goals</span>
+            <span className="text-sm font-bold text-orange-500">{overall.over25Pct}%</span>
+          </div>
+
+          <div>
+            <span className="text-[10px] text-muted-foreground block">BTTS (Both Scored)</span>
+            <span className="text-sm font-bold text-emerald-500">{overall.bttsPct}%</span>
+          </div>
+
+          <div>
+            <span className="text-[10px] text-muted-foreground block">Analyzed Fixtures</span>
+            <span className="text-sm font-bold text-foreground">{overall.scoredMatches.toLocaleString()}</span>
           </div>
         </div>
       </div>
@@ -199,19 +207,19 @@ export const GoalAnalysisView: React.FC<GoalAnalysisViewProps> = ({ matches }) =
           <h2 className="text-sm font-bold text-foreground">
             Most Frequent Exact Scores Across Jackpot Archives
           </h2>
-          <span className="text-xs text-muted-foreground font-mono">
+          <span className="text-xs text-muted-foreground">
             {overall.scoredMatches.toLocaleString()} scored matches analyzed
           </span>
         </div>
 
-        <div className="p-4">
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+        <div className="p-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
             {scoreDist.topScores.map((sc, i) => (
-              <div key={sc.score} className="p-3 rounded-lg border border-border bg-muted/20 text-center">
-                <span className="text-xs text-muted-foreground block">Rank #{i + 1}</span>
-                <span className="text-lg font-bold font-mono text-foreground block mt-0.5">{sc.score}</span>
-                <span className="text-xs font-mono font-medium text-primary block mt-0.5">{sc.pct}%</span>
-                <span className="text-xs text-muted-foreground font-mono">
+              <div key={sc.score} className="p-2 rounded-lg border border-border bg-muted/20 text-center">
+                <span className="text-[10px] text-muted-foreground block">Rank #{i + 1}</span>
+                <span className="text-base font-bold text-foreground block mt-0.5">{sc.score}</span>
+                <span className="text-xs font-medium text-primary block">{sc.pct}%</span>
+                <span className="text-[10px] text-muted-foreground block">
                   {sc.count.toLocaleString()} times
                 </span>
               </div>

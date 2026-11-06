@@ -14,7 +14,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ArrowRightLeft, History, Sparkles, Target } from "lucide-react";
+import { ArrowRightLeft, History, Sparkles } from "lucide-react";
 import React, { useMemo, useState } from "react";
 
 import { TeamLogo } from "@/components/TeamLogo";
@@ -120,249 +120,181 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
 
   return (
     <div className="flex-1 flex flex-col p-2 space-y-6  mx-auto w-full">
-      {/* Title */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-2 border-b border-border">
-        <div>
-          <h2 className="text-xl font-bold tracking-tight text-foreground">
-            Head to Head & Teams
-          </h2>
-          <p className="text-xs text-muted-foreground mt-1">
-            Compare head-to-head records, recent form, and score probabilities.
-          </p>
-        </div>
-      </div>
+      {/* Distilled Head to Head & Form Command Panel */}
+      <div className="rounded-xl bg-card border border-border shadow-xs overflow-hidden">
+        {/* Top Bar: Selector Controls & Encounter Summary */}
+        <div className="px-4 py-2.5 border-b border-border bg-card flex flex-col md:flex-row md:items-center justify-between gap-3">
+          <div className="flex items-center gap-2 flex-1 max-w-xl">
+            <div className="flex-1 min-w-36">
+              <TeamSearchInput
+                value={teamA}
+                onChange={setTeamA}
+                teams={allTeams}
+                teamAppearances={teamAppearances}
+                placeholder="Search home team..."
+              />
+            </div>
 
-      {/* Team Selection Inputs */}
-      <div className="bg-card border border-border rounded-xl p-4 shadow-xs">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-3">
-          {/* Home Team Input */}
-          <div className="w-full md:flex-1">
-            <label className="text-xs font-medium text-muted-foreground mb-1 block">
-              Home Team
-            </label>
-            <TeamSearchInput
-              value={teamA}
-              onChange={setTeamA}
-              teams={allTeams}
-              teamAppearances={teamAppearances}
-              placeholder="Search home team..."
-            />
-          </div>
-
-          {/* Swap Button */}
-          <div className="pt-4">
             <Button
               variant="outline"
-              size="sm"
+              size="icon-sm"
               onClick={handleSwap}
-              className="h-9 px-3 gap-1.5 text-xs text-muted-foreground hover:text-foreground"
+              className="h-8 w-8 shrink-0 text-muted-foreground hover:text-foreground"
+              title="Swap Home and Away teams"
             >
               <ArrowRightLeft className="h-3.5 w-3.5" />
-              <span>Swap</span>
             </Button>
+
+            <div className="flex-1 min-w-36">
+              <TeamSearchInput
+                value={teamB}
+                onChange={setTeamB}
+                teams={allTeams}
+                teamAppearances={teamAppearances}
+                placeholder="Search away team..."
+              />
+            </div>
           </div>
 
-          {/* Away Team Input */}
-          <div className="w-full md:flex-1">
-            <label className="text-xs font-medium text-muted-foreground mb-1 block">
-              Away Team
-            </label>
-            <TeamSearchInput
-              value={teamB}
-              onChange={setTeamB}
-              teams={allTeams}
-              teamAppearances={teamAppearances}
-              placeholder="Search away team..."
-            />
+          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <History className="h-3.5 w-3.5 text-primary" />
+            {h2h.totalMatches > 0 ? (
+              <span>
+                <strong className="text-foreground">{h2h.totalMatches}</strong> meetings · Avg{" "}
+                <strong className="text-foreground">{h2h.avgGoals}</strong> G/M
+              </span>
+            ) : (
+              <span className="italic">No prior jackpot meetings</span>
+            )}
           </div>
         </div>
-      </div>
 
-      {/* Grid: H2H + Side-by-Side Form */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        {/* Head to Head Card */}
-        <Card className="bg-card border-border shadow-xs">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-semibold flex items-center gap-2">
-              <History className="h-4 w-4 text-primary" />
-              Head-to-Head Historical Record
-            </CardTitle>
-            <CardDescription className="text-xs">
-              {h2h.totalMatches > 0
-                ? `${h2h.totalMatches} meetings recorded in the jackpot archive`
-                : "No meetings recorded in the jackpot archive"}
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
+        {/* Matrix: H2H Split & Team Form Side-by-Side */}
+        <div className="p-3.5 bg-muted/20 grid grid-cols-1 lg:grid-cols-12 gap-4 text-xs items-center">
+          {/* H2H Distribution (lg:col-span-5) */}
+          <div className="lg:col-span-5 space-y-2 border-b lg:border-b-0 lg:border-r border-border/70 pb-3 lg:pb-0 lg:pr-4">
+            <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider block">
+              H2H Outcome Split
+            </span>
             {h2h.totalMatches > 0 ? (
               <>
-                <div className="grid grid-cols-3 gap-2 text-center">
-                  <div className="p-3 rounded-lg bg-muted/40 border border-border">
-                    <span className="text-xs text-muted-foreground block truncate">
-                      {teamA} Wins
-                    </span>
-                    <span className="text-xl font-bold font-mono text-primary">
-                      {h2h.teamAWins}
-                    </span>
-                    <span className="text-xs text-muted-foreground block">
+                <div className="h-2 w-full bg-muted rounded-full overflow-hidden flex">
+                  <div
+                    style={{ width: `${(h2h.teamAWins / h2h.totalMatches) * 100}%` }}
+                    className="bg-primary transition-all duration-300"
+                    title={`${teamA} Wins: ${h2h.teamAWins}`}
+                  />
+                  <div
+                    style={{ width: `${(h2h.draws / h2h.totalMatches) * 100}%` }}
+                    className="bg-amber-500 transition-all duration-300"
+                    title={`Draws: ${h2h.draws}`}
+                  />
+                  <div
+                    style={{ width: `${(h2h.teamBWins / h2h.totalMatches) * 100}%` }}
+                    className="bg-blue-500 transition-all duration-300"
+                    title={`${teamB} Wins: ${h2h.teamBWins}`}
+                  />
+                </div>
+                <div className="grid grid-cols-3 gap-1.5 text-center">
+                  <div className="py-1 px-1.5 rounded bg-card border border-border">
+                    <span className="text-[10px] text-muted-foreground block truncate">{teamA}</span>
+                    <strong className="text-primary text-xs">{h2h.teamAWins}</strong>
+                    <span className="text-[10px] text-muted-foreground block">
                       ({((h2h.teamAWins / h2h.totalMatches) * 100).toFixed(0)}%)
                     </span>
                   </div>
-                  <div className="p-3 rounded-lg bg-muted/40 border border-border">
-                    <span className="text-xs text-muted-foreground block">
-                      Draws
-                    </span>
-                    <span className="text-xl font-bold font-mono text-foreground">
-                      {h2h.draws}
-                    </span>
-                    <span className="text-xs text-muted-foreground block">
+                  <div className="py-1 px-1.5 rounded bg-card border border-border">
+                    <span className="text-[10px] text-muted-foreground block">Draws</span>
+                    <strong className="text-foreground text-xs">{h2h.draws}</strong>
+                    <span className="text-[10px] text-muted-foreground block">
                       ({((h2h.draws / h2h.totalMatches) * 100).toFixed(0)}%)
                     </span>
                   </div>
-                  <div className="p-3 rounded-lg bg-muted/40 border border-border">
-                    <span className="text-xs text-muted-foreground block truncate">
-                      {teamB} Wins
-                    </span>
-                    <span className="text-xl font-bold font-mono text-foreground">
-                      {h2h.teamBWins}
-                    </span>
-                    <span className="text-xs text-muted-foreground block">
+                  <div className="py-1 px-1.5 rounded bg-card border border-border">
+                    <span className="text-[10px] text-muted-foreground block truncate">{teamB}</span>
+                    <strong className="text-blue-500 text-xs">{h2h.teamBWins}</strong>
+                    <span className="text-[10px] text-muted-foreground block">
                       ({((h2h.teamBWins / h2h.totalMatches) * 100).toFixed(0)}%)
                     </span>
                   </div>
                 </div>
-
-                <div className="text-xs text-muted-foreground flex items-center justify-between pt-1">
-                  <span>
-                    Average Goals in H2H:{" "}
-                    <strong className="text-foreground">{h2h.avgGoals}</strong>
-                  </span>
-                  <span>
-                    Total Encounters:{" "}
-                    <strong className="text-foreground">
-                      {h2h.totalMatches}
-                    </strong>
-                  </span>
-                </div>
               </>
             ) : (
-              <div className="p-6 text-center text-muted-foreground text-xs italic bg-muted/20 rounded-lg border border-dashed border-border">
-                These teams have no recorded meeting in the jackpot archive.
-                The model below uses their recent form and baseline scoring
-                rates instead.
+              <div className="py-3 px-3 text-center text-muted-foreground text-xs italic bg-card rounded-md border border-dashed border-border">
+                No past meetings recorded. Baseline and recent form models apply.
               </div>
             )}
-          </CardContent>
-        </Card>
+          </div>
 
-        {/* Form Comparison Card */}
-        <Card className="bg-card border-border shadow-xs">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-semibold flex items-center gap-2">
-              <Target className="h-4 w-4 text-primary" />
-              Recent Form Comparison
-            </CardTitle>
-            <CardDescription className="text-xs">
-              Last {formA.matchesCount} matches for {teamA} vs{" "}
-              {formB.matchesCount} matches for {teamB}
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-2 gap-3 text-xs">
-              {/* Team A Form */}
-              <div className="p-3 rounded-lg border border-border bg-muted/30 space-y-2">
-                <div className="flex items-center gap-1.5 font-semibold text-foreground">
-                  <TeamLogo team={teamA} size={24} />
-                  <span className="truncate">{teamA} (Home)</span>
+          {/* Form Comparison Side-by-Side (lg:col-span-7) */}
+          <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {/* Team A Form */}
+            <div className="p-2.5 rounded-lg bg-card border border-border space-y-1.5">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-1.5 font-semibold text-foreground truncate">
+                  <TeamLogo team={teamA} size={18} />
+                  <span className="truncate">{teamA}</span>
                 </div>
-                <div className="flex items-center gap-1">
-                  {formA.recentResults.slice(0, 5).map((r, i) => (
-                    <span
-                      key={i}
-                      className={`h-5 w-5 rounded text-xs font-bold flex items-center justify-center ${
-                        r === "W"
-                          ? "bg-primary/15 text-primary border border-primary/30"
-                          : r === "D"
-                            ? "bg-muted-foreground/20 text-foreground border border-border"
-                            : "bg-muted text-muted-foreground border border-border"
-                      }`}
-                    >
-                      {r}
-                    </span>
-                  ))}
-                </div>
-                <div className="space-y-1 text-xs text-muted-foreground font-mono">
-                  <div>
-                    Win Rate:{" "}
-                    <strong className="text-foreground">
-                      {formA.winRate}%
-                    </strong>
-                  </div>
-                  <div>
-                    Home Win Rate:{" "}
-                    <strong className="text-foreground">
-                      {formA.homeWinRate}%
-                    </strong>
-                  </div>
-                  <div>
-                    Avg Goals Scored:{" "}
-                    <strong className="text-foreground">{formA.avgGF}</strong>
-                  </div>
-                  <div>
-                    Avg Goals Conceded:{" "}
-                    <strong className="text-foreground">{formA.avgGA}</strong>
-                  </div>
-                </div>
+                <span className="text-[10px] px-1 rounded bg-muted text-muted-foreground">
+                  Home
+                </span>
               </div>
-
-              {/* Team B Form */}
-              <div className="p-3 rounded-lg border border-border bg-muted/30 space-y-2">
-                <div className="flex items-center gap-1.5 font-semibold text-foreground">
-                  <TeamLogo team={teamB} size={24} />
-                  <span className="truncate">{teamB} (Away)</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  {formB.recentResults.slice(0, 5).map((r, i) => (
-                    <span
-                      key={i}
-                      className={`h-5 w-5 rounded text-xs font-bold flex items-center justify-center ${
-                        r === "W"
-                          ? "bg-primary/15 text-primary border border-primary/30"
-                          : r === "D"
-                            ? "bg-muted-foreground/20 text-foreground border border-border"
-                            : "bg-muted text-muted-foreground border border-border"
-                      }`}
-                    >
-                      {r}
-                    </span>
-                  ))}
-                </div>
-                <div className="space-y-1 text-xs text-muted-foreground font-mono">
-                  <div>
-                    Win Rate:{" "}
-                    <strong className="text-foreground">
-                      {formB.winRate}%
-                    </strong>
-                  </div>
-                  <div>
-                    Away Win Rate:{" "}
-                    <strong className="text-foreground">
-                      {formB.awayWinRate}%
-                    </strong>
-                  </div>
-                  <div>
-                    Avg Goals Scored:{" "}
-                    <strong className="text-foreground">{formB.avgGF}</strong>
-                  </div>
-                  <div>
-                    Avg Goals Conceded:{" "}
-                    <strong className="text-foreground">{formB.avgGA}</strong>
-                  </div>
-                </div>
+              <div className="flex items-center gap-1">
+                {formA.recentResults.slice(0, 5).map((r, i) => (
+                  <span
+                    key={i}
+                    className={`h-4 w-4 rounded text-[10px] font-bold flex items-center justify-center ${
+                      r === "W"
+                        ? "bg-primary/15 text-primary border border-primary/30"
+                        : r === "D"
+                        ? "bg-amber-500/15 text-amber-500 border border-amber-500/30"
+                        : "bg-muted text-muted-foreground border border-border"
+                    }`}
+                  >
+                    {r}
+                  </span>
+                ))}
+              </div>
+              <div className="grid grid-cols-2 gap-x-2 gap-y-0.5 text-[11px] text-muted-foreground pt-1 border-t border-border/50">
+                <div>Win: <strong className="text-foreground">{formA.winRate}%</strong> (H: {formA.homeWinRate}%)</div>
+                <div>GF/GA: <strong className="text-foreground">{formA.avgGF}</strong> / {formA.avgGA}</div>
               </div>
             </div>
-          </CardContent>
-        </Card>
+
+            {/* Team B Form */}
+            <div className="p-2.5 rounded-lg bg-card border border-border space-y-1.5">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-1.5 font-semibold text-foreground truncate">
+                  <TeamLogo team={teamB} size={18} />
+                  <span className="truncate">{teamB}</span>
+                </div>
+                <span className="text-[10px] px-1 rounded bg-muted text-muted-foreground">
+                  Away
+                </span>
+              </div>
+              <div className="flex items-center gap-1">
+                {formB.recentResults.slice(0, 5).map((r, i) => (
+                  <span
+                    key={i}
+                    className={`h-4 w-4 rounded text-[10px] font-bold flex items-center justify-center ${
+                      r === "W"
+                        ? "bg-primary/15 text-primary border border-primary/30"
+                        : r === "D"
+                        ? "bg-amber-500/15 text-amber-500 border border-amber-500/30"
+                        : "bg-muted text-muted-foreground border border-border"
+                    }`}
+                  >
+                    {r}
+                  </span>
+                ))}
+              </div>
+              <div className="grid grid-cols-2 gap-x-2 gap-y-0.5 text-[11px] text-muted-foreground pt-1 border-t border-border/50">
+                <div>Win: <strong className="text-foreground">{formB.winRate}%</strong> (A: {formB.awayWinRate}%)</div>
+                <div>GF/GA: <strong className="text-foreground">{formB.avgGF}</strong> / {formB.avgGA}</div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Poisson Score Predictions & Probabilities */}
@@ -384,7 +316,7 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
               <span className="text-xs text-muted-foreground block">
                 Home Win (1)
               </span>
-              <span className="text-lg font-bold font-mono text-primary">
+              <span className="text-lg font-bold text-primary">
                 {poisson.sim.homeProb}%
               </span>
             </div>
@@ -392,7 +324,7 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
               <span className="text-xs text-muted-foreground block">
                 Draw (X)
               </span>
-              <span className="text-lg font-bold font-mono text-foreground">
+              <span className="text-lg font-bold text-foreground">
                 {poisson.sim.drawProb}%
               </span>
             </div>
@@ -400,7 +332,7 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
               <span className="text-xs text-muted-foreground block">
                 Away Win (2)
               </span>
-              <span className="text-lg font-bold font-mono text-foreground">
+              <span className="text-lg font-bold text-foreground">
                 {poisson.sim.awayProb}%
               </span>
             </div>
@@ -408,7 +340,7 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
               <span className="text-xs text-muted-foreground block">
                 Over 1.5 Goals
               </span>
-              <span className="text-lg font-bold font-mono text-foreground">
+              <span className="text-lg font-bold text-foreground">
                 {poisson.over15}%
               </span>
             </div>
@@ -416,7 +348,7 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
               <span className="text-xs text-muted-foreground block">
                 Over 2.5 Goals
               </span>
-              <span className="text-lg font-bold font-mono text-foreground">
+              <span className="text-lg font-bold text-foreground">
                 {poisson.over25}%
               </span>
             </div>
@@ -424,7 +356,7 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
               <span className="text-xs text-muted-foreground block">
                 Both Teams to Score (BTTS)
               </span>
-              <span className="text-lg font-bold font-mono text-foreground">
+              <span className="text-lg font-bold text-foreground">
                 {poisson.btts}%
               </span>
             </div>
@@ -445,10 +377,10 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
                       : "bg-muted/30 border-border"
                   }`}
                 >
-                  <span className="text-sm font-bold font-mono text-foreground block">
+                  <span className="text-sm font-bold text-foreground block">
                     {sc.score}
                   </span>
-                  <span className="text-xs font-mono font-medium text-primary block mt-0.5">
+                  <span className="text-xs font-medium text-primary block mt-0.5">
                     {sc.probability}%
                   </span>
                   <span className="text-xs text-muted-foreground">
@@ -468,7 +400,7 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
             <h2 className="text-sm font-bold text-foreground">
               Past Meetings in the Jackpot Archive
             </h2>
-            <span className="text-xs text-muted-foreground font-mono">
+            <span className="text-xs text-muted-foreground">
               {h2h.recentEncounters.length} recorded matches
             </span>
           </div>
