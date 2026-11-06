@@ -421,7 +421,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
           <div className="flex items-center gap-2">
             <span className="text-muted-foreground">Dates:</span>
             {filters.from || filters.to ? (
-              <div className="flex items-center gap-1.5 bg-muted border border-border px-2 py-0.5 rounded text-foreground font-mono text-xs">
+              <div className="flex items-center gap-1.5 bg-muted border border-border px-2 py-0.5 rounded text-foreground text-xs">
                 <span>{dateRangeLabel}</span>
                 <button
                   onClick={() => onFilterChange({ ...filters, from: null, to: null })}

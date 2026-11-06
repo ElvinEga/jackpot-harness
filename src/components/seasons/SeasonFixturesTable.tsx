@@ -133,7 +133,7 @@ export const SeasonFixturesTable: React.FC<SeasonFixturesTableProps> = ({
             </NativeSelectOption>
           </NativeSelect>
 
-          <span className="text-xs text-muted-foreground font-mono ml-1">
+          <span className="text-xs text-muted-foreground ml-1">
             {filteredMatches.length} / {matches.length} fixtures
           </span>
         </div>
@@ -290,10 +290,10 @@ export const SeasonFixturesTable: React.FC<SeasonFixturesTableProps> = ({
           <DialogContent className="sm:max-w-xl bg-card border-border p-6">
             <DialogHeader>
               <div className="flex items-center justify-between">
-                <Badge variant="outline" className="text-xs font-mono">
+                <Badge variant="outline" className="text-xs">
                   {selectedMatch.season} • {selectedMatch.league}
                 </Badge>
-                <span className="text-xs text-muted-foreground font-mono">
+                <span className="text-xs text-muted-foreground">
                   {selectedMatch.date}{" "}
                   {selectedMatch.kickoff_time &&
                     `at ${selectedMatch.kickoff_time}`}
@@ -302,7 +302,7 @@ export const SeasonFixturesTable: React.FC<SeasonFixturesTableProps> = ({
               <DialogTitle className="text-xl font-bold text-foreground mt-2 flex items-center gap-2">
                 <TeamLogo team={selectedMatch.home_team} size={24} />
                 <span>{selectedMatch.home_team}</span>
-                <span className="font-mono text-base px-2 py-0.5 rounded bg-muted border border-border">
+                <span className="text-base px-2 py-0.5 rounded bg-muted border border-border">
                   {selectedMatch.score || "—"}
                 </span>
                 <span>{selectedMatch.away_team}</span>
@@ -320,12 +320,12 @@ export const SeasonFixturesTable: React.FC<SeasonFixturesTableProps> = ({
                 <span className="font-semibold text-foreground text-xs block">
                   Match Statistics:
                 </span>
-                <div className="grid grid-cols-3 gap-2 text-center font-mono">
+                <div className="grid grid-cols-3 gap-2 text-center">
                   <span className="flex items-center justify-center gap-1.5 font-bold text-sm text-foreground">
                     <TeamLogo team={selectedMatch.home_team} size={24} />
                     <span className="truncate">{selectedMatch.home_team}</span>
                   </span>
-                  <span className="text-muted-foreground text-xs font-sans">
+                  <span className="text-muted-foreground text-xs">
                     Metric
                   </span>
                   <span className="flex items-center justify-center gap-1.5 font-bold text-sm text-foreground">
@@ -336,7 +336,7 @@ export const SeasonFixturesTable: React.FC<SeasonFixturesTableProps> = ({
                   <span className="text-foreground">
                     {selectedMatch.stats.home_shots ?? "-"}
                   </span>
-                  <span className="text-muted-foreground font-sans">
+                  <span className="text-muted-foreground">
                     Total Shots
                   </span>
                   <span className="text-foreground">
@@ -346,7 +346,7 @@ export const SeasonFixturesTable: React.FC<SeasonFixturesTableProps> = ({
                   <span className="text-foreground">
                     {selectedMatch.stats.home_shots_on_target ?? "-"}
                   </span>
-                  <span className="text-muted-foreground font-sans">
+                  <span className="text-muted-foreground">
                     Shots on Target
                   </span>
                   <span className="text-foreground">
@@ -356,7 +356,7 @@ export const SeasonFixturesTable: React.FC<SeasonFixturesTableProps> = ({
                   <span className="text-foreground">
                     {selectedMatch.stats.home_corners ?? "-"}
                   </span>
-                  <span className="text-muted-foreground font-sans">
+                  <span className="text-muted-foreground">
                     Corners
                   </span>
                   <span className="text-foreground">
@@ -366,7 +366,7 @@ export const SeasonFixturesTable: React.FC<SeasonFixturesTableProps> = ({
                   <span className="text-foreground">
                     {selectedMatch.stats.home_fouls ?? "-"}
                   </span>
-                  <span className="text-muted-foreground font-sans">Fouls</span>
+                  <span className="text-muted-foreground">Fouls</span>
                   <span className="text-foreground">
                     {selectedMatch.stats.away_fouls ?? "-"}
                   </span>
@@ -374,7 +374,7 @@ export const SeasonFixturesTable: React.FC<SeasonFixturesTableProps> = ({
                   <span className="text-foreground">
                     {selectedMatch.stats.home_yellow ?? "-"}
                   </span>
-                  <span className="text-muted-foreground font-sans">
+                  <span className="text-muted-foreground">
                     Yellow Cards
                   </span>
                   <span className="text-foreground">
@@ -384,7 +384,7 @@ export const SeasonFixturesTable: React.FC<SeasonFixturesTableProps> = ({
                   <span className="text-destructive font-bold">
                     {selectedMatch.stats.home_red ?? "-"}
                   </span>
-                  <span className="text-muted-foreground font-sans">
+                  <span className="text-muted-foreground">
                     Red Cards
                   </span>
                   <span className="text-destructive font-bold">
@@ -398,9 +398,9 @@ export const SeasonFixturesTable: React.FC<SeasonFixturesTableProps> = ({
                 <span className="font-semibold text-foreground text-xs block">
                   Market Odds &amp; Lines:
                 </span>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center font-mono">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center">
                   <div className="p-2 rounded bg-card border border-border">
-                    <span className="text-[10px] text-muted-foreground block font-sans">
+                    <span className="text-[10px] text-muted-foreground block">
                       Pre-Match (H/D/A)
                     </span>
                     <span className="font-bold text-foreground">
@@ -410,7 +410,7 @@ export const SeasonFixturesTable: React.FC<SeasonFixturesTableProps> = ({
                     </span>
                   </div>
                   <div className="p-2 rounded bg-card border border-border">
-                    <span className="text-[10px] text-muted-foreground block font-sans">
+                    <span className="text-[10px] text-muted-foreground block">
                       Closing (H/D/A)
                     </span>
                     <span className="font-bold text-foreground">
@@ -420,7 +420,7 @@ export const SeasonFixturesTable: React.FC<SeasonFixturesTableProps> = ({
                     </span>
                   </div>
                   <div className="p-2 rounded bg-card border border-border">
-                    <span className="text-[10px] text-muted-foreground block font-sans">
+                    <span className="text-[10px] text-muted-foreground block">
                       Over / Under 2.5
                     </span>
                     <span className="font-bold text-orange-500">
@@ -429,7 +429,7 @@ export const SeasonFixturesTable: React.FC<SeasonFixturesTableProps> = ({
                     </span>
                   </div>
                   <div className="p-2 rounded bg-card border border-border">
-                    <span className="text-[10px] text-muted-foreground block font-sans">
+                    <span className="text-[10px] text-muted-foreground block">
                       Asian Handicap Line
                     </span>
                     <span className="font-bold text-foreground">

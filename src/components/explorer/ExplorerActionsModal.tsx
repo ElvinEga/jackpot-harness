@@ -294,10 +294,10 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
                     <span className="text-xs text-muted-foreground block truncate">
                       {teamA}
                     </span>
-                    <span className="text-lg sm:text-xl font-bold font-mono text-primary block my-0.5">
+                    <span className="text-lg sm:text-xl font-bold text-primary block my-0.5">
                       {h2h.teamAWins}
                     </span>
-                    <span className="text-xs text-muted-foreground font-mono">
+                    <span className="text-xs text-muted-foreground">
                       {((h2h.teamAWins / h2h.totalMatches) * 100).toFixed(0)}%
                       wins
                     </span>
@@ -306,10 +306,10 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
                     <span className="text-xs text-muted-foreground block">
                       Draws
                     </span>
-                    <span className="text-lg sm:text-xl font-bold font-mono text-foreground block my-0.5">
+                    <span className="text-lg sm:text-xl font-bold text-foreground block my-0.5">
                       {h2h.draws}
                     </span>
-                    <span className="text-xs text-muted-foreground font-mono">
+                    <span className="text-xs text-muted-foreground">
                       {((h2h.draws / h2h.totalMatches) * 100).toFixed(0)}%
                     </span>
                   </div>
@@ -317,17 +317,17 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
                     <span className="text-xs text-muted-foreground block truncate">
                       {teamB}
                     </span>
-                    <span className="text-lg sm:text-xl font-bold font-mono text-foreground block my-0.5">
+                    <span className="text-lg sm:text-xl font-bold text-foreground block my-0.5">
                       {h2h.teamBWins}
                     </span>
-                    <span className="text-xs text-muted-foreground font-mono">
+                    <span className="text-xs text-muted-foreground">
                       {((h2h.teamBWins / h2h.totalMatches) * 100).toFixed(0)}%
                       wins
                     </span>
                   </div>
                 </div>
 
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-xs px-1 text-muted-foreground font-mono">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-xs px-1 text-muted-foreground">
                   <span>
                     Average goals per encounter:{" "}
                     <strong className="text-foreground">{h2h.avgGoals}</strong>
@@ -346,7 +346,7 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
                     <span className="font-semibold text-foreground text-xs">
                       Past Meetings in the Jackpot Archive
                     </span>
-                    <span className="text-xs text-muted-foreground font-mono">
+                    <span className="text-xs text-muted-foreground">
                       {h2h.recentEncounters.length} recorded
                     </span>
                   </div>
@@ -356,7 +356,7 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
                         key={m.id}
                         className="p-2.5 rounded-lg hover:bg-muted/30 transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-2"
                       >
-                        <div className="flex items-center gap-2 text-xs text-muted-foreground font-mono">
+                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
                           <Calendar className="h-3 w-3 text-muted-foreground/70" />
                           <span>{m.date || "—"}</span>
                           <span className="text-muted-foreground/40">•</span>
@@ -370,7 +370,7 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
                             <span className="truncate max-w-[110px] text-right">
                               {m.home_team}
                             </span>
-                            <span className="font-mono px-2 py-0.5 rounded bg-muted border border-border text-foreground font-bold text-xs shrink-0">
+                            <span className="px-2 py-0.5 rounded bg-muted border border-border text-foreground font-bold text-xs shrink-0">
                               {m.score || "—"}
                             </span>
                             <span className="truncate max-w-[110px] text-left">
@@ -388,7 +388,7 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
                                     ? "away"
                                     : "outline"
                             }
-                            className="text-xs uppercase font-mono shrink-0"
+                            className="text-xs uppercase shrink-0"
                           >
                             {m.result}
                           </Badge>
@@ -434,7 +434,7 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
                 <NativeSelect
                   value={String(selectedPosition)}
                   onChange={(e) => setSelectedPosition(Number(e.target.value))}
-                  className="h-8 text-xs w-28 font-mono"
+                  className="h-8 text-xs w-28"
                 >
                   {Array.from({ length: 20 }, (_, i) => i + 1).map((p) => (
                     <NativeSelectOption key={p} value={p}>
@@ -443,7 +443,7 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
                   ))}
                 </NativeSelect>
               </div>
-              <span className="text-muted-foreground text-xs font-mono">
+              <span className="text-muted-foreground text-xs">
                 {currentPosStat?.totalMatches.toLocaleString()} matches in this
                 position
               </span>
@@ -457,10 +457,10 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
                     <span className="text-xs text-muted-foreground block">
                       Position #{selectedPosition} Home Win
                     </span>
-                    <span className="text-xl font-bold font-mono text-primary block my-0.5">
+                    <span className="text-xl font-bold text-primary block my-0.5">
                       {currentPosStat.homeWinPct}%
                     </span>
-                    <span className="text-xs text-muted-foreground font-mono">
+                    <span className="text-xs text-muted-foreground">
                       {currentPosStat.homeWins} wins
                     </span>
                   </div>
@@ -468,10 +468,10 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
                     <span className="text-xs text-muted-foreground block">
                       Position #{selectedPosition} Draw
                     </span>
-                    <span className="text-xl font-bold font-mono text-foreground block my-0.5">
+                    <span className="text-xl font-bold text-foreground block my-0.5">
                       {currentPosStat.drawPct}%
                     </span>
-                    <span className="text-xs text-muted-foreground font-mono">
+                    <span className="text-xs text-muted-foreground">
                       {currentPosStat.draws} draws
                     </span>
                   </div>
@@ -479,10 +479,10 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
                     <span className="text-xs text-muted-foreground block">
                       Position #{selectedPosition} Away Win
                     </span>
-                    <span className="text-xl font-bold font-mono text-foreground block my-0.5">
+                    <span className="text-xl font-bold text-foreground block my-0.5">
                       {currentPosStat.awayWinPct}%
                     </span>
-                    <span className="text-xs text-muted-foreground font-mono">
+                    <span className="text-xs text-muted-foreground">
                       {currentPosStat.awayWins} wins
                     </span>
                   </div>
@@ -494,7 +494,7 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
                     <span className="text-xs text-muted-foreground block">
                       Avg Goals
                     </span>
-                    <span className="text-lg font-bold font-mono text-foreground">
+                    <span className="text-lg font-bold text-foreground">
                       {currentPosStat.avgGoals}
                     </span>
                   </div>
@@ -502,7 +502,7 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
                     <span className="text-xs text-muted-foreground block">
                       Over 2.5 %
                     </span>
-                    <span className="text-lg font-bold font-mono text-foreground">
+                    <span className="text-lg font-bold text-foreground">
                       {currentPosStat.over25Pct}%
                     </span>
                   </div>
@@ -510,7 +510,7 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
                     <span className="text-xs text-muted-foreground block">
                       BTTS %
                     </span>
-                    <span className="text-lg font-bold font-mono text-foreground">
+                    <span className="text-lg font-bold text-foreground">
                       {currentPosStat.bttsPct}%
                     </span>
                   </div>
@@ -518,7 +518,7 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
                     <span className="text-xs text-muted-foreground block">
                       Most Frequent
                     </span>
-                    <span className="text-lg font-bold font-mono text-primary">
+                    <span className="text-lg font-bold text-primary">
                       {currentPosStat.mostLikelyScore}
                     </span>
                   </div>
@@ -535,10 +535,10 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
                         key={ts.score}
                         className="p-2 rounded-lg bg-muted/40 border border-border text-center"
                       >
-                        <span className="font-mono font-bold text-xs text-foreground block">
+                        <span className="font-bold text-xs text-foreground block">
                           {ts.score}
                         </span>
-                        <span className="text-xs text-primary font-mono block mt-0.5">
+                        <span className="text-xs text-primary block mt-0.5">
                           {ts.pct}%
                         </span>
                         <span className="text-xs text-muted-foreground block">
@@ -559,7 +559,7 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
                 <span className="text-muted-foreground text-xs block truncate">
                   Home Win ({teamA})
                 </span>
-                <span className="text-xl font-bold font-mono text-primary block my-0.5">
+                <span className="text-xl font-bold text-primary block my-0.5">
                   {prediction.homeProb}%
                 </span>
               </div>
@@ -567,7 +567,7 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
                 <span className="text-muted-foreground text-xs block">
                   Draw (X)
                 </span>
-                <span className="text-xl font-bold font-mono text-foreground block my-0.5">
+                <span className="text-xl font-bold text-foreground block my-0.5">
                   {prediction.drawProb}%
                 </span>
               </div>
@@ -575,7 +575,7 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
                 <span className="text-muted-foreground text-xs block truncate">
                   Away Win ({teamB})
                 </span>
-                <span className="text-xl font-bold font-mono text-foreground block my-0.5">
+                <span className="text-xl font-bold text-foreground block my-0.5">
                   {prediction.awayProb}%
                 </span>
               </div>
@@ -593,7 +593,7 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
                   >
                     {prediction.predictedResult.toUpperCase()}
                   </Badge>
-                  <span className="text-xs text-muted-foreground font-mono">
+                  <span className="text-xs text-muted-foreground">
                     Confidence: <strong>{prediction.confidence}</strong>
                   </span>
                 </div>
@@ -631,10 +631,10 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
                     key={sc.score}
                     className="p-2 rounded-lg bg-muted/40 border border-border text-center"
                   >
-                    <span className="font-mono font-bold text-sm text-foreground block">
+                    <span className="font-bold text-sm text-foreground block">
                       {sc.score}
                     </span>
-                    <span className="text-xs text-primary font-mono">
+                    <span className="text-xs text-primary">
                       {sc.probability}%
                     </span>
                   </div>
@@ -650,7 +650,7 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
                 <span className="text-xs text-muted-foreground block truncate">
                   Exp Goals ({teamA})
                 </span>
-                <span className="text-xl font-bold font-mono text-primary block my-0.5">
+                <span className="text-xl font-bold text-primary block my-0.5">
                   {goalsModel.lambdaH}
                 </span>
               </div>
@@ -658,7 +658,7 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
                 <span className="text-xs text-muted-foreground block truncate">
                   Exp Goals ({teamB})
                 </span>
-                <span className="text-xl font-bold font-mono text-foreground block my-0.5">
+                <span className="text-xl font-bold text-foreground block my-0.5">
                   {goalsModel.lambdaA}
                 </span>
               </div>
@@ -666,7 +666,7 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
                 <span className="text-xs text-muted-foreground block">
                   Total Expected
                 </span>
-                <span className="text-xl font-bold font-mono text-primary block my-0.5">
+                <span className="text-xl font-bold text-primary block my-0.5">
                   {Number((goalsModel.lambdaH + goalsModel.lambdaA).toFixed(2))}
                 </span>
               </div>
@@ -674,7 +674,7 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
                 <span className="text-xs text-muted-foreground block">
                   BTTS %
                 </span>
-                <span className="text-xl font-bold font-mono text-foreground block my-0.5">
+                <span className="text-xl font-bold text-foreground block my-0.5">
                   {goalsModel.btts}%
                 </span>
               </div>
@@ -685,7 +685,7 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
                 <span className="text-xs text-muted-foreground block">
                   Over 1.5 Goals %
                 </span>
-                <span className="text-base font-bold font-mono text-foreground">
+                <span className="text-base font-bold text-foreground">
                   {goalsModel.over15}%
                 </span>
               </div>
@@ -693,7 +693,7 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
                 <span className="text-xs text-muted-foreground block">
                   Over 2.5 Goals %
                 </span>
-                <span className="text-base font-bold font-mono text-foreground">
+                <span className="text-base font-bold text-foreground">
                   {goalsModel.over25}%
                 </span>
               </div>
@@ -701,7 +701,7 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
                 <span className="text-xs text-muted-foreground block">
                   Over 3.5 Goals %
                 </span>
-                <span className="text-base font-bold font-mono text-foreground">
+                <span className="text-base font-bold text-foreground">
                   {goalsModel.over35}%
                 </span>
               </div>
@@ -718,10 +718,10 @@ export const ExplorerActionsModal: React.FC<ExplorerActionsModalProps> = ({
                     key={sc.score}
                     className="p-2 rounded-lg bg-muted/30 border border-border text-center"
                   >
-                    <span className="font-mono font-bold text-xs text-foreground block">
+                    <span className="font-bold text-xs text-foreground block">
                       {sc.score}
                     </span>
-                    <span className="text-xs text-primary font-mono">
+                    <span className="text-xs text-primary">
                       {sc.probability}%
                     </span>
                   </div>

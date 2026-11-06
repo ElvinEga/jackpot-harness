@@ -44,7 +44,7 @@ export const SeasonTrends: React.FC<SeasonTrendsProps> = ({ allMatches }) => {
               {leagueName} Evolution: Season-to-Season Comparison (2021–2027)
             </h3>
           </div>
-          <Badge variant="outline" className="text-xs font-mono">
+          <Badge variant="outline" className="text-xs">
             {comparisons.length} Seasons Evaluated
           </Badge>
         </div>

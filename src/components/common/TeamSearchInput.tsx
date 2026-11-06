@@ -235,7 +235,7 @@ export const TeamSearchInput: React.FC<TeamSearchInputProps> = ({
                     </div>
 
                     {count !== undefined && (
-                      <span className="text-xs font-mono text-muted-foreground shrink-0">
+                      <span className="text-xs text-muted-foreground shrink-0">
                         {count} matches
                       </span>
                     )}

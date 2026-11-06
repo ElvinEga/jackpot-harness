@@ -322,7 +322,7 @@ export const DataTable: React.FC<DataTableProps> = ({
                   }
                 />
                 <DropdownMenuContent align="end" className="w-56">
-                  <DropdownMenuLabel className="text-xs font-mono text-muted-foreground">
+                  <DropdownMenuLabel className="text-xs text-muted-foreground">
                     Position #{match.position} · {match.home_team} vs{" "}
                     {match.away_team}
                   </DropdownMenuLabel>
@@ -576,7 +576,7 @@ export const DataTable: React.FC<DataTableProps> = ({
           className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-card/95 border-2 border-primary/50 shadow-2xl rounded-2xl px-3 py-2 sm:px-4 sm:py-2.5 flex items-center gap-2 backdrop-blur-md ring-2 ring-primary/20 animate-in fade-in slide-in-from-bottom-4 flex-wrap max-w-[95vw] justify-center"
         >
           <div className="flex items-center gap-2 border-r border-border pr-2.5">
-            <Badge variant="default" className="font-mono text-xs">
+            <Badge variant="default" className="text-xs">
               {selectedCount} selected
             </Badge>
           </div>

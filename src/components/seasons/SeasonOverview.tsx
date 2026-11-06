@@ -77,20 +77,20 @@ export const SeasonOverview: React.FC<SeasonOverviewProps> = ({
           <div className="flex items-center gap-2">
             <Trophy className="h-4 w-4 text-foreground" />
             <span className="font-semibold text-foreground">{resolvedLeagueName} ({seasonName})</span>
-            <span className="text-muted-foreground font-mono">· {overview.totalMatches.toLocaleString()} matches</span>
+            <span className="text-muted-foreground">· {overview.totalMatches.toLocaleString()} matches</span>
           </div>
-          <div className="flex items-center gap-4 text-xs font-mono">
+          <div className="flex items-center gap-4 text-xs">
             <div>
-              <span className="text-muted-foreground font-sans mr-1">Goals/m:</span>
+              <span className="text-muted-foreground mr-1">Goals/m:</span>
               <span className="font-bold text-foreground">{overview.goalsPerMatch}</span>
               <span className="text-[11px] text-muted-foreground font-normal ml-1">({overview.totalGoals})</span>
             </div>
             <div>
-              <span className="text-muted-foreground font-sans mr-1">Over 2.5:</span>
+              <span className="text-muted-foreground mr-1">Over 2.5:</span>
               <span className="font-bold text-foreground">{overview.over25Pct}%</span>
             </div>
             <div>
-              <span className="text-muted-foreground font-sans mr-1">BTTS:</span>
+              <span className="text-muted-foreground mr-1">BTTS:</span>
               <span className="font-bold text-foreground">{overview.bttsPct}%</span>
             </div>
           </div>
@@ -99,23 +99,23 @@ export const SeasonOverview: React.FC<SeasonOverviewProps> = ({
         <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 text-xs">
           <div className="flex items-center justify-between px-2.5 py-1.5 rounded-sm bg-muted/40 border border-border">
             <span className="text-muted-foreground">Home Wins:</span>
-            <span className="font-mono font-bold text-foreground">{overview.homeWinPct}%</span>
+            <span className="font-bold text-foreground">{overview.homeWinPct}%</span>
           </div>
           <div className="flex items-center justify-between px-2.5 py-1.5 rounded-sm bg-muted/40 border border-border">
             <span className="text-muted-foreground">Draws:</span>
-            <span className="font-mono font-bold text-foreground">{overview.drawPct}%</span>
+            <span className="font-bold text-foreground">{overview.drawPct}%</span>
           </div>
           <div className="flex items-center justify-between px-2.5 py-1.5 rounded-sm bg-muted/40 border border-border">
             <span className="text-muted-foreground">Away Wins:</span>
-            <span className="font-mono font-bold text-foreground">{overview.awayWinPct}%</span>
+            <span className="font-bold text-foreground">{overview.awayWinPct}%</span>
           </div>
           <div className="flex items-center justify-between px-2.5 py-1.5 rounded-sm bg-muted/40 border border-border">
             <span className="text-muted-foreground">Clean Sheets:</span>
-            <span className="font-mono font-bold text-foreground">{overview.cleanSheetPct}%</span>
+            <span className="font-bold text-foreground">{overview.cleanSheetPct}%</span>
           </div>
           <div className="flex items-center justify-between px-2.5 py-1.5 rounded-sm bg-muted/40 border border-border">
             <span className="text-muted-foreground">Avg Shots:</span>
-            <span className="font-mono font-bold text-foreground">{overview.avgShots}</span>
+            <span className="font-bold text-foreground">{overview.avgShots}</span>
           </div>
         </div>
       </div>
@@ -128,7 +128,7 @@ export const SeasonOverview: React.FC<SeasonOverviewProps> = ({
             <h2 className="text-sm font-bold text-foreground">
               {resolvedLeagueName} Standings — {seasonName}
             </h2>
-            <Badge variant="secondary" className="text-[10px] font-mono">
+            <Badge variant="secondary" className="text-[10px]">
               {standings.length} Teams
             </Badge>
           </div>

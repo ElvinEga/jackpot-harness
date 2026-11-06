@@ -165,7 +165,7 @@ export const MozzartImportModal: React.FC<MozzartImportModalProps> = ({
                 placeholder='[{"id":1000029772,"roundId":2481,"totalRows":16,"matches":[...]}]'
                 value={jsonInput}
                 onChange={(e) => setJsonInput(e.target.value)}
-                className="font-mono text-xs h-32 resize-none"
+                className="text-xs h-32 resize-none"
               />
             </div>
             <div className="flex justify-end">
@@ -198,14 +198,14 @@ export const MozzartImportModal: React.FC<MozzartImportModalProps> = ({
                 <span className="font-semibold text-foreground text-xs">
                   Round #{previewJackpot.roundId}
                 </span>
-                {/*<Badge variant="outline" className="text-xs px-1.5 py-0 font-mono">
+                {/*<Badge variant="outline" className="text-xs px-1.5 py-0">
                   {previewJackpot.totalRows} Fixtures
                 </Badge>*/}
 
               </div>
 
               {previewJackpot.jackpotAmount !== null && (
-                <Badge variant="outline" className="text-xs px-1.5 py-0 text-primary border-primary/30 font-mono">
+                <Badge variant="outline" className="text-xs px-1.5 py-0 text-primary border-primary/30">
                   {formatJackpotAmount(previewJackpot.jackpotAmount)}
                 </Badge>
               )}
@@ -216,7 +216,7 @@ export const MozzartImportModal: React.FC<MozzartImportModalProps> = ({
               {previewJackpot.matches.map((m) => (
                 <div key={m.rowNumber} className="p-2 flex items-center justify-between hover:bg-muted/40 transition-colors">
                   <div className="flex items-center gap-2">
-                    <span className="h-5 w-5 rounded bg-muted text-foreground flex items-center justify-center font-mono text-xs font-bold border border-border">
+                    <span className="h-5 w-5 rounded bg-muted text-foreground flex items-center justify-center text-xs font-bold border border-border">
                       {m.rowNumber}
                     </span>
                     <div>
@@ -230,10 +230,10 @@ export const MozzartImportModal: React.FC<MozzartImportModalProps> = ({
                   </div>
 
                   <div className="text-right">
-                    <span className="font-mono text-xs font-semibold text-foreground">
+                    <span className="text-xs font-semibold text-foreground">
                       {m.homeOdds?.toFixed(2) || "-"} / {m.drawOdds?.toFixed(2) || "-"} / {m.awayOdds?.toFixed(2) || "-"}
                     </span>
-                    <span className="text-xs text-muted-foreground block font-mono">
+                    <span className="text-xs text-muted-foreground block">
                       1X2 Odds
                     </span>
                   </div>

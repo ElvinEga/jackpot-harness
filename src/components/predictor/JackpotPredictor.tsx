@@ -663,14 +663,14 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({
                     {activeSportPesaMeta ? (
                       <Badge
                         variant="outline"
-                        className="text-xs px-1.5 py-0 text-foreground border-border font-mono"
+                        className="text-xs px-1.5 py-0 text-foreground border-border"
                       >
                         #{activeSportPesaMeta.humanId} Active
                       </Badge>
                     ) : (
                       <Badge
                         variant="outline"
-                        className="text-xs px-1.5 py-0 text-muted-foreground border-border font-mono"
+                        className="text-xs px-1.5 py-0 text-muted-foreground border-border"
                       >
                         17 Matches
                       </Badge>
@@ -734,14 +734,14 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({
                     {activeMozzartMeta ? (
                       <Badge
                         variant="outline"
-                        className="text-xs px-1.5 py-0 text-foreground border-border font-mono"
+                        className="text-xs px-1.5 py-0 text-foreground border-border"
                       >
                         Round #{activeMozzartMeta.roundId} Active
                       </Badge>
                     ) : (
                       <Badge
                         variant="outline"
-                        className="text-xs px-1.5 py-0 text-muted-foreground border-border font-mono"
+                        className="text-xs px-1.5 py-0 text-muted-foreground border-border"
                       >
                         16 Matches
                       </Badge>
@@ -903,7 +903,7 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({
             placeholder="Select a past jackpot date..."
             searchPlaceholder="Search past dates..."
             clearable={!!selectedHistoricalEvent}
-            className="w-full text-xs font-mono"
+            className="w-full text-xs"
             popoverWidth="w-80"
           />
         </div>
@@ -914,24 +914,24 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({
         <div className="flex items-center gap-2 text-muted-foreground">
           <History className="h-3.5 w-3.5 text-muted-foreground" />
           <span className="text-foreground font-medium">Baseline Sample:</span>
-          <span className="font-mono font-bold text-foreground">{overview.totalAnalyzed.toLocaleString()}</span>
+          <span className="font-bold text-foreground">{overview.totalAnalyzed.toLocaleString()}</span>
           <span>historical jackpot matches</span>
         </div>
         <div className="flex items-center gap-4 text-xs">
-          <div className="flex items-center gap-1.5 font-mono">
-            <span className="text-muted-foreground font-sans">Home:</span>
+          <div className="flex items-center gap-1.5">
+            <span className="text-muted-foreground">Home:</span>
             <span className="font-bold text-foreground">{overview.homeWinPct}%</span>
           </div>
-          <div className="flex items-center gap-1.5 font-mono">
-            <span className="text-muted-foreground font-sans">Draw:</span>
+          <div className="flex items-center gap-1.5">
+            <span className="text-muted-foreground">Draw:</span>
             <span className="font-bold text-foreground">{overview.drawPct}%</span>
           </div>
-          <div className="flex items-center gap-1.5 font-mono">
-            <span className="text-muted-foreground font-sans">Away:</span>
+          <div className="flex items-center gap-1.5">
+            <span className="text-muted-foreground">Away:</span>
             <span className="font-bold text-foreground">{overview.awayWinPct}%</span>
           </div>
-          <div className="flex items-center gap-1.5 font-mono border-l border-border pl-3">
-            <span className="text-muted-foreground font-sans">Avg Goals:</span>
+          <div className="flex items-center gap-1.5 border-l border-border pl-3">
+            <span className="text-muted-foreground">Avg Goals:</span>
             <span className="font-bold text-foreground">{overview.avgGoals}</span>
           </div>
         </div>
@@ -1167,7 +1167,7 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({
           <DialogContent className="sm:max-w-2xl bg-card border-border">
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2 text-base">
-                <span className="h-6 w-6 rounded bg-primary/10 text-primary border border-primary/20 flex items-center justify-center font-bold text-xs font-mono">
+                <span className="h-6 w-6 rounded bg-primary/10 text-primary border border-primary/20 flex items-center justify-center font-bold text-xs">
                   #{detailMatch.position}
                 </span>
                 <span className="flex items-center gap-1.5">
@@ -1195,7 +1195,7 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({
                   <span className="text-muted-foreground text-xs block">
                     Home Win (1)
                   </span>
-                  <span className="text-lg font-bold font-mono text-primary">
+                  <span className="text-lg font-bold text-primary">
                     {detailMatch.homeProb}%
                   </span>
                 </div>
@@ -1203,7 +1203,7 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({
                   <span className="text-muted-foreground text-xs block">
                     Draw (X)
                   </span>
-                  <span className="text-lg font-bold font-mono text-foreground">
+                  <span className="text-lg font-bold text-foreground">
                     {detailMatch.drawProb}%
                   </span>
                 </div>
@@ -1211,7 +1211,7 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({
                   <span className="text-muted-foreground text-xs block">
                     Away Win (2)
                   </span>
-                  <span className="text-lg font-bold font-mono text-foreground">
+                  <span className="text-lg font-bold text-foreground">
                     {detailMatch.awayProb}%
                   </span>
                 </div>
@@ -1226,7 +1226,7 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({
                       SportPesa Live 1X2 Market Odds
                     </span>
                     {detailMatch.tournament && (
-                      <span className="text-xs text-muted-foreground font-mono">
+                      <span className="text-xs text-muted-foreground">
                         {detailMatch.tournament}{" "}
                         {detailMatch.country ? `• ${detailMatch.country}` : ""}
                       </span>
@@ -1237,7 +1237,7 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({
                       <span className="text-xs text-muted-foreground block">
                         Home (1)
                       </span>
-                      <span className="text-sm font-bold font-mono text-primary">
+                      <span className="text-sm font-bold text-primary">
                         {detailMatch.bookmakerOdds.home?.toFixed(2) || "-"}
                       </span>
                     </div>
@@ -1245,7 +1245,7 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({
                       <span className="text-xs text-muted-foreground block">
                         Draw (X)
                       </span>
-                      <span className="text-sm font-bold font-mono text-foreground">
+                      <span className="text-sm font-bold text-foreground">
                         {detailMatch.bookmakerOdds.draw?.toFixed(2) || "-"}
                       </span>
                     </div>
@@ -1253,7 +1253,7 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({
                       <span className="text-xs text-muted-foreground block">
                         Away (2)
                       </span>
-                      <span className="text-sm font-bold font-mono text-foreground">
+                      <span className="text-sm font-bold text-foreground">
                         {detailMatch.bookmakerOdds.away?.toFixed(2) || "-"}
                       </span>
                     </div>
@@ -1295,10 +1295,10 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({
                       key={i}
                       className="p-2 rounded bg-muted/50 border border-border text-center"
                     >
-                      <span className="font-mono font-bold text-sm text-foreground block">
+                      <span className="font-bold text-sm text-foreground block">
                         {sc.score}
                       </span>
-                      <span className="text-xs text-muted-foreground font-mono">
+                      <span className="text-xs text-muted-foreground">
                         {sc.probability}%
                       </span>
                     </div>

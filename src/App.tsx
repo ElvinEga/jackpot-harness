@@ -25,7 +25,7 @@ const SeasonsDashboard = React.lazy(() =>
 
 function ViewLoadingFallback() {
   return (
-    <div className="flex-1 flex items-center justify-center p-12 text-muted-foreground text-xs font-mono">
+    <div className="flex-1 flex items-center justify-center p-12 text-muted-foreground text-xs">
       <Loader2 className="h-4 w-4 animate-spin mr-2 text-primary" />
       <span>Loading analytical module...</span>
     </div>

@@ -152,7 +152,7 @@ export const SeasonActionsModal: React.FC<SeasonActionsModalProps> = ({
               <Trophy className="h-4 w-4 text-primary" />
               Match Analysis
             </DialogTitle>
-            <Badge variant="outline" className="text-xs font-mono">
+            <Badge variant="outline" className="text-xs">
               {selectedMatches.length} fixture{selectedMatches.length !== 1 ? "s" : ""} selected
             </Badge>
           </div>
@@ -243,26 +243,26 @@ export const SeasonActionsModal: React.FC<SeasonActionsModalProps> = ({
               <div className="grid grid-cols-3 gap-3 text-center">
                 <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
                   <span className="text-[11px] text-muted-foreground block truncate">{teamA} Wins</span>
-                  <span className="text-2xl font-bold font-mono text-emerald-500 block my-0.5">
+                  <span className="text-2xl font-bold text-emerald-500 block my-0.5">
                     {h2hStats.winsA}
                   </span>
-                  <span className="text-[10px] text-muted-foreground font-mono">{h2hStats.winRateA}%</span>
+                  <span className="text-[10px] text-muted-foreground">{h2hStats.winRateA}%</span>
                 </div>
 
                 <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20">
                   <span className="text-[11px] text-muted-foreground block">Draws</span>
-                  <span className="text-2xl font-bold font-mono text-amber-500 block my-0.5">
+                  <span className="text-2xl font-bold text-amber-500 block my-0.5">
                     {h2hStats.draws}
                   </span>
-                  <span className="text-[10px] text-muted-foreground font-mono">{h2hStats.drawRate}%</span>
+                  <span className="text-[10px] text-muted-foreground">{h2hStats.drawRate}%</span>
                 </div>
 
                 <div className="p-3 rounded-xl bg-blue-500/10 border border-blue-500/20">
                   <span className="text-[11px] text-muted-foreground block truncate">{teamB} Wins</span>
-                  <span className="text-2xl font-bold font-mono text-blue-500 block my-0.5">
+                  <span className="text-2xl font-bold text-blue-500 block my-0.5">
                     {h2hStats.winsB}
                   </span>
-                  <span className="text-[10px] text-muted-foreground font-mono">{h2hStats.winRateB}%</span>
+                  <span className="text-[10px] text-muted-foreground">{h2hStats.winRateB}%</span>
                 </div>
               </div>
 
@@ -270,15 +270,15 @@ export const SeasonActionsModal: React.FC<SeasonActionsModalProps> = ({
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="p-3 rounded-xl bg-card border border-border space-y-2">
                   <span className="font-semibold text-foreground block">Goal Averages in H2H:</span>
-                  <div className="flex justify-between font-mono">
+                  <div className="flex justify-between">
                     <span className="text-muted-foreground">{teamA} Avg Goals:</span>
                     <span className="font-bold text-foreground">{h2hStats.avgGoalsA}</span>
                   </div>
-                  <div className="flex justify-between font-mono">
+                  <div className="flex justify-between">
                     <span className="text-muted-foreground">{teamB} Avg Goals:</span>
                     <span className="font-bold text-foreground">{h2hStats.avgGoalsB}</span>
                   </div>
-                  <div className="flex justify-between font-mono pt-1 border-t border-border">
+                  <div className="flex justify-between pt-1 border-t border-border">
                     <span className="text-muted-foreground">Total Match Average:</span>
                     <span className="font-bold text-primary">
                       {h2hMatches.length > 0 ? (h2hStats.totalGoals / h2hMatches.length).toFixed(2) : "0.00"}
@@ -293,7 +293,7 @@ export const SeasonActionsModal: React.FC<SeasonActionsModalProps> = ({
                       h2hStats.topScores.map((sc) => (
                         <span
                           key={sc.score}
-                          className="rounded bg-muted border border-border font-mono font-bold text-foreground text-xs"
+                          className="rounded bg-muted border border-border font-bold text-foreground text-xs"
                         >
                           {sc.score} <span className="text-[10px] text-muted-foreground font-normal">({sc.count}x)</span>
                         </span>
@@ -357,39 +357,39 @@ export const SeasonActionsModal: React.FC<SeasonActionsModalProps> = ({
                   <div className="flex flex-col items-center gap-1">
                     <TeamLogo team={teamA} size={26} />
                     <span className="font-bold text-base text-foreground">{teamA}</span>
-                    <span className="text-2xl font-bold font-mono text-emerald-500">
+                    <span className="text-2xl font-bold text-emerald-500">
                       {prediction.expectedHomeGoals}
                     </span>
                   </div>
-                  <span className="text-muted-foreground text-xs font-mono">xG</span>
+                  <span className="text-muted-foreground text-xs">xG</span>
                   <div className="flex flex-col items-center gap-1">
                     <TeamLogo team={teamB} size={26} />
                     <span className="font-bold text-base text-foreground">{teamB}</span>
-                    <span className="text-2xl font-bold font-mono text-blue-500">
+                    <span className="text-2xl font-bold text-blue-500">
                       {prediction.expectedAwayGoals}
                     </span>
                   </div>
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 gap-2 text-center font-mono">
+              <div className="grid grid-cols-3 gap-2 text-center">
                 <div className="p-2.5 rounded-lg bg-muted/30 border border-border">
-                  <span className="text-[10px] text-muted-foreground block font-sans">Home Win Prob</span>
+                  <span className="text-[10px] text-muted-foreground block">Home Win Prob</span>
                   <span className="text-lg font-bold text-emerald-500">{prediction.homeProb}%</span>
                 </div>
                 <div className="p-2.5 rounded-lg bg-muted/30 border border-border">
-                  <span className="text-[10px] text-muted-foreground block font-sans">Draw Prob</span>
+                  <span className="text-[10px] text-muted-foreground block">Draw Prob</span>
                   <span className="text-lg font-bold text-amber-500">{prediction.drawProb}%</span>
                 </div>
                 <div className="p-2.5 rounded-lg bg-muted/30 border border-border">
-                  <span className="text-[10px] text-muted-foreground block font-sans">Away Win Prob</span>
+                  <span className="text-[10px] text-muted-foreground block">Away Win Prob</span>
                   <span className="text-lg font-bold text-blue-500">{prediction.awayProb}%</span>
                 </div>
               </div>
 
               <div className="p-3 rounded-xl bg-card border border-border space-y-2">
                 <span className="font-semibold text-foreground block">Top Likely Scores:</span>
-                <div className="grid grid-cols-3 gap-2 text-center font-mono">
+                <div className="grid grid-cols-3 gap-2 text-center">
                   {prediction.mostLikelyScores.slice(0, 3).map((sc) => (
                     <div key={sc.score} className="p-2 rounded bg-muted/30 border border-border">
                       <span className="font-bold text-xs text-foreground block">{sc.score}</span>
@@ -407,15 +407,15 @@ export const SeasonActionsModal: React.FC<SeasonActionsModalProps> = ({
               <div className="grid grid-cols-2 gap-3">
                 <div className="p-3 rounded-xl bg-card border border-border space-y-2">
                   <span className="font-bold text-foreground block">{teamA} Goals Overview</span>
-                  <div className="flex justify-between font-mono">
+                  <div className="flex justify-between">
                     <span className="text-muted-foreground">Scored / Game:</span>
                     <span className="font-semibold">{profileA?.avgGoalsFor ?? "—"}</span>
                   </div>
-                  <div className="flex justify-between font-mono">
+                  <div className="flex justify-between">
                     <span className="text-muted-foreground">Conceded / Game:</span>
                     <span className="font-semibold">{profileA?.avgGoalsAgainst ?? "—"}</span>
                   </div>
-                  <div className="flex justify-between font-mono">
+                  <div className="flex justify-between">
                     <span className="text-muted-foreground">Clean Sheet Rate:</span>
                     <span className="font-semibold text-emerald-500">{profileA?.cleanSheetPct ?? "—"}%</span>
                   </div>
@@ -423,15 +423,15 @@ export const SeasonActionsModal: React.FC<SeasonActionsModalProps> = ({
 
                 <div className="p-3 rounded-xl bg-card border border-border space-y-2">
                   <span className="font-bold text-foreground block">{teamB} Goals Overview</span>
-                  <div className="flex justify-between font-mono">
+                  <div className="flex justify-between">
                     <span className="text-muted-foreground">Scored / Game:</span>
                     <span className="font-semibold">{profileB?.avgGoalsFor ?? "—"}</span>
                   </div>
-                  <div className="flex justify-between font-mono">
+                  <div className="flex justify-between">
                     <span className="text-muted-foreground">Conceded / Game:</span>
                     <span className="font-semibold">{profileB?.avgGoalsAgainst ?? "—"}</span>
                   </div>
-                  <div className="flex justify-between font-mono">
+                  <div className="flex justify-between">
                     <span className="text-muted-foreground">Clean Sheet Rate:</span>
                     <span className="font-semibold text-emerald-500">{profileB?.cleanSheetPct ?? "—"}%</span>
                   </div>
@@ -446,11 +446,11 @@ export const SeasonActionsModal: React.FC<SeasonActionsModalProps> = ({
               <div className="grid grid-cols-2 gap-3">
                 <div className="p-3 rounded-xl bg-card border border-border space-y-2">
                   <span className="font-bold text-foreground block">{teamA} Cards</span>
-                  <div className="flex justify-between font-mono">
+                  <div className="flex justify-between">
                     <span className="text-muted-foreground">Yellow Cards / 90:</span>
                     <span className="font-semibold text-amber-500">{profileA?.avgYellows ?? "—"}</span>
                   </div>
-                  <div className="flex justify-between font-mono">
+                  <div className="flex justify-between">
                     <span className="text-muted-foreground">Red Cards / 90:</span>
                     <span className="font-semibold text-destructive">{profileA?.avgReds ?? "—"}</span>
                   </div>
@@ -458,11 +458,11 @@ export const SeasonActionsModal: React.FC<SeasonActionsModalProps> = ({
 
                 <div className="p-3 rounded-xl bg-card border border-border space-y-2">
                   <span className="font-bold text-foreground block">{teamB} Cards</span>
-                  <div className="flex justify-between font-mono">
+                  <div className="flex justify-between">
                     <span className="text-muted-foreground">Yellow Cards / 90:</span>
                     <span className="font-semibold text-amber-500">{profileB?.avgYellows ?? "—"}</span>
                   </div>
-                  <div className="flex justify-between font-mono">
+                  <div className="flex justify-between">
                     <span className="text-muted-foreground">Red Cards / 90:</span>
                     <span className="font-semibold text-destructive">{profileB?.avgReds ?? "—"}</span>
                   </div>

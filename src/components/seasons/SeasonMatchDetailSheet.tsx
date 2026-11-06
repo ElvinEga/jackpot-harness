@@ -87,7 +87,7 @@ export const SeasonMatchDetailSheet: React.FC<SeasonMatchDetailSheetProps> = ({
         {/* Header */}
         <SheetHeader className="p-6 border-b border-border bg-muted/20">
           <div className="flex items-center justify-between gap-2">
-            <Badge variant="secondary" className="text-xs font-mono">
+            <Badge variant="secondary" className="text-xs">
               {match.season} • {match.league}
             </Badge>
             {getResultBadge()}
@@ -98,7 +98,7 @@ export const SeasonMatchDetailSheet: React.FC<SeasonMatchDetailSheetProps> = ({
               <TeamLogo team={match.home_team} size={26} />
               <span className="truncate">{match.home_team}</span>
             </span>
-            <span className="font-mono text-2xl px-3 py-1 rounded-lg bg-muted border border-border text-foreground shrink-0">
+            <span className="text-2xl px-3 py-1 rounded-lg bg-muted border border-border text-foreground shrink-0">
               {match.score || "N/A"}
             </span>
             <span className="flex items-center gap-2 min-w-0 justify-end">
@@ -108,7 +108,7 @@ export const SeasonMatchDetailSheet: React.FC<SeasonMatchDetailSheetProps> = ({
           </SheetTitle>
 
           <SheetDescription className="text-xs text-muted-foreground flex items-center justify-between mt-1">
-            <span className="flex items-center gap-1.5 font-mono">
+            <span className="flex items-center gap-1.5">
               <Calendar className="h-3.5 w-3.5" />
               {match.date} {match.kickoff_time && `at ${match.kickoff_time}`}
             </span>
@@ -122,21 +122,21 @@ export const SeasonMatchDetailSheet: React.FC<SeasonMatchDetailSheetProps> = ({
           <div className="grid grid-cols-3 gap-2 text-center">
             <div className="p-3 rounded-xl bg-muted/30 border border-border">
               <span className="text-[11px] text-muted-foreground block">Half-Time Score</span>
-              <span className="text-base font-bold font-mono text-foreground mt-0.5 block">
+              <span className="text-base font-bold text-foreground mt-0.5 block">
                 {match.half_time_score || "N/A"}
               </span>
             </div>
 
             <div className="p-3 rounded-xl bg-muted/30 border border-border">
               <span className="text-[11px] text-muted-foreground block">Total Match Goals</span>
-              <span className="text-base font-bold font-mono text-primary mt-0.5 block">
+              <span className="text-base font-bold text-primary mt-0.5 block">
                 {decided ? match.total_goals : "N/A"}
               </span>
             </div>
 
             <div className="p-3 rounded-xl bg-muted/30 border border-border">
               <span className="text-[11px] text-muted-foreground block">Both Teams Scored</span>
-              <span className="text-base font-bold font-mono text-foreground mt-0.5 block">
+              <span className="text-base font-bold text-foreground mt-0.5 block">
                 {decided ? (match.home_goals > 0 && match.away_goals > 0 ? "Yes" : "No") : "N/A"}
               </span>
             </div>
@@ -151,12 +151,12 @@ export const SeasonMatchDetailSheet: React.FC<SeasonMatchDetailSheetProps> = ({
               </CardTitle>
             </CardHeader>
             <CardContent className="p-4 space-y-2.5">
-              <div className="grid grid-cols-3 gap-2 text-center font-mono font-semibold text-xs border-b border-border pb-1.5 text-muted-foreground">
+              <div className="grid grid-cols-3 gap-2 text-center font-semibold text-xs border-b border-border pb-1.5 text-muted-foreground">
                 <span className="flex items-center justify-center gap-1.5 text-foreground min-w-0">
                   <TeamLogo team={match.home_team} size={16} />
                   <span className="truncate">{match.home_team}</span>
                 </span>
-                <span className="font-sans text-[11px] font-normal">Metric</span>
+                <span className="text-[11px] font-normal">Metric</span>
                 <span className="flex items-center justify-center gap-1.5 text-foreground min-w-0">
                   <TeamLogo team={match.away_team} size={16} />
                   <span className="truncate">{match.away_team}</span>
@@ -174,9 +174,9 @@ export const SeasonMatchDetailSheet: React.FC<SeasonMatchDetailSheetProps> = ({
                 { label: "Woodwork Hits", h: match.stats.home_hit_woodwork, a: match.stats.away_hit_woodwork },
                 { label: "Expected Goals (xG)", h: match.stats.home_xg, a: match.stats.away_xg },
               ].map((row, idx) => (
-                <div key={idx} className="grid grid-cols-3 gap-2 text-center font-mono text-xs items-center py-1">
+                <div key={idx} className="grid grid-cols-3 gap-2 text-center text-xs items-center py-1">
                   <span className="font-bold text-foreground">{row.h ?? "—"}</span>
-                  <span className="font-sans text-[11px] text-muted-foreground">{row.label}</span>
+                  <span className="text-[11px] text-muted-foreground">{row.label}</span>
                   <span className="font-bold text-foreground">{row.a ?? "—"}</span>
                 </div>
               ))}
@@ -191,10 +191,10 @@ export const SeasonMatchDetailSheet: React.FC<SeasonMatchDetailSheetProps> = ({
                 Market-Average Bookmaker Odds &amp; Lines
               </CardTitle>
             </CardHeader>
-            <CardContent className="p-4 space-y-3 font-mono">
+            <CardContent className="p-4 space-y-3">
               <div className="grid grid-cols-3 gap-2 text-center">
                 <div className="p-2.5 rounded-lg bg-muted/40 border border-border">
-                  <span className="text-[10px] text-muted-foreground block font-sans">Pre-Match (H)</span>
+                  <span className="text-[10px] text-muted-foreground block">Pre-Match (H)</span>
                   <span className="text-sm font-bold text-foreground">{match.odds.home?.toFixed(2) || "—"}</span>
                   {match.odds.home_max && (
                     <span className="text-[10px] text-muted-foreground block">Max: {match.odds.home_max.toFixed(2)}</span>
@@ -202,7 +202,7 @@ export const SeasonMatchDetailSheet: React.FC<SeasonMatchDetailSheetProps> = ({
                 </div>
 
                 <div className="p-2.5 rounded-lg bg-muted/40 border border-border">
-                  <span className="text-[10px] text-muted-foreground block font-sans">Pre-Match (D)</span>
+                  <span className="text-[10px] text-muted-foreground block">Pre-Match (D)</span>
                   <span className="text-sm font-bold text-foreground">{match.odds.draw?.toFixed(2) || "—"}</span>
                   {match.odds.draw_max && (
                     <span className="text-[10px] text-muted-foreground block">Max: {match.odds.draw_max.toFixed(2)}</span>
@@ -210,7 +210,7 @@ export const SeasonMatchDetailSheet: React.FC<SeasonMatchDetailSheetProps> = ({
                 </div>
 
                 <div className="p-2.5 rounded-lg bg-muted/40 border border-border">
-                  <span className="text-[10px] text-muted-foreground block font-sans">Pre-Match (A)</span>
+                  <span className="text-[10px] text-muted-foreground block">Pre-Match (A)</span>
                   <span className="text-sm font-bold text-foreground">{match.odds.away?.toFixed(2) || "—"}</span>
                   {match.odds.away_max && (
                     <span className="text-[10px] text-muted-foreground block">Max: {match.odds.away_max.toFixed(2)}</span>
@@ -221,15 +221,15 @@ export const SeasonMatchDetailSheet: React.FC<SeasonMatchDetailSheetProps> = ({
               {/* Closing Odds */}
               <div className="grid grid-cols-3 gap-2 text-center text-xs">
                 <div className="p-2 rounded bg-muted/20 border border-border">
-                  <span className="text-[10px] text-muted-foreground block font-sans">Closing Home</span>
+                  <span className="text-[10px] text-muted-foreground block">Closing Home</span>
                   <span className="font-semibold text-foreground">{match.odds.home_close?.toFixed(2) || "—"}</span>
                 </div>
                 <div className="p-2 rounded bg-muted/20 border border-border">
-                  <span className="text-[10px] text-muted-foreground block font-sans">Closing Draw</span>
+                  <span className="text-[10px] text-muted-foreground block">Closing Draw</span>
                   <span className="font-semibold text-foreground">{match.odds.draw_close?.toFixed(2) || "—"}</span>
                 </div>
                 <div className="p-2 rounded bg-muted/20 border border-border">
-                  <span className="text-[10px] text-muted-foreground block font-sans">Closing Away</span>
+                  <span className="text-[10px] text-muted-foreground block">Closing Away</span>
                   <span className="font-semibold text-foreground">{match.odds.away_close?.toFixed(2) || "—"}</span>
                 </div>
               </div>
@@ -237,14 +237,14 @@ export const SeasonMatchDetailSheet: React.FC<SeasonMatchDetailSheetProps> = ({
               {/* Over / Under 2.5 & Asian Handicap */}
               <div className="grid grid-cols-2 gap-2 text-center pt-2 border-t border-border">
                 <div className="p-2.5 rounded-lg bg-muted/30 border border-border">
-                  <span className="text-[10px] text-muted-foreground block font-sans">Over / Under 2.5</span>
+                  <span className="text-[10px] text-muted-foreground block">Over / Under 2.5</span>
                   <span className="font-bold text-orange-500">
                     O: {match.odds.over_2_5?.toFixed(2) || "—"} / U: {match.odds.under_2_5?.toFixed(2) || "—"}
                   </span>
                 </div>
 
                 <div className="p-2.5 rounded-lg bg-muted/30 border border-border">
-                  <span className="text-[10px] text-muted-foreground block font-sans">Asian Handicap Line</span>
+                  <span className="text-[10px] text-muted-foreground block">Asian Handicap Line</span>
                   <span className="font-bold text-foreground">
                     {match.odds.handicap !== null && match.odds.handicap !== undefined
                       ? `${match.odds.handicap > 0 ? `+${match.odds.handicap}` : match.odds.handicap} (${match.odds.handicap_home?.toFixed(2) || "—"} / ${match.odds.handicap_away?.toFixed(2) || "—"})`
@@ -280,7 +280,7 @@ export const SeasonMatchDetailSheet: React.FC<SeasonMatchDetailSheetProps> = ({
             </div>
 
             {showJson && (
-              <pre className="p-3 rounded-xl bg-muted/60 border border-border text-[11px] font-mono overflow-x-auto max-h-56 leading-relaxed">
+              <pre className="p-3 rounded-xl bg-muted/60 border border-border text-[11px] overflow-x-auto max-h-56 leading-relaxed">
                 {JSON.stringify(match, null, 2)}
               </pre>
             )}

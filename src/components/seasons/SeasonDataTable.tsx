@@ -152,7 +152,7 @@ export const SeasonDataTable: React.FC<SeasonDataTableProps> = ({
           </Button>
         ),
         cell: ({ row }) => (
-          <Badge variant="outline" className="text-[10px] font-mono">
+          <Badge variant="outline" className="text-[10px]">
             {row.original.season}
           </Badge>
         ),
@@ -540,7 +540,7 @@ export const SeasonDataTable: React.FC<SeasonDataTableProps> = ({
         <div className="sticky bottom-14 z-20 mx-auto mb-2 flex items-center gap-2 p-2 rounded-xl bg-card border border-border shadow-2xl backdrop-blur max-w-2xl animate-in fade-in slide-in-from-bottom-2">
           <Badge
             variant="default"
-            className="text-xs font-mono font-bold px-2 py-1 bg-primary text-primary-foreground"
+            className="text-xs font-bold px-2 py-1 bg-primary text-primary-foreground"
           >
             {selectedMatches.length} Selected
           </Badge>

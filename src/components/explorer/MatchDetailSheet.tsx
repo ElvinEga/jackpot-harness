@@ -92,7 +92,7 @@ export const MatchDetailSheet: React.FC<MatchDetailSheetProps> = ({
                 </div>
 
                 <div className="col-span-1 flex flex-col items-center">
-                  <span className="text-xl font-mono font-extrabold tracking-wider text-foreground px-2 py-0.5 rounded bg-muted border border-border">
+                  <span className="text-xl font-extrabold tracking-wider text-foreground px-2 py-0.5 rounded bg-muted border border-border">
                     {match.score || "-"}
                   </span>
                   <div className="mt-1">{getResultBadge()}</div>
@@ -129,7 +129,7 @@ export const MatchDetailSheet: React.FC<MatchDetailSheetProps> = ({
                 <div className="p-3 rounded-lg bg-background border border-border">
                   <span className="text-muted-foreground block mb-1">Decimal Odds</span>
                   <div className="flex items-center gap-1.5">
-                    <span className="font-mono font-bold text-base text-primary">
+                    <span className="font-bold text-base text-primary">
                       {match.odds !== null ? match.odds.toFixed(2) : "N/A"}
                     </span>
                     {match.odds !== null && (
@@ -141,13 +141,13 @@ export const MatchDetailSheet: React.FC<MatchDetailSheetProps> = ({
                 {match.jackpot_id && (
                   <div className="p-3 rounded-lg bg-background border border-border col-span-2">
                     <span className="text-muted-foreground block mb-1">SportPesa Jackpot ID</span>
-                    <span className="font-mono text-foreground">{match.jackpot_id}</span>
+                    <span className="text-foreground">{match.jackpot_id}</span>
                   </div>
                 )}
 
                 <div className="p-3 rounded-lg bg-background border border-border col-span-2">
                   <span className="text-muted-foreground block mb-1">Source File</span>
-                  <span className="font-mono text-xs text-muted-foreground truncate block">
+                  <span className="text-xs text-muted-foreground truncate block">
                     data/processed/{match.source_file}
                   </span>
                 </div>
@@ -251,7 +251,7 @@ export const MatchDetailSheet: React.FC<MatchDetailSheetProps> = ({
               </div>
 
               {showJson && (
-                <pre className="p-3 rounded-lg bg-background border border-border text-xs font-mono text-muted-foreground overflow-x-auto max-h-56">
+                <pre className="p-3 rounded-lg bg-background border border-border text-xs text-muted-foreground overflow-x-auto max-h-56">
                   {JSON.stringify(match, null, 2)}
                 </pre>
               )}

@@ -156,7 +156,7 @@ export const SportPesaImportModal: React.FC<SportPesaImportModalProps> = ({
                 placeholder='{"id":"a5406708-...","humanId":202,"events":[...]}'
                 value={jsonInput}
                 onChange={(e) => setJsonInput(e.target.value)}
-                className="font-mono text-xs h-32 resize-none"
+                className="text-xs h-32 resize-none"
               />
             </div>
             <div className="flex justify-end">
@@ -210,7 +210,7 @@ export const SportPesaImportModal: React.FC<SportPesaImportModalProps> = ({
               {previewJackpot.matches.map((m) => (
                 <div key={m.order} className="p-2 flex items-center justify-between hover:bg-muted/40 transition-colors">
                   <div className="flex items-center gap-2">
-                    <span className="h-5 w-5 rounded bg-muted text-foreground flex items-center justify-center font-mono text-xs font-bold border border-border">
+                    <span className="h-5 w-5 rounded bg-muted text-foreground flex items-center justify-center text-xs font-bold border border-border">
                       {m.order}
                     </span>
                     <div>
@@ -224,10 +224,10 @@ export const SportPesaImportModal: React.FC<SportPesaImportModalProps> = ({
                   </div>
 
                   <div className="text-right">
-                    <span className="font-mono text-xs font-semibold text-foreground">
+                    <span className="text-xs font-semibold text-foreground">
                       {m.homeOdds?.toFixed(2) || "-"} / {m.drawOdds?.toFixed(2) || "-"} / {m.awayOdds?.toFixed(2) || "-"}
                     </span>
-                    <span className="text-xs text-muted-foreground block font-mono">
+                    <span className="text-xs text-muted-foreground block">
                       1X2 Odds
                     </span>
                   </div>
