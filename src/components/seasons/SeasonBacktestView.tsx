@@ -251,7 +251,7 @@ export const SeasonBacktestView: React.FC<SeasonBacktestViewProps> = ({ allMatch
                             a.predictedResult === "home"
                               ? "text-emerald-500"
                               : a.predictedResult === "draw"
-                              ? "text-amber-500"
+                              ? "text-amber-600 dark:text-amber-400"
                               : "text-blue-500"
                           }
                         >

@@ -168,7 +168,7 @@ export const PositionMatrix: React.FC<PositionMatrixProps> = ({ matches }) => {
             {/* Highest Draw */}
             <div className="p-3 flex items-center justify-between gap-3">
               <div className="flex items-center gap-2">
-                <span className="p-1.5 rounded-md bg-amber-500/10 text-amber-500 shrink-0">
+                <span className="p-1.5 rounded-md bg-amber-500/10 text-amber-600 dark:text-amber-400 shrink-0">
                   <ShieldAlert className="h-4 w-4" />
                 </span>
                 <div>
@@ -179,7 +179,7 @@ export const PositionMatrix: React.FC<PositionMatrixProps> = ({ matches }) => {
                 </div>
               </div>
               <div className="text-right">
-                <Badge variant="outline" className="text-amber-500 border-amber-500/30 text-[11px] py-0 h-5">
+                <Badge variant="outline" className="text-amber-600 dark:text-amber-400 border-amber-500/30 text-[11px] py-0 h-5">
                   {anomalies.highestDraw.drawPct}% Draw
                 </Badge>
                 <span className="text-[10px] text-muted-foreground block mt-0.5">

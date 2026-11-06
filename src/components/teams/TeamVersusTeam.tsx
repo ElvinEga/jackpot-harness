@@ -14,7 +14,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ArrowRightLeft, History, Sparkles } from "lucide-react";
+import { ArrowRightLeft, Calculator, History } from "lucide-react";
 import React, { useMemo, useState } from "react";
 
 import { TeamLogo } from "@/components/TeamLogo";
@@ -247,7 +247,7 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
                       r === "W"
                         ? "bg-primary/15 text-primary border border-primary/30"
                         : r === "D"
-                        ? "bg-amber-500/15 text-amber-500 border border-amber-500/30"
+                        ? "bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30"
                         : "bg-muted text-muted-foreground border border-border"
                     }`}
                   >
@@ -280,7 +280,7 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
                       r === "W"
                         ? "bg-primary/15 text-primary border border-primary/30"
                         : r === "D"
-                        ? "bg-amber-500/15 text-amber-500 border border-amber-500/30"
+                        ? "bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30"
                         : "bg-muted text-muted-foreground border border-border"
                     }`}
                   >
@@ -301,7 +301,7 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
       <Card className="bg-card border-border shadow-xs">
         <CardHeader className="pb-2">
           <CardTitle className="text-sm font-semibold flex items-center gap-2">
-            <Sparkles className="h-4 w-4 text-primary" />
+            <Calculator className="h-4 w-4 text-primary" />
             Poisson Score Probability Model
           </CardTitle>
           <CardDescription className="text-xs">
@@ -451,7 +451,7 @@ export const TeamVersusTeam: React.FC<TeamVersusTeamProps> = ({
                           m.result === "home"
                             ? "text-emerald-500"
                             : m.result === "draw"
-                              ? "text-amber-500"
+                              ? "text-amber-600 dark:text-amber-400"
                               : m.result === "away"
                                 ? "text-blue-500"
                                 : "text-muted-foreground"

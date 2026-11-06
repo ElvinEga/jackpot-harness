@@ -110,7 +110,7 @@ export const SeasonTeamAnalysis: React.FC<SeasonTeamAnalysisProps> = ({
             </span>
             <span className="text-base font-bold">
               <span className="text-emerald-500">{profile.wins}W</span>{" "}
-              <span className="text-amber-500">{profile.draws}D</span>{" "}
+              <span className="text-amber-600 dark:text-amber-400">{profile.draws}D</span>{" "}
               <span className="text-destructive">{profile.losses}L</span>
             </span>
           </div>
@@ -243,7 +243,7 @@ export const SeasonTeamAnalysis: React.FC<SeasonTeamAnalysisProps> = ({
               <strong className="text-foreground text-xs">
                 {profile.avgYellows}
               </strong>{" "}
-              <span className="text-amber-500 font-medium">YC</span> ·{" "}
+              <span className="text-amber-600 dark:text-amber-400 font-medium">YC</span> ·{" "}
               <strong className="text-foreground text-xs">
                 {profile.avgReds}
               </strong>{" "}

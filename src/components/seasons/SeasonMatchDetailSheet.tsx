@@ -69,7 +69,7 @@ export const SeasonMatchDetailSheet: React.FC<SeasonMatchDetailSheetProps> = ({
     }
     if (match.result === "draw") {
       return (
-        <Badge variant="outline" className="bg-amber-500/10 text-amber-500 border-amber-500/30 font-semibold">
+        <Badge variant="outline" className="bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/30 font-semibold">
           Draw
         </Badge>
       );

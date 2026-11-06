@@ -614,7 +614,7 @@ export const SeasonMatchPredictor: React.FC<SeasonMatchPredictorProps> = ({
                       ? "text-emerald-500 border-emerald-500/30"
                       : sig.favor === "away"
                       ? "text-blue-500 border-blue-500/30"
-                      : "text-amber-500 border-amber-500/30"
+                      : "text-amber-600 dark:text-amber-400 border-amber-500/30"
                   }`}
                 >
                   Favors: {sig.favor}

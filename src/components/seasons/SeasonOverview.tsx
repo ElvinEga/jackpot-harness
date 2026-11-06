@@ -241,7 +241,7 @@ export const SeasonOverview: React.FC<SeasonOverviewProps> = ({
                   row.rank <= 4
                     ? "text-primary"
                     : row.rank === 5
-                      ? "text-amber-500"
+                      ? "text-amber-600 dark:text-amber-400"
                       : row.rank >= 18
                         ? "text-destructive"
                         : "text-muted-foreground";

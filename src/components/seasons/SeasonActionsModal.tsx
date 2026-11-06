@@ -251,7 +251,7 @@ export const SeasonActionsModal: React.FC<SeasonActionsModalProps> = ({
 
                 <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20">
                   <span className="text-[11px] text-muted-foreground block">Draws</span>
-                  <span className="text-2xl font-bold text-amber-500 block my-0.5">
+                  <span className="text-2xl font-bold text-amber-600 dark:text-amber-400 block my-0.5">
                     {h2hStats.draws}
                   </span>
                   <span className="text-[10px] text-muted-foreground">{h2hStats.drawRate}%</span>
@@ -379,7 +379,7 @@ export const SeasonActionsModal: React.FC<SeasonActionsModalProps> = ({
                 </div>
                 <div className="p-2.5 rounded-lg bg-muted/30 border border-border">
                   <span className="text-[10px] text-muted-foreground block">Draw Prob</span>
-                  <span className="text-lg font-bold text-amber-500">{prediction.drawProb}%</span>
+                  <span className="text-lg font-bold text-amber-600 dark:text-amber-400">{prediction.drawProb}%</span>
                 </div>
                 <div className="p-2.5 rounded-lg bg-muted/30 border border-border">
                   <span className="text-[10px] text-muted-foreground block">Away Win Prob</span>
@@ -448,7 +448,7 @@ export const SeasonActionsModal: React.FC<SeasonActionsModalProps> = ({
                   <span className="font-bold text-foreground block">{teamA} Cards</span>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Yellow Cards / 90:</span>
-                    <span className="font-semibold text-amber-500">{profileA?.avgYellows ?? "—"}</span>
+                    <span className="font-semibold text-amber-600 dark:text-amber-400">{profileA?.avgYellows ?? "—"}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Red Cards / 90:</span>
@@ -460,7 +460,7 @@ export const SeasonActionsModal: React.FC<SeasonActionsModalProps> = ({
                   <span className="font-bold text-foreground block">{teamB} Cards</span>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Yellow Cards / 90:</span>
-                    <span className="font-semibold text-amber-500">{profileB?.avgYellows ?? "—"}</span>
+                    <span className="font-semibold text-amber-600 dark:text-amber-400">{profileB?.avgYellows ?? "—"}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Red Cards / 90:</span>

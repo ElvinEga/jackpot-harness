@@ -1124,7 +1124,7 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({
                         <span className="text-emerald-500">HOME (1)</span>
                       )}
                       {pred.predictedResult === "draw" && (
-                        <span className="text-amber-500">DRAW (X)</span>
+                        <span className="text-amber-600 dark:text-amber-400">DRAW (X)</span>
                       )}
                       {pred.predictedResult === "away" && (
                         <span className="text-blue-500">AWAY (2)</span>
