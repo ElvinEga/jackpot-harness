@@ -229,181 +229,212 @@ export const SeasonMatchPredictor: React.FC<SeasonMatchPredictorProps> = ({
 
   return (
     <div className="space-y-6">
-      {/* Matchup Selection Bar */}
-      <div className="p-4 rounded-xl bg-card border border-border flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div className="flex-1 flex flex-col sm:flex-row sm:items-center gap-3">
-          {/* Home Team */}
-          <div className="flex-1 space-y-1">
-            <label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider block">
-              Home Team
-            </label>
-            <SearchableSelect
-              value={homeTeam}
-              onValueChange={setHomeTeam}
-              options={allTeams.map((t) => ({
-                value: t,
-                label: t,
-                disabled: t === awayTeam,
-              }))}
-              searchPlaceholder="Search home team..."
-              placeholder="Select home team..."
-              className="w-full h-9 font-semibold text-xs"
-              popoverWidth="w-64"
-            />
-          </div>
+      {/* Distilled Matchup Command & Probability Panel */}
+      <div className="rounded-xl bg-card border border-border shadow-xs overflow-hidden">
+        {/* Matchup Selector & Derby Presets Bar */}
+        <div className="px-4 py-2.5 border-b border-border bg-card flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+          <div className="flex items-center gap-2 flex-1 max-w-xl">
+            {/* Home Select */}
+            <div className="flex-1 min-w-36">
+              <SearchableSelect
+                value={homeTeam}
+                onValueChange={setHomeTeam}
+                options={allTeams.map((t) => ({
+                  value: t,
+                  label: t,
+                  disabled: t === awayTeam,
+                }))}
+                searchPlaceholder="Search home team..."
+                placeholder="Select home team..."
+                className="w-full h-8 font-semibold text-xs"
+                popoverWidth="w-56"
+              />
+            </div>
 
-          {/* Swap Button */}
-          <div className="sm:self-end sm:mb-0.5 self-center">
+            {/* Swap Button */}
             <Button
               variant="outline"
               size="icon-sm"
               onClick={handleSwap}
-              className="h-9 w-9 shrink-0 text-muted-foreground hover:text-foreground"
+              className="h-8 w-8 shrink-0 text-muted-foreground hover:text-foreground"
               title="Swap Home and Away teams"
             >
-              <ArrowRightLeft className="h-4 w-4" />
+              <ArrowRightLeft className="h-3.5 w-3.5" />
             </Button>
+
+            {/* Away Select */}
+            <div className="flex-1 min-w-36">
+              <SearchableSelect
+                value={awayTeam}
+                onValueChange={setAwayTeam}
+                options={allTeams.map((t) => ({
+                  value: t,
+                  label: t,
+                  disabled: t === homeTeam,
+                }))}
+                searchPlaceholder="Search away team..."
+                placeholder="Select away team..."
+                className="w-full h-8 font-semibold text-xs"
+                popoverWidth="w-56"
+              />
+            </div>
+          </div>
+
+          {/* Quick Derby Presets */}
+          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar shrink-0 py-0.5">
+            <span className="text-[11px] text-muted-foreground font-medium shrink-0">Derby Presets:</span>
+            {presetMatchups.slice(0, 6).map((pair) => {
+              const isActive = homeTeam === pair.home && awayTeam === pair.away;
+              return (
+                <button
+                  key={`${pair.home}-${pair.away}`}
+                  type="button"
+                  onClick={() => {
+                    setHomeTeam(pair.home);
+                    setAwayTeam(pair.away);
+                  }}
+                  className={`rounded px-2 py-0.5 text-[11px] font-medium transition-colors border shrink-0 ${
+                    isActive
+                      ? "bg-primary text-primary-foreground border-primary"
+                      : "bg-muted/50 hover:bg-muted text-muted-foreground hover:text-foreground border-border"
+                  }`}
+                >
+                  {pair.home} v {pair.away}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Scoreboard Fixture Banner */}
+        <div className="px-4 py-3 bg-muted/20 border-b border-border/70 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          {/* Home Team */}
+          <div className="flex items-center gap-3 flex-1">
+            <TeamLogo team={prediction.homeTeam} size={30} />
+            <div>
+              <div className="flex items-center gap-1.5">
+                <span className="font-bold text-base text-foreground tracking-tight">
+                  {prediction.homeTeam}
+                </span>
+                <span className="text-[10px] px-1.5 py-0.2 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-semibold border border-emerald-500/20">
+                  HOME
+                </span>
+              </div>
+              <div className="text-xs text-muted-foreground flex items-center gap-1">
+                <span>Expected Goals:</span>
+                <span className="font-bold text-emerald-600 dark:text-emerald-400">
+                  {prediction.expectedHomeGoals}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Center: Result Badge */}
+          <div className="flex flex-col items-center justify-center shrink-0">
+            <Badge
+              variant="default"
+              className={`text-xs font-semibold px-3 py-1 ${
+                prediction.predictedResult === "home"
+                  ? "bg-emerald-600 text-white hover:bg-emerald-600"
+                  : prediction.predictedResult === "draw"
+                  ? "bg-amber-600 text-white hover:bg-amber-600"
+                  : "bg-blue-600 text-white hover:bg-blue-600"
+              }`}
+            >
+              {prediction.predictedResult === "home"
+                ? `${prediction.homeTeam} Win`
+                : prediction.predictedResult === "draw"
+                ? "Draw Projected"
+                : `${prediction.awayTeam} Win`}{" "}
+              <span className="opacity-80 font-normal ml-1">({prediction.confidence} Confidence)</span>
+            </Badge>
+            <span className="text-[10px] text-muted-foreground mt-0.5">
+              Total Exp Goals: {prediction.totalExpectedGoals}
+            </span>
           </div>
 
           {/* Away Team */}
-          <div className="flex-1 space-y-1">
-            <label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider block">
-              Away Team
-            </label>
-            <SearchableSelect
-              value={awayTeam}
-              onValueChange={setAwayTeam}
-              options={allTeams.map((t) => ({
-                value: t,
-                label: t,
-                disabled: t === homeTeam,
-              }))}
-              searchPlaceholder="Search away team..."
-              placeholder="Select away team..."
-              className="w-full h-9 font-semibold text-xs"
-              popoverWidth="w-64"
+          <div className="flex items-center justify-start md:justify-end gap-3 flex-1 text-left md:text-right">
+            <div className="order-2 md:order-1">
+              <div className="flex items-center justify-start md:justify-end gap-1.5">
+                <span className="text-[10px] px-1.5 py-0.2 rounded bg-blue-500/10 text-blue-600 dark:text-blue-400 font-semibold border border-blue-500/20">
+                  AWAY
+                </span>
+                <span className="font-bold text-base text-foreground tracking-tight">
+                  {prediction.awayTeam}
+                </span>
+              </div>
+              <div className="text-xs text-muted-foreground flex items-center justify-start md:justify-end gap-1">
+                <span>Expected Goals:</span>
+                <span className="font-bold text-blue-600 dark:text-blue-400">
+                  {prediction.expectedAwayGoals}
+                </span>
+              </div>
+            </div>
+            <div className="order-1 md:order-2">
+              <TeamLogo team={prediction.awayTeam} size={30} />
+            </div>
+          </div>
+        </div>
+
+        {/* Integrated 1X2 Probability Distribution Bar & Outcome Cards */}
+        <div className="p-3 bg-card space-y-2">
+          {/* Proportional Segmented Probability Bar */}
+          <div className="h-2 w-full bg-muted rounded-full overflow-hidden flex">
+            <div
+              style={{ width: `${prediction.homeProb}%` }}
+              className="bg-emerald-500 transition-all duration-300"
+              title={`Home Win (${prediction.homeTeam}): ${prediction.homeProb}%`}
+            />
+            <div
+              style={{ width: `${prediction.drawProb}%` }}
+              className="bg-amber-500 transition-all duration-300"
+              title={`Draw: ${prediction.drawProb}%`}
+            />
+            <div
+              style={{ width: `${prediction.awayProb}%` }}
+              className="bg-blue-500 transition-all duration-300"
+              title={`Away Win (${prediction.awayTeam}): ${prediction.awayProb}%`}
             />
           </div>
-        </div>
 
-        {/* Quick Presets */}
-        <div className="flex items-center gap-1.5 flex-wrap shrink-0">
-          <span className="text-[11px] text-muted-foreground font-medium mr-1">Derby Presets:</span>
-          {presetMatchups.map((pair) => (
-            <button
-              key={`${pair.home}-${pair.away}`}
-              type="button"
-              onClick={() => {
-                setHomeTeam(pair.home);
-                setAwayTeam(pair.away);
-              }}
-              className="rounded-md text-[11px] font-medium bg-muted/60 hover:bg-muted text-muted-foreground hover:text-foreground border border-border transition-colors"
-            >
-              {pair.home} vs {pair.away}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Main Matchup Card Header */}
-      <div className="p-6 rounded-2xl bg-card border border-border relative overflow-hidden shadow-xs">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
-          {/* Home Side */}
-          <div className="flex-1 text-center md:text-left">
-            <Badge variant="outline" className="text-[10px] font-mono mb-1 text-emerald-500 border-emerald-500/30">
-              Home Advantage
-            </Badge>
-            <h3 className="text-2xl font-bold tracking-tight text-foreground flex items-center justify-center gap-2 md:justify-start">
-              <TeamLogo team={prediction.homeTeam} size={28} />
-              <span className="truncate">{prediction.homeTeam}</span>
-            </h3>
-            <div className="mt-1 flex items-baseline justify-center md:justify-start gap-1.5">
-              <span className="text-xs text-muted-foreground">Expected Goals:</span>
-              <span className="text-xl font-bold font-mono text-emerald-500">
-                {prediction.expectedHomeGoals}
+          {/* 3 Outcome Pillars */}
+          <div className="grid grid-cols-3 gap-2 text-center text-xs">
+            <div className="py-1.5 px-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex flex-col sm:flex-row sm:items-center sm:justify-between">
+              <span className="font-semibold text-emerald-600 dark:text-emerald-400 truncate">
+                1 ({prediction.homeTeam})
               </span>
+              <div className="flex items-center justify-center gap-1.5">
+                <span className="font-bold text-foreground text-sm">{prediction.homeProb}%</span>
+                <span className="text-[10px] text-muted-foreground">
+                  (Fair: {(100 / (prediction.homeProb || 1)).toFixed(2)})
+                </span>
+              </div>
             </div>
-          </div>
 
-          {/* VS & Probability Pill */}
-          <div className="flex flex-col items-center justify-center shrink-0">
-            <span className="px-3 py-1 rounded-full bg-muted border border-border font-mono font-bold text-xs text-muted-foreground">
-              VS
-            </span>
-            <div className="mt-2 text-center">
-              <span className="text-[11px] text-muted-foreground block">Predicted Result</span>
-              <Badge
-                variant="default"
-                className={`text-xs font-semibold px-2 py-0.5 mt-0.5 ${
-                  prediction.predictedResult === "home"
-                    ? "bg-emerald-600 text-white"
-                    : prediction.predictedResult === "draw"
-                    ? "bg-amber-600 text-white"
-                    : "bg-blue-600 text-white"
-                }`}
-              >
-                {prediction.predictedResult === "home"
-                  ? `${prediction.homeTeam} Win`
-                  : prediction.predictedResult === "draw"
-                  ? "Draw"
-                  : `${prediction.awayTeam} Win`}{" "}
-                ({prediction.confidence} Confidence)
-              </Badge>
-            </div>
-          </div>
-
-          {/* Away Side */}
-          <div className="flex-1 text-center md:text-right">
-            <Badge variant="outline" className="text-[10px] font-mono mb-1 text-blue-500 border-blue-500/30">
-              Away Side
-            </Badge>
-            <h3 className="text-2xl font-bold tracking-tight text-foreground flex items-center justify-center gap-2 md:justify-end">
-              <span className="truncate">{prediction.awayTeam}</span>
-              <TeamLogo team={prediction.awayTeam} size={28} />
-            </h3>
-            <div className="mt-1 flex items-baseline justify-center md:justify-end gap-1.5">
-              <span className="text-xs text-muted-foreground">Expected Goals:</span>
-              <span className="text-xl font-bold font-mono text-blue-500">
-                {prediction.expectedAwayGoals}
+            <div className="py-1.5 px-3 rounded-lg bg-amber-500/10 border border-amber-500/20 flex flex-col sm:flex-row sm:items-center sm:justify-between">
+              <span className="font-semibold text-amber-600 dark:text-amber-400">
+                X (Draw)
               </span>
+              <div className="flex items-center justify-center gap-1.5">
+                <span className="font-bold text-foreground text-sm">{prediction.drawProb}%</span>
+                <span className="text-[10px] text-muted-foreground">
+                  (Fair: {(100 / (prediction.drawProb || 1)).toFixed(2)})
+                </span>
+              </div>
             </div>
-          </div>
-        </div>
 
-        {/* 1X2 Probability Distribution Bar */}
-        <div className="mt-6 pt-4 border-t border-border grid grid-cols-3 gap-3 text-center">
-          <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
-            <span className="text-xs font-semibold text-emerald-500 block mb-0.5">
-              Home Win ({prediction.homeTeam})
-            </span>
-            <span className="text-2xl font-bold font-mono text-emerald-500 block">
-              {prediction.homeProb}%
-            </span>
-            <span className="text-[10px] text-muted-foreground font-mono block mt-0.5">
-              Fair Odds: {(100 / (prediction.homeProb || 1)).toFixed(2)}
-            </span>
-          </div>
-
-          <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20">
-            <span className="text-xs font-semibold text-amber-500 block mb-0.5">Draw</span>
-            <span className="text-2xl font-bold font-mono text-amber-500 block">
-              {prediction.drawProb}%
-            </span>
-            <span className="text-[10px] text-muted-foreground font-mono block mt-0.5">
-              Fair Odds: {(100 / (prediction.drawProb || 1)).toFixed(2)}
-            </span>
-          </div>
-
-          <div className="p-3 rounded-xl bg-blue-500/10 border border-blue-500/20">
-            <span className="text-xs font-semibold text-blue-500 block mb-0.5">
-              Away Win ({prediction.awayTeam})
-            </span>
-            <span className="text-2xl font-bold font-mono text-blue-500 block">
-              {prediction.awayProb}%
-            </span>
-            <span className="text-[10px] text-muted-foreground font-mono block mt-0.5">
-              Fair Odds: {(100 / (prediction.awayProb || 1)).toFixed(2)}
-            </span>
+            <div className="py-1.5 px-3 rounded-lg bg-blue-500/10 border border-blue-500/20 flex flex-col sm:flex-row sm:items-center sm:justify-between">
+              <span className="font-semibold text-blue-600 dark:text-blue-400 truncate">
+                2 ({prediction.awayTeam})
+              </span>
+              <div className="flex items-center justify-center gap-1.5">
+                <span className="font-bold text-foreground text-sm">{prediction.awayProb}%</span>
+                <span className="text-[10px] text-muted-foreground">
+                  (Fair: {(100 / (prediction.awayProb || 1)).toFixed(2)})
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -486,8 +517,8 @@ export const SeasonMatchPredictor: React.FC<SeasonMatchPredictorProps> = ({
                     i === 0 ? "bg-primary/10 border-primary text-primary" : "bg-muted/40 border-border"
                   }`}
                 >
-                  <span className="font-mono font-bold text-xs block">{sc.score}</span>
-                  <span className="text-[10px] font-mono block opacity-85">{sc.prob}%</span>
+                  <span className="font-bold text-xs block">{sc.score}</span>
+                  <span className="text-[10px] block opacity-85">{sc.prob}%</span>
                 </div>
               ))}
             </div>
@@ -509,7 +540,7 @@ export const SeasonMatchPredictor: React.FC<SeasonMatchPredictorProps> = ({
             <div className="space-y-3 text-xs">
               {/* Over 1.5 Goals */}
               <div className="space-y-1">
-                <div className="flex justify-between font-mono">
+                <div className="flex justify-between">
                   <span>Over 1.5 Goals</span>
                   <span className="font-bold text-foreground">{prediction.over15Prob}%</span>
                 </div>
@@ -520,7 +551,7 @@ export const SeasonMatchPredictor: React.FC<SeasonMatchPredictorProps> = ({
 
               {/* Over 2.5 Goals */}
               <div className="space-y-1">
-                <div className="flex justify-between font-mono">
+                <div className="flex justify-between">
                   <span>Over 2.5 Goals</span>
                   <span className="font-bold text-foreground">{prediction.over25Prob}%</span>
                 </div>
@@ -531,7 +562,7 @@ export const SeasonMatchPredictor: React.FC<SeasonMatchPredictorProps> = ({
 
               {/* Over 3.5 Goals */}
               <div className="space-y-1">
-                <div className="flex justify-between font-mono">
+                <div className="flex justify-between">
                   <span>Over 3.5 Goals</span>
                   <span className="font-bold text-foreground">{prediction.over35Prob}%</span>
                 </div>
@@ -542,7 +573,7 @@ export const SeasonMatchPredictor: React.FC<SeasonMatchPredictorProps> = ({
 
               {/* BTTS */}
               <div className="space-y-1 pt-2 border-t border-border">
-                <div className="flex justify-between font-mono">
+                <div className="flex justify-between">
                   <span>Both Teams To Score (BTTS - Yes)</span>
                   <span className="font-bold text-emerald-500">{prediction.bttsProb}%</span>
                 </div>
@@ -578,7 +609,7 @@ export const SeasonMatchPredictor: React.FC<SeasonMatchPredictorProps> = ({
                 <span className="font-semibold text-foreground">{sig.label}</span>
                 <Badge
                   variant="outline"
-                  className={`text-[10px] font-mono ${
+                  className={`text-[10px] ${
                     sig.favor === "home"
                       ? "text-emerald-500 border-emerald-500/30"
                       : sig.favor === "away"
@@ -589,7 +620,7 @@ export const SeasonMatchPredictor: React.FC<SeasonMatchPredictorProps> = ({
                   Favors: {sig.favor}
                 </Badge>
               </div>
-              <div className="flex justify-between font-mono text-[11px] text-muted-foreground">
+              <div className="flex justify-between text-[11px] text-muted-foreground">
                 <span>{prediction.homeTeam}: {sig.homeValue}</span>
                 <span>{prediction.awayTeam}: {sig.awayValue}</span>
               </div>

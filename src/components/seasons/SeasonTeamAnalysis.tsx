@@ -1,31 +1,21 @@
-import React, { useState, useMemo } from "react";
-import {
-  Shield,
-  Swords,
-  Target,
-  Goal,
-  Flame,
-  Award,
-  ChevronRight,
-  TrendingUp,
-  Activity,
-  Zap,
-} from "lucide-react";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { SearchableSelect } from "@/components/ui/searchable-select";
 import { TeamLogo } from "@/components/TeamLogo";
+import { Badge } from "@/components/ui/badge";
+import { SearchableSelect } from "@/components/ui/searchable-select";
 import {
   Table,
-  TableHeader,
   TableBody,
-  TableHead,
-  TableRow,
   TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
 } from "@/components/ui/table";
+import { Activity } from "lucide-react";
+import React, { useMemo, useState } from "react";
 import type { SeasonMatch } from "../../lib/seasonTypes";
-import { getAllSeasonTeams, computeTeamProfile } from "../../lib/seasonsAnalytics";
+import {
+  computeTeamProfile,
+  getAllSeasonTeams,
+} from "../../lib/seasonsAnalytics";
 import { canonicalTeam } from "../../lib/teamRegistry";
 
 interface SeasonTeamAnalysisProps {
@@ -44,7 +34,8 @@ export const SeasonTeamAnalysis: React.FC<SeasonTeamAnalysisProps> = ({
   onPredictWithTeam,
 }) => {
   const allTeams = useMemo(() => getAllSeasonTeams(matches), [matches]);
-  const activeTeam = (allTeams.includes(selectedTeam) ? selectedTeam : allTeams[0]) || "Arsenal";
+  const activeTeam =
+    (allTeams.includes(selectedTeam) ? selectedTeam : allTeams[0]) || "Arsenal";
 
   const [formLimit, setFormLimit] = useState<number>(10);
 
@@ -64,206 +55,200 @@ export const SeasonTeamAnalysis: React.FC<SeasonTeamAnalysisProps> = ({
 
   return (
     <div className="space-y-6">
-      {/* Team Selection Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-xl bg-card border border-border">
-        <div>
+      {/* Distilled Team Command Header & Performance Matrix */}
+      <div className="rounded-xl bg-card border border-border shadow-xs overflow-hidden">
+        {/* Top Bar: Identity & Quick Switch */}
+        <div className="px-4 py-3 border-b border-border bg-card flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <TeamLogo team={profile.team} size={28} />
-            <h2 className="text-xl font-bold tracking-tight text-foreground">
-              {profile.team}
-            </h2>
-            <Badge variant="outline" className="text-xs font-mono">
-              {seasonName}
-            </Badge>
+            <TeamLogo team={profile.team} size={30} />
+            <div className="flex items-center gap-2">
+              <h2 className="text-lg font-bold tracking-tight text-foreground">
+                {profile.team}
+              </h2>
+              <Badge variant="outline" className="text-[11px]">
+                {seasonName}
+              </Badge>
+              <span className="text-xs text-muted-foreground hidden sm:inline">
+                ({profile.totalMatches} matches · {profile.winRate}% win rate)
+              </span>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 shrink-0">
+            <span className="text-xs text-muted-foreground font-medium">
+              Switch Team:
+            </span>
+            <SearchableSelect
+              size="sm"
+              value={activeTeam}
+              onValueChange={onSelectTeam}
+              options={allTeams.map((team) => ({
+                value: team,
+                label: team,
+              }))}
+              searchPlaceholder="Search club..."
+              className="text-xs font-semibold h-8 min-w-44"
+              popoverWidth="w-56"
+            />
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
-          <label className="text-xs text-muted-foreground font-medium shrink-0">Switch Team:</label>
-          <SearchableSelect
-            size="sm"
-            value={activeTeam}
-            onValueChange={onSelectTeam}
-            options={allTeams.map((team) => ({
-              value: team,
-              label: team,
-            }))}
-            searchPlaceholder="Search club..."
-            className="text-xs font-semibold h-9 min-w-48"
-            popoverWidth="w-56"
-          />
-        </div>
-      </div>
-
-      {/* Ratings & Overall Record Banner */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
-        <Card size="sm" className="bg-card border-border shadow-xs">
-          <CardHeader className="pb-1">
-            <CardDescription className="text-[11px]">Matches Played</CardDescription>
-            <CardTitle className="text-xl font-bold font-mono text-foreground">
+        {/* Primary Season Metrics Strip */}
+        <div className="px-4 py-2.5 border-b border-border/70 bg-muted/20 grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3 text-xs">
+          <div>
+            <span className="text-[11px] text-muted-foreground block">
+              Matches
+            </span>
+            <span className="text-base font-bold text-foreground">
               {profile.totalMatches}
-            </CardTitle>
-          </CardHeader>
-        </Card>
+            </span>
+          </div>
 
-        <Card size="sm" className="bg-card border-border shadow-xs">
-          <CardHeader className="pb-1">
-            <CardDescription className="text-[11px]">Win / Draw / Loss</CardDescription>
-            <CardTitle className="text-base font-bold font-mono text-foreground">
+          <div>
+            <span className="text-[11px] text-muted-foreground block">
+              Record (W-D-L)
+            </span>
+            <span className="text-base font-bold">
               <span className="text-emerald-500">{profile.wins}W</span>{" "}
               <span className="text-amber-500">{profile.draws}D</span>{" "}
               <span className="text-destructive">{profile.losses}L</span>
-            </CardTitle>
-          </CardHeader>
-        </Card>
+            </span>
+          </div>
 
-        <Card size="sm" className="bg-card border-border shadow-xs">
-          <CardHeader className="pb-1">
-            <CardDescription className="text-[11px]">Win Rate</CardDescription>
-            <CardTitle className="text-xl font-bold font-mono text-emerald-500">
+          <div>
+            <span className="text-[11px] text-muted-foreground block">
+              Win Rate
+            </span>
+            <span className="text-base font-bold text-emerald-500">
               {profile.winRate}%
-            </CardTitle>
-          </CardHeader>
-        </Card>
-
-        <Card size="sm" className="bg-card border-border shadow-xs">
-          <CardHeader className="pb-1">
-            <CardDescription className="text-[11px]">Goals For / Against</CardDescription>
-            <CardTitle className="text-base font-bold font-mono text-foreground">
-              <span className="text-primary">{profile.goalsFor}</span> :{" "}
-              <span className="text-muted-foreground">{profile.goalsAgainst}</span>
-            </CardTitle>
-          </CardHeader>
-        </Card>
-
-        <Card size="sm" className="bg-card border-border shadow-xs">
-          <CardHeader className="pb-1">
-            <CardDescription className="text-[11px]">Avg Goals Scored</CardDescription>
-            <CardTitle className="text-xl font-bold font-mono text-primary">
-              {profile.avgGoalsFor}
-            </CardTitle>
-          </CardHeader>
-        </Card>
-
-        <Card size="sm" className="bg-card border-border shadow-xs">
-          <CardHeader className="pb-1">
-            <CardDescription className="text-[11px]">Attack Rating</CardDescription>
-            <CardTitle className="text-xl font-bold font-mono text-emerald-500">
-              {profile.attackRating}/99
-            </CardTitle>
-          </CardHeader>
-        </Card>
-
-        <Card size="sm" className="bg-card border-border shadow-xs">
-          <CardHeader className="pb-1">
-            <CardDescription className="text-[11px]">Defense Rating</CardDescription>
-            <CardTitle className="text-xl font-bold font-mono text-blue-500">
-              {profile.defenseRating}/99
-            </CardTitle>
-          </CardHeader>
-        </Card>
-      </div>
-
-      {/* Home vs Away Splits */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Home Record */}
-        <div className="p-4 rounded-xl bg-card border border-border space-y-3">
-          <div className="flex items-center justify-between pb-2 border-b border-border">
-            <span className="font-bold text-sm text-foreground flex items-center gap-1.5">
-              <span className="h-2 w-2 rounded-full bg-emerald-500" />
-              Home Performance
             </span>
-            <Badge variant="outline" className="text-xs font-mono font-semibold">
-              {profile.homeRecord.winRate}% Win Rate
-            </Badge>
           </div>
-          <div className="grid grid-cols-3 gap-2 text-center text-xs">
-            <div className="p-2.5 rounded-lg bg-muted/30">
-              <span className="text-muted-foreground block text-[11px]">Home Matches</span>
-              <span className="font-bold font-mono text-sm text-foreground">{profile.homeRecord.matches}</span>
-            </div>
-            <div className="p-2.5 rounded-lg bg-muted/30">
-              <span className="text-muted-foreground block text-[11px]">Record (W-D-L)</span>
-              <span className="font-bold font-mono text-sm text-foreground">
-                {profile.homeRecord.wins}-{profile.homeRecord.draws}-{profile.homeRecord.losses}
-              </span>
-            </div>
-            <div className="p-2.5 rounded-lg bg-muted/30">
-              <span className="text-muted-foreground block text-[11px]">Goals (GF - GA)</span>
-              <span className="font-bold font-mono text-sm text-foreground">
-                {profile.homeRecord.gf} - {profile.homeRecord.ga}
-              </span>
-            </div>
-          </div>
-        </div>
 
-        {/* Away Record */}
-        <div className="p-4 rounded-xl bg-card border border-border space-y-3">
-          <div className="flex items-center justify-between pb-2 border-b border-border">
-            <span className="font-bold text-sm text-foreground flex items-center gap-1.5">
-              <span className="h-2 w-2 rounded-full bg-blue-500" />
-              Away Performance
+          <div>
+            <span className="text-[11px] text-muted-foreground block">
+              Goals (F : A)
             </span>
-            <Badge variant="outline" className="text-xs font-mono font-semibold">
-              {profile.awayRecord.winRate}% Win Rate
-            </Badge>
-          </div>
-          <div className="grid grid-cols-3 gap-2 text-center text-xs">
-            <div className="p-2.5 rounded-lg bg-muted/30">
-              <span className="text-muted-foreground block text-[11px]">Away Matches</span>
-              <span className="font-bold font-mono text-sm text-foreground">{profile.awayRecord.matches}</span>
-            </div>
-            <div className="p-2.5 rounded-lg bg-muted/30">
-              <span className="text-muted-foreground block text-[11px]">Record (W-D-L)</span>
-              <span className="font-bold font-mono text-sm text-foreground">
-                {profile.awayRecord.wins}-{profile.awayRecord.draws}-{profile.awayRecord.losses}
+            <span className="text-base font-bold text-foreground">
+              {profile.goalsFor} : {profile.goalsAgainst}{" "}
+              <span className="text-xs font-normal text-muted-foreground">
+                ({profile.avgGoalsFor}/m)
               </span>
-            </div>
-            <div className="p-2.5 rounded-lg bg-muted/30">
-              <span className="text-muted-foreground block text-[11px]">Goals (GF - GA)</span>
-              <span className="font-bold font-mono text-sm text-foreground">
-                {profile.awayRecord.gf} - {profile.awayRecord.ga}
+            </span>
+          </div>
+
+          <div>
+            <span className="text-[11px] text-muted-foreground block">
+              Power Ratings
+            </span>
+            <span className="text-base font-bold">
+              <span className="text-emerald-500">{profile.attackRating}</span>
+              <span className="text-muted-foreground font-normal">/</span>
+              <span className="text-blue-500">
+                {profile.defenseRating}
+              </span>{" "}
+              <span className="text-[10px] font-normal text-muted-foreground">
+                ATK/DEF
               </span>
+            </span>
+          </div>
+
+          <div>
+            <span className="text-[11px] text-muted-foreground block">
+              Clean Sheets
+            </span>
+            <span className="text-base font-bold text-foreground">
+              {profile.cleanSheets}{" "}
+              <span className="text-xs font-normal text-emerald-500">
+                ({profile.cleanSheetPct}%)
+              </span>
+            </span>
+          </div>
+
+          <div>
+            <span className="text-[11px] text-muted-foreground block">
+              Both Teams Score
+            </span>
+            <span className="text-base font-bold text-foreground">
+              {profile.bttsCount}{" "}
+              <span className="text-xs font-normal text-primary">
+                ({profile.bttsPct}%)
+              </span>
+            </span>
+          </div>
+        </div>
+
+        {/* Detailed Splits & Secondary Disciplines */}
+        <div className="px-4 py-2.5 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs bg-card">
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-1.5">
+            {/* Home split */}
+            <div className="flex items-center gap-1.5">
+              <span className="h-2 w-2 rounded-full bg-emerald-500 shrink-0" />
+              <span className="font-semibold text-foreground">Home:</span>
+              <span className="text-muted-foreground">
+                {profile.homeRecord.matches} MP
+              </span>
+              <span className="text-muted-foreground/60">·</span>
+              <span className="font-medium text-foreground">
+                {profile.homeRecord.wins}-{profile.homeRecord.draws}-
+                {profile.homeRecord.losses}
+              </span>
+              <span className="text-muted-foreground/60">·</span>
+              <span className="text-muted-foreground">
+                {profile.homeRecord.gf}-{profile.homeRecord.ga}
+              </span>
+              <Badge
+                variant="outline"
+                className="text-[10px] px-1.5 py-0 h-4 border-emerald-500/30 text-emerald-500"
+              >
+                {profile.homeRecord.winRate}% W
+              </Badge>
+            </div>
+
+            {/* Away split */}
+            <div className="flex items-center gap-1.5">
+              <span className="h-2 w-2 rounded-full bg-blue-500 shrink-0" />
+              <span className="font-semibold text-foreground">Away:</span>
+              <span className="text-muted-foreground">
+                {profile.awayRecord.matches} MP
+              </span>
+              <span className="text-muted-foreground/60">·</span>
+              <span className="font-medium text-foreground">
+                {profile.awayRecord.wins}-{profile.awayRecord.draws}-
+                {profile.awayRecord.losses}
+              </span>
+              <span className="text-muted-foreground/60">·</span>
+              <span className="text-muted-foreground">
+                {profile.awayRecord.gf}-{profile.awayRecord.ga}
+              </span>
+              <Badge
+                variant="outline"
+                className="text-[10px] px-1.5 py-0 h-4 border-blue-500/30 text-blue-500"
+              >
+                {profile.awayRecord.winRate}% W
+              </Badge>
             </div>
           </div>
-        </div>
-      </div>
 
-      {/* Advanced Underlying Metrics */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-muted/20 border border-border rounded-xl p-3 text-xs">
-        <div className="p-3 rounded-lg bg-card border border-border flex flex-col justify-between">
-          <span className="text-muted-foreground text-[11px]">Clean Sheets</span>
-          <div className="flex items-baseline justify-between mt-1">
-            <span className="text-lg font-bold font-mono text-foreground">{profile.cleanSheets}</span>
-            <span className="text-xs text-emerald-500 font-mono font-semibold">{profile.cleanSheetPct}%</span>
-          </div>
-        </div>
-
-        <div className="p-3 rounded-lg bg-card border border-border flex flex-col justify-between">
-          <span className="text-muted-foreground text-[11px]">Both Teams To Score</span>
-          <div className="flex items-baseline justify-between mt-1">
-            <span className="text-lg font-bold font-mono text-foreground">{profile.bttsCount}</span>
-            <span className="text-xs text-primary font-mono font-semibold">{profile.bttsPct}%</span>
-          </div>
-        </div>
-
-        <div className="p-3 rounded-lg bg-card border border-border flex flex-col justify-between">
-          <span className="text-muted-foreground text-[11px]">Shots on Target / 90</span>
-          <div className="flex items-baseline justify-between mt-1">
-            <span className="text-lg font-bold font-mono text-foreground">{profile.avgShotsOnTarget}</span>
-            <span className="text-[11px] text-muted-foreground font-mono">({profile.avgShots} total)</span>
-          </div>
-        </div>
-
-        <div className="p-3 rounded-lg bg-card border border-border flex flex-col justify-between">
-          <span className="text-muted-foreground text-[11px]">Discipline (Yellow / Red)</span>
-          <div className="flex items-baseline justify-between mt-1">
-            <span className="text-lg font-bold font-mono text-foreground">
-              {profile.avgYellows} <span className="text-xs font-normal text-muted-foreground">YC</span>
-            </span>
-            <span className="text-xs text-destructive font-mono font-semibold">
-              {profile.avgReds} RC
-            </span>
+          <div className="flex items-center gap-4 text-muted-foreground text-[11px] pt-1 md:pt-0 border-t md:border-t-0 border-border/50">
+            <div>
+              <span>SoT/90:</span>{" "}
+              <strong className="text-foreground text-xs">
+                {profile.avgShotsOnTarget}
+              </strong>{" "}
+              <span className="opacity-75">({profile.avgShots} total)</span>
+            </div>
+            <span className="text-border">|</span>
+            <div>
+              <span>Cards:</span>{" "}
+              <strong className="text-foreground text-xs">
+                {profile.avgYellows}
+              </strong>{" "}
+              <span className="text-amber-500 font-medium">YC</span> ·{" "}
+              <strong className="text-foreground text-xs">
+                {profile.avgReds}
+              </strong>{" "}
+              <span className="text-destructive font-medium">RC</span>
+            </div>
           </div>
         </div>
       </div>
@@ -285,7 +270,7 @@ export const SeasonTeamAnalysis: React.FC<SeasonTeamAnalysisProps> = ({
                 key={lim}
                 type="button"
                 onClick={() => setFormLimit(lim)}
-                className={`px-2 py-0.5 rounded text-xs font-mono font-semibold transition-colors ${
+                className={`px-2 py-0.5 rounded text-xs font-semibold transition-colors ${
                   formLimit === lim
                     ? "bg-primary text-primary-foreground"
                     : "bg-muted text-muted-foreground hover:text-foreground"
@@ -307,38 +292,52 @@ export const SeasonTeamAnalysis: React.FC<SeasonTeamAnalysisProps> = ({
                 <TableHead className="text-center text-xs">Score</TableHead>
                 <TableHead className="text-center text-xs">Result</TableHead>
                 <TableHead className="text-center text-xs">Half-Time</TableHead>
-                <TableHead className="text-center text-xs">Shots (Target)</TableHead>
+                <TableHead className="text-center text-xs">
+                  Shots (Target)
+                </TableHead>
                 <TableHead className="text-center text-xs">Corners</TableHead>
                 <TableHead className="text-right text-xs">Odds</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {displayedRecent.map((m, i) => {
-                const isHome = canonicalTeam(m.home_team) === canonicalTeam(activeTeam);
+                const isHome =
+                  canonicalTeam(m.home_team) === canonicalTeam(activeTeam);
                 const opp = isHome ? m.away_team : m.home_team;
                 const teamGoals = isHome ? m.home_goals : m.away_goals;
                 const oppGoals = isHome ? m.away_goals : m.home_goals;
 
                 const resLetter =
-                  teamGoals > oppGoals ? "W" : teamGoals === oppGoals ? "D" : "L";
+                  teamGoals > oppGoals
+                    ? "W"
+                    : teamGoals === oppGoals
+                      ? "D"
+                      : "L";
                 const resColor =
                   resLetter === "W"
-                    ? "text-emerald-500"
+                    ? "bg-emerald-500"
                     : resLetter === "D"
-                    ? "text-amber-500"
-                    : "text-destructive";
+                      ? "bg-amber-500"
+                      : "bg-destructive";
 
                 const shots = isHome ? m.stats.home_shots : m.stats.away_shots;
                 const sot = isHome
                   ? m.stats.home_shots_on_target
                   : m.stats.away_shots_on_target;
-                const corners = isHome ? m.stats.home_corners : m.stats.away_corners;
+                const corners = isHome
+                  ? m.stats.home_corners
+                  : m.stats.away_corners;
 
                 const winOdds = isHome ? m.odds.home : m.odds.away;
 
                 return (
-                  <TableRow key={i} className="hover:bg-muted/40 transition-colors">
-                    <TableCell className="tabular-nums text-xs text-muted-foreground">{m.date}</TableCell>
+                  <TableRow
+                    key={i}
+                    className="hover:bg-muted/40 transition-colors"
+                  >
+                    <TableCell className="tabular-nums text-xs text-muted-foreground">
+                      {m.date}
+                    </TableCell>
                     <TableCell className="text-xs text-muted-foreground font-medium">
                       {isHome ? "Home" : "Away"}
                     </TableCell>
@@ -352,7 +351,9 @@ export const SeasonTeamAnalysis: React.FC<SeasonTeamAnalysisProps> = ({
                       {m.score}
                     </TableCell>
                     <TableCell className="text-center text-xs font-medium">
-                      <span className={resColor}>
+                      <span
+                        className={`inline-flex h-5 w-5 items-center justify-center rounded-sm text-[10px] font-bold text-white ${resColor}`}
+                      >
                         {resLetter}
                       </span>
                     </TableCell>
