@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import {
-  Sparkles,
+  Target,
   Layers,
   Swords,
   Goal,
@@ -62,7 +62,7 @@ export type SeasonsTab =
 
 const NAV_ITEMS: { value: AppTab; label: string; icon: LucideIcon }[] = [
   { value: "explorer", label: "Explorer", icon: TableIcon },
-  { value: "predictor", label: "Predictor", icon: Sparkles },
+  { value: "predictor", label: "Predictor", icon: Target },
   { value: "positions", label: "Positions", icon: Layers },
   { value: "teams", label: "H2H & Teams", icon: Swords },
   { value: "goals", label: "Goals", icon: Goal },
@@ -72,7 +72,7 @@ export const SEASONS_NAV_ITEMS: { value: SeasonsTab; label: string; icon: Lucide
   { value: "explorer", label: "Explorer", icon: Compass },
   { value: "standings", label: "Standings", icon: Trophy },
   { value: "deepdive", label: "Deep Dive", icon: Shield },
-  { value: "predictor", label: "Predictor", icon: Sparkles },
+  { value: "predictor", label: "Predictor", icon: Target },
   { value: "trends", label: "Trends", icon: TrendingUp },
   { value: "backtest", label: "Backtest", icon: FlaskConical },
   { value: "fixtures", label: "Fixtures", icon: TableIcon },

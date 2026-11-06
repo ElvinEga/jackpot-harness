@@ -44,7 +44,7 @@ export const TeamLogo: React.FC<TeamLogoProps> = ({
   const badgeStyle: React.CSSProperties = {
     width: size,
     height: size,
-    fontSize: Math.max(8, Math.round(size * 0.42)),
+    fontSize: Math.max(10, Math.round(size * 0.48)),
   };
   // the crest keeps its own box; only the plate's inset shrinks the artwork
   const chipStyle: React.CSSProperties = {
@@ -77,7 +77,7 @@ export const TeamLogo: React.FC<TeamLogoProps> = ({
       aria-label={team}
       title={team}
       className={cn(
-        "inline-flex shrink-0 items-center justify-center rounded bg-muted dark:bg-white/30",
+        "inline-flex shrink-0 items-center justify-center rounded bg-muted/60 dark:bg-muted/80 border border-border/30",
         className,
       )}
     >

@@ -56,9 +56,9 @@ export const SeasonTrends: React.FC<SeasonTrendsProps> = ({ allMatches }) => {
                 <TableHead className="text-xs">Season</TableHead>
                 <TableHead className="text-center text-xs">Matches</TableHead>
                 <TableHead className="text-center text-xs">Goals / Match</TableHead>
-                <TableHead className="text-center text-xs text-emerald-500">Home Win %</TableHead>
-                <TableHead className="text-center text-xs text-amber-500">Draw %</TableHead>
-                <TableHead className="text-center text-xs text-blue-500">Away Win %</TableHead>
+                <TableHead className="text-center text-xs text-win-home">Home Win %</TableHead>
+                <TableHead className="text-center text-xs text-draw">Draw %</TableHead>
+                <TableHead className="text-center text-xs text-win-away">Away Win %</TableHead>
                 <TableHead className="text-center text-xs text-orange-500">Over 2.5 %</TableHead>
                 <TableHead className="text-center text-xs">BTTS %</TableHead>
                 <TableHead className="text-center text-xs">Clean Sheet %</TableHead>
@@ -77,13 +77,13 @@ export const SeasonTrends: React.FC<SeasonTrendsProps> = ({ allMatches }) => {
                   <TableCell className="text-center tabular-nums text-xs font-medium text-primary">
                     {row.goalsPerMatch}
                   </TableCell>
-                  <TableCell className="text-center tabular-nums text-xs font-medium text-emerald-500">
+                  <TableCell className="text-center tabular-nums text-xs font-semibold text-win-home">
                     {row.homeWinPct}%
                   </TableCell>
-                  <TableCell className="text-center tabular-nums text-xs font-medium text-amber-500">
+                  <TableCell className="text-center tabular-nums text-xs font-semibold text-draw">
                     {row.drawPct}%
                   </TableCell>
-                  <TableCell className="text-center tabular-nums text-xs font-medium text-blue-500">
+                  <TableCell className="text-center tabular-nums text-xs font-semibold text-win-away">
                     {row.awayWinPct}%
                   </TableCell>
                   <TableCell className="text-center tabular-nums text-xs text-orange-500 font-medium">
@@ -122,9 +122,9 @@ export const SeasonTrends: React.FC<SeasonTrendsProps> = ({ allMatches }) => {
                   <TableHead className="text-xs">Month</TableHead>
                   <TableHead className="text-center text-xs">Matches</TableHead>
                   <TableHead className="text-center text-xs">Avg Goals</TableHead>
-                  <TableHead className="text-center text-xs text-emerald-500">Home %</TableHead>
-                  <TableHead className="text-center text-xs text-amber-500">Draw %</TableHead>
-                  <TableHead className="text-center text-xs text-blue-500">Away %</TableHead>
+                  <TableHead className="text-center text-xs text-win-home">Home %</TableHead>
+                  <TableHead className="text-center text-xs text-draw">Draw %</TableHead>
+                  <TableHead className="text-center text-xs text-win-away">Away %</TableHead>
                   <TableHead className="text-center text-xs text-orange-500">Over 2.5 %</TableHead>
                   <TableHead className="text-center text-xs">BTTS %</TableHead>
                 </TableRow>
@@ -137,13 +137,13 @@ export const SeasonTrends: React.FC<SeasonTrendsProps> = ({ allMatches }) => {
                     </TableCell>
                     <TableCell className="text-center tabular-nums text-xs text-muted-foreground">{m.matches}</TableCell>
                     <TableCell className="text-center tabular-nums text-xs font-medium text-primary">{m.avgGoals}</TableCell>
-                    <TableCell className="text-center tabular-nums text-xs font-medium text-emerald-500">
+                    <TableCell className="text-center tabular-nums text-xs font-semibold text-win-home">
                       {m.homeWinPct}%
                     </TableCell>
-                    <TableCell className="text-center tabular-nums text-xs font-medium text-amber-500">
+                    <TableCell className="text-center tabular-nums text-xs font-semibold text-draw">
                       {m.drawPct}%
                     </TableCell>
-                    <TableCell className="text-center tabular-nums text-xs font-medium text-blue-500">
+                    <TableCell className="text-center tabular-nums text-xs font-semibold text-win-away">
                       {m.awayWinPct}%
                     </TableCell>
                     <TableCell className="text-center tabular-nums text-xs font-medium text-orange-500">
@@ -176,9 +176,9 @@ export const SeasonTrends: React.FC<SeasonTrendsProps> = ({ allMatches }) => {
                   <TableHead className="text-xs">Day</TableHead>
                   <TableHead className="text-center text-xs">Matches</TableHead>
                   <TableHead className="text-center text-xs">Avg Goals</TableHead>
-                  <TableHead className="text-center text-xs text-emerald-500">Home %</TableHead>
-                  <TableHead className="text-center text-xs text-amber-500">Draw %</TableHead>
-                  <TableHead className="text-center text-xs text-blue-500">Away %</TableHead>
+                  <TableHead className="text-center text-xs text-win-home">Home %</TableHead>
+                  <TableHead className="text-center text-xs text-draw">Draw %</TableHead>
+                  <TableHead className="text-center text-xs text-win-away">Away %</TableHead>
                   <TableHead className="text-center text-xs text-orange-500">Over 2.5 %</TableHead>
                 </TableRow>
               </TableHeader>
@@ -190,13 +190,13 @@ export const SeasonTrends: React.FC<SeasonTrendsProps> = ({ allMatches }) => {
                     </TableCell>
                     <TableCell className="text-center tabular-nums text-xs text-muted-foreground">{d.matches}</TableCell>
                     <TableCell className="text-center tabular-nums text-xs font-medium text-primary">{d.avgGoals}</TableCell>
-                    <TableCell className="text-center tabular-nums text-xs font-medium text-emerald-500">
+                    <TableCell className="text-center tabular-nums text-xs font-semibold text-win-home">
                       {d.homeWinPct}%
                     </TableCell>
-                    <TableCell className="text-center tabular-nums text-xs font-medium text-amber-500">
+                    <TableCell className="text-center tabular-nums text-xs font-semibold text-draw">
                       {d.drawPct}%
                     </TableCell>
-                    <TableCell className="text-center tabular-nums text-xs font-medium text-blue-500">
+                    <TableCell className="text-center tabular-nums text-xs font-semibold text-win-away">
                       {d.awayWinPct}%
                     </TableCell>
                     <TableCell className="text-center tabular-nums text-xs font-medium text-orange-500">

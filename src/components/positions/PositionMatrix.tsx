@@ -243,9 +243,9 @@ export const PositionMatrix: React.FC<PositionMatrixProps> = ({ matches }) => {
                   formatter={(value: any) => [`${value}%`]}
                 />
                 <Legend wrapperStyle={{ fontSize: "11px", paddingTop: "8px" }} />
-                <Bar dataKey="Home Win %" fill="var(--primary)" radius={[3, 3, 0, 0]} />
-                <Bar dataKey="Draw %" fill="#cbd5e1" radius={[3, 3, 0, 0]} />
-                <Bar dataKey="Away Win %" fill="#64748b" radius={[3, 3, 0, 0]} />
+                <Bar dataKey="Home Win %" fill="var(--win-home)" radius={[3, 3, 0, 0]} />
+                <Bar dataKey="Draw %" fill="var(--draw)" radius={[3, 3, 0, 0]} />
+                <Bar dataKey="Away Win %" fill="var(--win-away)" radius={[3, 3, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -253,14 +253,14 @@ export const PositionMatrix: React.FC<PositionMatrixProps> = ({ matches }) => {
       </Card>
 
       {/* Statistical Context Note on Score Modality */}
-      <div className="p-3.5 bg-muted/40 border border-border rounded-xl flex items-start gap-3 text-xs leading-relaxed">
+      <div className="p-3.5 bg-muted/40 border border-border rounded-md flex items-start gap-3 text-xs leading-relaxed">
         <Info className="h-4 w-4 text-primary shrink-0 mt-0.5" />
         <div className="space-y-1">
           <div className="font-semibold text-foreground flex items-center gap-1.5">
             <span>Why is 1-1 the most common score in every position?</span>
           </div>
           <p className="text-muted-foreground">
-            In football jackpots, <strong className="text-foreground">Home Wins</strong> are the most frequent outcome (<span className="text-emerald-500 font-medium">~42%</span>), but they are dispersed across many different scorelines (1-0 at 10%, 2-1 at 8.5%, 2-0 at 5.9%, 3-1 at 3.4%). <strong className="text-foreground">Away Wins</strong> (<span className="text-blue-500 font-medium">~30%</span>) are similarly split (0-1 at 9%, 1-2 at 8%, 0-2 at 5.4%). In contrast, <strong className="text-foreground">Draws</strong> (<span className="text-amber-500 font-medium">~28%</span>) are heavily clustered into just two scores: <strong className="text-foreground">1-1 (~13.4%)</strong> and <strong className="text-foreground">0-0 (~9.1%)</strong>.
+            In football jackpots, <strong className="text-foreground">Home Wins</strong> are the most frequent outcome (<span className="text-win-home font-semibold">~42%</span>), but they are dispersed across many different scorelines (1-0 at 10%, 2-1 at 8.5%, 2-0 at 5.9%, 3-1 at 3.4%). <strong className="text-foreground">Away Wins</strong> (<span className="text-win-away font-semibold">~30%</span>) are similarly split (0-1 at 9%, 1-2 at 8%, 0-2 at 5.4%). In contrast, <strong className="text-foreground">Draws</strong> (<span className="text-draw font-semibold">~28%</span>) are heavily clustered into just two scores: <strong className="text-foreground">1-1 (~13.4%)</strong> and <strong className="text-foreground">0-0 (~9.1%)</strong>.
           </p>
           <p className="text-muted-foreground">
             Because nearly half of all draws finish 1-1, it is the most common
@@ -312,13 +312,13 @@ export const PositionMatrix: React.FC<PositionMatrixProps> = ({ matches }) => {
                   <TableCell className="text-center tabular-nums text-xs text-muted-foreground">
                     {s.totalMatches.toLocaleString()}
                   </TableCell>
-                  <TableCell className="text-center tabular-nums text-xs font-medium text-emerald-500">
+                  <TableCell className="text-center tabular-nums text-xs font-semibold text-win-home">
                     {s.homeWinPct}%
                   </TableCell>
-                  <TableCell className="text-center tabular-nums text-xs font-medium text-amber-500">
+                  <TableCell className="text-center tabular-nums text-xs font-semibold text-draw">
                     {s.drawPct}%
                   </TableCell>
-                  <TableCell className="text-center tabular-nums text-xs font-medium text-blue-500">
+                  <TableCell className="text-center tabular-nums text-xs font-semibold text-win-away">
                     {s.awayWinPct}%
                   </TableCell>
                   <TableCell className="text-center tabular-nums text-xs">
@@ -333,14 +333,14 @@ export const PositionMatrix: React.FC<PositionMatrixProps> = ({ matches }) => {
                   <TableCell className="text-center tabular-nums text-xs text-muted-foreground">
                     {s.bttsPct}%
                   </TableCell>
-                  <TableCell className="text-center tabular-nums text-xs font-medium text-amber-500" title={`Overall modal score: ${s.mostLikelyScore}`}>
+                  <TableCell className="text-center tabular-nums text-xs font-semibold text-draw" title={`Overall modal score: ${s.mostLikelyScore}`}>
                     {s.mostLikelyScore}
                   </TableCell>
                   <TableCell className="text-center tabular-nums text-xs">
                     <div className="flex items-center justify-center gap-1.5 font-medium">
                       {s.topHomeScore ? (
                         <span
-                          className="text-emerald-500"
+                          className="text-win-home font-semibold"
                           title={`Top Home Win Score: ${s.topHomeScore.score} (${s.topHomeScore.pct}%)`}
                         >
                           H: {s.topHomeScore.score}
@@ -350,7 +350,7 @@ export const PositionMatrix: React.FC<PositionMatrixProps> = ({ matches }) => {
                       )}
                       {s.topAwayScore ? (
                         <span
-                          className="text-blue-500"
+                          className="text-win-away font-semibold"
                           title={`Top Away Win Score: ${s.topAwayScore.score} (${s.topAwayScore.pct}%)`}
                         >
                           A: {s.topAwayScore.score}
@@ -367,17 +367,17 @@ export const PositionMatrix: React.FC<PositionMatrixProps> = ({ matches }) => {
                         const isHome = parts[0] > parts[1];
                         const isDraw = parts[0] === parts[1];
                         const textColor = isHome
-                          ? "text-emerald-500"
+                          ? "text-win-home"
                           : isDraw
-                          ? "text-amber-500"
-                          : "text-blue-500";
+                          ? "text-draw"
+                          : "text-win-away";
                         return (
                           <span
                             key={ts.score}
-                            className={`tabular-nums text-xs font-medium ${textColor}`}
+                            className={`tabular-nums text-xs font-semibold ${textColor}`}
                             title={`${ts.score}: ${ts.count} times (${ts.pct}%)`}
                           >
-                            {ts.score} <span className="opacity-75 text-[10px]">({ts.pct}%)</span>
+                            {ts.score} <span className="opacity-75 text-[11px]">({ts.pct}%)</span>
                           </span>
                         );
                       })}

@@ -4,13 +4,33 @@ import { Header, type AppTab, type AppMode, type SeasonsTab } from "./components
 import { FilterBar } from "./components/explorer/FilterBar";
 import { DataTable } from "./components/explorer/DataTable";
 import { MatchDetailSheet } from "./components/explorer/MatchDetailSheet";
-import { JackpotPredictor } from "./components/predictor/JackpotPredictor";
 import { Toaster } from "./components/ui/toast";
-import { PositionMatrix } from "./components/positions/PositionMatrix";
-import { TeamVersusTeam } from "./components/teams/TeamVersusTeam";
-import { GoalAnalysisView } from "./components/goals/GoalAnalysisView";
-import { SeasonsDashboard } from "./components/seasons/SeasonsDashboard";
 import { Button } from "./components/ui/button";
+
+const JackpotPredictor = React.lazy(() =>
+  import("./components/predictor/JackpotPredictor").then((m) => ({ default: m.JackpotPredictor }))
+);
+const PositionMatrix = React.lazy(() =>
+  import("./components/positions/PositionMatrix").then((m) => ({ default: m.PositionMatrix }))
+);
+const TeamVersusTeam = React.lazy(() =>
+  import("./components/teams/TeamVersusTeam").then((m) => ({ default: m.TeamVersusTeam }))
+);
+const GoalAnalysisView = React.lazy(() =>
+  import("./components/goals/GoalAnalysisView").then((m) => ({ default: m.GoalAnalysisView }))
+);
+const SeasonsDashboard = React.lazy(() =>
+  import("./components/seasons/SeasonsDashboard").then((m) => ({ default: m.SeasonsDashboard }))
+);
+
+function ViewLoadingFallback() {
+  return (
+    <div className="flex-1 flex items-center justify-center p-12 text-muted-foreground text-xs font-mono">
+      <Loader2 className="h-4 w-4 animate-spin mr-2 text-primary" />
+      <span>Loading analytical module...</span>
+    </div>
+  );
+}
 
 import type { Match, AppStats, MatchFilters } from "./lib/types";
 import { computeDatasetStats } from "./lib/data";
@@ -127,61 +147,63 @@ export function App() {
       />
 
       {/* Main Content Area */}
-      {appMode === "seasons" ? (
-        <SeasonsDashboard
-          activeTab={seasonsTab}
-          onTabChange={setSeasonsTab}
-          competition={seasonsCompetition}
-          onCompetitionChange={setSeasonsCompetition}
-        />
-      ) : (
-        <>
-          {activeTab === "predictor" && (
-            <JackpotPredictor matches={matches} onSelectTeamForH2H={handleOpenH2H} />
-          )}
-
-          {activeTab === "positions" && (
-            <PositionMatrix matches={matches} />
-          )}
-
-          {activeTab === "teams" && (
-            <TeamVersusTeam
-              matches={matches}
-              initialTeamA={h2hTeamA}
-              initialTeamB={h2hTeamB}
-            />
-          )}
-
-          {activeTab === "goals" && (
-            <GoalAnalysisView matches={matches} />
-          )}
-
-          {activeTab === "explorer" && (
-            <div className="flex-1 flex flex-col min-h-0">
-              <FilterBar
-                filters={filters}
-                onFilterChange={setFilters}
-                onReset={resetFilters}
-                uniqueLeagues={uniqueLeagues}
-              />
-              <DataTable
-                matches={filteredMatches}
-                allMatches={matches}
-                onSelectMatch={setSelectedMatch}
-                onNavigateToH2H={handleOpenH2H}
-                onReset={resetFilters}
-              />
-            </div>
-          )}
-
-          {/* Match Detail Drawer / Sheet */}
-          <MatchDetailSheet
-            match={selectedMatch}
-            onClose={() => setSelectedMatch(null)}
-            onApplyFilter={handleApplyPartialFilter}
+      <React.Suspense fallback={<ViewLoadingFallback />}>
+        {appMode === "seasons" ? (
+          <SeasonsDashboard
+            activeTab={seasonsTab}
+            onTabChange={setSeasonsTab}
+            competition={seasonsCompetition}
+            onCompetitionChange={setSeasonsCompetition}
           />
-        </>
-      )}
+        ) : (
+          <>
+            {activeTab === "predictor" && (
+              <JackpotPredictor matches={matches} onSelectTeamForH2H={handleOpenH2H} />
+            )}
+
+            {activeTab === "positions" && (
+              <PositionMatrix matches={matches} />
+            )}
+
+            {activeTab === "teams" && (
+              <TeamVersusTeam
+                matches={matches}
+                initialTeamA={h2hTeamA}
+                initialTeamB={h2hTeamB}
+              />
+            )}
+
+            {activeTab === "goals" && (
+              <GoalAnalysisView matches={matches} />
+            )}
+
+            {activeTab === "explorer" && (
+              <div className="flex-1 flex flex-col min-h-0">
+                <FilterBar
+                  filters={filters}
+                  onFilterChange={setFilters}
+                  onReset={resetFilters}
+                  uniqueLeagues={uniqueLeagues}
+                />
+                <DataTable
+                  matches={filteredMatches}
+                  allMatches={matches}
+                  onSelectMatch={setSelectedMatch}
+                  onNavigateToH2H={handleOpenH2H}
+                  onReset={resetFilters}
+                />
+              </div>
+            )}
+
+            {/* Match Detail Drawer / Sheet */}
+            <MatchDetailSheet
+              match={selectedMatch}
+              onClose={() => setSelectedMatch(null)}
+              onApplyFilter={handleApplyPartialFilter}
+            />
+          </>
+        )}
+      </React.Suspense>
       </div>
     </Toaster>
   );

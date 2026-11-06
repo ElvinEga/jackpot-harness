@@ -22,7 +22,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Eye, Search } from "lucide-react";
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useRef } from "react";
+import { useVirtualizer } from "@tanstack/react-virtual";
 import type { SeasonMatch } from "../../lib/seasonTypes";
 import { isDecidedSeasonMatch } from "../../lib/seasonTypes";
 import { canonicalTeam } from "../../lib/teamRegistry";
@@ -40,6 +41,7 @@ export const SeasonFixturesTable: React.FC<SeasonFixturesTableProps> = ({
   const [resultFilter, setResultFilter] = useState<string>("all");
   const [goalsFilter, setGoalsFilter] = useState<string>("all");
   const [selectedMatch, setSelectedMatch] = useState<SeasonMatch | null>(null);
+  const parentRef = useRef<HTMLDivElement>(null);
 
   const filteredMatches = useMemo(() => {
     const q = searchTerm.trim().toLowerCase();
@@ -72,10 +74,24 @@ export const SeasonFixturesTable: React.FC<SeasonFixturesTableProps> = ({
     });
   }, [matches, searchTerm, resultFilter, goalsFilter]);
 
+  const rowVirtualizer = useVirtualizer({
+    count: filteredMatches.length,
+    getScrollElement: () => parentRef.current,
+    estimateSize: () => 44,
+    overscan: 10,
+  });
+
+  const virtualItems = rowVirtualizer.getVirtualItems();
+  const paddingTop = virtualItems.length > 0 ? virtualItems[0]?.start ?? 0 : 0;
+  const paddingBottom =
+    virtualItems.length > 0
+      ? rowVirtualizer.getTotalSize() - (virtualItems[virtualItems.length - 1]?.end ?? 0)
+      : 0;
+
   return (
     <div className="space-y-4">
       {/* Search & Filter Toolbar */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 p-3.5 bg-card border border-border rounded-xl">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 p-3.5 bg-card border border-border rounded-md">
         <div className="relative flex-1 max-w-sm">
           <Search className="h-4 w-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
           <Input
@@ -124,8 +140,8 @@ export const SeasonFixturesTable: React.FC<SeasonFixturesTableProps> = ({
       </div>
 
       {/* Match Table */}
-      <div className="bg-card border border-border rounded-xl shadow-xs overflow-hidden">
-        <div className="overflow-x-auto max-h-[600px] overflow-y-auto">
+      <div className="bg-card border border-border rounded-md shadow-xs overflow-hidden">
+        <div ref={parentRef} className="overflow-x-auto max-h-[600px] overflow-y-auto">
           <Table>
             <TableHeader className="sticky top-0 bg-muted/95 backdrop-blur z-10">
               <TableRow className="border-b border-border text-muted-foreground font-medium">
@@ -147,13 +163,21 @@ export const SeasonFixturesTable: React.FC<SeasonFixturesTableProps> = ({
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredMatches.map((m, idx) => {
+              {paddingTop > 0 && (
+                <TableRow style={{ height: `${paddingTop}px` }}>
+                  <TableCell colSpan={11} className="p-0 border-0" />
+                </TableRow>
+              )}
+              {virtualItems.map((virtualRow) => {
+                const m = filteredMatches[virtualRow.index];
+                if (!m) return null;
+
                 const scoreColor =
                   m.result === "home"
-                    ? "text-emerald-500"
+                    ? "text-win-home font-semibold"
                     : m.result === "draw"
-                      ? "text-amber-500"
-                      : "text-blue-500";
+                      ? "text-draw font-semibold"
+                      : "text-win-away font-semibold";
 
                 const hs = m.stats.home_shots ?? "-";
                 const as = m.stats.away_shots ?? "-";
@@ -175,7 +199,9 @@ export const SeasonFixturesTable: React.FC<SeasonFixturesTableProps> = ({
 
                 return (
                   <TableRow
-                    key={idx}
+                    key={`${m.date}_${m.home_team}_${m.away_team}`}
+                    data-index={virtualRow.index}
+                    ref={rowVirtualizer.measureElement}
                     className="hover:bg-muted/40 transition-colors cursor-pointer"
                     onClick={() => setSelectedMatch(m)}
                   >
@@ -236,7 +262,7 @@ export const SeasonFixturesTable: React.FC<SeasonFixturesTableProps> = ({
                           e.stopPropagation();
                           setSelectedMatch(m);
                         }}
-                        className="text-xs h-6 px-1.5 text-muted-foreground hover:text-foreground"
+                        className="text-xs h-7 px-2 text-muted-foreground hover:text-foreground"
                       >
                         <Eye className="h-3 w-3 mr-1" />
                         Stats
@@ -245,6 +271,11 @@ export const SeasonFixturesTable: React.FC<SeasonFixturesTableProps> = ({
                   </TableRow>
                 );
               })}
+              {paddingBottom > 0 && (
+                <TableRow style={{ height: `${paddingBottom}px` }}>
+                  <TableCell colSpan={11} className="p-0 border-0" />
+                </TableRow>
+              )}
             </TableBody>
           </Table>
         </div>

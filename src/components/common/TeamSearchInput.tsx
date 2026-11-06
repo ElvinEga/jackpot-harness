@@ -158,6 +158,11 @@ export const TeamSearchInput: React.FC<TeamSearchInputProps> = ({
           value={value}
           disabled={disabled}
           placeholder={placeholder}
+          role="combobox"
+          aria-autocomplete="list"
+          aria-expanded={isOpen}
+          aria-controls="team-suggestions-listbox"
+          aria-activedescendant={highlightIndex >= 0 ? `team-opt-${highlightIndex}` : undefined}
           onFocus={() => setIsOpen(true)}
           onClick={() => setIsOpen(true)}
           onChange={(e) => {
@@ -172,6 +177,7 @@ export const TeamSearchInput: React.FC<TeamSearchInputProps> = ({
           {value ? (
             <button
               type="button"
+              aria-label="Clear team selection"
               onClick={() => {
                 onChange("");
                 inputRef.current?.focus();
@@ -191,7 +197,10 @@ export const TeamSearchInput: React.FC<TeamSearchInputProps> = ({
       {isOpen && (
         <div
           ref={listRef}
-          className="absolute left-0 top-full z-50 mt-1 max-h-60 w-full min-w-[240px] max-w-[min(360px,calc(100vw-2rem))] overflow-y-auto rounded-xl bg-card border border-border shadow-2xl p-1 text-xs outline-none animate-in fade-in-0 zoom-in-95"
+          id="team-suggestions-listbox"
+          role="listbox"
+          aria-label="Suggested teams"
+          className="absolute left-0 top-full z-50 mt-1 max-h-60 w-full min-w-[240px] max-w-[min(360px,calc(100vw-2rem))] overflow-y-auto rounded-md bg-card border border-border shadow-2xl p-1 text-xs outline-none animate-in fade-in-0 zoom-in-95"
         >
           {suggestions.length > 0 ? (
             <>
@@ -207,9 +216,12 @@ export const TeamSearchInput: React.FC<TeamSearchInputProps> = ({
                 return (
                   <div
                     key={team}
+                    id={`team-opt-${idx}`}
+                    role="option"
+                    aria-selected={isSelected}
                     onMouseEnter={() => setHighlightIndex(idx)}
                     onClick={() => handleSelectTeam(team)}
-                    className={`flex items-center justify-between gap-2 px-2.5 py-1.5 rounded-lg cursor-pointer transition-colors ${
+                    className={`flex items-center justify-between gap-2 px-2.5 py-1.5 rounded-sm cursor-pointer transition-colors ${
                       isHighlighted
                         ? "bg-accent text-accent-foreground font-semibold"
                         : isSelected

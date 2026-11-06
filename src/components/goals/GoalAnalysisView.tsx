@@ -3,10 +3,6 @@ import {
   Goal,
   Calendar,
   CalendarDays,
-  Target,
-  BarChart3,
-  TrendingUp,
-  Percent,
 } from "lucide-react";
 import {
   BarChart,
@@ -21,7 +17,6 @@ import {
   Legend,
 } from "recharts";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 
 import type { Match, MonthGoalStat, DayGoalStat } from "../../lib/types";
 import { computeMonthlyGoalStats, computeDailyGoalStats, computeScoreDistribution } from "../../lib/goals";
@@ -91,70 +86,39 @@ export const GoalAnalysisView: React.FC<GoalAnalysisViewProps> = ({ matches }) =
         </div>
       </div>
 
-      {/* Summary KPI Cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-        <Card size="sm" className="bg-card border-border shadow-xs">
-          <CardHeader className="pb-1">
-            <CardDescription className="text-xs flex items-center gap-1">
-              <Goal className="h-3 w-3 text-primary" />
-              Overall Avg Goals
-            </CardDescription>
-            <CardTitle className="text-xl font-bold font-mono text-primary">
-              {overall.avgGoals}
-            </CardTitle>
-          </CardHeader>
-        </Card>
-
-        <Card size="sm" className="bg-card border-border shadow-xs">
-          <CardHeader className="pb-1">
-            <CardDescription className="text-xs flex items-center gap-1">
-              <Target className="h-3 w-3 text-primary" />
-              Avg Home Goals
-            </CardDescription>
-            <CardTitle className="text-xl font-bold font-mono text-primary">
-              {overall.avgHomeGoals}
-            </CardTitle>
-          </CardHeader>
-        </Card>
-
-        <Card size="sm" className="bg-card border-border shadow-xs">
-          <CardHeader className="pb-1">
-            <CardDescription className="text-xs flex items-center gap-1">
-              <Target className="h-3 w-3 text-muted-foreground" />
-              Avg Away Goals
-            </CardDescription>
-            <CardTitle className="text-xl font-bold font-mono text-foreground">
-              {overall.avgAwayGoals}
-            </CardTitle>
-          </CardHeader>
-        </Card>
-
-        <Card size="sm" className="bg-card border-border shadow-xs">
-          <CardHeader className="pb-1">
-            <CardDescription className="text-xs">Over 1.5 Goals %</CardDescription>
-            <CardTitle className="text-xl font-bold font-mono text-foreground">
-              {overall.over15Pct}%
-            </CardTitle>
-          </CardHeader>
-        </Card>
-
-        <Card size="sm" className="bg-card border-border shadow-xs">
-          <CardHeader className="pb-1">
-            <CardDescription className="text-xs">Over 2.5 Goals %</CardDescription>
-            <CardTitle className="text-xl font-bold font-mono text-foreground">
-              {overall.over25Pct}%
-            </CardTitle>
-          </CardHeader>
-        </Card>
-
-        <Card size="sm" className="bg-card border-border shadow-xs">
-          <CardHeader className="pb-1">
-            <CardDescription className="text-xs">Both Teams to Score (BTTS)</CardDescription>
-            <CardTitle className="text-xl font-bold font-mono text-foreground">
-              {overall.bttsPct}%
-            </CardTitle>
-          </CardHeader>
-        </Card>
+      {/* Summary Metrics Bar — High density quantitative summary */}
+      <div className="flex flex-wrap items-center justify-between gap-3 px-3.5 py-2.5 bg-card border border-border rounded-md text-xs shadow-xs">
+        <div className="flex items-center gap-2">
+          <Goal className="h-4 w-4 text-foreground" />
+          <span className="font-semibold text-foreground">Goal Frequency Distribution</span>
+          <span className="text-muted-foreground font-mono text-xs">· Full dataset</span>
+        </div>
+        <div className="flex flex-wrap items-center gap-4 font-mono text-xs">
+          <div>
+            <span className="text-muted-foreground font-sans mr-1">Overall Avg:</span>
+            <span className="font-bold text-foreground">{overall.avgGoals}</span>
+          </div>
+          <div className="border-l border-border pl-3">
+            <span className="text-muted-foreground font-sans mr-1">Home:</span>
+            <span className="font-bold text-foreground">{overall.avgHomeGoals}</span>
+          </div>
+          <div>
+            <span className="text-muted-foreground font-sans mr-1">Away:</span>
+            <span className="font-bold text-foreground">{overall.avgAwayGoals}</span>
+          </div>
+          <div className="border-l border-border pl-3">
+            <span className="text-muted-foreground font-sans mr-1">Over 1.5:</span>
+            <span className="font-bold text-foreground">{overall.over15Pct}%</span>
+          </div>
+          <div>
+            <span className="text-muted-foreground font-sans mr-1">Over 2.5:</span>
+            <span className="font-bold text-foreground">{overall.over25Pct}%</span>
+          </div>
+          <div className="border-l border-border pl-3">
+            <span className="text-muted-foreground font-sans mr-1">BTTS:</span>
+            <span className="font-bold text-foreground">{overall.bttsPct}%</span>
+          </div>
+        </div>
       </div>
 
       {/* Grid: Goals by Month & Goals by Day of Week */}

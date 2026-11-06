@@ -113,7 +113,9 @@ export const SearchableSelect: React.FC<SearchableSelectProps> = ({
           <button
             type="button"
             disabled={disabled}
+            role="combobox"
             aria-expanded={open}
+            aria-haspopup="listbox"
             className={cn(
               "flex items-center justify-between border border-border bg-card text-foreground font-medium transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 select-none cursor-pointer",
               size === "sm"
@@ -162,7 +164,7 @@ export const SearchableSelect: React.FC<SearchableSelectProps> = ({
         align={align}
         sideOffset={4}
         className={cn(
-          "p-1 gap-1 rounded-xl border border-border bg-popover text-popover-foreground shadow-lg min-w-[200px] w-auto max-w-sm z-50",
+          "p-1 gap-1 rounded-md border border-border bg-popover text-popover-foreground shadow-lg min-w-[200px] w-auto max-w-sm z-50",
           popoverWidth,
           contentClassName
         )}
@@ -191,7 +193,11 @@ export const SearchableSelect: React.FC<SearchableSelectProps> = ({
         </div>
 
         {/* Scrollable Items List */}
-        <div className="max-h-60 overflow-y-auto p-0.5 space-y-0.5 overscroll-contain">
+        <div
+          role="listbox"
+          aria-label={placeholder || "Options"}
+          className="max-h-60 overflow-y-auto p-0.5 space-y-0.5 overscroll-contain"
+        >
           {filteredOptions.length === 0 ? (
             <div className="py-4 text-center text-xs text-muted-foreground">
               {emptyMessage}
@@ -203,13 +209,15 @@ export const SearchableSelect: React.FC<SearchableSelectProps> = ({
                 <button
                   key={opt.value}
                   type="button"
+                  role="option"
+                  aria-selected={isSelected}
                   disabled={opt.disabled}
                   onClick={() => {
                     onValueChange(opt.value);
                     setOpen(false);
                   }}
                   className={cn(
-                    "flex w-full items-center justify-between px-2 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer select-none text-left",
+                    "flex w-full items-center justify-between px-2 py-1.5 rounded-sm text-xs font-medium transition-colors cursor-pointer select-none text-left",
                     isSelected
                       ? "bg-primary/10 text-primary font-semibold"
                       : "hover:bg-muted text-foreground",
@@ -222,7 +230,7 @@ export const SearchableSelect: React.FC<SearchableSelectProps> = ({
                     )}
                     <span className="truncate">{opt.label}</span>
                     {opt.sublabel && (
-                      <span className="text-[10px] text-muted-foreground shrink-0 font-normal">
+                      <span className="text-[11px] text-muted-foreground shrink-0 font-normal">
                         ({opt.sublabel})
                       </span>
                     )}

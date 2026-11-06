@@ -2,12 +2,6 @@ import { TeamLogo } from "@/components/TeamLogo";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
   Table,
   TableBody,
   TableCell,
@@ -15,7 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ChevronRight, Flame, Goal, Trophy } from "lucide-react";
+import { ChevronRight, Trophy } from "lucide-react";
 import React, { useMemo, useState } from "react";
 import type { LeagueStandingRow, SeasonMatch } from "../../lib/seasonTypes";
 import {
@@ -77,111 +71,52 @@ export const SeasonOverview: React.FC<SeasonOverviewProps> = ({
 
   return (
     <div className="space-y-6">
-      {/* Overview Stat Cards Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-        <Card size="sm" className="bg-card border-border shadow-xs">
-          <CardHeader className="pb-1">
-            <CardDescription className="text-[11px] flex items-center gap-1">
-              <Trophy className="h-3 w-3 text-primary" />
-              Matches Played
-            </CardDescription>
-            <CardTitle className="text-xl font-bold font-mono text-foreground">
-              {overview.totalMatches.toLocaleString()}
-            </CardTitle>
-          </CardHeader>
-        </Card>
-
-        <Card size="sm" className="bg-card border-border shadow-xs">
-          <CardHeader className="pb-1">
-            <CardDescription className="text-[11px] flex items-center gap-1">
-              <Goal className="h-3 w-3 text-primary" />
-              Goals / Match
-            </CardDescription>
-            <CardTitle className="text-xl font-bold font-mono text-primary">
-              {overview.goalsPerMatch}
-              <span className="text-[11px] text-muted-foreground font-normal ml-1">
-                ({overview.totalGoals})
-              </span>
-            </CardTitle>
-          </CardHeader>
-        </Card>
-
-        <Card size="sm" className="bg-card border-border shadow-xs">
-          <CardHeader className="pb-1">
-            <CardDescription className="text-[11px] flex items-center gap-1">
-              <span className="h-2 w-2 rounded-full bg-emerald-500 inline-block" />
-              Home Wins
-            </CardDescription>
-            <CardTitle className="text-xl font-bold font-mono text-emerald-500">
-              {overview.homeWinPct}%
-            </CardTitle>
-          </CardHeader>
-        </Card>
-
-        <Card size="sm" className="bg-card border-border shadow-xs">
-          <CardHeader className="pb-1">
-            <CardDescription className="text-[11px] flex items-center gap-1">
-              <span className="h-2 w-2 rounded-full bg-amber-500 inline-block" />
-              Draws
-            </CardDescription>
-            <CardTitle className="text-xl font-bold font-mono text-amber-500">
-              {overview.drawPct}%
-            </CardTitle>
-          </CardHeader>
-        </Card>
-
-        <Card size="sm" className="bg-card border-border shadow-xs">
-          <CardHeader className="pb-1">
-            <CardDescription className="text-[11px] flex items-center gap-1">
-              <span className="h-2 w-2 rounded-full bg-blue-500 inline-block" />
-              Away Wins
-            </CardDescription>
-            <CardTitle className="text-xl font-bold font-mono text-blue-500">
-              {overview.awayWinPct}%
-            </CardTitle>
-          </CardHeader>
-        </Card>
-
-        <Card size="sm" className="bg-card border-border shadow-xs">
-          <CardHeader className="pb-1">
-            <CardDescription className="text-[11px] flex items-center gap-1">
-              <Flame className="h-3 w-3 text-orange-500" />
-              Over 2.5 Goals
-            </CardDescription>
-            <CardTitle className="text-xl font-bold font-mono text-orange-500">
-              {overview.over25Pct}%
-            </CardTitle>
-          </CardHeader>
-        </Card>
-      </div>
-
-      {/* Secondary Metrics Bar */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-muted/30 border border-border rounded-xl p-3 text-xs">
-        <div className="flex items-center justify-between p-2 rounded-lg bg-card border border-border">
-          <span className="text-muted-foreground">
-            Both Teams To Score (BTTS):
-          </span>
-          <span className="font-mono font-bold text-foreground">
-            {overview.bttsPct}%
-          </span>
+      {/* Statistical Overview Ribbon — High-density quantitative summary */}
+      <div className="bg-card border border-border rounded-md p-3.5 shadow-xs space-y-3">
+        <div className="flex flex-wrap items-center justify-between gap-3 text-xs border-b border-border pb-3">
+          <div className="flex items-center gap-2">
+            <Trophy className="h-4 w-4 text-foreground" />
+            <span className="font-semibold text-foreground">{resolvedLeagueName} ({seasonName})</span>
+            <span className="text-muted-foreground font-mono">· {overview.totalMatches.toLocaleString()} matches</span>
+          </div>
+          <div className="flex items-center gap-4 text-xs font-mono">
+            <div>
+              <span className="text-muted-foreground font-sans mr-1">Goals/m:</span>
+              <span className="font-bold text-foreground">{overview.goalsPerMatch}</span>
+              <span className="text-[11px] text-muted-foreground font-normal ml-1">({overview.totalGoals})</span>
+            </div>
+            <div>
+              <span className="text-muted-foreground font-sans mr-1">Over 2.5:</span>
+              <span className="font-bold text-foreground">{overview.over25Pct}%</span>
+            </div>
+            <div>
+              <span className="text-muted-foreground font-sans mr-1">BTTS:</span>
+              <span className="font-bold text-foreground">{overview.bttsPct}%</span>
+            </div>
+          </div>
         </div>
-        <div className="flex items-center justify-between p-2 rounded-lg bg-card border border-border">
-          <span className="text-muted-foreground">Clean Sheets Rate:</span>
-          <span className="font-mono font-bold text-foreground">
-            {overview.cleanSheetPct}%
-          </span>
-        </div>
-        <div className="flex items-center justify-between p-2 rounded-lg bg-card border border-border">
-          <span className="text-muted-foreground">Avg Shots / Match:</span>
-          <span className="font-mono font-bold text-foreground">
-            {overview.avgShots}
-          </span>
-        </div>
-        <div className="flex items-center justify-between p-2 rounded-lg bg-card border border-border">
-          <span className="text-muted-foreground">Avg Corners / Match:</span>
-          <span className="font-mono font-bold text-foreground">
-            {overview.avgCorners}
-          </span>
+
+        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 text-xs">
+          <div className="flex items-center justify-between px-2.5 py-1.5 rounded-sm bg-muted/40 border border-border">
+            <span className="text-muted-foreground">Home Wins:</span>
+            <span className="font-mono font-bold text-foreground">{overview.homeWinPct}%</span>
+          </div>
+          <div className="flex items-center justify-between px-2.5 py-1.5 rounded-sm bg-muted/40 border border-border">
+            <span className="text-muted-foreground">Draws:</span>
+            <span className="font-mono font-bold text-foreground">{overview.drawPct}%</span>
+          </div>
+          <div className="flex items-center justify-between px-2.5 py-1.5 rounded-sm bg-muted/40 border border-border">
+            <span className="text-muted-foreground">Away Wins:</span>
+            <span className="font-mono font-bold text-foreground">{overview.awayWinPct}%</span>
+          </div>
+          <div className="flex items-center justify-between px-2.5 py-1.5 rounded-sm bg-muted/40 border border-border">
+            <span className="text-muted-foreground">Clean Sheets:</span>
+            <span className="font-mono font-bold text-foreground">{overview.cleanSheetPct}%</span>
+          </div>
+          <div className="flex items-center justify-between px-2.5 py-1.5 rounded-sm bg-muted/40 border border-border">
+            <span className="text-muted-foreground">Avg Shots:</span>
+            <span className="font-mono font-bold text-foreground">{overview.avgShots}</span>
+          </div>
         </div>
       </div>
 

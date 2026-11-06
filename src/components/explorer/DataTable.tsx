@@ -51,8 +51,8 @@ import {
   Inbox,
   Layers,
   MoreHorizontal,
-  Sparkles,
   Swords,
+  Target,
   X,
 } from "lucide-react";
 import React, { useMemo, useState } from "react";
@@ -165,13 +165,13 @@ export const DataTable: React.FC<DataTableProps> = ({
           const val = info.getValue() as Match["bookmaker"];
           if (val === "betika")
             return (
-              <span className="text-xs text-emerald-500 font-medium">
+              <span className="text-xs text-win-home font-medium">
                 Betika
               </span>
             );
           if (val === "mozzart")
             return (
-              <span className="text-xs text-amber-500 font-medium">
+              <span className="text-xs text-draw font-medium">
                 Mozzart
               </span>
             );
@@ -348,7 +348,7 @@ export const DataTable: React.FC<DataTableProps> = ({
                     onClick={() => handleOpenAction("likelihood", [match])}
                     className="cursor-pointer gap-2 text-xs"
                   >
-                    <Sparkles className="h-3.5 w-3.5" />
+                    <Target className="h-3.5 w-3.5 text-muted-foreground" />
                     <span>Team Likelihood & Prediction</span>
                   </DropdownMenuItem>
 
@@ -608,7 +608,7 @@ export const DataTable: React.FC<DataTableProps> = ({
               onClick={() => handleOpenAction("likelihood", selectedMatches)}
               className="text-xs h-7 gap-1"
             >
-              <Sparkles className="h-3.5 w-3.5" />
+              <Target className="h-3.5 w-3.5" />
               <span>Team Likelihood</span>
             </Button>
 

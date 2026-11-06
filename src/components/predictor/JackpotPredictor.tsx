@@ -11,12 +11,6 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -55,9 +49,8 @@ import {
   Loader2,
   RotateCcw,
   SlidersHorizontal,
-  Target,
   Trophy,
-  Zap,
+  Radio,
 } from "lucide-react";
 import React, { useMemo, useState } from "react";
 
@@ -601,7 +594,7 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({
             onClick={() => setApiSheetOpen(true)}
             className="text-xs gap-1.5 h-8"
           >
-            <Zap className="h-3.5 w-3.5 text-muted-foreground" />
+            <Radio className="h-3.5 w-3.5 text-muted-foreground" />
             <span>API Prefill</span>
           </Button>
 
@@ -657,10 +650,10 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({
           </SheetHeader>
           <div className="p-4 space-y-4">
             {/* SportPesa Live API Prefill Toolbar */}
-            <div className="rounded-xl border border-primary/30 bg-primary/5 p-3.5 flex flex-col  items-stretch sm:items-center justify-between gap-3 shadow-xs">
+            <div className="rounded-md border border-border bg-card p-3 flex flex-col items-stretch sm:items-center justify-between gap-3 shadow-xs">
               <div className="flex items-center gap-3">
-                <div className="h-9 w-9 rounded-xl bg-primary/15 border border-primary/30 flex items-center justify-center text-primary shrink-0">
-                  <Zap className="h-5 w-5 fill-current" />
+                <div className="h-8 w-8 rounded-md bg-muted border border-border flex items-center justify-center text-foreground shrink-0">
+                  <Radio className="h-4 w-4" />
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
@@ -670,14 +663,14 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({
                     {activeSportPesaMeta ? (
                       <Badge
                         variant="outline"
-                        className="text-xs px-1.5 py-0 text-primary border-primary/30 font-mono"
+                        className="text-xs px-1.5 py-0 text-foreground border-border font-mono"
                       >
                         #{activeSportPesaMeta.humanId} Active
                       </Badge>
                     ) : (
                       <Badge
                         variant="outline"
-                        className="text-xs px-1.5 py-0 text-muted-foreground border-primary/30 font-mono"
+                        className="text-xs px-1.5 py-0 text-muted-foreground border-border font-mono"
                       >
                         17 Matches
                       </Badge>
@@ -697,7 +690,7 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({
                   size="sm"
                   onClick={handleQuickPrefillSportPesa}
                   disabled={isFetchingSportPesa}
-                  className="h-8 text-xs font-semibold gap-1.5 border-primary/40 bg-primary/10 text-primary hover:bg-primary/20 hover:text-primary shadow-xs"
+                  className="h-8 text-xs font-semibold gap-1.5 border-border bg-background hover:bg-muted text-foreground shadow-xs"
                 >
                   {isFetchingSportPesa ? (
                     <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -728,10 +721,10 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({
             </div>
 
             {/* Mozzart Live API Prefill Toolbar */}
-            <div className="rounded-xl border border-primary/30 bg-primary/5 p-3.5 flex flex-col  items-stretch sm:items-center justify-between gap-3 shadow-xs">
+            <div className="rounded-md border border-border bg-card p-3 flex flex-col items-stretch sm:items-center justify-between gap-3 shadow-xs">
               <div className="flex items-center gap-3">
-                <div className="h-9 w-9 rounded-xl bg-primary/15 border border-primary/30 flex items-center justify-center text-primary shrink-0">
-                  <Zap className="h-5 w-5 fill-current" />
+                <div className="h-8 w-8 rounded-md bg-muted border border-border flex items-center justify-center text-foreground shrink-0">
+                  <Radio className="h-4 w-4" />
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
@@ -741,14 +734,14 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({
                     {activeMozzartMeta ? (
                       <Badge
                         variant="outline"
-                        className="text-xs px-1.5 py-0 text-primary border-primary/30 font-mono"
+                        className="text-xs px-1.5 py-0 text-foreground border-border font-mono"
                       >
                         Round #{activeMozzartMeta.roundId} Active
                       </Badge>
                     ) : (
                       <Badge
                         variant="outline"
-                        className="text-xs px-1.5 py-0 text-primary border-primary/30 font-mono"
+                        className="text-xs px-1.5 py-0 text-muted-foreground border-border font-mono"
                       >
                         16 Matches
                       </Badge>
@@ -768,7 +761,7 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({
                   size="sm"
                   onClick={handleQuickPrefillMozzart}
                   disabled={isFetchingMozzart}
-                  className="h-8 text-xs font-semibold gap-1.5 border-primary/40 bg-primary/10 text-primary hover:bg-primary/20 shadow-xs"
+                  className="h-8 text-xs font-semibold gap-1.5 border-border bg-background hover:bg-muted text-foreground shadow-xs"
                 >
                   {isFetchingMozzart ? (
                     <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -916,71 +909,36 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({
         </div>
       </div>
 
-      {/* Overview Stat Cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-        <Card size="sm" className="bg-card border-border shadow-xs">
-          <CardHeader className="pb-1">
-            <CardDescription className="text-xs flex items-center gap-1">
-              <History className="h-3 w-3 text-muted-foreground" />
-              Analyzed Matches
-            </CardDescription>
-            <CardTitle className="text-xl font-bold font-mono text-foreground">
-              {overview.totalAnalyzed.toLocaleString()}
-            </CardTitle>
-          </CardHeader>
-        </Card>
-
-        <Card size="sm" className="bg-card border-border shadow-xs">
-          <CardHeader className="pb-1">
-            <CardDescription className="text-xs flex items-center gap-1">
-              <span className="h-2 w-2 rounded-full bg-primary inline-block" />
-              Home Win %
-            </CardDescription>
-            <CardTitle className="text-xl font-bold font-mono text-primary">
-              {overview.homeWinPct}%
-            </CardTitle>
-          </CardHeader>
-        </Card>
-
-        <Card size="sm" className="bg-card border-border shadow-xs">
-          <CardHeader className="pb-1">
-            <CardDescription className="text-xs flex items-center gap-1">
-              <span className="h-2 w-2 rounded-full bg-slate-300 inline-block" />
-              Draw %
-            </CardDescription>
-            <CardTitle className="text-xl font-bold font-mono text-foreground">
-              {overview.drawPct}%
-            </CardTitle>
-          </CardHeader>
-        </Card>
-
-        <Card size="sm" className="bg-card border-border shadow-xs">
-          <CardHeader className="pb-1">
-            <CardDescription className="text-xs flex items-center gap-1">
-              <span className="h-2 w-2 rounded-full bg-slate-500 inline-block" />
-              Away Win %
-            </CardDescription>
-            <CardTitle className="text-xl font-bold font-mono text-foreground">
-              {overview.awayWinPct}%
-            </CardTitle>
-          </CardHeader>
-        </Card>
-
-        <Card size="sm" className="bg-card border-border shadow-xs">
-          <CardHeader className="pb-1">
-            <CardDescription className="text-xs flex items-center gap-1">
-              <Target className="h-3 w-3 text-primary" />
-              Avg Goals / Match
-            </CardDescription>
-            <CardTitle className="text-xl font-bold font-mono text-primary">
-              {overview.avgGoals}
-            </CardTitle>
-          </CardHeader>
-        </Card>
+      {/* Overview Metrics Bar — High density quantitative summary */}
+      <div className="flex flex-wrap items-center justify-between gap-3 px-3.5 py-2 bg-card border border-border rounded-md text-xs shadow-xs">
+        <div className="flex items-center gap-2 text-muted-foreground">
+          <History className="h-3.5 w-3.5 text-muted-foreground" />
+          <span className="text-foreground font-medium">Baseline Sample:</span>
+          <span className="font-mono font-bold text-foreground">{overview.totalAnalyzed.toLocaleString()}</span>
+          <span>historical jackpot matches</span>
+        </div>
+        <div className="flex items-center gap-4 text-xs">
+          <div className="flex items-center gap-1.5 font-mono">
+            <span className="text-muted-foreground font-sans">Home:</span>
+            <span className="font-bold text-foreground">{overview.homeWinPct}%</span>
+          </div>
+          <div className="flex items-center gap-1.5 font-mono">
+            <span className="text-muted-foreground font-sans">Draw:</span>
+            <span className="font-bold text-foreground">{overview.drawPct}%</span>
+          </div>
+          <div className="flex items-center gap-1.5 font-mono">
+            <span className="text-muted-foreground font-sans">Away:</span>
+            <span className="font-bold text-foreground">{overview.awayWinPct}%</span>
+          </div>
+          <div className="flex items-center gap-1.5 font-mono border-l border-border pl-3">
+            <span className="text-muted-foreground font-sans">Avg Goals:</span>
+            <span className="font-bold text-foreground">{overview.avgGoals}</span>
+          </div>
+        </div>
       </div>
 
       {/* Main 1–17 Table Section */}
-      <div className="bg-card border border-border rounded-xl shadow-xs overflow-hidden">
+      <div className="bg-card border border-border rounded-md shadow-xs overflow-hidden">
         <div className="px-4 py-3 border-b border-border bg-muted/30 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Trophy className="h-4 w-4 text-primary" />
@@ -1261,10 +1219,10 @@ export const JackpotPredictor: React.FC<JackpotPredictorProps> = ({
 
               {/* SportPesa Live Market Odds Card if present */}
               {detailMatch.bookmakerOdds && (
-                <div className="p-3 rounded-xl bg-primary/5 border border-primary/20">
+                <div className="p-3 rounded-md bg-card border border-border">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-semibold text-primary flex items-center gap-1.5">
-                      <Zap className="h-3.5 w-3.5" />
+                    <span className="text-xs font-semibold text-foreground flex items-center gap-1.5">
+                      <Radio className="h-3.5 w-3.5 text-muted-foreground" />
                       SportPesa Live 1X2 Market Odds
                     </span>
                     {detailMatch.tournament && (
