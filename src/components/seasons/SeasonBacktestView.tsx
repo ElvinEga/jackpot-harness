@@ -4,14 +4,8 @@ import {
   Play,
   CheckCircle2,
   XCircle,
-  TrendingUp,
-  Percent,
-  Award,
   Loader2,
-  AlertCircle,
-  HelpCircle,
 } from "lucide-react";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
@@ -80,41 +74,20 @@ export const SeasonBacktestView: React.FC<SeasonBacktestViewProps> = ({ allMatch
 
   return (
     <div className="space-y-6">
-      {/* Simulation Configuration Card */}
-      <div className="p-4 rounded-xl bg-card border border-border space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-border">
-          <div className="flex items-center gap-2">
-            <FlaskConical className="h-5 w-5 text-primary" />
-            <div>
-              <h3 className="text-sm font-bold text-foreground">
-                Backtest Simulator
-              </h3>
-              <p className="text-[11px] text-muted-foreground">
-                Train the model on past seasons, then test its predictions on an unseen season
-              </p>
+      {/* Distilled Backtest Command & Results Panel */}
+      <div className="rounded-xl bg-card border border-border shadow-xs overflow-hidden">
+        {/* Top Control Bar: Config & Simulation Action */}
+        <div className="px-4 py-3 border-b border-border bg-card flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4 flex-1">
+            {/* Title / Icon */}
+            <div className="flex items-center gap-2 shrink-0">
+              <FlaskConical className="h-4 w-4 text-primary" />
+              <span className="text-sm font-bold text-foreground">Backtest</span>
             </div>
-          </div>
 
-          <Button
-            variant="default"
-            size="sm"
-            onClick={handleRunBacktest}
-            disabled={isRunning || selectedTrain.length === 0 || !selectedTest}
-            className="h-8 text-xs font-semibold gap-1.5"
-          >
-            {isRunning ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Play className="h-3.5 w-3.5" />}
-            <span>{isRunning ? "Simulating..." : "Run Backtest Simulation"}</span>
-          </Button>
-        </div>
-
-        {/* Configuration Row */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-          {/* Training Seasons Checkboxes */}
-          <div>
-            <label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider block mb-2">
-              1. Training Seasons (Historical Baseline):
-            </label>
-            <div className="flex items-center gap-2 flex-wrap">
+            {/* Training Seasons Selector */}
+            <div className="flex items-center gap-1.5 flex-wrap">
+              <span className="text-[11px] text-muted-foreground font-medium shrink-0">Train on:</span>
               {availableSeasons.map((s) => {
                 const isSelected = selectedTrain.includes(s);
                 const isCurrentTest = selectedTest === s;
@@ -124,112 +97,102 @@ export const SeasonBacktestView: React.FC<SeasonBacktestViewProps> = ({ allMatch
                     type="button"
                     disabled={isCurrentTest}
                     onClick={() => handleToggleTrainSeason(s)}
-                    className={`px-2.5 py-1 rounded-md font-mono text-xs border transition-colors ${
+                    className={`px-2 py-0.5 rounded text-[11px] border transition-colors ${
                       isSelected
                         ? "bg-primary/15 text-primary border-primary/40 font-bold"
-                        : "bg-muted text-muted-foreground border-border hover:text-foreground"
-                    } ${isCurrentTest ? "opacity-40 cursor-not-allowed" : ""}`}
+                        : "bg-muted/50 text-muted-foreground border-border hover:text-foreground"
+                    } ${isCurrentTest ? "opacity-35 cursor-not-allowed" : ""}`}
                   >
                     {s}
                   </button>
                 );
               })}
             </div>
+
+            {/* Test Target Season */}
+            <div className="flex items-center gap-1.5 shrink-0">
+              <span className="text-[11px] text-muted-foreground font-medium shrink-0">Test Target:</span>
+              <NativeSelect
+                value={selectedTest}
+                onChange={(e) => {
+                  const newTest = e.target.value;
+                  setSelectedTest(newTest);
+                  setSelectedTrain((prev) => prev.filter((s) => s !== newTest));
+                }}
+                className="text-xs font-semibold h-7.5 w-36"
+              >
+                {availableSeasons.map((s) => (
+                  <NativeSelectOption key={s} value={s}>
+                    {s}
+                  </NativeSelectOption>
+                ))}
+              </NativeSelect>
+            </div>
           </div>
 
-          {/* Test Season Dropdown */}
-          <div>
-            <label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider block mb-2">
-              2. Test Season (Unseen Target):
-            </label>
-            <NativeSelect
-              value={selectedTest}
-              onChange={(e) => {
-                const newTest = e.target.value;
-                setSelectedTest(newTest);
-                // Remove from training if selected
-                setSelectedTrain((prev) => prev.filter((s) => s !== newTest));
-              }}
-              className="text-xs font-semibold h-8 w-48"
-            >
-              {availableSeasons.map((s) => (
-                <NativeSelectOption key={s} value={s}>
-                  {s}
-                </NativeSelectOption>
-              ))}
-            </NativeSelect>
-          </div>
+          <Button
+            variant="default"
+            size="sm"
+            onClick={handleRunBacktest}
+            disabled={isRunning || selectedTrain.length === 0 || !selectedTest}
+            className="h-8 text-xs font-semibold gap-1.5 shrink-0"
+          >
+            {isRunning ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Play className="h-3.5 w-3.5" />}
+            <span>{isRunning ? "Simulating..." : "Run Simulation"}</span>
+          </Button>
         </div>
+
+        {/* Results Strip */}
+        {result && (
+          <div className="px-4 py-2.5 bg-muted/20 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 text-xs items-center">
+            <div>
+              <span className="text-[10px] text-muted-foreground block">Evaluated</span>
+              <span className="text-base font-bold text-foreground">{result.totalMatchesTested}</span>
+              <span className="text-[10px] text-muted-foreground ml-1">matches</span>
+            </div>
+
+            <div>
+              <span className="text-[10px] text-muted-foreground block">1X2 Accuracy</span>
+              <span className="text-base font-bold text-emerald-500">
+                {result.accuracy1X2Pct}%
+                <span className="text-[10px] text-muted-foreground font-normal ml-1">
+                  ({result.correct1X2}/{result.totalMatchesTested})
+                </span>
+              </span>
+            </div>
+
+            <div>
+              <span className="text-[10px] text-muted-foreground block">O / U 2.5 Goals</span>
+              <span className="text-base font-bold text-orange-500">{result.accuracyOver25Pct}%</span>
+            </div>
+
+            <div>
+              <span className="text-[10px] text-muted-foreground block">BTTS Accuracy</span>
+              <span className="text-base font-bold text-primary">{result.accuracyBTTSPct}%</span>
+            </div>
+
+            <div>
+              <span className="text-[10px] text-muted-foreground block">Exact Scores</span>
+              <span className="text-base font-bold text-foreground">
+                {result.scoreAccuracyPct}%
+                <span className="text-[10px] text-muted-foreground font-normal ml-1">
+                  ({result.correctScores})
+                </span>
+              </span>
+            </div>
+
+            <div>
+              <span className="text-[10px] text-muted-foreground block" title="Multi-category Brier score. Closer to 0 indicates superior calibration.">
+                Brier Calibration
+              </span>
+              <span className="text-base font-bold text-blue-500">{result.brierScore}</span>
+            </div>
+          </div>
+        )}
       </div>
 
-      {/* Results Scorecards */}
       {result && (
         <div className="space-y-6">
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-            <Card size="sm" className="bg-card border-border shadow-xs">
-              <CardHeader className="pb-1">
-                <CardDescription className="text-[11px]">Matches Evaluated</CardDescription>
-                <CardTitle className="text-xl font-bold font-mono text-foreground">
-                  {result.totalMatchesTested}
-                </CardTitle>
-              </CardHeader>
-            </Card>
-
-            <Card size="sm" className="bg-card border-border shadow-xs">
-              <CardHeader className="pb-1">
-                <CardDescription className="text-[11px] text-emerald-500 font-medium">
-                  1X2 Pick Accuracy
-                </CardDescription>
-                <CardTitle className="text-xl font-bold font-mono text-emerald-500">
-                  {result.accuracy1X2Pct}%
-                  <span className="text-[10px] text-muted-foreground font-normal ml-1 font-mono">
-                    ({result.correct1X2}/{result.totalMatchesTested})
-                  </span>
-                </CardTitle>
-              </CardHeader>
-            </Card>
-
-            <Card size="sm" className="bg-card border-border shadow-xs">
-              <CardHeader className="pb-1">
-                <CardDescription className="text-[11px] text-orange-500 font-medium">
-                  Over / Under 2.5 Accuracy
-                </CardDescription>
-                <CardTitle className="text-xl font-bold font-mono text-orange-500">
-                  {result.accuracyOver25Pct}%
-                </CardTitle>
-              </CardHeader>
-            </Card>
-
-            <Card size="sm" className="bg-card border-border shadow-xs">
-              <CardHeader className="pb-1">
-                <CardDescription className="text-[11px]">BTTS Accuracy</CardDescription>
-                <CardTitle className="text-xl font-bold font-mono text-primary">
-                  {result.accuracyBTTSPct}%
-                </CardTitle>
-              </CardHeader>
-            </Card>
-
-            <Card size="sm" className="bg-card border-border shadow-xs">
-              <CardHeader className="pb-1">
-                <CardDescription className="text-[11px]">Exact Score Hits</CardDescription>
-                <CardTitle className="text-xl font-bold font-mono text-foreground">
-                  {result.scoreAccuracyPct}%
-                  <span className="text-[10px] text-muted-foreground font-normal ml-1 font-mono">
-                    ({result.correctScores})
-                  </span>
-                </CardTitle>
-              </CardHeader>
-            </Card>
-
-            <Card size="sm" className="bg-card border-border shadow-xs">
-              <CardHeader className="pb-1">
-                <CardDescription className="text-[11px]">Brier Score</CardDescription>
-                <CardTitle className="text-xl font-bold font-mono text-blue-500" title="Multi-category Brier score. Closer to 0 indicates superior calibration.">
-                  {result.brierScore}
-                </CardTitle>
-              </CardHeader>
-            </Card>
-          </div>
 
           {/* Audit Fixture Table */}
           <div className="bg-card border border-border rounded-xl shadow-xs overflow-hidden">
@@ -242,7 +205,7 @@ export const SeasonBacktestView: React.FC<SeasonBacktestViewProps> = ({ allMatch
                   Each fixture predicted using only data from the training seasons
                 </p>
               </div>
-              <Badge variant="outline" className="text-xs font-mono font-semibold">
+              <Badge variant="outline" className="text-xs font-semibold">
                 {result.audits.length} Fixtures
               </Badge>
             </div>
