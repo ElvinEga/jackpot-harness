@@ -333,13 +333,13 @@ export const SeasonOverview: React.FC<SeasonOverviewProps> = ({
                     <TableCell className="text-center tabular-nums text-xs text-muted-foreground">
                       {pld}
                     </TableCell>
-                    <TableCell className="text-center tabular-nums text-xs font-medium text-emerald-500">
+                    <TableCell className="text-center tabular-nums text-xs text-muted-foreground">
                       {won}
                     </TableCell>
-                    <TableCell className="text-center tabular-nums text-xs font-medium text-amber-500">
+                    <TableCell className="text-center tabular-nums text-xs text-muted-foreground">
                       {drawn}
                     </TableCell>
-                    <TableCell className="text-center tabular-nums text-xs font-medium text-destructive">
+                    <TableCell className="text-center tabular-nums text-xs text-muted-foreground">
                       {lost}
                     </TableCell>
                     <TableCell className="text-center tabular-nums text-xs text-muted-foreground">
@@ -370,12 +370,12 @@ export const SeasonOverview: React.FC<SeasonOverviewProps> = ({
                           {row.form.map((res, i) => (
                             <span
                               key={i}
-                              className={`text-xs font-medium ${
+                              className={`flex h-5 w-5 items-center justify-center rounded text-[10px] font-bold text-white ${
                                 res === "W"
-                                  ? "text-emerald-500"
+                                  ? "bg-emerald-500"
                                   : res === "D"
-                                    ? "text-amber-500"
-                                    : "text-destructive"
+                                    ? "bg-amber-500"
+                                    : "bg-destructive"
                               }`}
                             >
                               {res}
