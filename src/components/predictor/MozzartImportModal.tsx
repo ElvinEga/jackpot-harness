@@ -7,6 +7,7 @@ import {
   Loader2,
   FileCode,
   Globe,
+  ExternalLink,
   Info,
 } from "lucide-react";
 import {
@@ -16,7 +17,8 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { cn } from "cn";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
@@ -160,7 +162,18 @@ export const MozzartImportModal: React.FC<MozzartImportModalProps> = ({
           {/* TAB 2: Paste JSON */}
           <TabsContent value="json" className="space-y-3 min-h-0 flex-1 flex flex-col">
             <div className="space-y-1.5">
-              <label className="text-xs font-medium text-foreground">Paste Mozzart Predefined Tickets JSON</label>
+              <div className="flex items-center justify-between gap-2">
+                <label className="text-xs font-medium text-foreground">Paste Mozzart Predefined Tickets JSON</label>
+                <a
+                  href="https://www.mozzartbet.co.ke/predefined-tickets"
+                  target="_blank"
+                  rel="noreferrer"
+                  className={cn(buttonVariants({ variant: "outline", size: "sm" }), "gap-1 shrink-0")}
+                >
+                  <ExternalLink className="size-3" />
+                  Open live JSON
+                </a>
+              </div>
               <Textarea
                 placeholder='[{"id":1000029772,"roundId":2481,"totalRows":16,"matches":[...]}]'
                 value={jsonInput}
