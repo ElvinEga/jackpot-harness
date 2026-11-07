@@ -31,8 +31,10 @@ data/seasons/sco_premier_league/ 6 CSVs (same seasons) — division code SC0, 22
 data/seasons/sco_championship/ 6 CSVs (same seasons) — division code SC1, 180 per season
 data/seasons/ligi_1/          6 CSVs (same seasons) — division code T1 (Turkey), 380/342/306
 data/seasons/ethniki_katigoria/ 6 CSVs (same seasons) — division code G1 (Greece), 240/233/236
+data/seasons/fixtures.csv   the site's rolling card of unplayed fixtures, ~4 days, 19 divisions
 data/processed/      JSON mirror of the raw CSVs, same bookmaker folders and filenames
 data/processed/seasons/<competition>/  one JSON per season + index.json
+data/processed/seasons/fixtures.json   the same card, one object per upcoming fixture
 data/processed/teams/  canonical.json (name -> club id) + review.csv (ambiguous ids)
 public/logos/<folder>/  320 club crest SVGs in 18 folders; the folder says where the crest came from, not the league
 src/build_json.py    regenerates data/processed from data/raw
@@ -123,6 +125,20 @@ sync:seasons` chains the fetch and the build below.
 `index.json`. These files are **separate from the jackpot data** — served by the Vite middleware at
 `/data/seasons/premier_league/<season>.json` exactly like the jackpot mirror is at
 `/data/<bookmaker>/`.
+
+**The season set holds no unplayed fixtures** — 30349 rows, exactly one null result (the Bastia v Red
+Star gap below), and every other row has been played. The only future matches available are
+`https://www.football-data.co.uk/fixtures.csv`, the site's rolling card, which `src/fetch_seasons.py`
+also downloads into `data/seasons/fixtures.csv` and `src/build_seasons.py` converts to
+`data/processed/seasons/fixtures.json` (it is a top-level file, not a competition folder, so
+`build_fixtures()` is its own step). Same column vocabulary as the season CSVs minus every result
+column, so each record carries `score`, `goals`, `result`, `half_time_*` and `stats` as null or empty
+and only the market-average prices. Measured on the 2026-11-07 sync: 160 fixtures over four dates
+(2026-11-06 → 2026-11-09) across 19 divisions — the repo's seventeen plus `SC2` and `SC3`, Scotland's
+Leagues 1 and 2, which have no history folder, so their rows have `league: null` and no data to learn
+from. Every `Date`, `Time` and `Div` is filled and every row has a full `Avg*`/`Max*` price set. The
+card overlaps no season file: each row sits after its division's latest decided fixture, so nothing on
+it has been played.
 
 30349 matches in total across the seventeen competitions (380 per completed season for EPL, La Liga and
 Serie A, 306 for Bundesliga, Eredivisie and `liga_1`; Ligue 1 has 380 for 2021-2022 and 2022-2023

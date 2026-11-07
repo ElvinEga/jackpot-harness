@@ -3,6 +3,8 @@
 Reads data/seasons/<competition>/<season>.csv and writes
 data/processed/seasons/<competition>/<season>.json plus an index.json listing
 the seasons. Kept separate from the jackpot output under data/processed/.
+The card of unplayed fixtures, data/seasons/fixtures.csv, becomes
+data/processed/seasons/fixtures.json alongside them.
 """
 
 import csv
@@ -140,11 +142,11 @@ def build_match(row, source, header):
         "home_goals": home_goals,
         "away_goals": away_goals,
         "total_goals": None,
-        "result": RESULT.get(text(row.get("FTR")), None),
+        "result": RESULT.get(text(row.get("FTR") or ""), None),
         "half_time_score": None,
         "half_time_home_goals": ht_home,
         "half_time_away_goals": ht_away,
-        "half_time_result": RESULT.get(text(row.get("HTR")), None),
+        "half_time_result": RESULT.get(text(row.get("HTR") or ""), None),
         **({"referee": text(row.get("Referee"))} if "Referee" in header else {}),
         "stats": {key: number(f, row.get(f, "")) for f, key in STATS.items() if f in header},
         "odds": {key: number(f, row.get(f, "")) for f, key in ODDS.items() if f in header},
@@ -210,6 +212,42 @@ def build_competition(folder):
     print(index_path.relative_to(ROOT), len(index), "seasons,", total, "matches")
 
 
+def build_fixtures():
+    """Convert the rolling fixtures.csv card into data/processed/seasons/fixtures.json.
+
+    A top-level file, not a competition folder, so main() does not reach it: the
+    card holds one row per upcoming league fixture across every division. The
+    rows have no result columns, so each record keeps null score/goals/result and
+    carries only the market-average odds the card publishes.
+    """
+    path = RAW / "fixtures.csv"
+    if not path.exists():
+        print(path.relative_to(ROOT), "not found: run bun run fetch:seasons", file=sys.stderr)
+        return 0
+
+    with open(path, newline="", encoding="utf-8-sig") as fh:
+        reader = csv.DictReader(fh)
+        header = set(reader.fieldnames or [])
+        rows = [row for row in reader if text(row.get("Date") or "")]
+
+    records = []
+    for row in rows:
+        try:
+            records.append(build_match(row, "fixtures.csv", header))
+        except ValueError:
+            continue
+    records.sort(key=lambda r: (r["date"], r["kickoff_time"] or "", r["home_team"]))
+
+    out = OUT / "fixtures.json"
+    write_json(out, records)
+    dates = [r["date"] for r in records]
+    divisions = sorted({r["division"] for r in records})
+    print(out.relative_to(ROOT), len(records), "upcoming fixtures,",
+          min(dates, default="-"), "->", max(dates, default="-"), ",",
+          len(divisions), "divisions:", " ".join(divisions))
+    return len(records)
+
+
 def main():
     folders = sorted(p for p in RAW.iterdir() if p.is_dir())
     if not folders:
@@ -217,6 +255,7 @@ def main():
         return 1
     for folder in folders:
         build_competition(folder)
+    build_fixtures()
     return 0
 
 

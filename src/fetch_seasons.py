@@ -3,7 +3,9 @@
 Walks data.php -> country pages -> mmz4281/<yy><yy>/<DIV>.csv links for the
 division codes already in this repo, and writes only when the remote bytes
 differ from the local copy, so re-runs stay cheap and the in-progress seasons
-pick up new fixtures.
+pick up new fixtures. The rolling fixtures.csv card — the next few days of
+league fixtures, the only unplayed matches available — is fetched the same way
+into data/seasons/fixtures.csv.
 
     uv run python src/fetch_seasons.py [--dry-run] [--from 2021] [--to 2026]
 
@@ -84,6 +86,18 @@ REPAIRS = [
 
 REQUIRED_COLUMNS = {"Div", "Date", "Time", "HomeTeam", "AwayTeam", "FTHG", "FTAG", "FTR"}
 
+# The rolling upcoming-fixtures card. It carries the next few days across the
+# site's leagues and, by design, has no result columns at all, so it cannot go
+# through the season validator.
+FIXTURES_URL = SITE + "fixtures.csv"
+FIXTURES_TARGET = RAW / "fixtures.csv"
+FIXTURES_REQUIRED_COLUMNS = {"Div", "Date", "Time", "HomeTeam", "AwayTeam"}
+FIXTURE_DATE = re.compile(r"\d{1,2}/\d{1,2}/\d{2,4}")
+
+# SC2 and SC3 (Scotland's Leagues 1 and 2) are on the card but have no history
+# folder in this repo, so their fixtures arrive with nothing to learn from.
+FIXTURE_DIVISIONS = set(DIVISIONS) | {"SC2", "SC3"}
+
 CSV_LINK = re.compile(r"mmz4281/(\d{4})/([A-Za-z0-9]+)\.csv")
 ANCHOR_HREF = re.compile(r"""<a[^>]+href=['"]([^'"]+)['"]""", re.I)
 COUNTRY_PAGE = re.compile(r"[a-z]+m\.php")
@@ -144,6 +158,35 @@ def problem_with(payload, division):
     divisions = {next(csv.reader([line]))[header.index("Div")].strip() for line in lines[1:]}
     if divisions != {division}:
         return "rows carry a division other than " + division
+    return None
+
+
+def problem_with_fixtures(payload):
+    """None if the fixtures card is the CSV we expect, else why it was rejected."""
+    text = payload.decode("utf-8-sig")
+    lines = [line for line in text.splitlines() if line.strip()]
+    if not lines:
+        return "empty response"
+    header = [column.strip() for column in next(csv.reader([lines[0]]))]
+    missing = FIXTURES_REQUIRED_COLUMNS - set(header)
+    if missing:
+        return "missing columns " + ", ".join(sorted(missing))
+    if len(lines) < 2:
+        return "no data rows"
+
+    columns = {name: header.index(name) for name in ("Div", "Date")}
+
+    def read(row, name):
+        index = columns[name]
+        return row[index].strip() if index < len(row) else ""
+
+    rows = [next(csv.reader([line])) for line in lines[1:]]
+    unknown = {read(row, "Div") for row in rows} - FIXTURE_DIVISIONS
+    if unknown:
+        return "divisions this repo has no history for: " + ", ".join(sorted(unknown))
+    bad = sorted({read(row, "Date") for row in rows if not FIXTURE_DATE.fullmatch(read(row, "Date"))})
+    if bad:
+        return "unparseable dates: " + ", ".join(bad[:5])
     return None
 
 
@@ -211,6 +254,41 @@ def resolve_targets(first_season, last_season):
     return targets
 
 
+def fetch_fixtures(dry_run, counts):
+    """Refresh the rolling upcoming-fixtures card, with the same byte-compare write."""
+    try:
+        payload = get(FIXTURES_URL)
+    except urllib.error.HTTPError as error:
+        counts["failed"] += 1
+        print("fixtures.csv  failed: HTTP " + str(error.code), file=sys.stderr)
+        return
+    except urllib.error.URLError as error:
+        counts["failed"] += 1
+        print("fixtures.csv  failed: " + str(error.reason), file=sys.stderr)
+        return
+
+    problem = problem_with_fixtures(payload)
+    if problem:
+        counts["failed"] += 1
+        print("fixtures.csv  rejected: " + problem, file=sys.stderr)
+        return
+
+    existing = FIXTURES_TARGET.read_bytes() if FIXTURES_TARGET.exists() else None
+    if existing == payload:
+        counts["unchanged"] += 1
+        return
+
+    counts["new" if existing is None else "updated"] += 1
+    detail = "{} rows".format(row_count(payload))
+    if existing is not None:
+        detail = "{} -> {} rows".format(row_count(existing), row_count(payload))
+    print("fixtures.csv  " + ("new" if existing is None else "updated") + " (" + detail + ")")
+    if not dry_run:
+        temp = FIXTURES_TARGET.with_suffix(".csv.part")
+        temp.write_bytes(payload)
+        temp.replace(FIXTURES_TARGET)
+
+
 def main(argv):
     dry_run = "--dry-run" in argv
 
@@ -269,6 +347,8 @@ def main(argv):
                 temp = destination.with_suffix(".csv.part")
                 temp.write_bytes(payload)
                 temp.replace(destination)
+
+    fetch_fixtures(dry_run, counts)
 
     print(" ".join(key + "=" + str(counts[key]) for key in counts))
     if dry_run and counts["new"] + counts["updated"]:
