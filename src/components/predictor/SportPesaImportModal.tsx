@@ -17,7 +17,8 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { cn } from "cn";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
@@ -151,7 +152,22 @@ export const SportPesaImportModal: React.FC<SportPesaImportModalProps> = ({
           {/* TAB 2: Paste JSON */}
           <TabsContent value="json" className="space-y-3 min-h-0 flex-1 flex flex-col">
             <div className="space-y-1.5">
-              <label className="text-xs font-medium text-foreground">Paste SportPesa Active Jackpot JSON</label>
+              <div className="flex items-center justify-between gap-2">
+                <label className="text-xs font-medium text-foreground">Paste SportPesa Active Jackpot JSON</label>
+                <a
+                  href="https://jackpot-offer-api.ke.sportpesa.com/api/jackpots/active"
+                  target="_blank"
+                  rel="noreferrer"
+                  className={cn(buttonVariants({ variant: "outline", size: "sm" }), "gap-1 shrink-0")}
+                >
+                  <ExternalLink className="size-3" />
+                  Open live JSON
+                </a>
+              </div>
+              <p className="text-xs text-muted-foreground">
+                A new-tab visit gets the JSON as-is; SportPesa refuses the same URL requested from page
+                script, which is why Live API Fetch goes through the server leg.
+              </p>
               <Textarea
                 placeholder='{"id":"a5406708-...","humanId":202,"events":[...]}'
                 value={jsonInput}
