@@ -9,7 +9,10 @@ const HEADERS = {
   "Cache-Control": "no-store",
 };
 
+const LABEL = "[sportpesa-active]";
+
 export default async function handler() {
+  const startedAt = Date.now();
   try {
     const upstream = await fetch(UPSTREAM, {
       headers: {
@@ -17,8 +20,17 @@ export default async function handler() {
         Accept: "application/json, text/plain, */*",
       },
     });
-    return { statusCode: upstream.status, headers: HEADERS, body: await upstream.text() };
+    const body = await upstream.text();
+    const summary = `${upstream.status} ${upstream.headers.get("content-type")} ${body.length}b in ${Date.now() - startedAt}ms`;
+    if (upstream.ok) {
+      console.log(`${LABEL} upstream ${summary}`);
+    } else {
+      console.warn(`${LABEL} upstream blocked ${summary} body: ${body.slice(0, 300).replace(/\s+/g, " ")}`);
+    }
+    return { statusCode: upstream.status, headers: HEADERS, body };
   } catch (err) {
+    const detail = err instanceof Error ? `${err.message}${err.cause ? ` (cause: ${err.cause})` : ""}` : String(err);
+    console.error(`${LABEL} upstream fetch failed in ${Date.now() - startedAt}ms: ${detail}`);
     return {
       statusCode: 502,
       headers: HEADERS,

@@ -114,37 +114,55 @@ export function parseMozzartJackpot(data: MozzartPredefinedTicket[]): ParsedMozz
   };
 }
 
+const LIVE_ENDPOINT = "/api/mozzart/super-jackpot";
+const SNAPSHOT_ENDPOINT = "/data/mozzart-active.json";
+
+/** First 200 chars, collapsed to one line, for console diagnostics. */
+function preview(text: string): string {
+  return text.slice(0, 200).replace(/\s+/g, " ").trim();
+}
+
 /**
- * Fetches the active Mozzart Super Jackpot from the Vite proxy.
- * Falls back to the bundled snapshot if the proxy is unavailable (static hosting).
+ * Fetches the active Mozzart Super Jackpot from the server-side leg.
+ * Falls back to the bundled snapshot if the leg is unavailable (static hosting).
+ * Both outcomes are logged.
  */
 export async function fetchActiveMozzartJackpot(): Promise<ParsedMozzartJackpot> {
-  // 1. Try local dev proxy endpoint
+  // 1. Try the server-side leg
   try {
-    const res = await fetch("/api/mozzart/super-jackpot", {
-      headers: { Accept: "application/json" },
-    });
+    const res = await fetch(LIVE_ENDPOINT, { headers: { Accept: "application/json" } });
+    const text = await res.text();
 
-    if (res.ok) {
-      const text = await res.text();
-      const data: MozzartPredefinedTicket[] = JSON.parse(text);
-      if (Array.isArray(data) && data.length > 0) {
-        return parseMozzartJackpot(data);
+    if (!res.ok) {
+      console.warn(`[mozzart] ${LIVE_ENDPOINT} -> HTTP ${res.status} (${text.length}b): ${preview(text)}`);
+    } else {
+      try {
+        const data = JSON.parse(text) as MozzartPredefinedTicket[];
+        if (Array.isArray(data) && data.length > 0) {
+          console.info(`[mozzart] live ticket ${data[0]?.id}: ${data[0]?.matches?.length ?? 0} matches`);
+          return parseMozzartJackpot(data);
+        }
+        console.warn(`[mozzart] ${LIVE_ENDPOINT} -> HTTP ${res.status} but empty payload: ${preview(text)}`);
+      } catch {
+        console.warn(`[mozzart] ${LIVE_ENDPOINT} -> HTTP ${res.status} but body is not JSON: ${preview(text)}`);
       }
     }
-  } catch {
-    // Silently proceed to fallback
+  } catch (err: unknown) {
+    console.warn(`[mozzart] ${LIVE_ENDPOINT} -> request failed:`, err);
   }
 
   // 2. Fallback to bundled snapshot
+  console.warn(`[mozzart] falling back to bundled snapshot ${SNAPSHOT_ENDPOINT}`);
   try {
-    const fallbackRes = await fetch("/data/mozzart-active.json");
+    const fallbackRes = await fetch(SNAPSHOT_ENDPOINT);
     if (fallbackRes.ok) {
       const fallbackData: MozzartPredefinedTicket[] = await fallbackRes.json();
       return parseMozzartJackpot(fallbackData);
     }
+    console.error(`[mozzart] ${SNAPSHOT_ENDPOINT} -> HTTP ${fallbackRes.status}`);
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
+    console.error(`[mozzart] ${SNAPSHOT_ENDPOINT} -> failed:`, err);
     throw new Error(`Failed to load Mozzart super jackpot: ${msg}`);
   }
 
