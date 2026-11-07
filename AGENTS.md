@@ -238,8 +238,8 @@ analyse half a club, and `getLogo` returns nothing for the long form. One genera
 club sits under every comparison.
 
 `uv run python src/build_teams.py` (also `--dry-run`, report only) reads the processed data — the
-three jackpot mirrors and all 102 season JSONs, `index.json` and `data/processed/teams/` skipped —
-and writes three artifacts:
+three jackpot mirrors, all 102 season JSONs and `seasons/fixtures.json`, `index.json` and
+`data/processed/teams/` skipped — and writes three artifacts:
 
 ```
 src/lib/teamRegistry.ts              -- canonicalTeam(), for the browser bundle
@@ -247,11 +247,12 @@ data/processed/teams/canonical.json  -- the same variant -> id map, for offline 
 data/processed/teams/review.csv      -- ids the data cannot name one club for
 ```
 
-Measured on the current data: 146,864 name occurrences and 5,022 distinct normalised spellings
-collapse to 3,820 ids; 1,394 spellings are remapped and those carry 31,460 occurrences. Jackpot and
-season vocabulary are 5,227 and 418 raw names (86,166 and 60,698 occurrences) and the season side is
-already one-name-per-club, so the map mostly serves the bookmakers. The artifacts are generated,
-never hand-edited — change a rule in the script and re-run.
+Measured on the current data: 147,184 name occurrences and 5,022 distinct normalised spellings
+collapse to 3,819 ids; 1,395 spellings are remapped and those carry 31,507 occurrences. Jackpot,
+season and fixtures-card vocabulary is 5,227, 416 and 320 raw names (86,166, 60,698 and 320
+occurrences), and every season name — the card included — already stands for exactly one id, so the
+map mostly serves the bookmakers. The artifacts are generated, never hand-edited — change a rule in
+the script and re-run.
 
 How an id is derived, in order:
 - `slug()` — the ticket-prefix strip and `snake()` from `src/build_logos.py` (lowercase, accents
@@ -278,7 +279,7 @@ How an id is derived, in order:
   with it, and (d) differs by tokens that are not in `OTHER_TEAM_TOKENS` (women's, reserve, U21 and
   B-team words, which mark a *different* squad). Exactly one candidate can satisfy all four; two or
   more, or candidates that share no fixture with anything, go to `review.csv` with the owners named,
-  because a guess here invents a meeting between two real clubs. 495 names fold on the current data.
+  because a guess here invents a meeting between two real clubs. 496 names fold on the current data.
   The fold direction is fixed by `CREST_KEYS` (the 304 logo keys): a fold never moves a club off the
   spelling that owns its file, so `fsv_mainz` → `mainz` and `bayer_leverkusen` → `leverkusen`, never
   the reverse. That reversal rewrites edges after the chain has already been walked, so the targets
@@ -295,22 +296,24 @@ Three guards keep a merge from inventing fixtures between real clubs:
 - **`guard_season_injectivity()`** refuses any id that ends up holding two different season-file
   spellings; the season vocabulary is the one place where two spellings are two clubs unless proven
   otherwise, so it is the cheapest hard stop. Refusing restores each spelling to its own id, which
-  under-merges — the safe direction. `ALLOWED_SEASON_MERGES = {"mechelen", "sheffield_united"}` are
-  the two exceptions the source itself creates: `jupiter_league` 2026-2027 has one row as
-  `KV Mechelen`, `efl_championship` 2026-2027 one as `Sheffield Utd`. The script prints refusals;
-  there are currently none.
+  under-merges — the safe direction. `ALLOWED_SEASON_MERGES = {"mechelen", "sheffield_united"}` is the
+  exception list for the two pairs the source used to split across the rows of one season
+  (`KV Mechelen`/`Mechelen` in `jupiter_league` 2026-2027, `Sheffield United`/`Sheffield Utd` in
+  `efl_championship` 2026-2027); both were corrected at source in the 2026-11-07 sync, so the set is
+  currently inert — with it emptied the report still prints zero refusals. It stays as the written
+  answer for the next time the site changes a club's mind mid-season.
 - **The self-match invariant** is the acceptance gate: `id_evidence()` records, per id, the fixtures it
   appears in, and any id that ends up on both sides of one row is a merge that invented a meeting. The
   report must print `0 ids appear against themselves` — every rule above is re-run until it does, and a
   non-zero count means undo the newest edge rather than widening a strip list.
-- **`review.csv`** (515 rows) lists what the data cannot name one club for, in four kinds:
+- **`review.csv`** (514 rows) lists what the data cannot name one club for, in four kinds:
   `rows in 2+ countries` (5), `short name, 2+ confirmed owners` (45), `short name, nothing faces the
-  owner` (461) and `kept apart by hand` (4). `fixable` is `no` for a spelling shared across countries
+  owner` (460) and `kept apart by hand` (4). `fixable` is `no` for a spelling shared across countries
   or a pair decided by hand (9 rows) and `by hand` for the fold candidates the evidence can rank but
   not prove — those name their suggested owners in `variants`, so promoting one is a one-line
   `EXTRA_MERGES` edge; there is no `yes` row, because every droppable edge is now caught by the
-  guards above. The five country rows are `arsenal` (England 214 / Belarus 3),
-  `athletic` (`Athletic Club`: Spain 37 / Brazil 9), `river_plate` (Argentina 2 / Uruguay 2 /
+  guards above. The five country rows are `arsenal` (England 215 / Belarus 3),
+  `athletic` (`Athletic Club`: Spain 37 / Brazil 9), `river_plate_uru` (Argentina 2 / Uruguay 2 /
   Paraguay 1), `defensor_sporting` (Uruguay 4 / Colombia 1), `liverpool_montevideo` (Uruguay 3 /
   Colombia 1). They stay merged and carry the cost: no crest for `athletic` (Bilbao's file is
   `athletic_bilbao`, and claiming it would claim Mineiro's rows too), and no cross-country aggregate
@@ -333,7 +336,7 @@ exports `snake` and `MANUAL_ALIASES`, which `build_teams.py` imports. `getLogo()
 occurrences, up from 36.9% on name alone: 315 spellings (6,188 rows — `Manchester Utd` 212,
 `Atl. Madrid` 186, `AS Roma` 158) resolve only through the canonical step. Season coverage is 82.7%
 before and after it, because that vocabulary was always the short form; 304 of the 416 season clubs
-have a file and all 304 keys are used, while the jackpot data reaches 280 of them across 3,820 ids.
+have a file and all 304 keys are used, while the jackpot data reaches 299 of them across 3,819 ids.
 `src/components/TeamLogo.tsx` sits each crest on a light chip (`bg-muted dark:bg-white/30`) so dark
 crests stay readable on the dark card, and falls back to broadcast initials (`Nott'm Forest` → NFO)
 when there is no file *or the file fails to decode*. A crest that is valid XML but uses an undeclared
@@ -367,9 +370,12 @@ load the SVG as an image and read the parser error.
 - One raw cell holds a bare `#`: `B365CH` of Utrecht v Feyenoord (08/01/2023) in
   `data/seasons/eredivisie/2022-2023.csv`. It is a per-bookmaker column, which the converter drops,
   so the JSON never sees it — but anything reading the CSVs directly must not `float()` that cell.
-- `data/seasons/efl_championship/2026-2027.csv` spells one club two ways: 13 of its matches call the
-  club `Sheffield United` and one `Sheffield Utd`, so `index.json` reports 25 teams for a 24-club
-  league. Dedupe club names before counting fixtures per side.
+- The site has twice split one club across two spellings inside a single season file —
+  `efl_championship` 2026-2027 wrote `Sheffield United` on 13 rows and `Sheffield Utd` on one, and
+  `jupiter_league` 2026-2027 wrote `KV Mechelen` on one row of a `Mechelen` club. Both were corrected
+  at source by the 2026-11-07 sync, so the season vocabulary is now one name per club and those
+  `index.json` counts read 24 and 18 teams rather than 25 and 19. Dedupe club names before counting
+  fixtures per side anyway: the defect is the source's, and it can come back with the next row.
 - The six second tiers appear in the jackpot CSVs under exactly the strings the season set now uses,
   so they join (`England – Championship` 176 rows, `Spain – Segunda División` 135, `Germany – 2.
   Bundesliga` 32, `France – Ligue 2` 17, `Italy – Serie B` 12, `Scotland – Championship` 2), with one
