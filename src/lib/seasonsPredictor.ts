@@ -20,7 +20,7 @@ function factorial(n: number): number {
 /**
  * Standard Poisson probability P(k; lambda)
  */
-function poissonProb(k: number, lambda: number): number {
+export function poissonProb(k: number, lambda: number): number {
   if (lambda <= 0) return k === 0 ? 1 : 0;
   return (Math.pow(lambda, k) * Math.exp(-lambda)) / factorial(k);
 }
@@ -29,7 +29,7 @@ function poissonProb(k: number, lambda: number): number {
  * Dixon-Coles adjustment tau factor for low scores (0-0, 1-0, 0-1, 1-1)
  * rho is typically between -0.10 and -0.05 in top European leagues.
  */
-function tauAdjustment(x: number, y: number, lambda: number, mu: number, rho = -0.08): number {
+export function tauAdjustment(x: number, y: number, lambda: number, mu: number, rho = -0.08): number {
   if (x === 0 && y === 0) {
     return 1 - lambda * mu * rho;
   }
@@ -46,14 +46,44 @@ function tauAdjustment(x: number, y: number, lambda: number, mu: number, rho = -
 }
 
 /**
- * Predicts a matchup between Home Team and Away Team using historical season matches.
+ * Everything the model reads off the history before it turns into a score
+ * matrix. The two expected-goal rates are the headline; the rest are the venue,
+ * form and head-to-head tallies the signal breakdown prints, and they ride
+ * along so one pass over the matches serves both consumers.
  */
-export function predictSeasonMatch(
+export interface MatchModel {
+  lambdaHome: number;
+  lambdaAway: number;
+  homeFormPpg: number;
+  awayFormPpg: number;
+  homeFormPts: number;
+  awayFormPts: number;
+  homeWins: number;
+  homeCount: number;
+  awayWins: number;
+  awayCount: number;
+  homeSot: number;
+  awaySot: number;
+  homeCorners: number;
+  awayCorners: number;
+  homeYellows: number;
+  awayYellows: number;
+  h2hHomeWins: number;
+  h2hDraws: number;
+  h2hAwayWins: number;
+}
+
+/**
+ * Estimates the expected home and away goal rates for a matchup from
+ * historical season matches. Kept apart from predictSeasonMatch so the combo
+ * engine prices the same fixture off the same rates.
+ */
+export function estimateMatchModel(
   allMatches: SeasonMatch[],
   homeTeam: string,
   awayTeam: string,
   fixtureOdds?: { home?: number | null; draw?: number | null; away?: number | null }
-): SeasonMatchPrediction {
+): MatchModel {
   // Canonical ids, so a club spelled two ways in the source is one team here.
   const homeTeamId = canonicalTeam(homeTeam);
   const awayTeamId = canonicalTeam(awayTeam);
@@ -212,6 +242,60 @@ export function predictSeasonMatch(
     lambdaHome = (totalExpGoals * blendedRatio) / (1 + blendedRatio);
     lambdaAway = totalExpGoals - lambdaHome;
   }
+
+  return {
+    lambdaHome,
+    lambdaAway,
+    homeFormPpg,
+    awayFormPpg,
+    homeFormPts,
+    awayFormPts,
+    homeWins,
+    homeCount,
+    awayWins,
+    awayCount,
+    homeSot,
+    awaySot,
+    homeCorners,
+    awayCorners,
+    homeYellows,
+    awayYellows,
+    h2hHomeWins,
+    h2hDraws,
+    h2hAwayWins,
+  };
+}
+
+/**
+ * Predicts a matchup between Home Team and Away Team using historical season matches.
+ */
+export function predictSeasonMatch(
+  allMatches: SeasonMatch[],
+  homeTeam: string,
+  awayTeam: string,
+  fixtureOdds?: { home?: number | null; draw?: number | null; away?: number | null }
+): SeasonMatchPrediction {
+  const {
+    lambdaHome,
+    lambdaAway,
+    homeFormPpg,
+    awayFormPpg,
+    homeFormPts,
+    awayFormPts,
+    homeWins,
+    homeCount,
+    awayWins,
+    awayCount,
+    homeSot,
+    awaySot,
+    homeCorners,
+    awayCorners,
+    homeYellows,
+    awayYellows,
+    h2hHomeWins,
+    h2hDraws,
+    h2hAwayWins,
+  } = estimateMatchModel(allMatches, homeTeam, awayTeam, fixtureOdds);
 
   // 5. Generate 6x6 Bivariate Poisson Score Matrix (Goals 0..5)
   const maxGoals = 5;
