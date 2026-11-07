@@ -83,6 +83,15 @@ export type DecidedSeasonMatch = SeasonMatch & {
 export const isDecidedSeasonMatch = (m: SeasonMatch): m is DecidedSeasonMatch =>
   m.result !== null;
 
+/**
+ * A row of data/processed/seasons/fixtures.json — the site's rolling card of
+ * unplayed league fixtures. Same shape as a season row by construction, with
+ * the parts a match that has not been played cannot have (`score`, goals,
+ * `result`, half-time block, `stats`) null or empty and only the market-average
+ * prices filled.
+ */
+export type UpcomingFixture = SeasonMatch;
+
 export interface SeasonIndexEntry {
   season: string;
   file: string;
@@ -298,4 +307,63 @@ export interface BacktestSummary {
   brierScore: number;
   simulatedFlatYieldPct: number;
   audits: BacktestMatchAudit[];
+}
+
+/**
+ * One cell of the joint (1st-half, 2nd-half) score grid a combo is priced
+ * from: four goal counts, so a full-time and a half-time market are both sums
+ * over the same cells and the HT/FT correlation comes for free.
+ */
+export interface ComboOutcome {
+  homeFirst: number;
+  awayFirst: number;
+  homeSecond: number;
+  awaySecond: number;
+  homeGoals: number;
+  awayGoals: number;
+  totalGoals: number;
+  result: "home" | "draw" | "away";
+  firstHalfResult: "home" | "draw" | "away";
+  prob: number; // percentage points; the whole grid sums to 100
+}
+
+export type ComboFamily =
+  | "btts-result"
+  | "result-total"
+  | "win-to-nil"
+  | "first-half"
+  | "both-halves"
+  | "ht-ft"
+  | "single";
+
+export interface ComboMarket {
+  id: string;
+  label: string;
+  family: ComboFamily;
+  /** False for a diagnostic line that stays out of the ranked slip list. */
+  slip: boolean;
+  predicate: (outcome: ComboOutcome) => boolean;
+}
+
+/** A market priced for one fixture: probability and the odds that imply. */
+export interface ComboQuote {
+  id: string;
+  label: string;
+  family: ComboFamily;
+  prob: number; // percentage points, 1dp
+  fairOdds: number; // decimal, 2dp
+}
+
+export interface FixtureCombos {
+  fixture: UpcomingFixture;
+  lambdaHome: number;
+  lambdaAway: number;
+  firstHalfShare: number;
+  outcomes: number; // grid cells evaluated
+  combos: ComboQuote[]; // ranked slip list
+  references: ComboQuote[]; // the single legs each combo is read against
+  expanded: ComboQuote[]; // every market, ranked
+  /** Complementary leg sums taken before the quotes are rounded, so the panel's
+   *  Σ proof cannot read as 100.1. */
+  partition: { oneX2: number; overUnder25: number };
 }

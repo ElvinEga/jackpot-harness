@@ -1,9 +1,10 @@
-import type { SeasonIndex, SeasonMatch } from "./seasonTypes";
+import type { SeasonIndex, SeasonMatch, UpcomingFixture } from "./seasonTypes";
 
 // In-memory caches to avoid redundant HTTP requests
 const seasonIndexCache = new Map<string, SeasonIndex>();
 const seasonMatchesCache = new Map<string, SeasonMatch[]>();
 const allMatchesCache = new Map<string, SeasonMatch[]>();
+const fixturesCache = new Map<string, UpcomingFixture[]>();
 
 export const AVAILABLE_COMPETITIONS = [
   {
@@ -242,3 +243,31 @@ export async function fetchAllSeasonMatches(
   allMatchesCache.set(competition, flatMatches);
   return flatMatches;
 }
+
+/**
+ * The rolling card of unplayed fixtures, one file across every league the site
+ * covers. It changes only when the data is re-synced and redeployed.
+ */
+export async function fetchUpcomingFixtures(): Promise<UpcomingFixture[]> {
+  if (fixturesCache.has("fixtures")) {
+    return fixturesCache.get("fixtures")!;
+  }
+
+  const url = "/data/seasons/fixtures.json";
+  const res = await fetch(url);
+  if (!res.ok) {
+    throw new Error(`Failed to load upcoming fixtures: HTTP ${res.status} ${res.statusText}`);
+  }
+
+  const data: UpcomingFixture[] = await res.json();
+  fixturesCache.set("fixtures", data);
+  return data;
+}
+
+/**
+ * Which league a fixtures-card `Div` code belongs to. `SC2` and `SC3` — the
+ * Scottish Leagues 1 and 2 — are on the card but have no history folder here,
+ * so nothing predicts them and they map to nothing.
+ */
+export const competitionForDivision = (division: string) =>
+  AVAILABLE_COMPETITIONS.find((c) => c.division === division);

@@ -22,6 +22,7 @@ import {
   TrendingUp,
   FlaskConical,
   Calendar,
+  Receipt,
   type LucideIcon,
 } from "lucide-react";
 import { cn } from "cn";
@@ -54,6 +55,7 @@ export type SeasonsTab =
   | "standings"
   | "deepdive"
   | "predictor"
+  | "combos"
   | "trends"
   | "backtest"
   | "fixtures"
@@ -73,6 +75,7 @@ export const SEASONS_NAV_ITEMS: { value: SeasonsTab; label: string; icon: Lucide
   { value: "standings", label: "Standings", icon: Trophy },
   { value: "deepdive", label: "Deep Dive", icon: Shield },
   { value: "predictor", label: "Predictor", icon: Target },
+  { value: "combos", label: "Combos", icon: Receipt },
   { value: "trends", label: "Trends", icon: TrendingUp },
   { value: "backtest", label: "Backtest", icon: FlaskConical },
   { value: "fixtures", label: "Fixtures", icon: TableIcon },

@@ -16,6 +16,7 @@ import { getAllSeasonTeams } from "../../lib/seasonsAnalytics";
 import { SeasonOverview } from "./SeasonOverview";
 import { SeasonTeamAnalysis } from "./SeasonTeamAnalysis";
 import { SeasonMatchPredictor } from "./SeasonMatchPredictor";
+import { SeasonComboPredictor } from "./SeasonComboPredictor";
 import { SeasonTrends } from "./SeasonTrends";
 import { SeasonBacktestView } from "./SeasonBacktestView";
 import { SeasonFixturesTable } from "./SeasonFixturesTable";
@@ -303,8 +304,10 @@ export const SeasonsDashboard: React.FC<SeasonsDashboardProps> = ({
 
   return (
     <div className="flex-1 flex flex-col mx-auto w-full">
-      {/* Top Banner & Season Selector Bar */}
-      {currentTab !== "explorer" && (
+      {/* Top Banner & Season Selector Bar. Explorer and Combos carry their own
+          header with the league picker, because the season window means nothing
+          to either of them. */}
+      {currentTab !== "explorer" && currentTab !== "combos" && (
         <div className="flex flex-col md:flex-row md:items-center justify-between py-2 gap-4">
           <div>
             <div className="flex items-center gap-2">
@@ -410,6 +413,15 @@ export const SeasonsDashboard: React.FC<SeasonsDashboardProps> = ({
           matches={allMatches}
           defaultHomeTeam={predHome}
           defaultAwayTeam={predAway}
+        />
+      )}
+
+      {currentTab === "combos" && (
+        <SeasonComboPredictor
+          matches={allMatches}
+          competition={activeCompetition}
+          onCompetitionChange={handleCompetitionChange}
+          onPredictMatchup={handlePredictMatchup}
         />
       )}
 
