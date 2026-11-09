@@ -333,10 +333,12 @@ crest was sourced, not who plays there (`celta_vigo` and `real_sociedad` each ap
 `src/lib/logoRegistry.ts` from the same table, so files and registry cannot drift; `MAPPING` also
 exports `snake` and `MANUAL_ALIASES`, which `build_teams.py` imports. `getLogo()` order: `normalizeTeam`
 → `TEAM_ALIASES` → `TEAM_LOGOS`, then `canonicalTeam` and that again — coverage 45.4% of jackpot name
-occurrences, up from 36.9% on name alone: 315 spellings (6,188 rows — `Manchester Utd` 212,
-`Atl. Madrid` 186, `AS Roma` 158) resolve only through the canonical step. Season coverage is 82.7%
-before and after it, because that vocabulary was always the short form; 304 of the 416 season clubs
-have a file and all 304 keys are used, while the jackpot data reaches 299 of them across 3,819 ids.
+occurrences, up from 38.2% on name alone: 315 spellings (6,188 rows — `Manchester Utd` 212,
+`Atl. Madrid` 186, `AS Roma` 158) resolve only through the canonical step. Season coverage is 82.7%,
+up from 81.9%: the whole gain is three Scottish spellings the crest files don't carry
+(`Dundee United` 199 rows → `dundee_utd`, `Raith Rvs` 193 → `raith`, `Inverness C` 121 →
+`inverness_caledonian_thistle`). 304 of the 416 season clubs have a file and all 304 keys are used,
+while the jackpot data reaches 299 of them across 3,819 ids.
 `src/components/TeamLogo.tsx` sits each crest on a light chip (`bg-muted dark:bg-white/30`) so dark
 crests stay readable on the dark card, and falls back to broadcast initials (`Nott'm Forest` → NFO)
 when there is no file *or the file fails to decode*. A crest that is valid XML but uses an undeclared
