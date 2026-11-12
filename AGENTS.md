@@ -79,7 +79,7 @@ analysis.
 ## Derived JSON
 
 `uv run python src/build_json.py` regenerates `data/processed/<bookmaker>/<same-stem>.json` from
-`data/raw/`. Each file is a flat JSON array of one object per match row, 43083 records in total:
+`data/raw/`. Each file is a flat JSON array of one object per match row, 43120 records in total:
 
 ```json
 {
@@ -126,21 +126,24 @@ sync:seasons` chains the fetch and the build below.
 `/data/seasons/premier_league/<season>.json` exactly like the jackpot mirror is at
 `/data/<bookmaker>/`.
 
-**The season set holds no unplayed fixtures** — 30349 rows, exactly one null result (the Bastia v Red
+**The season set holds no unplayed fixtures** — 30499 rows, exactly one null result (the Bastia v Red
 Star gap below), and every other row has been played. The only future matches available are
 `https://www.football-data.co.uk/fixtures.csv`, the site's rolling card, which `src/fetch_seasons.py`
 also downloads into `data/seasons/fixtures.csv` and `src/build_seasons.py` converts to
 `data/processed/seasons/fixtures.json` (it is a top-level file, not a competition folder, so
 `build_fixtures()` is its own step). Same column vocabulary as the season CSVs minus every result
 column, so each record carries `score`, `goals`, `result`, `half_time_*` and `stats` as null or empty
-and only the market-average prices. Measured on the 2026-11-07 sync: 160 fixtures over four dates
+and only the market-average prices. Measured on the 2026-11-12 sync: 160 fixtures over four dates
 (2026-11-06 → 2026-11-09) across 19 divisions — the repo's seventeen plus `SC2` and `SC3`, Scotland's
 Leagues 1 and 2, which have no history folder, so their rows have `league: null` and no data to learn
-from. Every `Date`, `Time` and `Div` is filled and every row has a full `Avg*`/`Max*` price set. The
-card overlaps no season file: each row sits after its division's latest decided fixture, so nothing on
-it has been played.
+from. Every `Date`, `Time` and `Div` is filled and every row has a full `Avg*`/`Max*` price set. **The
+card is not guaranteed to hold only future matches**: the site refreshes it on its own schedule, so it
+can still list a weekend the season files have already accumulated — on this sync 147 of its 160 rows
+appear as decided fixtures in a season file (`data/seasons/fixtures.csv` was unchanged since the
+morning while seventeen season CSVs gained 150 rows). Dedupe any union of the card and the season set
+on `(date, home_team, away_team)`; never assume the card is the future.
 
-30349 matches in total across the seventeen competitions (380 per completed season for EPL, La Liga and
+30499 matches in total across the seventeen competitions (380 per completed season for EPL, La Liga and
 Serie A, 306 for Bundesliga, Eredivisie and `liga_1`; Ligue 1 has 380 for 2021-2022 and 2022-2023
 then 306 from 2023-2024, when it dropped to 18 clubs; `jupiter_league` has 306 for 2021-2022 and
 2022-2023, 312, 312 and 311 for the three seasons it ran 16 clubs plus playoffs, then 18 clubs
@@ -152,9 +155,9 @@ double round-robin its club count implies: `efl_championship` 552 (24 clubs), `l
 (22), `serie_b` 380 (20), `bundesliga_2` 306 (18), `sco_championship` 180 (10 clubs, four meetings
 per pair); `ligue_2` runs 380, 380, 379 then 306 — 2023-2024 is one fixture short at source, the
 second Troyes v Valenciennes meeting. The in-progress 2026-2027 files
-hold 90 EPL, 168 Championship, 109 La Liga, 131 Segunda, 72 Bundesliga, 90 2. Bundesliga, 100 Serie
-A, 100 Serie B, 81 Ligue 1, 99 Ligue 2, 99 Eredivisie, 90 Portugal, 90 Belgium, 69 Premiership, 64
-Scottish Championship, 90 Turkey and 62 Greece matches as of the 2026-11-05 sync. One object per
+hold 100 EPL, 180 Championship, 119 La Liga, 140 Segunda, 81 Bundesliga, 99 2. Bundesliga, 110 Serie
+A, 110 Serie B, 90 Ligue 1, 108 Ligue 2, 108 Eredivisie, 98 Portugal, 99 Belgium, 75 Premiership, 69
+Scottish Championship, 99 Turkey and 69 Greece matches as of the 2026-11-12 sync. One object per
 match, sorted by `(date, home_team)`; the ~100 source columns are reduced to 19 fields, variable
 parts grouped:
 
@@ -247,9 +250,9 @@ data/processed/teams/canonical.json  -- the same variant -> id map, for offline 
 data/processed/teams/review.csv      -- ids the data cannot name one club for
 ```
 
-Measured on the current data: 147,184 name occurrences and 5,022 distinct normalised spellings
-collapse to 3,819 ids; 1,395 spellings are remapped and those carry 31,507 occurrences. Jackpot,
-season and fixtures-card vocabulary is 5,227, 416 and 320 raw names (86,166, 60,698 and 320
+Measured on the current data: 147,558 name occurrences and 5,023 distinct normalised spellings
+collapse to 3,820 ids; 1,396 spellings are remapped and those carry 31,568 occurrences. Jackpot,
+season and fixtures-card vocabulary is 5,260, 416 and 320 raw names (86,560, 60,998 and 320
 occurrences), and every season name — the card included — already stands for exactly one id, so the
 map mostly serves the bookmakers. The artifacts are generated, never hand-edited — change a rule in
 the script and re-run.
@@ -312,16 +315,16 @@ Three guards keep a merge from inventing fixtures between real clubs:
   or a pair decided by hand (9 rows) and `by hand` for the fold candidates the evidence can rank but
   not prove — those name their suggested owners in `variants`, so promoting one is a one-line
   `EXTRA_MERGES` edge; there is no `yes` row, because every droppable edge is now caught by the
-  guards above. The five country rows are `arsenal` (England 215 / Belarus 3),
-  `athletic` (`Athletic Club`: Spain 37 / Brazil 9), `river_plate_uru` (Argentina 2 / Uruguay 2 /
+  guards above. The five country rows are `arsenal` (England 216 / Belarus 3),
+  `athletic` (`Athletic Club`: Spain 38 / Brazil 9), `river_plate_uru` (Argentina 2 / Uruguay 2 /
   Paraguay 1), `defensor_sporting` (Uruguay 4 / Colombia 1), `liverpool_montevideo` (Uruguay 3 /
   Colombia 1). They stay merged and carry the cost: no crest for `athletic` (Bilbao's file is
   `athletic_bilbao`, and claiming it would claim Mineiro's rows too), and no cross-country aggregate
   keyed on them.
 
 What reads the id: `src/lib/teams.ts` (appearances, H2H, form, the team lists), the mozzart extract
-dedupe in `src/lib/data.ts` and the analysis dedupe in `src/lib/analytics.ts` (30,537 distinct mozzart
-fixtures become 30,523 once "Arsenal" and "Arsenal FC" are one club), `src/lib/seasonsAnalytics.ts`
+dedupe in `src/lib/data.ts` and the analysis dedupe in `src/lib/analytics.ts` (30,525 distinct mozzart
+fixtures become 30,509 once "Arsenal" and "Arsenal FC" are one club), `src/lib/seasonsAnalytics.ts`
 and `src/lib/seasonsPredictor.ts`, the team filters in the seasons dashboard and the versus/actions
 modals, and `getLogo`. Display strings stay raw: lists and standings show each id's most frequent
 spelling in the current selection. **Never compare raw team strings — canonicalise both sides.**
@@ -332,13 +335,13 @@ crest was sourced, not who plays there (`celta_vigo` and `real_sociedad` each ap
 `uv run python src/build_logos.py` renames the files from its `MAPPING` and emits
 `src/lib/logoRegistry.ts` from the same table, so files and registry cannot drift; `MAPPING` also
 exports `snake` and `MANUAL_ALIASES`, which `build_teams.py` imports. `getLogo()` order: `normalizeTeam`
-→ `TEAM_ALIASES` → `TEAM_LOGOS`, then `canonicalTeam` and that again — coverage 45.4% of jackpot name
-occurrences, up from 38.2% on name alone: 315 spellings (6,188 rows — `Manchester Utd` 212,
-`Atl. Madrid` 186, `AS Roma` 158) resolve only through the canonical step. Season coverage is 82.7%,
-up from 81.9%: the whole gain is three Scottish spellings the crest files don't carry
-(`Dundee United` 199 rows → `dundee_utd`, `Raith Rvs` 193 → `raith`, `Inverness C` 121 →
+→ `TEAM_ALIASES` → `TEAM_LOGOS`, then `canonicalTeam` and that again — coverage 45.6% of jackpot name
+occurrences, up from 38.4% on name alone: 317 spellings (6,205 rows — `Manchester Utd` 212,
+`Atl. Madrid` 186, `AS Roma` 158) resolve only through the canonical step. Season coverage is 82.8%,
+up from 82.0%: the whole gain is three Scottish spellings the crest files don't carry
+(`Dundee United` 200 rows → `dundee_utd`, `Raith Rvs` 194 → `raith`, `Inverness C` 122 →
 `inverness_caledonian_thistle`). 304 of the 416 season clubs have a file and all 304 keys are used,
-while the jackpot data reaches 299 of them across 3,819 ids.
+and the jackpot data reaches all 304 of them across 3,818 ids.
 `src/components/TeamLogo.tsx` sits each crest on a light chip (`bg-muted dark:bg-white/30`) so dark
 crests stay readable on the dark card, and falls back to broadcast initials (`Nott'm Forest` → NFO)
 when there is no file *or the file fails to decode*. A crest that is valid XML but uses an undeclared
