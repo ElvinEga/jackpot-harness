@@ -27470,5 +27470,141 @@
     "away_team": "Tromsoe IL",
     "score": "4-0",
     "result": "home"
+  },
+  {
+    "date": "2026-11-08",
+    "jackpot_id": 207,
+    "home_team": "Aberdeen FC",
+    "away_team": "Hibernian FC",
+    "score": "0-4",
+    "result": "away"
+  },
+  {
+    "date": "2026-11-08",
+    "jackpot_id": 207,
+    "home_team": "Pau FC",
+    "away_team": "FC Nantes",
+    "score": "0-2",
+    "result": "away"
+  },
+  {
+    "date": "2026-11-08",
+    "jackpot_id": 207,
+    "home_team": "Grasshopper Club Zurich",
+    "away_team": "Lausanne-Sport",
+    "score": "1-1",
+    "result": "draw"
+  },
+  {
+    "date": "2026-11-08",
+    "jackpot_id": 207,
+    "home_team": "RAAL La Louviere",
+    "away_team": "Cercle Brugge",
+    "score": "0-1",
+    "result": "away"
+  },
+  {
+    "date": "2026-11-08",
+    "jackpot_id": 207,
+    "home_team": "IFK Goteborg",
+    "away_team": "Malmo FF",
+    "score": "0-0",
+    "result": "draw"
+  },
+  {
+    "date": "2026-11-08",
+    "jackpot_id": 207,
+    "home_team": "WSG Tirol",
+    "away_team": "FK Austria Wien",
+    "score": "1-1",
+    "result": "draw"
+  },
+  {
+    "date": "2026-11-08",
+    "jackpot_id": 207,
+    "home_team": "TSV Hartberg",
+    "away_team": "SCR Altach",
+    "score": "3-0",
+    "result": "home"
+  },
+  {
+    "date": "2026-11-08",
+    "jackpot_id": 207,
+    "home_team": "NK Brinje Grosuplje",
+    "away_team": "Aluminij Kidricevo",
+    "score": "1-0",
+    "result": "home"
+  },
+  {
+    "date": "2026-11-08",
+    "jackpot_id": 207,
+    "home_team": "Virtus Entella",
+    "away_team": "Modena FC",
+    "score": "0-2",
+    "result": "away"
+  },
+  {
+    "date": "2026-11-08",
+    "jackpot_id": 207,
+    "home_team": "IF Brommapojkarna",
+    "away_team": "Mjallby AIF",
+    "score": "0-0",
+    "result": "draw"
+  },
+  {
+    "date": "2026-11-08",
+    "jackpot_id": 207,
+    "home_team": "Carrarese Calcio",
+    "away_team": "Sampdoria Genoa",
+    "score": "0-1",
+    "result": "away"
+  },
+  {
+    "date": "2026-11-08",
+    "jackpot_id": 207,
+    "home_team": "Le Havre AC",
+    "away_team": "FC Lorient",
+    "score": "0-2",
+    "result": "away"
+  },
+  {
+    "date": "2026-11-08",
+    "jackpot_id": 207,
+    "home_team": "Stade Brest 29",
+    "away_team": "Olympique Lyon",
+    "score": "2-0",
+    "result": "home"
+  },
+  {
+    "date": "2026-11-08",
+    "jackpot_id": 207,
+    "home_team": "Manchester United",
+    "away_team": "Aston Villa",
+    "score": "4-4",
+    "result": "draw"
+  },
+  {
+    "date": "2026-11-08",
+    "jackpot_id": 207,
+    "home_team": "FC Viktoria Plzen",
+    "away_team": "Sparta Prague",
+    "score": "1-1",
+    "result": "draw"
+  },
+  {
+    "date": "2026-11-08",
+    "jackpot_id": 207,
+    "home_team": "Fredrikstad FK",
+    "away_team": "SK Brann",
+    "score": "2-2",
+    "result": "draw"
+  },
+  {
+    "date": "2026-11-08",
+    "jackpot_id": 207,
+    "home_team": "L.R. Vicenza",
+    "away_team": "US Cremonese",
+    "score": "1-4",
+    "result": "away"
   }
 ]
