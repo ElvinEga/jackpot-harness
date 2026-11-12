@@ -53080,5 +53080,185 @@
     "score": "2-2",
     "odds": 1.33,
     "result": "draw"
+  },
+  {
+    "date": "2026-11-07",
+    "home_team": "Fulham",
+    "away_team": "Newcastle",
+    "league": "England – Premier League",
+    "score": "1-1",
+    "odds": 2.05,
+    "result": "draw"
+  },
+  {
+    "date": "2026-11-07",
+    "home_team": "Espanyol",
+    "away_team": "Deportivo La Coruna",
+    "league": "Spain – La Liga",
+    "score": "0-0",
+    "odds": 1.35,
+    "result": "draw"
+  },
+  {
+    "date": "2026-11-07",
+    "home_team": "Fortuna Sittard",
+    "away_team": "Telstar",
+    "league": "Netherlands – Eredivisie",
+    "score": "2-2",
+    "odds": 2.0,
+    "result": "draw"
+  },
+  {
+    "date": "2026-11-07",
+    "home_team": "Nacional",
+    "away_team": "Academico Viseu",
+    "league": "Portugal – Primeira Liga",
+    "score": "1-0",
+    "odds": 1.4,
+    "result": "home"
+  },
+  {
+    "date": "2026-11-07",
+    "home_team": "Osasuna",
+    "away_team": "Athletic Club",
+    "league": "Spain – La Liga",
+    "score": "1-1",
+    "odds": 2.05,
+    "result": "draw"
+  },
+  {
+    "date": "2026-11-07",
+    "home_team": "ADO Den Haag",
+    "away_team": "Sparta Rotterdam",
+    "league": "Netherlands – Eredivisie",
+    "score": "3-1",
+    "odds": 2.75,
+    "result": "home"
+  },
+  {
+    "date": "2026-11-07",
+    "home_team": "Excelsior",
+    "away_team": "GO Ahead Eagles",
+    "league": "Netherlands – Eredivisie",
+    "score": "0-1",
+    "odds": 2.45,
+    "result": "away"
+  },
+  {
+    "date": "2026-11-07",
+    "home_team": "Napoli",
+    "away_team": "Lazio",
+    "league": "Italy – Serie A",
+    "score": "1-1",
+    "odds": 1.35,
+    "result": "draw"
+  },
+  {
+    "date": "2026-11-07",
+    "home_team": "Elche",
+    "away_team": "Real Betis",
+    "league": "Spain – La Liga",
+    "score": "0-2",
+    "odds": 1.35,
+    "result": "away"
+  },
+  {
+    "date": "2026-11-07",
+    "home_team": "Twente",
+    "away_team": "Ajax",
+    "league": "Netherlands – Eredivisie",
+    "score": "2-2",
+    "odds": 2.25,
+    "result": "draw"
+  },
+  {
+    "date": "2026-11-07",
+    "home_team": "Sunderland",
+    "away_team": "Chelsea",
+    "league": "England – Premier League",
+    "score": "1-0",
+    "odds": 2.0,
+    "result": "home"
+  },
+  {
+    "date": "2026-11-07",
+    "home_team": "Monza",
+    "away_team": "Atalanta",
+    "league": "Italy – Serie A",
+    "score": "0-1",
+    "odds": 2.05,
+    "result": "away"
+  },
+  {
+    "date": "2026-11-07",
+    "home_team": "Rennes",
+    "away_team": "Lille",
+    "league": "France – Ligue 1",
+    "score": "1-2",
+    "odds": 2.15,
+    "result": "away"
+  },
+  {
+    "date": "2026-11-07",
+    "home_team": "Santa Clara",
+    "away_team": "GIL Vicente",
+    "league": "Portugal – Primeira Liga",
+    "score": "1-2",
+    "odds": 3.2,
+    "result": "away"
+  },
+  {
+    "date": "2026-11-07",
+    "home_team": "Angers",
+    "away_team": "Nice",
+    "league": "France – Ligue 1",
+    "score": "0-2",
+    "odds": 2.0,
+    "result": "away"
+  },
+  {
+    "date": "2026-11-07",
+    "home_team": "Le Havre",
+    "away_team": "Lorient",
+    "league": "France – Ligue 1",
+    "score": "0-2",
+    "odds": 2.55,
+    "result": "away"
+  },
+  {
+    "date": "2026-11-07",
+    "home_team": "Stade Brestois 29",
+    "away_team": "Lyon",
+    "league": "France – Ligue 1",
+    "score": "2-0",
+    "odds": 1.43,
+    "result": "home"
+  },
+  {
+    "date": "2026-11-07",
+    "home_team": "Manchester United",
+    "away_team": "Aston Villa",
+    "league": "England – Premier League",
+    "score": "4-4",
+    "odds": 2.2,
+    "result": "draw"
+  },
+  {
+    "date": "2026-11-07",
+    "home_team": "Fiorentina",
+    "away_team": "Juventus",
+    "league": "Italy – Serie A",
+    "score": "2-2",
+    "odds": 1.95,
+    "result": "draw"
+  },
+  {
+    "date": "2026-11-07",
+    "home_team": "Lens",
+    "away_team": "Marseille",
+    "league": "France – Ligue 1",
+    "score": "1-2",
+    "odds": 1.25,
+    "result": "away"
   }
 ]
