@@ -1,6 +1,6 @@
 key,kind,fixable,countries,variants
-arsenal,rows in 2+ countries,no,England=215;Belarus=3,"arsenal(Belarus:3,England:215)"
-athletic,rows in 2+ countries,no,Spain=37;Brazil=9,"athletic_club(Brazil:9,Spain:37)<-"
+arsenal,rows in 2+ countries,no,England=216;Belarus=3,"arsenal(Belarus:3,England:216)"
+athletic,rows in 2+ countries,no,Spain=38;Brazil=9,"athletic_club(Brazil:9,Spain:38)<-"
 defensor_sporting,rows in 2+ countries,no,Uruguay=4;Colombia=1,"defensor_sporting(Colombia:1,Uruguay:4)"
 liverpool_montevideo,rows in 2+ countries,no,Uruguay=3;Colombia=1,"liverpool_montevideo(Colombia:1,Uruguay:3)"
 river_plate_uru,rows in 2+ countries,no,Argentina=2;Uruguay=2;Paraguay=1,"ca_river_plate(Uruguay:2)<-;river_plate(Argentina:2,Paraguay:1)<-"
@@ -22,7 +22,7 @@ aldershot,"short name, nothing faces the owner",by hand,,aldershot_town(5) (no s
 alianza_lima,"short name, nothing faces the owner",by hand,,alianza_lima_per(4) (no shared fixture)
 alkmaar,"short name, nothing faces the owner",by hand,,jong_az_alkmaar(1) (no shared fixture)
 almagro,"short name, nothing faces the owner",by hand,,"club_almagro(5), san_lorenzo(78) (no shared fixture)"
-aluminij,"short name, nothing faces the owner",by hand,,aluminij_kidricevo(1) (no shared fixture)
+aluminij,"short name, nothing faces the owner",by hand,,aluminij_kidricevo(2) (no shared fixture)
 amazonas,"short name, nothing faces the owner",by hand,,amazonas_fc_am(1) (no shared fixture)
 amed,"short name, nothing faces the owner",by hand,,amed_sportif_faaliyetler(1) (no shared fixture)
 america_cali,"short name, nothing faces the owner",by hand,,"america_de_cali(39), america_de_cali_col(2) (no shared fixture)"
@@ -44,7 +44,7 @@ atletic_escaldes,"short name, nothing faces the owner",by hand,,atletic_club_d_e
 atletico_atlanta,"short name, nothing faces the owner",by hand,,club_atletico_atlanta(2) (no shared fixture)
 atletico_mineiro,"short name, nothing faces the owner",by hand,,"atletico_mg_bra(1), atletico_mineiro_mg(3) (no shared fixture)"
 auda,"short name, nothing faces the owner",by hand,,auda_riga(1) (no shared fixture)
-austria,"short name, nothing faces the owner",by hand,,"austria_kl(6), austria_wien(16) (no shared fixture)"
+austria,"short name, nothing faces the owner",by hand,,"austria_kl(6), austria_wien(17) (no shared fixture)"
 avai,"short name, nothing faces the owner",by hand,,avai_fc_sc(3) (no shared fixture)
 backa_topola,"short name, nothing faces the owner",by hand,,tsc_backa_topola(4) (no shared fixture)
 bala,"short name, nothing faces the owner",by hand,,bala_town(3) (no shared fixture)
@@ -260,7 +260,7 @@ la_serena,"short name, nothing faces the owner",by hand,,"d_la_serena(2), deport
 lanus,"short name, nothing faces the owner",by hand,,"atletico_lanus(2), lanus_arg(2) (no shared fixture)"
 lara,"short name, nothing faces the owner",by hand,,dep_lara(8) (no shared fixture)
 larissa,"short name, nothing faces the owner",by hand,,ae_larissa(1) (no shared fixture)
-lausanne,"short name, 2+ confirmed owners",by hand,,"lausanne_ouchy(2), lausanne_sport(13)"
+lausanne,"short name, 2+ confirmed owners",by hand,,"lausanne_ouchy(2), lausanne_sport(14)"
 legnago,"short name, nothing faces the owner",by hand,,legnago_salus(3) (no shared fixture)
 legnica,"short name, nothing faces the owner",by hand,,miedz_legnica(2) (no shared fixture)
 leiknir,"short name, nothing faces the owner",by hand,,leiknir_r(7) (no shared fixture)
@@ -391,7 +391,7 @@ rigas,"short name, nothing faces the owner",by hand,,rigas_fs(4) (no shared fixt
 rimini,"short name, nothing faces the owner",by hand,,rimini_fc_1912(1) (no shared fixture)
 rionegro_aguilas,"short name, nothing faces the owner",by hand,,aguilas_doradas_rionegro(3) (no shared fixture)
 rodina,"short name, nothing faces the owner",by hand,,rodina_moskva(1) (no shared fixture)
-rotterdam,"short name, 2+ confirmed owners",by hand,,"excelsior(180), feyenoord(274), sparta_rotterdam(234)"
+rotterdam,"short name, 2+ confirmed owners",by hand,,"excelsior(182), feyenoord(275), sparta_rotterdam(236)"
 rouen,"short name, nothing faces the owner",by hand,,quevilly_rouen_metropole(2) (no shared fixture)
 rudes,"short name, nothing faces the owner",by hand,,rudes_zagreb(1) (no shared fixture)
 ruzomberok,"short name, nothing faces the owner",by hand,,mfk_ruzomberok(2) (no shared fixture)
@@ -428,7 +428,7 @@ sol_america,"short name, nothing faces the owner",by hand,,"sol_de_america(11), 
 sol_de_america,"short name, nothing faces the owner",by hand,,sol_de_america_villa_elisa(2) (no shared fixture)
 sollentuna,"short name, nothing faces the owner",by hand,,sollentuna_fk(3) (no shared fixture)
 sp_luqueno,"short name, nothing faces the owner",by hand,,sp_luqueno_par(3) (no shared fixture)
-sparta,"short name, 2+ confirmed owners",by hand,,"sparta_praha(4), sparta_rotterdam(234)"
+sparta,"short name, 2+ confirmed owners",by hand,,"sparta_praha(4), sparta_rotterdam(236)"
 spartans,"short name, nothing faces the owner",by hand,,hamrun_spartans(3) (no shared fixture)
 sporting_cristal,"short name, nothing faces the owner",by hand,,sporting_cristal_per(2) (no shared fixture)
 st_albans,"short name, nothing faces the owner",by hand,,st_albans_saints(1) (no shared fixture)
@@ -440,7 +440,7 @@ talleres_remedios,"short name, nothing faces the owner",by hand,,talleres_de_rem
 tampa_bay,"short name, nothing faces the owner",by hand,,tampa_bay_rowdies(3) (no shared fixture)
 taunton,"short name, nothing faces the owner",by hand,,taunton_town(5) (no shared fixture)
 throttur,"short name, nothing faces the owner",by hand,,"throttur_r(1), throttur_reykjavik(7) (no shared fixture)"
-tirol,"short name, 2+ confirmed owners",by hand,,"tirol_wattens(1), wsg_tirol(21)"
+tirol,"short name, 2+ confirmed owners",by hand,,"tirol_wattens(1), wsg_tirol(22)"
 tomayapo,"short name, nothing faces the owner",by hand,,real_tomayapo(2) (no shared fixture)
 tombense,"short name, nothing faces the owner",by hand,,tombense_fc_mg(3) (no shared fixture)
 torquay,"short name, nothing faces the owner",by hand,,torquay_united(1) (no shared fixture)
