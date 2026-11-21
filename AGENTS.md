@@ -31,7 +31,7 @@ data/seasons/sco_premier_league/ 6 CSVs (same seasons) — division code SC0, 22
 data/seasons/sco_championship/ 6 CSVs (same seasons) — division code SC1, 180 per season
 data/seasons/ligi_1/          6 CSVs (same seasons) — division code T1 (Turkey), 380/342/306
 data/seasons/ethniki_katigoria/ 6 CSVs (same seasons) — division code G1 (Greece), 240/233/236
-data/seasons/fixtures.csv   the site's rolling card of unplayed fixtures, ~4 days, 19 divisions
+data/seasons/fixtures.csv   the site's rolling card of fixtures, ~4 days, 21 divisions
 data/processed/      JSON mirror of the raw CSVs, same bookmaker folders and filenames
 data/processed/seasons/<competition>/  one JSON per season + index.json
 data/processed/seasons/fixtures.json   the same card, one object per upcoming fixture
@@ -79,7 +79,7 @@ analysis.
 ## Derived JSON
 
 `uv run python src/build_json.py` regenerates `data/processed/<bookmaker>/<same-stem>.json` from
-`data/raw/`. Each file is a flat JSON array of one object per match row, 43120 records in total:
+`data/raw/`. Each file is a flat JSON array of one object per match row, 43157 records in total:
 
 ```json
 {
@@ -95,13 +95,18 @@ analysis.
 
 Conversions the generator applies, all lossless apart from the last:
 - SportPesa headers are renamed to the shared snake_case vocabulary (`JackpotId` to `jackpot_id`,
-  `Home` to `home_team`), so every file has one key set; `result` is lowercased throughout.
+  `Home` to `home_team`) and `result` is lowercased throughout. That is **not** one key set: the
+  SportPesa scrape has no league or price columns, so its 3468 records carry `jackpot_id` and omit
+  `league` and `odds` as keys entirely. Read them with `.get("league")` / `.get("odds")` — `m["odds"]`
+  raises `KeyError` on every SportPesa row, and `sum(1 for m in rows if m["odds"] is None)` silently
+  under-counts by that whole file.
 - `date` becomes ISO `YYYY-MM-DD` (raw betika/mozzart is `DD-MM-YYYY`, SportPesa an ISO timestamp).
 - `odds` and `jackpot_id` become numbers; `score` uses `-` (`0:1` becomes `0-1`).
-- Empty strings, unparseable dates and non-numeric odds become `null`. 865 rows of
-  `mozzart-super-jackpot2.csv` have a score duplicated into `odds` and therefore null odds, three
-  other rows carry typo prices (`1..35`, `.1.35`), and the 32 `No date found` rows of
-  `mozzart-super-jackpot4.csv` get a null date. Values are never guessed or repaired.
+- Empty strings, unparseable dates and non-numeric odds become `null`: 865 rows of
+  `mozzart-super-jackpot2.csv` (847 of them a scoreline sitting in the `odds` cell, the rest a
+  `Postp`/`Abn`), three rows elsewhere with a mistyped price (`1..35` twice in
+  `mozzart-super-jackpot3.csv`, `.1.35` in `mozzart-super-jackpot5.csv`), and the 32 `No date found`
+  rows of `mozzart-super-jackpot4.csv` get a null date. Values are never guessed or repaired.
 
 ## Season data (Football-Data.co.uk)
 
@@ -126,24 +131,29 @@ sync:seasons` chains the fetch and the build below.
 `/data/seasons/premier_league/<season>.json` exactly like the jackpot mirror is at
 `/data/<bookmaker>/`.
 
-**The season set holds no unplayed fixtures** — 30499 rows, exactly one null result (the Bastia v Red
+**The season set holds no unplayed fixtures** — 30514 rows, exactly one null result (the Bastia v Red
 Star gap below), and every other row has been played. The only future matches available are
 `https://www.football-data.co.uk/fixtures.csv`, the site's rolling card, which `src/fetch_seasons.py`
 also downloads into `data/seasons/fixtures.csv` and `src/build_seasons.py` converts to
 `data/processed/seasons/fixtures.json` (it is a top-level file, not a competition folder, so
 `build_fixtures()` is its own step). Same column vocabulary as the season CSVs minus every result
 column, so each record carries `score`, `goals`, `result`, `half_time_*` and `stats` as null or empty
-and only the market-average prices. Measured on the 2026-11-12 sync: 160 fixtures over four dates
-(2026-11-06 → 2026-11-09) across 19 divisions — the repo's seventeen plus `SC2` and `SC3`, Scotland's
-Leagues 1 and 2, which have no history folder, so their rows have `league: null` and no data to learn
-from. Every `Date`, `Time` and `Div` is filled and every row has a full `Avg*`/`Max*` price set. **The
-card is not guaranteed to hold only future matches**: the site refreshes it on its own schedule, so it
-can still list a weekend the season files have already accumulated — on this sync 147 of its 160 rows
-appear as decided fixtures in a season file (`data/seasons/fixtures.csv` was unchanged since the
-morning while seventeen season CSVs gained 150 rows). Dedupe any union of the card and the season set
-on `(date, home_team, away_team)`; never assume the card is the future.
+and only the market-average prices. Measured on the 2026-11-21 sync: 190 fixtures over four dates
+(2026-11-20 → 2026-11-23) across 21 divisions — the repo's seventeen plus `E2`, `E3`, `EC`, `SC2` and
+`SC3`, England's Leagues 1 and 2 and the National plus Scotland's Leagues 1 and 2. Those 46 rows have
+`league: null` and no history folder to learn from. **The division set is the site's calendar, not a
+data-quality signal**: it changed between two syncs nine days apart, so `problem_with_fixtures()`
+gates on shape (the `Div`/`Date`/`Time`/`HomeTeam`/`AwayTeam` header, a `Div` on every row, parseable
+dates) and never on which leagues appear. Every `Date`, `Time` and `Div` is filled and every row has
+a full `Avg*`/`Max*` price set. **The card is not guaranteed to hold only future matches**: the site
+refreshes it on its own schedule, so it can still list a weekend the season files have already
+accumulated — on the 2026-11-12 sync 147 of its 160 rows appeared as decided fixtures in a season file
+(`data/seasons/fixtures.csv` was unchanged since the morning while seventeen season CSVs gained 150
+rows). The 2026-11-21 card overlaps the season set on zero rows, which is the normal case and is not
+something to rely on. Dedupe any union of the card and the season set on
+`(date, home_team, away_team)`; never assume the card is the future.
 
-30499 matches in total across the seventeen competitions (380 per completed season for EPL, La Liga and
+30514 matches in total across the seventeen competitions (380 per completed season for EPL, La Liga and
 Serie A, 306 for Bundesliga, Eredivisie and `liga_1`; Ligue 1 has 380 for 2021-2022 and 2022-2023
 then 306 from 2023-2024, when it dropped to 18 clubs; `jupiter_league` has 306 for 2021-2022 and
 2022-2023, 312, 312 and 311 for the three seasons it ran 16 clubs plus playoffs, then 18 clubs
@@ -154,10 +164,10 @@ its 14-club seasons, then 233 and 236 as the playoff block shrank). Each second 
 double round-robin its club count implies: `efl_championship` 552 (24 clubs), `laliga_segunda` 462
 (22), `serie_b` 380 (20), `bundesliga_2` 306 (18), `sco_championship` 180 (10 clubs, four meetings
 per pair); `ligue_2` runs 380, 380, 379 then 306 — 2023-2024 is one fixture short at source, the
-second Troyes v Valenciennes meeting. The in-progress 2026-2027 files
-hold 100 EPL, 180 Championship, 119 La Liga, 140 Segunda, 81 Bundesliga, 99 2. Bundesliga, 110 Serie
-A, 110 Serie B, 90 Ligue 1, 108 Ligue 2, 108 Eredivisie, 98 Portugal, 99 Belgium, 75 Premiership, 69
-Scottish Championship, 99 Turkey and 69 Greece matches as of the 2026-11-12 sync. One object per
+second Troyes v Valenciennes meeting. The in-progress 2026-2027 files (1769 rows in all)
+hold 100 EPL, 180 Championship, 119 La Liga, 151 Segunda, 81 Bundesliga, 99 2. Bundesliga, 110 Serie
+A, 110 Serie B, 90 Ligue 1, 108 Ligue 2, 108 Eredivisie, 98 Portugal, 99 Belgium, 75 Premiership, 73
+Scottish Championship, 99 Turkey and 69 Greece matches as of the 2026-11-21 sync. One object per
 match, sorted by `(date, home_team)`; the ~100 source columns are reduced to 19 fields, variable
 parts grouped:
 
@@ -250,11 +260,14 @@ data/processed/teams/canonical.json  -- the same variant -> id map, for offline 
 data/processed/teams/review.csv      -- ids the data cannot name one club for
 ```
 
-Measured on the current data: 147,558 name occurrences and 5,023 distinct normalised spellings
-collapse to 3,820 ids; 1,396 spellings are remapped and those carry 31,568 occurrences. Jackpot,
-season and fixtures-card vocabulary is 5,260, 416 and 320 raw names (86,560, 60,998 and 320
-occurrences), and every season name — the card included — already stands for exactly one id, so the
-map mostly serves the bookmakers. The artifacts are generated, never hand-edited — change a rule in
+Measured on the current data: 147,722 name occurrences and 5,033 distinct normalised spellings
+collapse to 3,829 ids; 1,396 spellings are remapped and those carry 31,612 occurrences. Jackpot,
+season and fixtures-card vocabulary is 5,236, 416 and 380 raw names (86,314, 61,028 and 380
+occurrences — the three sum to the 147,722). No two season spellings name the same club: 416 season
+spellings give 416 ids, and the card's 380 add 75 more (305 of them are spellings the season files
+already use) for 491 across 491. 73 season and 68 card spellings are still rewritten by the map —
+`RCD Mallorca` to `mallorca` — they just land on a club nothing else claims, so the collisions the map
+exists for are the bookmakers'. The artifacts are generated, never hand-edited — change a rule in
 the script and re-run.
 
 How an id is derived, in order:
@@ -282,7 +295,7 @@ How an id is derived, in order:
   with it, and (d) differs by tokens that are not in `OTHER_TEAM_TOKENS` (women's, reserve, U21 and
   B-team words, which mark a *different* squad). Exactly one candidate can satisfy all four; two or
   more, or candidates that share no fixture with anything, go to `review.csv` with the owners named,
-  because a guess here invents a meeting between two real clubs. 496 names fold on the current data.
+  because a guess here invents a meeting between two real clubs. 494 names fold on the current data.
   The fold direction is fixed by `CREST_KEYS` (the 304 logo keys): a fold never moves a club off the
   spelling that owns its file, so `fsv_mainz` → `mainz` and `bayer_leverkusen` → `leverkusen`, never
   the reverse. That reversal rewrites edges after the chain has already been walked, so the targets
@@ -309,9 +322,9 @@ Three guards keep a merge from inventing fixtures between real clubs:
   appears in, and any id that ends up on both sides of one row is a merge that invented a meeting. The
   report must print `0 ids appear against themselves` — every rule above is re-run until it does, and a
   non-zero count means undo the newest edge rather than widening a strip list.
-- **`review.csv`** (514 rows) lists what the data cannot name one club for, in four kinds:
-  `rows in 2+ countries` (5), `short name, 2+ confirmed owners` (45), `short name, nothing faces the
-  owner` (460) and `kept apart by hand` (4). `fixable` is `no` for a spelling shared across countries
+- **`review.csv`** (517 rows) lists what the data cannot name one club for, in four kinds:
+  `rows in 2+ countries` (5), `short name, 2+ confirmed owners` (46), `short name, nothing faces the
+  owner` (462) and `kept apart by hand` (4). `fixable` is `no` for a spelling shared across countries
   or a pair decided by hand (9 rows) and `by hand` for the fold candidates the evidence can rank but
   not prove — those name their suggested owners in `variants`, so promoting one is a one-line
   `EXTRA_MERGES` edge; there is no `yes` row, because every droppable edge is now caught by the
@@ -323,8 +336,8 @@ Three guards keep a merge from inventing fixtures between real clubs:
   keyed on them.
 
 What reads the id: `src/lib/teams.ts` (appearances, H2H, form, the team lists), the mozzart extract
-dedupe in `src/lib/data.ts` and the analysis dedupe in `src/lib/analytics.ts` (30,525 distinct mozzart
-fixtures become 30,509 once "Arsenal" and "Arsenal FC" are one club), `src/lib/seasonsAnalytics.ts`
+dedupe in `src/lib/data.ts` and the analysis dedupe in `src/lib/analytics.ts` (30,577 distinct mozzart
+fixtures become 30,548 once "Arsenal" and "Arsenal FC" are one club), `src/lib/seasonsAnalytics.ts`
 and `src/lib/seasonsPredictor.ts`, the team filters in the seasons dashboard and the versus/actions
 modals, and `getLogo`. Display strings stay raw: lists and standings show each id's most frequent
 spelling in the current selection. **Never compare raw team strings — canonicalise both sides.**
@@ -335,13 +348,18 @@ crest was sourced, not who plays there (`celta_vigo` and `real_sociedad` each ap
 `uv run python src/build_logos.py` renames the files from its `MAPPING` and emits
 `src/lib/logoRegistry.ts` from the same table, so files and registry cannot drift; `MAPPING` also
 exports `snake` and `MANUAL_ALIASES`, which `build_teams.py` imports. `getLogo()` order: `normalizeTeam`
-→ `TEAM_ALIASES` → `TEAM_LOGOS`, then `canonicalTeam` and that again — coverage 45.6% of jackpot name
-occurrences, up from 38.4% on name alone: 317 spellings (6,205 rows — `Manchester Utd` 212,
+→ `TEAM_ALIASES` → `TEAM_LOGOS`, then `canonicalTeam` and that again — coverage 45.4% of jackpot name
+occurrences, up from 38.2% on name alone: 315 spellings (6,204 rows — `Manchester Utd` 212,
 `Atl. Madrid` 186, `AS Roma` 158) resolve only through the canonical step. Season coverage is 82.8%,
 up from 82.0%: the whole gain is three Scottish spellings the crest files don't carry
-(`Dundee United` 200 rows → `dundee_utd`, `Raith Rvs` 194 → `raith`, `Inverness C` 122 →
-`inverness_caledonian_thistle`). 304 of the 416 season clubs have a file and all 304 keys are used,
-and the jackpot data reaches all 304 of them across 3,818 ids.
+(`Dundee United` 200 rows → `dundee_utd`, `Raith Rvs` 195 → `raith`, `Inverness C` 123 →
+`inverness_caledonian_thistle`). 304 of the 416 season clubs have a file and all 304 keys are used.
+The jackpot data (3,819 ids) reaches 299 of the 304 files; the five it cannot name are `amedspor`,
+`corum`, `iraklis` and `kalamata` — clubs only the season set tickets — plus `karlsruhe`, which is a
+live split rather than a gap: the jackpots write `Karlsruher`/`Karlsruher SC` (id `karlsruher_sc`) and
+`data/seasons/bundesliga_2/` writes `Karlsruhe` (id `karlsruhe`, 181 rows), and the token-subset fold
+cannot see a pair whose tokens merely differ by a suffix. One `EXTRA_MERGES` edge onto the crest-key
+spelling closes it.
 `src/components/TeamLogo.tsx` sits each crest on a light chip (`bg-muted dark:bg-white/30`) so dark
 crests stay readable on the dark card, and falls back to broadcast initials (`Nott'm Forest` → NFO)
 when there is no file *or the file fails to decode*. A crest that is valid XML but uses an undeclared
@@ -382,10 +400,17 @@ load the SVG as an image and read the parser error.
   `index.json` counts read 24 and 18 teams rather than 25 and 19. Dedupe club names before counting
   fixtures per side anyway: the defect is the source's, and it can come back with the next row.
 - The six second tiers appear in the jackpot CSVs under exactly the strings the season set now uses,
-  so they join (`England – Championship` 176 rows, `Spain – Segunda División` 135, `Germany – 2.
+  so they join (`England – Championship` 176 rows, `Spain – Segunda División` 136, `Germany – 2.
   Bundesliga` 32, `France – Ligue 2` 17, `Italy – Serie B` 12, `Scotland – Championship` 2), with one
   exception: 3 mozzart rows say `Spain – Segunda Division` without the accent and will not match.
-  `Brazil – Serie B` (69 jackpot rows) has no football-data.co.uk coverage at all.
+  `Brazil – Serie B` (71 jackpot rows) has no football-data.co.uk coverage at all.
+- Eight `odds` cells sit far above any plausible 1X2 price (130, 135, 170, 185, 195, 270, 270, 295) —
+  the shape of a dropped decimal separator, and the same pairing appears twice: Freiburg v Mainz draw
+  reads `270` in `betika-midweek-jackpot.csv` (2024-04-20) and in `mozzart-super-jackpot2.csv`
+  (2024-04-21, the bookmakers' ticket date is a day apart). They parse as numbers, so the generator
+  keeps them as 270.0 and only a price-band filter removes them. Integer prices as such are **not**
+  corruption: 3,188 rows carry exactly 2.0 or 3.0 (mozzart 2,745, betika 443), which is another reason
+  `odds` is not one homogeneous market.
 - Encodings are mixed UTF-8 / plain ASCII across files; always open with `encoding='utf-8'`.
 - `mozzart-super-jackpot4.csv` contains ~32 literal `No date found` values in `date`.
 - Coverage overlaps between files within a bookmaker (e.g. `mozzart-super-jackpot*.csv` are
