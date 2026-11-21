@@ -27606,5 +27606,141 @@
     "away_team": "US Cremonese",
     "score": "1-4",
     "result": "away"
+  },
+  {
+    "date": "2026-11-15",
+    "jackpot_id": 208,
+    "home_team": "AFC Wimbledon",
+    "away_team": "Blackpool FC",
+    "score": "1-0",
+    "result": "home"
+  },
+  {
+    "date": "2026-11-15",
+    "jackpot_id": 208,
+    "home_team": "Wigan Athletic",
+    "away_team": "Barnsley FC",
+    "score": "2-1",
+    "result": "home"
+  },
+  {
+    "date": "2026-11-15",
+    "jackpot_id": 208,
+    "home_team": "Bristol Rovers",
+    "away_team": "Chesterfield FC",
+    "score": "0-2",
+    "result": "away"
+  },
+  {
+    "date": "2026-11-15",
+    "jackpot_id": 208,
+    "home_team": "Shrewsbury Town",
+    "away_team": "Oldham Athletic",
+    "score": "2-1",
+    "result": "home"
+  },
+  {
+    "date": "2026-11-15",
+    "jackpot_id": 208,
+    "home_team": "Hornchurch FC",
+    "away_team": "Tamworth FC",
+    "score": "2-1",
+    "result": "home"
+  },
+  {
+    "date": "2026-11-15",
+    "jackpot_id": 208,
+    "home_team": "Kidderminster Harriers FC",
+    "away_team": "FC Halifax Town",
+    "score": "1-1",
+    "result": "draw"
+  },
+  {
+    "date": "2026-11-15",
+    "jackpot_id": 208,
+    "home_team": "East Fife FC",
+    "away_team": "Peterhead FC",
+    "score": "1-0",
+    "result": "home"
+  },
+  {
+    "date": "2026-11-15",
+    "jackpot_id": 208,
+    "home_team": "Real Sociedad San Sebastian B",
+    "away_team": "Sporting Gijon",
+    "score": "2-2",
+    "result": "draw"
+  },
+  {
+    "date": "2026-11-15",
+    "jackpot_id": 208,
+    "home_team": "Georgia",
+    "away_team": "Hungary",
+    "score": "0-2",
+    "result": "away"
+  },
+  {
+    "date": "2026-11-15",
+    "jackpot_id": 208,
+    "home_team": "Criciuma EC SC",
+    "away_team": "Gremio Novorizontino SP",
+    "score": "0-1",
+    "result": "away"
+  },
+  {
+    "date": "2026-11-15",
+    "jackpot_id": 208,
+    "home_team": "Real Oviedo",
+    "away_team": "Girona FC",
+    "score": "1-2",
+    "result": "away"
+  },
+  {
+    "date": "2026-11-15",
+    "jackpot_id": 208,
+    "home_team": "Club Comunicaciones",
+    "away_team": "Arsenal de Sarandi",
+    "score": "2-3",
+    "result": "away"
+  },
+  {
+    "date": "2026-11-15",
+    "jackpot_id": 208,
+    "home_team": "CD Armenio",
+    "away_team": "CS Italiano",
+    "score": "1-0",
+    "result": "home"
+  },
+  {
+    "date": "2026-11-15",
+    "jackpot_id": 208,
+    "home_team": "Amarante FC",
+    "away_team": "FC Felgueiras 1932",
+    "score": "1-1",
+    "result": "draw"
+  },
+  {
+    "date": "2026-11-15",
+    "jackpot_id": 208,
+    "home_team": "FK Ufa",
+    "away_team": "Spartak Kostroma",
+    "score": "3-3",
+    "result": "draw"
+  },
+  {
+    "date": "2026-11-15",
+    "jackpot_id": 208,
+    "home_team": "Portimonense SAD",
+    "away_team": "Academica de Coimbra",
+    "score": "0-0",
+    "result": "draw"
+  },
+  {
+    "date": "2026-11-15",
+    "jackpot_id": 208,
+    "home_team": "FC Penafiel",
+    "away_team": "Lusitania FC Lourosa",
+    "score": "1-2",
+    "result": "away"
   }
 ]
