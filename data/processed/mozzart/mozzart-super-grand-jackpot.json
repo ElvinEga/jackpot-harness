@@ -53260,5 +53260,185 @@
     "score": "1-2",
     "odds": 1.25,
     "result": "away"
+  },
+  {
+    "date": "2026-11-14",
+    "home_team": "Swindon Town",
+    "away_team": "Grimsby",
+    "league": "England – League Two",
+    "score": "1-4",
+    "odds": 2.05,
+    "result": "away"
+  },
+  {
+    "date": "2026-11-14",
+    "home_team": "Shrewsbury",
+    "away_team": "Oldham",
+    "league": "England – League Two",
+    "score": "2-1",
+    "odds": 2.5,
+    "result": "home"
+  },
+  {
+    "date": "2026-11-14",
+    "home_team": "Walsall",
+    "away_team": "Barnet",
+    "league": "England – League Two",
+    "score": "Abn",
+    "odds": 1.4,
+    "result": "abandoned"
+  },
+  {
+    "date": "2026-11-14",
+    "home_team": "Colchester",
+    "away_team": "Gillingham",
+    "league": "England – League Two",
+    "score": "2-0",
+    "odds": 2.15,
+    "result": "home"
+  },
+  {
+    "date": "2026-11-14",
+    "home_team": "Bristol Rovers",
+    "away_team": "Chesterfield",
+    "league": "England – League Two",
+    "score": "0-2",
+    "odds": 1.35,
+    "result": "away"
+  },
+  {
+    "date": "2026-11-14",
+    "home_team": "Crewe",
+    "away_team": "Newport County",
+    "league": "England – League Two",
+    "score": "2-2",
+    "odds": 2.0,
+    "result": "draw"
+  },
+  {
+    "date": "2026-11-14",
+    "home_team": "Rotherham",
+    "away_team": "Crawley Town",
+    "league": "England – League Two",
+    "score": "Abn",
+    "odds": 2.1,
+    "result": "abandoned"
+  },
+  {
+    "date": "2026-11-14",
+    "home_team": "Doncaster",
+    "away_team": "Leyton Orient",
+    "league": "England – League One",
+    "score": "Abn",
+    "odds": 2.9,
+    "result": "abandoned"
+  },
+  {
+    "date": "2026-11-14",
+    "home_team": "Hartlepool",
+    "away_team": "Wealdstone",
+    "league": "England – National League",
+    "score": "1-1",
+    "odds": 2.1,
+    "result": "draw"
+  },
+  {
+    "date": "2026-11-14",
+    "home_team": "AFC Wimbledon",
+    "away_team": "Blackpool",
+    "league": "England – League One",
+    "score": "1-0",
+    "odds": 1.5,
+    "result": "home"
+  },
+  {
+    "date": "2026-11-14",
+    "home_team": "Kidderminster Harriers",
+    "away_team": "FC Halifax Town",
+    "league": "England – National League",
+    "score": "1-1",
+    "odds": 1.43,
+    "result": "draw"
+  },
+  {
+    "date": "2026-11-14",
+    "home_team": "Georgia",
+    "away_team": "Hungary",
+    "league": "World – UEFA Nations League",
+    "score": "0-2",
+    "odds": 2.38,
+    "result": "away"
+  },
+  {
+    "date": "2026-11-14",
+    "home_team": "Fortaleza EC",
+    "away_team": "Vila Nova",
+    "league": "Brazil – Serie B",
+    "score": "1-0",
+    "odds": 1.38,
+    "result": "home"
+  },
+  {
+    "date": "2026-11-14",
+    "home_team": "Sport Recife",
+    "away_team": "Goias",
+    "league": "Brazil – Serie B",
+    "score": "3-0",
+    "odds": 1.9,
+    "result": "home"
+  },
+  {
+    "date": "2026-11-14",
+    "home_team": "Northern Ireland",
+    "away_team": "Ukraine",
+    "league": "World – UEFA Nations League",
+    "score": "1-0",
+    "odds": 3.15,
+    "result": "home"
+  },
+  {
+    "date": "2026-11-14",
+    "home_team": "Romania",
+    "away_team": "Poland",
+    "league": "World – UEFA Nations League",
+    "score": "2-1",
+    "odds": 1.9,
+    "result": "home"
+  },
+  {
+    "date": "2026-11-14",
+    "home_team": "Oviedo",
+    "away_team": "Girona",
+    "league": "Spain – Segunda División",
+    "score": "1-2",
+    "odds": 1.37,
+    "result": "away"
+  },
+  {
+    "date": "2026-11-14",
+    "home_team": "Amarante",
+    "away_team": "Felgueiras 1932",
+    "league": "Portugal – Segunda Liga",
+    "score": "1-1",
+    "odds": 2.95,
+    "result": "draw"
+  },
+  {
+    "date": "2026-11-14",
+    "home_team": "MVV",
+    "away_team": "Vitesse",
+    "league": "Netherlands – Eerste Divisie",
+    "score": "2-1",
+    "odds": 2.1,
+    "result": "home"
+  },
+  {
+    "date": "2026-11-14",
+    "home_team": "Portimonense",
+    "away_team": "Academica",
+    "league": "Portugal – Segunda Liga",
+    "score": "0-0",
+    "odds": 3.0,
+    "result": "draw"
   }
 ]
