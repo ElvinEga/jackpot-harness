@@ -94,10 +94,6 @@ FIXTURES_TARGET = RAW / "fixtures.csv"
 FIXTURES_REQUIRED_COLUMNS = {"Div", "Date", "Time", "HomeTeam", "AwayTeam"}
 FIXTURE_DATE = re.compile(r"\d{1,2}/\d{1,2}/\d{2,4}")
 
-# SC2 and SC3 (Scotland's Leagues 1 and 2) are on the card but have no history
-# folder in this repo, so their fixtures arrive with nothing to learn from.
-FIXTURE_DIVISIONS = set(DIVISIONS) | {"SC2", "SC3"}
-
 CSV_LINK = re.compile(r"mmz4281/(\d{4})/([A-Za-z0-9]+)\.csv")
 ANCHOR_HREF = re.compile(r"""<a[^>]+href=['"]([^'"]+)['"]""", re.I)
 COUNTRY_PAGE = re.compile(r"[a-z]+m\.php")
@@ -181,9 +177,13 @@ def problem_with_fixtures(payload):
         return row[index].strip() if index < len(row) else ""
 
     rows = [next(csv.reader([line])) for line in lines[1:]]
-    unknown = {read(row, "Div") for row in rows} - FIXTURE_DIVISIONS
-    if unknown:
-        return "divisions this repo has no history for: " + ", ".join(sorted(unknown))
+    # The card's division set follows the fixture calendar, not this repo: it has
+    # carried Scotland's Leagues 1 and 2 and England's three tiers below the
+    # Championship. An unplayed fixture in a division we have no history for is
+    # still a real fixture, so only its structure is checked here.
+    no_division = [read(row, "Date") for row in rows if not read(row, "Div")]
+    if no_division:
+        return "rows with no division: " + ", ".join(no_division[:5])
     bad = sorted({read(row, "Date") for row in rows if not FIXTURE_DATE.fullmatch(read(row, "Date"))})
     if bad:
         return "unparseable dates: " + ", ".join(bad[:5])
