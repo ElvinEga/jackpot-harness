@@ -6,6 +6,7 @@ liverpool_montevideo,rows in 2+ countries,no,Uruguay=3;Colombia=1,"liverpool_mon
 river_plate_uru,rows in 2+ countries,no,Argentina=2;Uruguay=2;Paraguay=1,"ca_river_plate(Uruguay:2)<-;river_plate(Argentina:2,Paraguay:1)<-"
 aalborg,"short name, nothing faces the owner",by hand,,aalborg_bk(2) (no shared fixture)
 abc,"short name, nothing faces the owner",by hand,,abc_fc_rn(1) (no shared fixture)
+academica,"short name, nothing faces the owner",by hand,,academica_de_coimbra(1) (no shared fixture)
 achnas,"short name, 2+ confirmed owners",by hand,,"ethnicos_achnas(1), ethnikos_achnas(8)"
 adanaspor,"short name, nothing faces the owner",by hand,,adanaspor_as(1) (no shared fixture)
 aguilas,"short name, 2+ confirmed owners",by hand,,"aguilas_doradas(1), aguilas_doradas_rionegro(3), rionegro_aguilas(1)"
@@ -29,6 +30,7 @@ america_cali,"short name, nothing faces the owner",by hand,,"america_de_cali(39)
 america_de_cali,"short name, nothing faces the owner",by hand,,america_de_cali_col(2) (no shared fixture)
 america_mineiro,"short name, nothing faces the owner",by hand,,america_fc_mg(4) (no shared fixture)
 ancona,"short name, nothing faces the owner",by hand,,"ancona_matelica(3), ancona_metalica(1) (no shared fixture)"
+annan,"short name, nothing faces the owner",by hand,,annan_athletic(4) (no shared fixture)
 antigua,"short name, nothing faces the owner",by hand,,antigua_and_barbuda(1) (no shared fixture)
 apoel,"short name, 2+ confirmed owners",by hand,,"apoel_nicosia(21), apoel_nikosia(2)"
 apollon,"short name, 2+ confirmed owners",by hand,,"apollon_limassol(3), apollon_s(3), apollon_smyrnis(1)"
@@ -111,7 +113,7 @@ corum,"short name, nothing faces the owner",by hand,,corum_fk(2) (no shared fixt
 cove,"short name, nothing faces the owner",by hand,,cove_rangers(48) (no shared fixture)
 cr_vasco_da_gama,"short name, nothing faces the owner",by hand,,cr_vasco_da_gama_rj(5) (no shared fixture)
 cracovia_krakow,"short name, nothing faces the owner",by hand,,"ks_cracovia_krakow(1), mks_cracovia_krakow(2) (no shared fixture)"
-criciuma_ec,"short name, nothing faces the owner",by hand,,criciuma_ec_sc(5) (no shared fixture)
+criciuma_ec,"short name, nothing faces the owner",by hand,,criciuma_ec_sc(6) (no shared fixture)
 croatia,"short name, nothing faces the owner",by hand,,canberra_croatia(1) (no shared fixture)
 cruzeiro,"short name, nothing faces the owner",by hand,,"cruzeiro_bra(3), cruzeiro_ec_mg(4) (no shared fixture)"
 cska_1948,"short name, nothing faces the owner",by hand,,cska_1948_sofia(3) (no shared fixture)
@@ -188,7 +190,7 @@ godoy_cruz,"short name, nothing faces the owner",by hand,,godoy_cruz_arg(2) (no 
 goias,"short name, nothing faces the owner",by hand,,goias_ec_go(2) (no shared fixture)
 golden_arrows,"short name, nothing faces the owner",by hand,,lamontville_golden_arrows(1) (no shared fixture)
 grau,"short name, nothing faces the owner",by hand,,"atletica_grau(1), atletico_grau(4), grau_per(1) (no shared fixture)"
-gremio,"short name, nothing faces the owner",by hand,,"gremio_bra(1), gremio_fb_porto_alegrense_rs(5), gremio_novorizontino_sp(5) (no shared fixture)"
+gremio,"short name, nothing faces the owner",by hand,,"gremio_bra(1), gremio_fb_porto_alegrense_rs(5), gremio_novorizontino_sp(6) (no shared fixture)"
 grimsby,"short name, nothing faces the owner",by hand,,grimsby_town(1) (no shared fixture)
 gualaceo,"short name, nothing faces the owner",by hand,,gualaceo_sc(1) (no shared fixture)
 guarani,"short name, 2+ confirmed owners",by hand,,"club_guarani(2), guarani_asuncian(1), guarani_asuncion(7)"
@@ -198,7 +200,7 @@ gv_san_jose,"short name, nothing faces the owner",by hand,,gv_san_jose_bol(2) (n
 gyor,"short name, nothing faces the owner",by hand,,wkw_eto_fc_gyor(1) (no shared fixture)
 hajduk,"short name, 2+ confirmed owners",by hand,,"hajduk_split(12), hnk_hajduk_split(2)"
 haka,"short name, nothing faces the owner",by hand,,"haka_valkeakoski(3), kajaanin_haka(1) (no shared fixture)"
-halifax,"short name, nothing faces the owner",by hand,,halifax_town(2) (no shared fixture)
+halifax,"short name, nothing faces the owner",by hand,,halifax_town(4) (no shared fixture)
 hamilton,"short name, nothing faces the owner",by hand,,forge_hamilton(1) (no shared fixture)
 hamrun,"short name, nothing faces the owner",by hand,,hamrun_spartans(3) (no shared fixture)
 haninge,"short name, nothing faces the owner",by hand,,ifk_haninge(1) (no shared fixture)
@@ -220,7 +222,7 @@ instituto,"short name, 2+ confirmed owners",by hand,,"instituto_atletico(1), ins
 inter,"short name, nothing faces the owner",by hand,,"inter_de_barinas(1), inter_de_limeira(1), inter_escaldes(3), inter_miami(60) (no shared fixture)"
 inter_escaldes,"short name, nothing faces the owner",by hand,,inter_club_d_escaldes(2) (no shared fixture)
 internacional,"short name, nothing faces the owner",by hand,,"internacional_bra(3), internacional_limeira(2), internacional_rs(4) (no shared fixture)"
-ireland,"short name, 2+ confirmed owners",by hand,,"northern_ireland(23), r_ireland(24), rep_of_ireland(6)"
+ireland,"short name, 2+ confirmed owners",by hand,,"northern_ireland(24), r_ireland(24), rep_of_ireland(6)"
 isloch,"short name, nothing faces the owner",by hand,,"isloch_minsk_r(1), minsk_isloch(3) (no shared fixture)"
 ismaily,"short name, 2+ confirmed owners",by hand,,"el_ismaily(11), ismaily_sc(2)"
 israel,"short name, nothing faces the owner",by hand,,israel_ol(2) (no shared fixture)
@@ -330,7 +332,7 @@ nimes,"short name, nothing faces the owner",by hand,,nimes_olympique(1) (no shar
 niort,"short name, nothing faces the owner",by hand,,chamois_niort(1) (no shared fixture)
 nomme,"short name, nothing faces the owner",by hand,,kalju_nomme(3) (no shared fixture)
 norrby,"short name, nothing faces the owner",by hand,,norrby_if(3) (no shared fixture)
-novorizontino,"short name, nothing faces the owner",by hand,,gremio_novorizontino_sp(5) (no shared fixture)
+novorizontino,"short name, nothing faces the owner",by hand,,gremio_novorizontino_sp(6) (no shared fixture)
 nublense,"short name, nothing faces the owner",by hand,,nublense_chi(1) (no shared fixture)
 oakland_roots,"short name, nothing faces the owner",by hand,,oakland_roots_sc(2) (no shared fixture)
 odd,"short name, 2+ confirmed owners",by hand,,"odd_ballklubb(5), odd_grenland(54)"
@@ -433,6 +435,7 @@ spartans,"short name, nothing faces the owner",by hand,,hamrun_spartans(3) (no s
 sporting_cristal,"short name, nothing faces the owner",by hand,,sporting_cristal_per(2) (no shared fixture)
 st_albans,"short name, nothing faces the owner",by hand,,st_albans_saints(1) (no shared fixture)
 stabaek,"short name, nothing faces the owner",by hand,,stabaek_if(4) (no shared fixture)
+stirling,"short name, 2+ confirmed owners",by hand,,"stirling_albion(2), stirling_un(2)"
 stockholm,"short name, nothing faces the owner",by hand,,"aik_stockholm(7), stockholm_internazionale(2) (no shared fixture)"
 szeged,"short name, nothing faces the owner",by hand,,szeged_csanad_grosics_akademia(2) (no shared fixture)
 talavera,"short name, nothing faces the owner",by hand,,talavera_de_la_reina(1) (no shared fixture)
